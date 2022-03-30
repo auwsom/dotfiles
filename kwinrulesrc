@@ -1,8 +1,125 @@
+[1]
+Description=screen 1
+screen=0
+screenrule=2
+types=33
+wmclass=!
+wmclasscomplete=false
+wmclassmatch=0
+
+[10]
+Description=all rem
+decocolor=Breeze
+decocolorrule=1
+noborder=true
+noborderrule=1
+placement=Smart
+placementrule=2
+position=497,158
+positionrule=4
+size=1658,950
+sizerule=4
+types=257
+wmclass=dafvadfbdab
+wmclasscomplete=false
+wmclassmatch=1
+
+[2]
+Description=Window settings for virt-manager
+clientmachine=localhost
+clientmachinematch=0
+screen=1
+screenrule=2
+title=ubuntu20.04-kvm-img--mini--set2--kub-using on QEMU/KVM
+titlematch=1
+wmclass=virt-manager
+wmclasscomplete=false
+wmclassmatch=1
+
+[3]
+Description=Application settings for firefox
+clientmachine=localhost
+clientmachinematch=0
+screen=0
+screenrule=3
+types=1
+wmclass=navigator firefox
+wmclasscomplete=true
+wmclassmatch=1
+
+[4]
+Description=Application settings for keepassxc
+clientmachine=localhost
+clientmachinematch=0
+position=1152,646
+positionrule=4
+types=1
+wmclass=keepassxc
+wmclasscomplete=false
+wmclassmatch=1
+
+[5]
+Description=Application settings for kate
+clientmachine=localhost
+clientmachinematch=0
+position=2652,612
+positionrule=4
+size=1060,792
+sizerule=4
+types=1
+wmclass=kate
+wmclasscomplete=false
+wmclassmatch=1
+
+[6]
+Description=Application settings for firefox-esr
+position=470,0
+positionrule=4
+size=1904,1332
+sizerule=4
+wmclass=navigator firefox-esr
+wmclasscomplete=true
+wmclassmatch=1
+
+[7]
+Description=Application settings for ksysguard
+position=3190,0
+positionrule=4
+size=535,782
+sizerule=4
+types=1
+wmclass=ksysguard
+wmclasscomplete=false
+wmclassmatch=1
+
+[8]
+Description=Application settings for konsole
+position=2697,0
+positionrule=4
+size=1015,1404
+sizerule=4
+wmclass=konsole
+wmclasscomplete=false
+wmclassmatch=3
+
+[9]
+Description=Window settings for virt-manager
+position=162,0
+positionrule=4
+size=2265,1396
+sizerule=4
+title=partition-kub1-part2 on QEMU/KVM
+titlematch=1
+types=1
+wmclass=virt-manager || ksysguard
+wmclasscomplete=false
+wmclassmatch=2
+
 [General]
 XftAntialias[$d]
 XftHintStyle[$d]
 XftSubPixel[$d]
-count=0
+count=10
 
 [KDE]
 LookAndFeelPackage[$d]
