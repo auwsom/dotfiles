@@ -1,6 +1,6 @@
 ## These lines for importing these command aliases and functions into .bash_aliases (or .bashrc), the settings file for bash
-# `wget https://gist.github.com/auwsom/57c4f7c9db585b3f67065f13055986cc/raw -O ~/.bash_aliases && source ~/.bashrc`
-# `wget https://bit.ly/3o2fy8S -O ~/.bash_aliases && source ~/.bashrc`
+# `wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc`
+# old version: `wget https://bit.ly/3o2fy8S -O ~/.bash_aliases && source ~/.bashrc`
 # `cp -f ~/.bash_aliases /home/user/.bash_aliases && chown user:user /home/user/.bash_aliases`
 #shellcheck "$0" # `apt install shellcheck` to check any script for any errors. uncomment line to check this one.
 
