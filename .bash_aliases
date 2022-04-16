@@ -287,6 +287,7 @@ alias gb='git branch '
 alias ga='git add . '
 alias gc='git commit -m "commit" '
 alias gac='ga && gc '
+alias gacp='ga && gc && gph '
 alias gph='git push -u origin main '
 alias gpl='git pull ' # (git fetch && git merge) 
 # git clone is for first copy # git status, git log, git branch
