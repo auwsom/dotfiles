@@ -17,6 +17,7 @@ shopt -s dotglob  # will include dot files in mv, cp and rsync
 alias vibash='vi ~/.bash_aliases ' # use `vimtutor` to learn (`esc` then `:q` to quit. `ctrl+w` sometimes). or use `nano` editor.
 alias rebash='source ~/.bashrc ' # have to use `source` command to load the settings file. ~ is home directory
 dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
+shopt lastpipe; set +m # allows last pipe to affect shell; needs Job Control disabled
 
 # some familiar keyboard shortcuts 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
@@ -62,7 +63,7 @@ alias k3='kill -TERM %1 ' # terminate job 1
 alias lo='locate --limit 5' # `apt install locate` finds common file locations fast (fstab, etc) 
 #alias ls='ls -F ' # list. F is --classify with symbols or colors. already included in most .bashrc
 #alias la='ls -A' # list all. included. 
-alias ll='ls -alFh ' # list all long format. included. added human readable.
+alias ll='ls -alFh ' # list all long format. included. added human readable. # maybe better:lsl
 alias lll='ls -alF ' # list all long format. full bytec count. 
 alias ltr='ls -ltr ' # list long, time, reverse. sorted bottom is latest changed. 
 alias mo='more ' # break output into pages. or `less`.
@@ -253,6 +254,8 @@ set autowrite
 set autoindent
 set ruler
 set wrapscan 
+set hlsearch
+autocmd InsertEnter,InsertLeave * set cul!
 if has("autocmd")\n  au BufReadPost * if line("'\''\"") > 0 && line("'\''\"") <= line("$") | exe "normal! g`\"" | endif\nendif
 nnoremap <F5> <esc>:w<enter>:!%:p<enter> "run script"
 inoremap <F5> <esc>:w<enter>:!%:p<enter>
@@ -284,7 +287,7 @@ alias gb='git branch '
 alias ga='git add . '
 alias gc='git commit -m "commit" '
 alias gac='ga && gc '
-alias gps='git push -u origin main '
+alias gph='git push -u origin main '
 alias gpl='git pull ' # (git fetch && git merge) 
 # git clone is for first copy # git status, git log, git branch
 # git clone git@gist.github.com:57c4f7c9db585b3f67065f13055986cc.git
@@ -306,7 +309,7 @@ alias gpl='git pull ' # (git fetch && git merge)
 # `apt purge <package>` doesnt erase anything in home dir
 # list installed packages by date: `grep " install " /var/log/dpkg.log` or `apt-mark showmanual`
 # `apt install mlocate ncdu htop`
-# extundelete and ext4magic and testdisk can only recover files because of ext#. keeping data on ntfs has structure info in journal.
+# ext4magic and testdisk (extundelete defunct segfault) can only recover files because of ext#. keeping data on ntfs has structure info in journal.
 # `ntfsundelete /dev/hda1 -t 2d` Look for deleted files altered in the last two days
 
 # bash wildcards (glob/global): `*(pattern|optional-or) ? * + @ ! https://www.linuxjournal.com/content/bash-extended-globbing
