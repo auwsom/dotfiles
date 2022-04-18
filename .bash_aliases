@@ -18,6 +18,7 @@ alias vibash='vi ~/.bash_aliases ' # use `vimtutor` to learn (`esc` then `:q` to
 alias rebash='source ~/.bashrc ' # have to use `source` command to load the settings file. ~ is home directory
 dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
 shopt lastpipe; set +m # allows last pipe to affect shell; needs Job Control disabled
+shopt -s dotglob # makes `mv/cp /dir/*` copy all contents, both * and .*; or use `mv /path/{.,}* /path/`
 
 # some familiar keyboard shortcuts 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
@@ -138,7 +139,7 @@ alias uname='uname -a ' # show all kernel info
 alias zzr='shutdown -r now || true ' # reboot in ssh, otherwise freezes
 alias zzs='shutdown -h now || true ' # shutdown in ssh, otherwise freezes
 # common typos
-alias unmount='umount ' ; alias u='umount ' ; alias mounts='mount ' ; alias m='mount | g -v -e cgroup -e fs' ; alias ma='mount -a' ; alias mg='mount | grep ' 
+alias unmount='umount ' ; alias u='umount ' ; alias mounts='mount ' ; alias m='mount | g -v -e cgroup -e fs' ; alias ma='mount -a' ; alias mg='mount | grep '; alias mr-'mount -o remount,' 
 # change tty term from cli: `chvt 2`
 # keyrings https://itnext.io/what-is-linux-keyring-gnome-keyring-secret-service-and-d-bus-349df9411e67 
 # encrypt files with `gpg -c`
