@@ -139,7 +139,7 @@ alias uname='uname -a ' # show all kernel info
 alias zzr='shutdown -r now || true ' # reboot in ssh, otherwise freezes
 alias zzs='shutdown -h now || true ' # shutdown in ssh, otherwise freezes
 # common typos
-alias unmount='umount ' ; alias um='umount ' ; alias mounts='mount ' ; alias m='mount | g -v -e cgroup -e fs' ; alias ma='mount -a' ; alias mg='mount | grep '; alias mr-'mount -o remount,'
+alias unmount='umount ' ; alias um='umount ' ; alias mounts='mount ' ; alias m='mount | g -v -e cgroup -e fs' ; alias ma='mount -a' ; alias mg='mount | grep '; alias mr='mount -o remount,'
 # change tty term from cli: `chvt 2`
 # keyrings https://itnext.io/what-is-linux-keyring-gnome-keyring-secret-service-and-d-bus-349df9411e67 
 # encrypt files with `gpg -c`
@@ -325,5 +325,5 @@ alias gpl='git pull ' # (git fetch && git merge)
 export home='/home/user' # for setup 
 alias vl='virsh list '
 alias vc='virsh console '
-
-#
+#`echo foobar | tr "bar" "substituded"
+# echo -e allows \n, sed -i is inplace, perl -pie uses better regex
