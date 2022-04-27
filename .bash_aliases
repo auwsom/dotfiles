@@ -87,7 +87,7 @@ alias s='sudo -s '; alias sudo='sudo ' # elevate privelege for command. see `vis
 alias ssh='ssh -vvv ' # most verbose level
 # `sort` `sort --numeric-sort` `sort --human-numeric-sort` `unique`
 # `stat` will show file info 
-alias t='htop ' # `q` to exit like in many utilities. htop allows deleting directly. `apt install htop`
+alias top='htop ' # `q` to exit like in many utilities. htop allows deleting directly. `apt install htop`
 alias tree='tree -h --du -L 2 ' #<dir>. `apt install tree`
 # `type` will show info on commands and show functions
 alias untar='tar -xvf ' # -C /target/directory
