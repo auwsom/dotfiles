@@ -51,7 +51,7 @@ alias e='echo ' # show <args>. or for 'exit '-01/816-5165/history-1/index.html
 alias fh='find . -iname ' # wildcard * have to be in double quotes (no expansion). -exec needs escaped semicolon \;
 alias fr='find / -iname ' # use `tldr find` for basics. -L will follow symlinks
 alias fm='findmnt ' # shows mountpoints as tree
-alias g='grep -i ' # search for text and more. Global Regular Expressions Print. -i is case-insensitive. use -v to exclude. add mulitple with -e <pattern>
+alias g='grep -i ' # search for text and more. Global Regular Expressions Print. -i is case-insensitive. use -v to exclude. add mulitple with `-e <pattern>`. use `-C 3` to show 3 lines above and below.
 alias i='ip a ' # network info
 alias h='history 50 '
 alias hhh='history ' # `apt install hstr`. replaces ctrl-r with `hstr --show-configuration >> ~/.bashrc` https://github.com/dvorka/hstr. disables hide by default.
@@ -70,7 +70,7 @@ alias ltr='ls -ltr ' # list long, time, reverse. sorted bottom is latest changed
 alias mo='more ' # break output into pages. or `less`.
 alias md='mkdir -p ' # makes all --parents directories necessary
 alias mv='mv -in ' # interactive. -n for no clobber
-alias mvu='install -o user -g user -D -t ' # target/ dir/* # this copies while keeping target dir ownership
+alias mvu='install -o user -g user -D -t ' # target/ dir/* # this copies while keeping target dir ownership. change <user>
 alias new='touch ' # new file. or `echo $text | tee $newfile`. also `netstat`
 alias ncdu='ncdu -x ' # manage disk space utility. `apt install ncdu`
 alias o=''  
@@ -104,6 +104,7 @@ alias zzz='systemctl poweroff ' # uncomment if you want this. also `systemctl ha
 
 ## more advanced:
 alias bc="BC_ENV_ARGS=<(echo "scale=2") \bc"
+alias cu="chown -R user:user "
 alias d='dirs ' # shows dir stack for pushd/popd
 alias diff='diff --color ' # compare
 alias dmesg='dmesg -HTw ' # messages from the kernel, human readable, timestamp, follow
@@ -176,7 +177,7 @@ export VISUAL='vi' # export EDITOR='vi' is for old line editors like ed
 bind '"\\\\": "|"' # quick shortcut to | pipe key. double \\ key. (the 4 \\\\s are for escape chars)
 bind '",,": "!$"' # easy way to get last argument from last line. can expand. delete $ for ! bang commands.
 bind '",.": "$"' # quick shortcut to $ key. 
-bind '"..": shell-expand-line' # easy `ctrl+alt+e` expand
+#bind '"..": shell-expand-line' # easy `ctrl+alt+e` expand
 bind '".,": "$(!!)"' # easy way to add last output. can expand
 bind '"///": reverse-search-history' # easy ctrl+r for history search.
 bind '\C-Q: shell-kill-word' # crtl+q is erase forward one word. (ctrl+a, ctrl+q to change first command on line)
@@ -212,6 +213,7 @@ conditional expressions, if [  ];then ;fi, `man bash` search / comparsion, https
 learnshell.org
 linuxcommand.org
 https://linux.101hacks.com/toc/ CDPATH info
+https://www.gnu.org/software/bash/manual/html_node/index.html#SEC_Contents
 END
 
 ## common files: # need extra space in alias for commands on files
@@ -287,12 +289,12 @@ alias gl='git log '
 alias gb='git branch '
 alias ga='git add . '
 alias gc='git commit -m "commit" '
-alias gac='ga && gc '
-alias gacp='ga && gc && gph '
+alias gac='ga && gc ' #git
+alias gacp='ga && gc && gph ' #git
 alias gph='git push -u origin main '
 alias gpl='git pull ' # (git fetch && git merge) 
 # git clone is for first copy # git status, git log, git branch
-# git clone git@gist.github.com:57c4f7c9db585b3f67065f13055986cc.git
+# git clone git@github.com:auwsom/dotfiles.git # will ask to connect. 
 # undo last commit added to remote `git reset --soft HEAD~` then `git pull -f` 
 #[Configure GitHub SSH Keys - YouTube](https://www.youtube.com/watch?v=s6KTbytdNgs?disablekb=0)
 #git-cheatsheet.com
