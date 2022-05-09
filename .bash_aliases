@@ -294,14 +294,14 @@ alias gacp='ga && gc && gph ' #git
 alias gph='git push -u origin main '
 alias gpl='git pull ' # (git fetch && git merge) 
 # git clone is for first copy # git status, git log, git branch
-# git clone https://github.com/auwsom/dotfiles.git # add ssh priv and pub key, and will sync
-#git@github.com:auwsom/dotfiles.git # will ask to connect.
+# git clone https://github.com/auwsom/dotfiles.git # add ssh priv and pub key, and will pull but not push
+# git clone git@github.com:auwsom/dotfiles.git # will ask to connect. need to `eval $(ssh-agent -s) && ssh-add ~/.ssh/id_rsa` (will display email of GH account) 
 # mv ~/.bash_aliases ~/.bash_aliases0 && ln -s ~/git/dotfiles/.bash_aliases ~/.bash_aliases
-# undo last commit added to remote `git reset --soft HEAD~` then `git pull -f` 
 #[Configure GitHub SSH Keys - YouTube](https://www.youtube.com/watch?v=s6KTbytdNgs?disablekb=0)
 #git-cheatsheet.com
 #[Learn Github in 20 Minutes - YouTube](https://www.youtube.com/watch?v=nhNq2kIvi9s)
 #[Git MERGE vs REBASE - YouTube](https://www.youtube.com/watch?v=CRlGDDprdOQ) use merge squash
+# undo last commit added to remote `git reset --soft HEAD~` then `git pull -f` 
 #https://alvar3z.com/blog/git-going-gud/
 # delete a file from all commits: git filter-branch --index-filter     'git rm -rf --cached --ignore-unmatch <file>' HEAD
 
