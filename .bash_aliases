@@ -105,7 +105,7 @@ alias zzz='systemctl poweroff ' # uncomment if you want this. also `systemctl ha
 ## more advanced:
 alias bc="BC_ENV_ARGS=<(echo "scale=2") \bc"
 alias cu="chown -R user:user "
-alias d='dirs ' # shows dir stack for pushd/popd
+alias ds='dirs ' # shows dir stack for pushd/popd
 alias diff='diff --color ' # compare
 alias dmesg='dmesg -HTw ' # messages from the kernel, human readable, timestamp, follow
 # dbus-monitor, qdbus
