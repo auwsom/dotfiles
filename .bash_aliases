@@ -297,6 +297,7 @@ alias gpl='git pull ' # (git fetch && git merge)
 # git clone https://github.com/auwsom/dotfiles.git # add ssh priv and pub key, and will pull but not push
 # git clone git@github.com:auwsom/dotfiles.git # will ask to connect. need to `eval $(ssh-agent -s) && ssh-add ~/.ssh/id_rsa` (will display email of GH account) 
 # mv ~/.bash_aliases ~/.bash_aliases0 && ln -s ~/git/dotfiles/.bash_aliases ~/.bash_aliases
+# to push new repo from CLI you have to create it using curl and PERSONAL_ACCESS_TOKEN.
 #[Configure GitHub SSH Keys - YouTube](https://www.youtube.com/watch?v=s6KTbytdNgs?disablekb=0)
 #git-cheatsheet.com
 #[Learn Github in 20 Minutes - YouTube](https://www.youtube.com/watch?v=nhNq2kIvi9s)
