@@ -294,7 +294,9 @@ alias gacp='ga && gc && gph ' #git
 alias gph='git push -u origin main '
 alias gpl='git pull ' # (git fetch && git merge) 
 # git clone is for first copy # git status, git log, git branch
-# git clone git@github.com:auwsom/dotfiles.git # will ask to connect. 
+# git clone https://github.com/auwsom/dotfiles.git # add ssh priv and pub key, and will sync
+#git@github.com:auwsom/dotfiles.git # will ask to connect.
+# mv ~/.bash_aliases ~/.bash_aliases0 && ln -s ~/git/dotfiles/.bash_aliases ~/.bash_aliases
 # undo last commit added to remote `git reset --soft HEAD~` then `git pull -f` 
 #[Configure GitHub SSH Keys - YouTube](https://www.youtube.com/watch?v=s6KTbytdNgs?disablekb=0)
 #git-cheatsheet.com
