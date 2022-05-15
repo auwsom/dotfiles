@@ -9,7 +9,8 @@
 ## basic .bashrc settings
 HISTCONTROL=ignorespace:ignoredups:erasedups   # no duplicate entries
 #shopt -s histverify   # confirm bash history (!number) commands before executing. optional for beginners using bang ! commands. can also use ctrl+alt+e to expand before enter.
-export PROMPT_COMMAND='history -a' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file.
+alias ha='history -a ' # append current history before opening new terminal, to have it available.
+#export PROMPT_COMMAND='history -a' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file.
 # `history -a;history -c;history -r` # this will reload history with commands from other shells 
 set -o noclobber  # dont let accidental > overwrite. use >| to force redirection even with noclobber
 shopt -s dotglob  # will include dot files in mv, cp and rsync
@@ -17,15 +18,15 @@ shopt -s dotglob  # will include dot files in mv, cp and rsync
 alias vibash='vi ~/.bash_aliases ' # use `vimtutor` to learn (`esc` then `:q` to quit. `ctrl+w` sometimes). or use `nano` editor.
 alias rebash='source ~/.bashrc ' # have to use `source` command to load the settings file. ~ is home directory
 dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
-shopt lastpipe; set +m # allows last pipe to affect shell; needs Job Control disabled
+shopt -s lastpipe; set +m # allows last pipe to affect shell; needs Job Control disabled
 shopt -s dotglob # makes `mv/cp /dir/*` copy all contents, both * and .*; or use `mv /path/{.,}* /path/`
 
 # some familiar keyboard shortcuts 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
 stty intr ^S # this changes the ctrl+c for interrupt process to ctrl+s, to allow modern ctrl+c for copy.
 stty lnext ^N # this changes the ctrl+v for lnext to ctrl+b, to allow modern ctrl+v for paste. lnext shows the keycode of the next key typed.
-stty susp undef # ctrl+z for undo have to remove default. https://www.computerhope.com/unix/bash/bind.htm
-bind '"\C-z": undo' && bind '"\ez": yank' # crtl+z and alt+z (bash bind wont do ctrl+shift+key, will do alt+shift+key ^[z) \e is esc and alt(meta). 
+stty susp undef; #stty intr undef # ctrl+z for undo have to remove default. https://www.computerhope.com/unix/bash/bind.htm
+bind '"\C-Z": undo' && bind '"\ez": yank' # crtl+z and alt+z (bash bind wont do ctrl+shift+key, will do alt+shift+key ^[z) \e is esc and alt(meta). 
 bind '"\C-f": revert-line' # clear the line
 
 ## short abc's of common commands. be careful when making one letter test files or variables. use \ to escape alias.
@@ -66,6 +67,7 @@ alias loc='locate --limit 5' # `apt install locate` finds common file locations 
 #alias la='ls -A' # list all. included. 
 alias ll='ls -alFh ' # list all long format. included. added human readable. # maybe better:lsl
 alias lll='ls -alF ' # list all long format. full bytec count. 
+alias lsd='ls -d $PWD/* ' # returns full paths. have to be in the directory. 
 alias ltr='ls -ltr ' # list long, time, reverse. sorted bottom is latest changed. 
 alias mo='more ' # break output into pages. or `less`.
 alias md='mkdir -p ' # makes all --parents directories necessary
@@ -73,14 +75,14 @@ alias mv='mv -in ' # interactive. -n for no clobber
 alias mvu='install -o user -g user -D -t ' # target/ dir/* # this copies while keeping target dir ownership. change <user>
 alias new='touch ' # new file. or `echo $text | tee $newfile`. also `netstat`
 alias ncdu='ncdu -x ' # manage disk space utility. `apt install ncdu`
-alias o=''  
-alias ps='ps -ef ' # list processed - all, full-format
-alias ps1='ps -O -p ' # <PID> show info on one PID: PID TTY STAT TIME COMMAND (ENV)
+alias o='eval $(history -p !!) | read var; echo var=$var ' # this var only works with shopt lastpipe and set +m to disable pipe subshells
+alias p='echo $PATH' # show path
 alias psp='ps -o ppid= -p ' # <PID> show parent PID
 alias pgrep='pgrep -af ' # grep processes - full, list-full. use \pgrep for just the PID.
 alias pkill='pkill -f ' # kill processed - full
 # p for pipe `|` a very powerful feature of shell language. transfers command output to input next command.
 alias q='helpany ' # see helpany function
+alias r='eval sudo $(history -p !!) ' # redo with sudo
 alias rm='rm -Irv ' # make remove confirm and also recursive for directories by default. v is for verbose. 
 # ^^ ***maybe most important one***, avoids deleting uninended files. use -i to approve each deletion.
 alias s='sudo -s '; alias sudo='sudo ' # elevate privelege for command. see `visudo` to set. And `usermod -aG sudo add`, security caution when adding.
@@ -92,7 +94,6 @@ alias tree='tree -h --du -L 2 ' #<dir>. `apt install tree`
 # `type` will show info on commands and show functions
 alias untar='tar -xvf ' # -C /target/directory
 alias urel='cat /etc/os-release ' # show OS info
-alias vi='vi ' # extra space allows aliasing common files `alias fstab='/etc/fstab '`
 #alias w='whatis ' # display one-line manual page descriptions
 #alias w='whereis ' # locate the binary, source, and manual page files for a...
 #alias w='which ' # locate a command
@@ -103,9 +104,11 @@ alias zzz='systemctl poweroff ' # uncomment if you want this. also `systemctl ha
 
 
 ## more advanced:
+alias auu='sudo apt update && apt -y upgrade ' # show all users logged in. `last` show last logins
 alias bc="BC_ENV_ARGS=<(echo "scale=2") \bc"
 alias cu="chown -R user:user "
-alias d='dirs ' # shows dir stack for pushd/popd
+alias cx="chmod +x "
+alias ds='dirs ' # shows dir stack for pushd/popd
 alias diff='diff --color ' # compare
 alias dmesg='dmesg -HTw ' # messages from the kernel, human readable, timestamp, follow
 # dbus-monitor, qdbus
@@ -119,20 +122,19 @@ alias free='free -h ' # check memory, human readable
 # `inotifywait -m ~/.config/ -e create -e modify` (inotify-tools), watch runs every x sec, entr runs command after file changes
 alias jo='journalctl ' # -p err, --list-boots, -b, -b -1, -r, -x, -k (kernel/dmesg), -f, --grep, -g
 alias ku='pkill -KILL -u user ' # kill another users processes. use `skill` default is TERM.
-alias lnf='ln -f ' # symlink. use -f to overwrite. <target> <linkname>
+#alias lnf='ln -f ' # symlink. use -f to overwrite. <target> <linkname>
 alias ma='cat /var/mail/root ' # mail
 alias pegrep='grep -P ' # PCRE grep https://stackoverflow.com/a/67943782/4240654
 alias perl='perl -p -i -e ' # loop through stdin lines. in-place. use as command. https://stackoverflow.com/questions/6302025/perl-flags-pe-pi-p-w-d-i-t
 alias pd='pushd ' # a way to move through directories in a row (https://linux.101hacks.com/cd-command/dirs-pushd-popd/)
 alias pp='popd ' # going back through the 'stack' history
 alias pstree='pstree ' # shows what started a process
-alias r='read -a ' # reads into array. or see rename function
+alias ra='read -a ' # reads into array/list. 
 alias rplasma='pkill plasmashell && plasmashell & ' # restart plasmashell in KDE Kubuntu
 alias sys='systemctl ' # `enable --now` will enable and start
 alias sysl='systemctl list-unit-files ' # | grep <arg>
 alias t0='truncate -s 0 ' # reset file with zeros to wipe. also use wipe -qr.
 alias u='users ' # show all users logged in. `last` show last logins
-alias uu='sudo apt update && apt -y upgrade ' # show all users logged in. `last` show last logins
 alias unama='uname -a ' # show all kernel info 
 #alias w='w ' # Show who is logged on and what they are doing. Or `who`.
 # wget or curl to download webfile
@@ -160,6 +162,7 @@ function helpany { $1 --help || help $1 || man $1 || info $1; } # use any of the
 function ren { mv $1 $2; } # rename
 function sudov { while true; do sudo -v; sleep 360; done; } # will grant sudo 'for 60 minutes
 function addpath { export PATH="$1:$PATH"; } # add to path
+function addpathp { echo "PATH="$1':$PATH' >> ~/.profile; } # add to path permanently
 set +a
 # `unset -f foo`; or `unset -f` to remove all functions
 export CDPATH=".:/home/user" # can cd to any dir in user home from anywhere just by `cd Documents`
@@ -266,6 +269,7 @@ inoremap <F5> <esc>:w<enter>:!%:p<enter>
 # https://askubuntu.com/questions/202075/how-do-i-get-vim-to-remember-the-line-i-was-on-when-i-reopen-a-file
 # more ideas: https://github.com/amix/vimrc, https://github.com/rwxrob/dot/blob/main/vim/.vimrc
 # basic vim commands: https://gist.github.com/auwsom/78c837fde60fe36159ee89e4e29ed6f1
+# basic vim commands: https://gist.github.com/auwsom/78c837fde60fe36159ee89e4e29ed6f1
 # https://rwxrob.github.io/vi-help/
 
 : <<'END3'
@@ -332,3 +336,6 @@ alias vl='virsh list '
 alias vc='virsh console '
 #`echo foobar | tr "bar" "substituded"
 # echo -e allows \n, sed -i is inplace, perl -pie uses better regex
+
+# nerd-dictation voice commands
+alias list='ll '
