@@ -35,7 +35,7 @@ bind '"\C-f": revert-line' # clear the line
 # full list: https://www.computerhope.com/unix.htm or `ls /bin`. https://www.gnu.org/software/coreutils/manual/coreutils.html
 # list all builtins with `\help`. then `\help <builtin>` for any single one.
 # use \ before any alias command to use the original command
-alias apt="sudo apt " # also extend sudo timeout: `echo 'Defaults timestamp_timeout=360 #minutes' | sudo EDITOR='tee -a' visudo`
+alias apt="sudo apt" # also extend sudo timeout: `echo 'Defaults timestamp_timeout=360 #minutes' | sudo EDITOR='tee -a' visudo`
 alias b='bg 1 ' # put background job 1
 alias f='fg 1 ' # put foreground job 1
 alias c='clear ' # clear terminal
@@ -82,10 +82,10 @@ alias pgrep='pgrep -af ' # grep processes - full, list-full. use \pgrep for just
 alias pkill='pkill -f ' # kill processed - full
 # p for pipe `|` a very powerful feature of shell language. transfers command output to input next command.
 alias q='helpany ' # see helpany function
-alias r='eval sudo $(history -p !!) ' # redo with sudo
+alias rr='eval sudo $(history -p !!) ' # redo with sudo
 alias rm='rm -Irv ' # make remove confirm and also recursive for directories by default. v is for verbose. 
 # ^^ ***maybe most important one***, avoids deleting uninended files. use -i to approve each deletion.
-alias s='sudo -s '; alias sudo='sudo ' # elevate privelege for command. see `visudo` to set. And `usermod -aG sudo add`, security caution when adding.
+alias s='sudo '; alias ss='sudo -s ' # elevate privelege for command. see `visudo` to set. And `usermod -aG sudo add`, security caution when adding.
 alias ssh='ssh -vvv ' # most verbose level
 # `sort` `sort --numeric-sort` `sort --human-numeric-sort` `unique`
 # `stat` will show file info 
@@ -106,22 +106,29 @@ alias zzz='systemctl poweroff ' # uncomment if you want this. also `systemctl ha
 ## more advanced:
 alias auu='sudo apt update && apt -y upgrade ' # show all users logged in. `last` show last logins
 alias bc="BC_ENV_ARGS=<(echo "scale=2") \bc"
-alias cu="chown -R user:user "
-alias cx="chmod +x "
-alias ds='dirs ' # shows dir stack for pushd/popd
+alias cu="chown -R user:user " # change ownership to user
+alias cx="chmod +x " # make executable
+alias cm="chmod -R 777 " # change perms to all
 alias diff='diff --color ' # compare
 alias dmesg='dmesg -HTw ' # messages from the kernel, human readable, timestamp, follow
+alias dli='tac var/log/dpkg.log | grep -i "install"' # list installed packages
+alias ali='apt list   | grep -i "installed"' # list installed apt packages
+alias dlk='dpkg --list | grep -i -E "linux-image|linux-kernel" | grep "^ii"' # list kernels
+alias dl='dpkg --listfiles ' # -L list package install locations
+alias ds='dirs ' # shows dir stack for pushd/popd
 # dbus-monitor, qdbus
 # `env` # shows environment variables
 alias fc='fc -s ' #<query> # search and rerun command from history. shebang is similar !<query> or !number. fc -s [old=new] [command]   https://docs.oracle.com/cd/E19253
 alias fsck='fsck -p ' # automatic. or use -y for yes to all except multiple choice.
 alias redo='fc -s ' # redo from history. see fc.
-alias flmh='find . -type d \( -name .cache -o -name .mozilla \) -prune -o -type f -mmin -1 '
+alias fn='find . -iname ' # find, search in name
+alias flmh='find ~ -type d \( -name .cache -o -name .mozilla \) -prune -o -type f -mmin -1 '
 alias flmr='find / -type d \( -name proc -o -name sys -o -name dev -o -name run -o -name var -o -name media \) -prune -o -type f -mmin -1 '
 alias free='free -h ' # check memory, human readable
 # `inotifywait -m ~/.config/ -e create -e modify` (inotify-tools), watch runs every x sec, entr runs command after file changes
 alias jo='journalctl ' # -p err, --list-boots, -b, -b -1, -r, -x, -k (kernel/dmesg), -f, --grep, -g
 alias ku='pkill -KILL -u user ' # kill another users processes. use `skill` default is TERM.
+alias lsof='lsof -e /run/user/*' # remove cant stat errors
 #alias lnf='ln -f ' # symlink. use -f to overwrite. <target> <linkname>
 alias ma='cat /var/mail/root ' # mail
 alias pegrep='grep -P ' # PCRE grep https://stackoverflow.com/a/67943782/4240654
@@ -133,6 +140,7 @@ alias ra='read -a ' # reads into array/list.
 alias rplasma='pkill plasmashell && plasmashell & ' # restart plasmashell in KDE Kubuntu
 alias sys='systemctl ' # `enable --now` will enable and start
 alias sysl='systemctl list-unit-files ' # | grep <arg>
+alias sp='echo $PATH ' # show path
 alias t0='truncate -s 0 ' # reset file with zeros to wipe. also use wipe -qr.
 alias u='users ' # show all users logged in. `last` show last logins
 alias unama='uname -a ' # show all kernel info 
@@ -142,7 +150,8 @@ alias uname='uname -a ' # show all kernel info
 alias zzr='shutdown -r now || true ' # reboot in ssh, otherwise freezes
 alias zzs='shutdown -h now || true ' # shutdown in ssh, otherwise freezes
 # common typos
-alias unmount='umount ' ; alias um='umount ' ; alias mounts='mount ' ; alias m='mount | g -v -e cgroup -e fs' ; alias ma='mount -a' ; alias mg='mount | grep '; alias mr='mount -o remount,'
+alias unmount='umount ' ; alias um='umount ' ; alias mounts='mount ' ; alias m='mount | g -v -e cgroup -e fs' ; alias ma='mount -a' ; alias mg='mount | grep '; alias mr='mount -o remount,'; 
+alias uml='umount -l ' # unmount lazy works when force doesnt
 # change tty term from cli: `chvt 2`
 # keyrings https://itnext.io/what-is-linux-keyring-gnome-keyring-secret-service-and-d-bus-349df9411e67 
 # encrypt files with `gpg -c`
@@ -208,7 +217,6 @@ creation time if available: `stat`
 terminal key shortcuts: `stty -a`
 search history reverse (type afterward): `ctrl+r`, go forward `ctrl+f`. `ctrl+g` cancels. `alt(meta)+>` go back to history bottom.
 ways to kill runaway process: `ctrl+c`, `ctrl+d` (exit current shell), `ctrl+\` 
-list last installed `grep -i "install" /var/log/dpkg.log`
 apt: remove. purge deletes config except in home dir. autoremove deletes unused.    
 apt -s, --simulate, --just-print, --dry-run, --recon, --no-act  = No action; perform a simulation..
 `apt show <package>` shows size, unlike simulate, even if not installed, but sizes not same as install info
@@ -266,6 +274,7 @@ if has("autocmd")\n  au BufReadPost * if line("'\''\"") > 0 && line("'\''\"") <=
 nnoremap <F5> <esc>:w<enter>:!%:p<enter> "run script"
 inoremap <F5> <esc>:w<enter>:!%:p<enter>
 ' >| ~/.vimrc   # >> to not overwrite 
+alias vimdo=':! bash %' # memory alias for vim run current script
 # https://askubuntu.com/questions/202075/how-do-i-get-vim-to-remember-the-line-i-was-on-when-i-reopen-a-file
 # more ideas: https://github.com/amix/vimrc, https://github.com/rwxrob/dot/blob/main/vim/.vimrc
 # basic vim commands: https://gist.github.com/auwsom/78c837fde60fe36159ee89e4e29ed6f1
