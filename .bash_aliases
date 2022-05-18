@@ -40,8 +40,8 @@ alias b='bg 1 ' # put background job 1
 alias f='fg 1 ' # put foreground job 1
 alias c='clear ' # clear terminal
 alias cat='cat ' # concatenate (if more than one file) and display. use `realpath` for piping to cat.
-alias cd='cd ' # extra space allows aliasing directories `alias fstab='/etc/fstab '`
-alias cdh='cd ~ ' # cd home
+alias cd='pushd ' # extra space allows aliasing directories `alias fstab='/etc/fstab '`. use `pd` to go back through dir stack.
+#alias cdh='cd ~ ' # cd home.. just use `cd ` with one space to goto home. 
 alias cdb='cd - ' # cd back
 alias cdu='cd .. ' # change directory up
 alias cp='cp -r ' # recursive. but next command is better because shows progress (not possible with cp without piping)
@@ -77,6 +77,8 @@ alias new='touch ' # new file. or `echo $text | tee $newfile`. also `netstat`
 alias ncdu='ncdu -x ' # manage disk space utility. `apt install ncdu`
 alias o='eval $(history -p !!) | read var; echo var=$var ' # this var only works with shopt lastpipe and set +m to disable pipe subshells
 alias p='echo $PATH' # show path
+#alias pd='pushd ' # a way to move through directories in a row (https://linux.101hacks.com/cd-command/dirs-pushd-popd/) ..aliased as `cd`
+alias pd='popd ' # going back through the 'stack' history
 alias psp='ps -o ppid= -p ' # <PID> show parent PID
 alias pgrep='pgrep -af ' # grep processes - full, list-full. use \pgrep for just the PID.
 alias pkill='pkill -f ' # kill processed - full
@@ -103,7 +105,7 @@ alias rrr='reboot ' # uncomment if you want this. also `systemctl reboot`. DE `r
 alias zzz='systemctl poweroff ' # uncomment if you want this. also `systemctl halt` or `shutdown -H now`. halt leaves on
 
 
-## more advanced:
+### more advanced:
 alias auu='sudo apt update && apt -y upgrade ' # show all users logged in. `last` show last logins
 alias bc="BC_ENV_ARGS=<(echo "scale=2") \bc"
 alias cu="chown -R user:user " # change ownership to user
@@ -133,9 +135,9 @@ alias lsof='lsof -e /run/user/*' # remove cant stat errors
 alias ma='cat /var/mail/root ' # mail
 alias pegrep='grep -P ' # PCRE grep https://stackoverflow.com/a/67943782/4240654
 alias perl='perl -p -i -e ' # loop through stdin lines. in-place. use as command. https://stackoverflow.com/questions/6302025/perl-flags-pe-pi-p-w-d-i-t
-alias pd='pushd ' # a way to move through directories in a row (https://linux.101hacks.com/cd-command/dirs-pushd-popd/)
-alias pp='popd ' # going back through the 'stack' history
+alias pip='pip --verbose '
 alias pstree='pstree ' # shows what started a process
+alias py='python ' 
 alias ra='read -a ' # reads into array/list. 
 alias rplasma='pkill plasmashell && plasmashell & ' # restart plasmashell in KDE Kubuntu
 alias sys='systemctl ' # `enable --now` will enable and start
