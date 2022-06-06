@@ -44,16 +44,16 @@ alias cd='pushd ' # extra space allows aliasing directories `alias fstab='/etc/f
 #alias cdh='cd ~ ' # cd home.. just use `cd ` with one space to goto home. 
 alias cdb='cd - ' # cd back
 alias cdu='cd .. ' # change directory up
-alias cp='cp -r ' # recursive. but next command is better because shows progress (not possible with cp without piping)
+alias cp='cp -a ' # achive and recursive. but rsync is better because shows progress (not possible with cp without piping to pv). also try `install` command - copies and keeps permissions of target dir.
 alias cpr='rsync -aAX --info=progress2 ' # copy with progress info, -a --archive mode: recursive, copies symlinks, keeps permissions, times, owner, group, device. -A acls -X extended attributes.
-alias df='df -h -x"squashfs" ' # human readable, will not show all the snap mounts
+alias df='df -h -x"squashfs" ' # "disk free" human readable, will exclude show all the snap mounts
 alias du='du -hs ' # human readable, summarize
-alias e='echo ' # show <args>. or for 'exit '-01/816-5165/history-1/index.html
+alias e='echo ' # print <args>. or for 'exit '-01/816-5165/history-1/index.html
 alias fh='find . -iname ' # wildcard * have to be in double quotes (no expansion). -exec needs escaped semicolon \;
 alias fr='find / -iname ' # use `tldr find` for basics. -L will follow symlinks
 alias fm='findmnt ' # shows mountpoints as tree
-alias g='grep -i ' # search for text and more. Global Regular Expressions Print. -i is case-insensitive. use -v to exclude. add mulitple with `-e <pattern>`. use `-C 3` to show 3 lines above and below.
-alias i='ip a ' # network info
+alias g='grep -i ' # search for text and more. "Global Regular Expressions Print" -i is case-insensitive. use -v to exclude. add mulitple with `-e <pattern>`. use `-C 3` to show 3 lines above and below.
+alias i='ip -color a ' # network info
 alias h='history 50 '
 alias hhh='history ' # `apt install hstr`. replaces ctrl-r with `hstr --show-configuration >> ~/.bashrc` https://github.com/dvorka/hstr. disables hide by default.
 alias hg='history | grep -i '
@@ -65,10 +65,10 @@ alias k3='kill -TERM %1 ' # terminate job 1
 alias loc='locate --limit 5' # `apt install locate` finds common file locations fast (fstab, etc) 
 #alias ls='ls -F ' # list. F is --classify with symbols or colors. already included in most .bashrc
 #alias la='ls -A' # list all. included. 
-alias ll='ls -alFh ' # list all long format. included. added human readable. # maybe better:lsl
-alias lll='ls -alF ' # list all long format. full bytec count. 
+alias ll='ls -alFh ' # "list" all long format. included. added human readable. # maybe better:lsl
+alias lll='ls -alF ' # "list" all long format. full bytec count. 
+alias ltr='ls -ltr ' # "list" long, time, reverse. sorted bottom is latest changed. 
 alias lsd='ls -d $PWD/* ' # returns full paths. have to be in the directory. 
-alias ltr='ls -ltr ' # list long, time, reverse. sorted bottom is latest changed. 
 alias mo='more ' # break output into pages. or `less`.
 alias md='mkdir -p ' # makes all --parents directories necessary
 alias mf='touch ' # make file. or `echo $text | tee $newfile`. also `netstat`
@@ -117,6 +117,7 @@ alias dli='tac var/log/dpkg.log | grep -i "install"' # list installed packages
 alias ali='apt list   | grep -i "installed"' # list installed apt packages
 alias dlk='dpkg --list | grep -i -E "linux-image|linux-kernel" | grep "^ii"' # list kernels
 alias dl='dpkg --listfiles ' # -L list package install locations
+alias dc='dpkg-reconfigure -a' # use when apt install breaks. use `apt -f install` install dependencies when using `apt install debfile.deb`
 alias ds='dirs ' # shows dir stack for pushd/popd
 # dbus-monitor, qdbus
 # `env` # shows environment variables
@@ -189,7 +190,7 @@ export VISUAL='vi' # export EDITOR='vi' is for old line editors like ed
 # ***very helpful*** press `ctrl+alt+e` to expand the symbol to show. press double keys slowly to use normally. 
 # `bind -r <keycode>` to remove. use ctrl+V (lnext) to use key normally. https://en.wikipedia.org/wiki/ANSI_escape_code
 # `set -o posix ; set` or `set | more` lists all variables
-bind '"\\\\": "|"' # quick shortcut to | pipe key. double \\ key. (the 4 \\\\s are for escape chars)
+bind '"\\\\": "|"' # quick shortcut to | pipe key. double slash key `\\` (two of the 4 slashes are escape chars)
 bind '",,": "!$"' # easy way to get last argument from last line. can expand. delete $ for ! bang commands.
 bind '",.": "$"' # quick shortcut to $ key. 
 #bind '"..": shell-expand-line' # easy `ctrl+alt+e` expand
@@ -244,6 +245,7 @@ alias resolv='/etc/resolv.conf' # resolvectl status
 alias hosts='/etc/hosts' 
 alias netman='/etc/network/interfaces' # `man interfaces`
 alias netpln='/etc/netplan/01-netcfg.yaml'
+# /etc/skel has default user home files
 # common directories: # need extra space in alias for commands on files
 # /etc/default/grub.d/, /etc/apt/sources.list.d/
 # /etc/cron.d/, /etc/cron.daily/ (etc),  /var/cache/apt/archives/ (use apt clean?)visudo
@@ -277,11 +279,11 @@ if has("autocmd")\n  au BufReadPost * if line("'\''\"") > 0 && line("'\''\"") <=
 nnoremap <F5> <esc>:w<enter>:!%:p<enter> "run script"
 inoremap <F5> <esc>:w<enter>:!%:p<enter>
 ' >| ~/.vimrc   # >> to not overwrite 
-alias vimdo=':! bash %' # memory alias for vim run current script
+# basic vim commands: https://gist.github.com/auwsom/78c837fde60fe36159ee89e4e29ed6f1
+# `:e <filename>` to open file or `:e .` to browse directory 
+# `:!bash %` to run script from within vim
 # https://askubuntu.com/questions/202075/how-do-i-get-vim-to-remember-the-line-i-was-on-when-i-reopen-a-file
 # more ideas: https://github.com/amix/vimrc, https://github.com/rwxrob/dot/blob/main/vim/.vimrc
-# basic vim commands: https://gist.github.com/auwsom/78c837fde60fe36159ee89e4e29ed6f1
-# basic vim commands: https://gist.github.com/auwsom/78c837fde60fe36159ee89e4e29ed6f1
 # https://rwxrob.github.io/vi-help/
 
 : <<'END3'
@@ -343,9 +345,14 @@ alias gpl='git pull ' # (git fetch && git merge)
 #alias -p | g ' u=' | xargs -I % bash -c "sed -i 's/="/=" type _ ; /' %"
 # wget rc files
 #
-export home='/home/user' # for setup 
+export home='/home/user' # for setup, $home variable
+# firewall
+
+#iptables -L -v -n
+
 alias vl='virsh list '
 alias vc='virsh console '
+
 #`echo foobar | tr "bar" "substituded"
 # echo -e allows \n, sed -i is inplace, perl -pie uses better regex
 
