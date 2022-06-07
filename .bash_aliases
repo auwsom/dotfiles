@@ -282,6 +282,7 @@ inoremap <F5> <esc>:w<enter>:!%:p<enter>
 # basic vim commands: https://gist.github.com/auwsom/78c837fde60fe36159ee89e4e29ed6f1
 # `:e <filename>` to open file or `:e .` to browse directory 
 # `:!bash %` to run script from within vim
+# vim tabs: (open multiple files or open more from inside vim) then `gt` and `gT` for forward/back, `2gt`, `:tabs` list
 # https://askubuntu.com/questions/202075/how-do-i-get-vim-to-remember-the-line-i-was-on-when-i-reopen-a-file
 # more ideas: https://github.com/amix/vimrc, https://github.com/rwxrob/dot/blob/main/vim/.vimrc
 # https://rwxrob.github.io/vi-help/
