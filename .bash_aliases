@@ -349,11 +349,22 @@ alias gpl='git pull ' # (git fetch && git merge)
 #
 export home='/home/user' # for setup, $home variable
 # firewall
-
-#iptables -L -v -n
+alias us='ufw status'
+alias usv='ufw status verbose'
+alias usn='ufw status numbered'
+alias ue='ufw enable'
+alias ud='ufw disable'
+alias uh='ufw logging high'
+alias ul='ufw logging low'
+alias il='iptables -L'
+alias ill='iptables -L --line-numbers'
+# `watch -n 2 -d iptables -nvL` # shows blocking realtime
+# arp && brctl show
 
 alias vl='virsh list '
 alias vc='virsh console '
+alias vl='virsh net-list '
+#virsh net-destroy default && virsh net-start default # use GUI
 
 #`echo foobar | tr "bar" "substituded"
 # echo -e allows \n, sed -i is inplace, perl -pie uses better regex
