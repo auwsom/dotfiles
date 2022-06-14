@@ -106,7 +106,9 @@ alias zzz='systemctl poweroff ' # uncomment if you want this. also `systemctl ha
 
 
 ### more advanced:
-alias auu='sudo apt update && apt -y upgrade ' # show all users logged in. `last` show last logins
+alias au='sudo apt update'
+alias auu='sudo apt update && apt -y upgrade' # show all users logged in. `last` show last logins
+alias aca='sudo apt clean && sudo apt autoremove'
 alias bc="BC_ENV_ARGS=<(echo "scale=2") \bc"
 alias cu="chown -R user:user " # change ownership to user
 alias cx="chmod +x " # make executable
