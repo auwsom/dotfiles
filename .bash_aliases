@@ -17,6 +17,7 @@ shopt -s dotglob  # will include dot files in mv, cp and rsync
 # alias # unalias # put extra space at end of aliased command will make bash look if the next arg is an alias
 alias vibash='vi ~/.bash_aliases ' # use `vimtutor` to learn (`esc` then `:q` to quit. `ctrl+w` sometimes). or use `nano` editor.
 alias rebash='source ~/.bashrc ' # have to use `source` command to load the settings file. ~ is home directory
+alias realias'wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc' 
 dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
 shopt -s lastpipe; set +m # allows last pipe to affect shell; needs Job Control disabled
 shopt -s dotglob # makes `mv/cp /dir/*` copy all contents, both * and .*; or use `mv /path/{.,}* /path/`
@@ -361,11 +362,12 @@ alias ul='ufw logging low'
 alias il='iptables -L'
 alias ill='iptables -L --line-numbers'
 # `watch -n 2 -d iptables -nvL` # shows blocking realtime
-# arp && brctl show
+# arp && 
+alias bs='brctl show'
 
 alias vl='virsh list '
 alias vc='virsh console '
-alias vl='virsh net-list '
+alias vnl='virsh net-list '
 #virsh net-destroy default && virsh net-start default # use GUI
 
 #`echo foobar | tr "bar" "substituded"
