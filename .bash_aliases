@@ -17,7 +17,7 @@ shopt -s dotglob  # will include dot files in mv, cp and rsync
 # alias # unalias # put extra space at end of aliased command will make bash look if the next arg is an alias
 alias vibash='vi ~/.bash_aliases ' # use `vimtutor` to learn (`esc` then `:q` to quit. `ctrl+w` sometimes). or use `nano` editor.
 alias rebash='source ~/.bashrc ' # have to use `source` command to load the settings file. ~ is home directory
-alias realias'wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc' 
+alias realias='wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc' 
 dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
 shopt -s lastpipe; set +m # allows last pipe to affect shell; needs Job Control disabled
 shopt -s dotglob # makes `mv/cp /dir/*` copy all contents, both * and .*; or use `mv /path/{.,}* /path/`
@@ -100,6 +100,7 @@ alias urel='cat /etc/os-release ' # show OS info
 #alias w='whatis ' # display one-line manual page descriptions
 #alias w='whereis ' # locate the binary, source, and manual page files for a...
 #alias w='which ' # locate a command
+alias vi='vi ' # needs space to allow alias chaining 
 alias x='xargs ' # take last output and pipe into new command. not all commands support it, but many do. 
 # use `xargs -I % some-command %` to use output as non-standard argument
 alias rrr='reboot ' # uncomment if you want this. also `systemctl reboot`. DE `reboot -t 120`   
