@@ -9,7 +9,7 @@
 ## basic .bashrc settings
 HISTCONTROL=ignorespace:ignoredups:erasedups   # no duplicate entries
 #shopt -s histverify   # confirm bash history (!number) commands before executing. optional for beginners using bang ! commands. can also use ctrl+alt+e to expand before enter.
-alias ha='history -a ' # append current history before opening new terminal, to have it available.
+#alias ha='history -a ' # append current history before opening new terminal, to have it available.
 #export PROMPT_COMMAND='history -a' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file.
 # `history -a;history -c;history -r` # this will reload history with commands from other shells 
 set -o noclobber  # dont let accidental > overwrite. use >| to force redirection even with noclobber
