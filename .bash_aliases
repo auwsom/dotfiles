@@ -45,7 +45,7 @@ alias cd='pushd ' # extra space allows aliasing directories `alias fstab='/etc/f
 alias cdh='cd ~ ' # cd home.. just use `cd ` with one space to goto home. 
 alias cdb='cd - ' # cd back
 alias cdu='cd .. ' # change directory up
-alias cp='cp -a ' # achive and recursive. but rsync is better because shows progress (not possible with cp without piping to pv). also try `install` command - copies and keeps permissions of target dir.
+alias cp='cp -ar ' # achive and recursive. but rsync is better because shows progress (not possible with cp without piping to pv). also try `install` command - copies and keeps permissions of target dir.
 alias cpr='rsync -aAX --info=progress2 ' # copy with progress info, -a --archive mode: recursive, copies symlinks, keeps permissions, times, owner, group, device. -A acls -X extended attributes.
 alias df='df -h -x"squashfs" ' # "disk free" human readable, will exclude show all the snap mounts
 alias du='du -hs ' # human readable, summarize
@@ -88,7 +88,7 @@ alias q='helpany ' # see helpany function
 alias rr='eval sudo $(history -p !!) ' # redo with sudo
 alias rm='rm -Irv ' # make remove confirm and also recursive for directories by default. v is for verbose. 
 # ^^ ***maybe most important one***, avoids deleting uninended files. use -i to approve each deletion.
-alias s='sudo '; alias ss='sudo -s ' # elevate privelege for command. see `visudo` to set. And `usermod -aG sudo add`, security caution when adding.
+alias sudo='sudo '; alias s='sudo '; alias ss='sudo -s ' # elevate privelege for command. see `visudo` to set. And `usermod -aG sudo add`, security caution when adding.
 alias ssh='ssh -vvv ' # most verbose level
 # `sort` `sort --numeric-sort` `sort --human-numeric-sort` `unique`
 # `stat` will show file info 
