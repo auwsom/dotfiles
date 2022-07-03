@@ -374,5 +374,9 @@ alias vnl='virsh net-list '
 #`echo foobar | tr "bar" "substituded"
 # echo -e allows \n, sed -i is inplace, perl -pie uses better regex
 
+# python
+alias py='python3'
+# `py -m venv <name>; `source <path>/bin/activate`
+
 # nerd-dictation voice commands
 alias list='ll '
