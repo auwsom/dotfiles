@@ -13,7 +13,6 @@ HISTCONTROL=ignorespace:ignoredups:erasedups   # no duplicate entries
 #export PROMPT_COMMAND='history -a' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file.
 # `history -a;history -c;history -r` # this will reload history with commands from other shells 
 set -o noclobber  # dont let accidental > overwrite. use >| to force redirection even with noclobber
-shopt -s dotglob  # will include dot files in mv, cp and rsync
 # alias # unalias # put extra space at end of aliased command will make bash look if the next arg is an alias
 alias vibash='vi ~/.bash_aliases ' # use `vimtutor` to learn (`esc` then `:q` to quit. `ctrl+w` sometimes). or use `nano` editor.
 alias rebash='source ~/.bashrc ' # have to use `source` command to load the settings file. ~ is home directory
