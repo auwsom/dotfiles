@@ -329,8 +329,7 @@ alias gpl='git pull ' # (git fetch && git merge)
 # git init
 # git remote add origin git@github.com:auwsom/<newrepo>.git
 # git branch -M main
-# git add . 
-# git push -u origin main
+# git add .  && git commit -m commit  && git push -u origin main
 
 
 # mv ~/.bash_aliases ~/.bash_aliases0 && ln -s ~/git/dotfiles/.bash_aliases ~/.bash_aliases
