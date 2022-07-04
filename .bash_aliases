@@ -20,6 +20,9 @@ alias realias='wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash
 dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
 shopt -s lastpipe; set +m # allows last pipe to affect shell; needs Job Control disabled
 shopt -s dotglob # makes `mv/cp /dir/*` copy all contents, both * and .*; or use `mv /path/{.,}* /path/`
+shopt -s globstar # makes ** be recursive for directories
+if [ -f ~/.env ]; then source ~/.env ; fi
+
 
 # some familiar keyboard shortcuts 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
@@ -40,8 +43,9 @@ alias b='bg 1 ' # put background job 1
 alias f='fg 1 ' # put foreground job 1
 alias c='clear ' # clear terminal
 alias cat='cat ' # concatenate (if more than one file) and display. use `realpath` for piping to cat.
-alias cd='pushd ' # extra space allows aliasing directories `alias fstab='/etc/fstab '`. use `pd` to go back through dir stack.
+alias cd='pushd > /dev/null ' # extra space allows aliasing directories `alias fstab='/etc/fstab '`. use `pd` to go back through dir stack.
 alias cdh='cd ~ ' # cd home.. just use `cd ` with one space to goto home. 
+#alias cdb='pd - ' # cd back
 alias cdb='cd - ' # cd back
 alias cdu='cd .. ' # change directory up
 alias cp='cp -ar ' # achive and recursive. but rsync is better because shows progress (not possible with cp without piping to pv). also try `install` command - copies and keeps permissions of target dir.
