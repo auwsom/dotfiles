@@ -100,10 +100,10 @@ alias tree='tree -h --du -L 2 ' #<dir>. `apt install tree`
 # `type` will show info on commands and show functions
 alias untar='tar -xvf ' # -C /target/directory
 alias urel='cat /etc/os-release ' # show OS info
+alias vi='vi ' # needs space at end for alias chaining
 #alias w='whatis ' # display one-line manual page descriptions
 #alias w='whereis ' # locate the binary, source, and manual page files for a...
 #alias w='which ' # locate a command
-alias vi='vi ' # needs space to allow alias chaining 
 alias x='xargs ' # take last output and pipe into new command. not all commands support it, but many do. 
 # use `xargs -I % some-command %` to use output as non-standard argument
 alias rrr='reboot ' # uncomment if you want this. also `systemctl reboot`. DE `reboot -t 120`   
@@ -129,7 +129,7 @@ alias dc='dpkg-reconfigure -a' # use when apt install breaks. use `apt -f instal
 alias ds='dirs ' # shows dir stack for pushd/popd
 # dbus-monitor, qdbus
 # `env` # shows environment variables
-alias fc='fc -s ' #<query> # search and rerun command from history. shebang is similar !<query> or !number. fc -s [old=new] [command]   https://docs.oracle.com/cd/E19253
+alias r='fc -s ' #<query> # search and rerun command from history. shebang is similar !<query> or !number. fc -s [old=new] [command]   https://docs.oracle.com/cd/E19253
 alias fsck='fsck -p ' # automatic. or use -y for yes to all except multiple choice.
 alias redo='fc -s ' # redo from history. see fc.
 alias fn='find . -iname ' # find, search in name
@@ -156,9 +156,10 @@ alias sp='echo $PATH ' # show path
 alias t0='truncate -s 0 ' # reset file with zeros to wipe. also use wipe -qr.
 alias u='users ' # show all users logged in. `last` show last logins
 alias unama='uname -a ' # show all kernel info 
+#alias uname='uname -a ' # show all kernel info 
 #alias w='w ' # Show who is logged on and what they are doing. Or `who`.
 # wget or curl to download webfile
-alias uname='uname -a ' # show all kernel info 
+alias wdu='watch du -d1 .'
 alias zzr='shutdown -r now || true ' # reboot in ssh, otherwise freezes
 alias zzs='shutdown -h now || true ' # shutdown in ssh, otherwise freezes
 # common typos
