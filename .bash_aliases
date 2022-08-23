@@ -88,10 +88,10 @@ alias pgrep='pgrep -af ' # grep processes - full, list-full. use \pgrep for just
 alias pkill='pkill -f ' # kill processed - full
 # p for pipe `|` a very powerful feature of shell language. transfers command output to input next command.
 alias q='helpany ' # see helpany function
-alias rr='eval sudo $(history -p !!) ' # redo with sudo
 alias rm='rm -Irv ' # make remove confirm and also recursive for directories by default. v is for verbose. 
 # ^^ ***maybe most important one***, avoids deleting uninended files. use -i to approve each deletion.
 alias sudo='sudo '; alias s='sudo '; alias ss='sudo -s ' # elevate privelege for command. see `visudo` to set. And `usermod -aG sudo add`, security caution when adding.
+alias sss='eval sudo $(history -p !!) ' # redo with sudo
 alias ssh='ssh -vvv ' # most verbose level
 # `sort` `sort --numeric-sort` `sort --human-numeric-sort` `unique`
 # `stat` will show file info 
