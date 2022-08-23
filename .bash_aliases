@@ -158,7 +158,7 @@ alias u='users ' # show all users logged in. `last` show last logins
 alias unama='uname -a ' # show all kernel info 
 #alias uname='uname -a ' # show all kernel info 
 #alias w='w ' # Show who is logged on and what they are doing. Or `who`.
-# wget or curl to download webfile
+alias wget='wget --no-clobber --content-disposition --trust-server-names' # or curl to download webfile (curl -JLO)
 alias wdu='watch du -d1 .'
 alias zzr='shutdown -r now || true ' # reboot in ssh, otherwise freezes
 alias zzs='shutdown -h now || true ' # shutdown in ssh, otherwise freezes

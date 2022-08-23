@@ -1,4 +1,6 @@
 #!/bin/bash
+#echo "@reboot /home/user/autostart-scripts/snap_refresh" >> /var/spool/cron/crontabs/root
+snap refresh
 # This script will remove disabled snap revisions.
 set -eu
 
