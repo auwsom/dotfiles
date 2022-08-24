@@ -287,6 +287,7 @@ autocmd InsertEnter,InsertLeave * set cul!
 if has("autocmd")\n  au BufReadPost * if line("'\''\"") > 0 && line("'\''\"") <= line("$") | exe "normal! g`\"" | endif\nendif
 nnoremap <F5> <esc>:w<enter>:!%:p<enter> "run script"
 inoremap <F5> <esc>:w<enter>:!%:p<enter>
+let $BASH_ENV = "~/.bash_aliases" "<--to use aliases in vi plus `shopt -s expand_aliases`
 ' >| ~/.vimrc   # >> to not overwrite 
 # basic vim commands: https://gist.github.com/auwsom/78c837fde60fe36159ee89e4e29ed6f1
 # `:e <filename>` to open file or `:e .` to browse directory 
@@ -295,6 +296,7 @@ inoremap <F5> <esc>:w<enter>:!%:p<enter>
 # https://askubuntu.com/questions/202075/how-do-i-get-vim-to-remember-the-line-i-was-on-when-i-reopen-a-file
 # more ideas: https://github.com/amix/vimrc, https://github.com/rwxrob/dot/blob/main/vim/.vimrc
 # https://rwxrob.github.io/vi-help/
+shopt -s expand_aliases # to use bash aliases inside vi plus the `let $BASH_ENV = "~/.bash_aliase` in .vimrc
 
 : <<'END3'
 ## tmux   wget https://raw.githubusercontent.com/rwxrob/dot/main/tmux/.tmux.conf
