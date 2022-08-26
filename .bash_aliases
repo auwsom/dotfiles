@@ -21,7 +21,7 @@ dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
 shopt -s lastpipe; set +m # allows last pipe to affect shell; needs Job Control disabled
 shopt -s dotglob # makes `mv/cp /dir/*` copy all contents, both * and .*; or use `mv /path/{.,}* /path/`
 shopt -s globstar # makes ** be recursive for directories
-if [ -f ~/.env ]; then source ~/.env ; fi
+if [ -f ~/.env ]; then source ~/.env ; fi # for storing env vars
 
 
 # some familiar keyboard shortcuts 
