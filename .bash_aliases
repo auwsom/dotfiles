@@ -288,10 +288,12 @@ if has("autocmd")\n  au BufReadPost * if line("'\''\"") > 0 && line("'\''\"") <=
 nnoremap <F5> <esc>:w<enter>:!%:p<enter> "run script in normal mode"
 inoremap <F5> <esc>:w<enter>:!%:p<enter> "in insert mode too"
 let $BASH_ENV = "~/.bash_aliases" "<--to use aliases in vi plus `shopt -s expand_aliases`"
+set list " shows hidden characters
 set tabstop=4       " The width of a TAB is set to 4.
 set shiftwidth=4    " Indents will have a width of 4
 set softtabstop=4   " Sets the number of columns for a TAB
 set expandtab       " Expand TABs to spaces
+
 ' >| ~/.vimrc   # >> to not overwrite 
 # basic vim commands: https://gist.github.com/auwsom/78c837fde60fe36159ee89e4e29ed6f1
 # `:e <filename>` to open file or `:e .` to browse directory 
