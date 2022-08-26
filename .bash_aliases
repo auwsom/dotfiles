@@ -277,7 +277,7 @@ echo -e '
 set nocompatible
 set showmode
 set whichwrap+=<,> "arrow key wraparound"
-set number   " :set nonumber"
+"set number   " :set nonumber"
 set autowrite
 set autoindent
 set ruler
