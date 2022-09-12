@@ -133,8 +133,9 @@ alias r='fc -s ' #<query> # search and rerun command from history. shebang is si
 alias fsck='fsck -p ' # automatic. or use -y for yes to all except multiple choice.
 alias redo='fc -s ' # redo from history. see fc.
 alias fn='find . -iname ' # find, search in name
-alias flmh='find ~ -type d \( -name .cache -o -name .mozilla \) -prune -o -type f -mmin -1 '
 alias flmr='find / -type d \( -name proc -o -name sys -o -name dev -o -name run -o -name var -o -name media \) -prune -o -type f -mmin -1 '
+alias flmh='find ~ -type d \( -name .cache -o -name .mozilla \) -prune -o -type f -mmin -1 '
+alias flm='find . -type f -mmin -1 '
 alias free='free -h ' # check memory, human readable
 # `inotifywait -m ~/.config/ -e create -e modify` (inotify-tools), watch runs every x sec, entr runs command after file changes
 alias jo='journalctl ' # -p err, --list-boots, -b, -b -1, -r, -x, -k (kernel/dmesg), -f, --grep, -g
