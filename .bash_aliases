@@ -329,7 +329,8 @@ alias ga='git add . '
 alias gc='git commit -m "commit" '
 alias gac='ga && gc ' #git
 alias gacp='ga && gc && gph ' #git
-alias gph='git push -u origin main '
+#alias gph='git push -u origin main '
+alias gph='git push '
 alias gpl='git pull ' # (git fetch && git merge) 
 # git clone is for first copy # git status, git log, git branch
 # git clone https://github.com/auwsom/dotfiles.git # add ssh priv and pub key, and will pull but not push
@@ -340,7 +341,7 @@ alias gpl='git pull ' # (git fetch && git merge)
 # git init
 # git remote add origin git@github.com:auwsom/<newrepo>.git
 # git branch -M main
-# git add .  && git commit -m commit  && git push -u origin main
+# git add .  && git commit -m commit  && git push 
 
 
 # mv ~/.bash_aliases ~/.bash_aliases0 && ln -s ~/git/dotfiles/.bash_aliases ~/.bash_aliases
@@ -361,7 +362,7 @@ alias gpl='git pull ' # (git fetch && git merge)
 # `apt clean` then `apt purge <package>` to uninstall package broken from out of disk space.
 # use `apt purge *<old kernel number>*` to clear out old kernels for space. orr `journalctl --vacuum-size=5M`
 # `apt purge <package>` doesnt erase anything in home dir
-# list installed packages by date: `grep " install " /var/log/dpkg.log` or `apt-mark showmanual`
+# list installed packages by date: `grep " install " /var/log/dpkg.log` or `apt-mark showmanual` (`apt-mark minimize-manual` is supposed to unmark all dependencies) (zgrep will search /var/log/dpkg.log.2.gz files)
 # `apt install mlocate ncdu htop`
 # ext4magic and testdisk (extundelete defunct segfault) can only recover files because of ext#. keeping data on ntfs has structure info in journal.
 # `ntfsundelete /dev/hda1 -t 2d` Look for deleted files altered in the last two days
