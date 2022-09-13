@@ -339,7 +339,7 @@ alias gpl='git pull ' # (git fetch && git merge)
 ## add from local create:
 # `apt install gh` then click enter until auth through webpage
 # gh repo create <newrepo> --public 
-# git init && git remote add origin git@github.com:auwsom/<newrepo>.git && git branch -M main
+# git init  && git remote add origin git@github.com:auwsom/<newrepo>.git  && git branch -M main
 # git add .  && git commit -m commit  && git push 
 
 
