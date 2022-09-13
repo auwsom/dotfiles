@@ -22,6 +22,7 @@ shopt -s lastpipe; set +m # allows last pipe to affect shell; needs Job Control 
 shopt -s dotglob # makes `mv/cp /dir/*` copy all contents, both * and .*; or use `mv /path/{.,}* /path/`
 shopt -s globstar # makes ** be recursive for directories
 if [ -f ~/.env ]; then source ~/.env ; fi # for storing env vars
+export LC_ALL="C" # makes ls list dotfiles before others
 
 
 # some familiar keyboard shortcuts 
