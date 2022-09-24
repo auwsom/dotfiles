@@ -123,6 +123,7 @@ alias diff='diff --color ' # compare
 alias dmesg='dmesg -HTw ' # messages from the kernel, human readable, timestamp, follow
 alias dli='tac var/log/dpkg.log | grep -i "install"' # list installed packages
 alias ali='apt list | grep -i "installed"' # list installed apt packages
+alias alig='apt list | grep -i "installed" | grep -i ' # list installed apt packages
 alias dlk='dpkg --list | grep -i -E "linux-image|linux-kernel" | grep "^ii"' # list kernels
 alias dll='grep -i install /var/log/dpkg.log' # list last installed
 alias dl='dpkg --listfiles ' # -L list package install locations
