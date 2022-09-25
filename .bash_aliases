@@ -23,6 +23,7 @@ shopt -s dotglob # makes `mv/cp /dir/*` copy all contents, both * and .*; or use
 shopt -s globstar # makes ** be recursive for directories
 if [ -f ~/.env ]; then source ~/.env ; fi # for storing env vars
 export LC_ALL="C" # makes ls list dotfiles before others
+set -x # show aliases expanded when running them
 
 
 # some familiar keyboard shortcuts 
