@@ -16,14 +16,15 @@ set -o noclobber  # dont let accidental > overwrite. use >| to force redirection
 # alias # unalias # put extra space at end of aliased command will make bash look if the next arg is an alias
 alias vibash='vi ~/.bash_aliases ' # use `vimtutor` to learn (`esc` then `:q` to quit. `ctrl+w` sometimes). or use `nano` editor.
 alias rebash='source ~/.bashrc ' # have to use `source` command to load the settings file. ~ is home directory
-alias realias='wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc' 
+alias ra='wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc' 
 dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
 shopt -s lastpipe; set +m # allows last pipe to affect shell; needs Job Control disabled
 shopt -s dotglob # makes `mv/cp /dir/*` copy all contents, both * and .*; or use `mv /path/{.,}* /path/`
 shopt -s globstar # makes ** be recursive for directories
+shopt -s nocaseglob # ignores case of * globs
 if [ -f ~/.env ]; then source ~/.env ; fi # for storing env vars
 export LC_ALL="C" # makes ls list dotfiles before others
-set -x # show aliases expanded when running them
+#set -x # show aliases expanded when running them.. causes too much other noise
 
 
 # some familiar keyboard shortcuts 
@@ -151,7 +152,7 @@ alias perl='perl -p -i -e ' # loop through stdin lines. in-place. use as command
 alias pip='pip --verbose'
 alias pipd='pip --download -d /media/user/data ' 
 alias pstree='pstree ' # shows what started a process
-alias py='python ' 
+alias py='python '; alias pip='pip3' 
 alias ra='read -a ' # reads into array/list. 
 alias rplasma='pkill plasmashell && plasmashell & ' # restart plasmashell in KDE Kubuntu
 alias sys='systemctl ' # `enable --now` will enable and start
