@@ -16,7 +16,7 @@ set -o noclobber  # dont let accidental > overwrite. use >| to force redirection
 # alias # unalias # put extra space at end of aliased command will make bash look if the next arg is an alias
 alias vibash='vi ~/.bash_aliases ' # use `vimtutor` to learn (`esc` then `:q` to quit. `ctrl+w` sometimes). or use `nano` editor.
 alias rebash='source ~/.bashrc ' # have to use `source` command to load the settings file. ~ is home directory
-alias ra='wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc' 
+alias ra='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc' 
 dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
 shopt -s lastpipe; set +m # allows last pipe to affect shell; needs Job Control disabled
 shopt -s dotglob # makes `mv/cp /dir/*` copy all contents, both * and .*; or use `mv /path/{.,}* /path/`
@@ -24,7 +24,7 @@ shopt -s globstar # makes ** be recursive for directories
 shopt -s nocaseglob # ignores case of * globs
 if [ -f ~/.env ]; then source ~/.env ; fi # for storing env vars
 export LC_ALL="C" # makes ls list dotfiles before others
-#set -x # show aliases expanded when running them.. causes too much other noise
+#set -x # show aliases expanded when running them.. but causes too much other noise as debug
 
 
 # some familiar keyboard shortcuts 
@@ -51,8 +51,8 @@ alias cdh='cd ~ ' # cd home.. just use `cd ` with one space to goto home.
 #alias cdb='pd - ' # cd back
 alias cdb='cd - ' # cd back
 alias cdu='cd .. ' # change directory up
-alias cp='cp -ar ' # achive and recursive. but rsync is better because shows progress (not possible with cp without piping to pv). also try `install` command - copies and keeps permissions of target dir.
-alias cpr='rsync -aAX --info=progress2 ' # copy with progress info, -a --archive mode: recursive, copies symlinks, keeps permissions, times, owner, group, device. -A acls -X extended attributes.
+alias cp='type cp; cp -ar ' # achive and recursive. but rsync is better because shows progress (not possible with cp without piping to pv). also try `install` command - copies and keeps permissions of target dir. type shows the alias to avoid confusion.
+alias cpr='type cpr; rsync -aAX --info=progress2 ' # copy with progress info, -a --archive mode: recursive, copies symlinks, keeps permissions, times, owner, group, device. -A acls -X extended attributes.
 alias df='df -h -x"squashfs" ' # "disk free" human readable, will exclude show all the snap mounts
 alias du='du -hs ' # human readable, summarize
 alias e='echo ' # print <args>. or for 'exit '-01/816-5165/history-1/index.html
@@ -79,7 +79,7 @@ alias lsd='ls -d $PWD/* ' # returns full paths. have to be in the directory.
 alias mo='more ' # break output into pages. or `less`.
 alias md='mkdir -p ' # makes all --parents directories necessary
 alias mf='touch ' # make file. or `echo $text | tee $newfile`. also `netstat`
-alias mv='mv -in ' # interactive. -n for no clobber
+alias mv='type mv; mv -in ' # interactive. -n for no clobber
 alias mvu='install -o user -g user -D -t ' # target/ dir/* # this copies while keeping target dir ownership. change <user>
 alias ncdu='ncdu -x ' # manage disk space utility. `apt install ncdu`
 alias o='eval $(history -p !!) | read var; echo var=$var ' # this var only works with shopt lastpipe and set +m to disable pipe subshells
@@ -122,7 +122,7 @@ alias cu="chown -R user:user " # change ownership to user
 alias cx="chmod +x " # make executable
 alias cm="chmod -R 777 " # change perms to all
 alias diff='diff --color ' # compare
-alias dmesg='dmesg -HTw ' # messages from the kernel, human readable, timestamp, follow
+alias dmesg='type dmesg; dmesg -HTw ' # messages from the kernel, human readable, timestamp, follow
 alias dli='tac var/log/dpkg.log | grep -i "install"' # list installed packages
 alias ali='apt list | grep -i "installed"' # list installed apt packages
 alias alig='apt list | grep -i "installed" | grep -i ' # list installed apt packages
@@ -134,25 +134,25 @@ alias ds='dirs ' # shows dir stack for pushd/popd
 # dbus-monitor, qdbus
 # `env` # shows environment variables
 alias r='fc -s ' #<query> # search and rerun command from history. shebang is similar !<query> or !number. fc -s [old=new] [command]   https://docs.oracle.com/cd/E19253
-alias fsck='fsck -p ' # automatic. or use -y for yes to all except multiple choice.
+alias fsck='type fsck; fsck -p ' # automatic. or use -y for yes to all except multiple choice.
 alias redo='fc -s ' # redo from history. see fc.
 alias fn='find . -iname ' # find, search in name
 alias flmr='find / -type d \( -name proc -o -name sys -o -name dev -o -name run -o -name var -o -name media \) -prune -o -type f -mmin -1 '
 alias flmh='find ~ -type d \( -name .cache -o -name .mozilla \) -prune -o -type f -mmin -1 '
 alias flm='find . -type f -mmin -1 '
-alias free='free -h ' # check memory, human readable
+alias free='type free; free -h ' # check memory, human readable
 # `inotifywait -m ~/.config/ -e create -e modify` (inotify-tools), watch runs every x sec, entr runs command after file changes
 alias jo='journalctl ' # -p err, --list-boots, -b, -b -1, -r, -x, -k (kernel/dmesg), -f, --grep, -g
 alias ku='pkill -KILL -u user ' # kill another users processes. use `skill` default is TERM.
-alias lsof='lsof -e /run/user/*' # remove cant stat errors
+alias lsof='type lsof; lsof -e /run/user/*' # remove cant stat errors
 #alias lnf='ln -f ' # symlink. use -f to overwrite. <target> <linkname>
 alias ma='cat /var/mail/root ' # mail
 alias pegrep='grep -P ' # PCRE grep https://stackoverflow.com/a/67943782/4240654
-alias perl='perl -p -i -e ' # loop through stdin lines. in-place. use as command. https://stackoverflow.com/questions/6302025/perl-flags-pe-pi-p-w-d-i-t
-alias pip='pip --verbose'
+alias perl='type perl; perl -p -i -e ' # loop through stdin lines. in-place. use as command. https://stackoverflow.com/questions/6302025/perl-flags-pe-pi-p-w-d-i-t
+alias pip='type pip; pip3 --verbose'
 alias pipd='pip --download -d /media/user/data ' 
 alias pstree='pstree ' # shows what started a process
-alias py='python '; alias pip='pip3' 
+alias py='type py; python3 ' 
 alias ra='read -a ' # reads into array/list. 
 alias rplasma='pkill plasmashell && plasmashell & ' # restart plasmashell in KDE Kubuntu
 alias sys='systemctl ' # `enable --now` will enable and start
@@ -163,8 +163,8 @@ alias u='users ' # show all users logged in. `last` show last logins
 alias unama='uname -a ' # show all kernel info 
 #alias uname='uname -a ' # show all kernel info 
 #alias w='w ' # Show who is logged on and what they are doing. Or `who`.
-alias wget='wget --no-clobber --content-disposition --trust-server-names' # -N overwrites only if newer file and disables timestamping # or curl to download webfile (curl -JLO)
-alias wdu='watch du -d1 .'
+alias wget='type wget; wget --no-clobber --content-disposition --trust-server-names' # -N overwrites only if newer file and disables timestamping # or curl to download webfile (curl -JLO)
+alias wdu='watch du -d1 .' # `watch du -s <dir>`
 alias zzr='shutdown -r now || true ' # reboot in ssh, otherwise freezes
 alias zzs='shutdown -h now || true ' # shutdown in ssh, otherwise freezes
 # common typos
