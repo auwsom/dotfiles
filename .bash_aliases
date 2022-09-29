@@ -168,7 +168,7 @@ alias wdu='watch du -d1 .' # `watch du -s <dir>`
 alias zzr='shutdown -r now || true ' # reboot in ssh, otherwise freezes
 alias zzs='shutdown -h now || true ' # shutdown in ssh, otherwise freezes
 # common typos
-alias unmount='umount ' ; alias um='umount ' ; alias mounts='mount ' ; alias m='mount | g -v -e cgroup -e fs' ; alias ma='mount -a' ; alias mg='mount | grep '; alias mr='mount -o remount,'; 
+alias unmount='umount ' ; alias um='umount ' ; alias mounts='mount ' ; alias m='type m; mount | g -v -e cgroup -e fs' ; alias ma='mount -a' ; alias mg='mount | grep '; alias mr='mount -o remount,'; 
 alias uml='umount -l ' # unmount lazy works when force doesnt
 # change tty term from cli: `chvt 2`
 # keyrings https://itnext.io/what-is-linux-keyring-gnome-keyring-secret-service-and-d-bus-349df9411e67 
