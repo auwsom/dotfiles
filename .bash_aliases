@@ -25,6 +25,7 @@ shopt -s nocaseglob # ignores case of * globs
 if [ -f ~/.env ]; then source ~/.env ; fi # for storing env vars
 export LC_ALL="C" # makes ls list dotfiles before others
 #set -x # show aliases expanded when running them.. but causes too much other noise as debug
+function rescue_history { history -a; }; trap rescue_history SIGHUP # saves history on interupt
 
 
 # some familiar keyboard shortcuts 
@@ -142,11 +143,10 @@ alias flmh='find ~ -type d \( -name .cache -o -name .mozilla \) -prune -o -type 
 alias flm='find . -type f -mmin -1 '
 alias free='type free; free -h ' # check memory, human readable
 # `inotifywait -m ~/.config/ -e create -e modify` (inotify-tools), watch runs every x sec, entr runs command after file changes
-alias jo='journalctl ' # -p err, --list-boots, -b, -b -1, -r, -x, -k (kernel/dmesg), -f, --grep, -g
+alias jo='journalctl -x' # -p,  -err, --list-boots, -b boot, -b -1 last boot, -r reverse, -k (kernel/dmesg), -f follow, --grep -g, --catalog -x (use error notes), -e goto end
 alias ku='pkill -KILL -u user ' # kill another users processes. use `skill` default is TERM.
 alias lsof='type lsof; lsof -e /run/user/*' # remove cant stat errors
 #alias lnf='ln -f ' # symlink. use -f to overwrite. <target> <linkname>
-alias ma='cat /var/mail/root ' # mail
 alias pegrep='grep -P ' # PCRE grep https://stackoverflow.com/a/67943782/4240654
 alias perl='type perl; perl -p -i -e ' # loop through stdin lines. in-place. use as command. https://stackoverflow.com/questions/6302025/perl-flags-pe-pi-p-w-d-i-t
 alias pip='type pip; pip3 --verbose'
@@ -168,7 +168,7 @@ alias wdu='watch du -d1 .' # `watch du -s <dir>`
 alias zzr='shutdown -r now || true ' # reboot in ssh, otherwise freezes
 alias zzs='shutdown -h now || true ' # shutdown in ssh, otherwise freezes
 # common typos
-alias unmount='umount ' ; alias um='umount ' ; alias mounts='mount ' ; alias m='type m; mount | g -v -e cgroup -e fs' ; alias ma='mount -a' ; alias mg='mount | grep '; alias mr='mount -o remount,'; 
+alias unmount='umount ' ; alias um='umount ' ; alias mounts='mount ' ; alias m='type m; printf "\033[?7l"; mount | g -v -e cgroup -e fs; printf "\033[?7h"' ; alias ma='mount -a' ; alias mg='mount | grep '; alias mr='mount -o remount,'; 
 alias uml='umount -l ' # unmount lazy works when force doesnt
 # change tty term from cli: `chvt 2`
 # keyrings https://itnext.io/what-is-linux-keyring-gnome-keyring-secret-service-and-d-bus-349df9411e67 
@@ -259,6 +259,8 @@ alias resolv='/etc/resolv.conf' # resolvectl status
 alias hosts='/etc/hosts' 
 alias netman='/etc/network/interfaces' # `man interfaces`
 alias netpln='/etc/netplan/01-netcfg.yaml'
+alias mailr='/var/mail/root ' # mail
+alias osr='cat /etc/os-release' # os name
 # /etc/skel has default user home files
 # common directories: # need extra space in alias for commands on files
 # /etc/default/grub.d/, /etc/apt/sources.list.d/
