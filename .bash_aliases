@@ -142,6 +142,7 @@ alias flmr='find / -type d \( -name proc -o -name sys -o -name dev -o -name run 
 alias flmh='find ~ -type d \( -name .cache -o -name .mozilla \) -prune -o -type f -mmin -1 '
 alias flm='find . -type f -mmin -1 '
 alias free='type free; free -h ' # check memory, human readable
+alias gm='guestmount -i $file -a /mnt' # set file=<vm/partition-backup> first 
 # `inotifywait -m ~/.config/ -e create -e modify` (inotify-tools), watch runs every x sec, entr runs command after file changes
 alias jo='journalctl -x' # -p,  -err, --list-boots, -b boot, -b -1 last boot, -r reverse, -k (kernel/dmesg), -f follow, --grep -g, --catalog -x (use error notes), -e goto end
 alias ku='pkill -KILL -u user ' # kill another users processes. use `skill` default is TERM.
@@ -150,15 +151,15 @@ alias lsof='type lsof; lsof -e /run/user/*' # remove cant stat errors
 alias pegrep='grep -P ' # PCRE grep https://stackoverflow.com/a/67943782/4240654
 alias perl='type perl; perl -p -i -e ' # loop through stdin lines. in-place. use as command. https://stackoverflow.com/questions/6302025/perl-flags-pe-pi-p-w-d-i-t
 alias pip='type pip; pip3 --verbose'
-alias pipd='pip --download -d /media/user/data ' 
+#alias pipd='pip --download -d /media/user/data ' 
 alias pstree='pstree ' # shows what started a process
 alias py='type py; python3 ' 
 alias ra='read -a ' # reads into array/list. 
 alias rplasma='pkill plasmashell && plasmashell & ' # restart plasmashell in KDE Kubuntu
-alias sys='systemctl ' # `enable --now` will enable and start
+alias sys='systemctl' # `enable --now` will enable and start
 alias sysl='systemctl list-unit-files ' # | grep <arg>
-alias sp='echo $PATH ' # show path
-alias t0='truncate -s 0 ' # reset file with zeros to wipe. also use wipe -qr.
+alias t='truncate -s' # <size, eg 10G> creates dynamic file; format with mkfs.ext4; `ls -s` to show true size on disk 
+alias t0='truncate -s 0' # reset file with zeros to wipe. also use wipe -qr.
 alias u='users ' # show all users logged in. `last` show last logins
 alias unama='uname -a ' # show all kernel info 
 #alias uname='uname -a ' # show all kernel info 
