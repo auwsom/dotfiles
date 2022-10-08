@@ -259,9 +259,10 @@ alias crontabf='/etc/crontab'
 alias resolv='/etc/resolv.conf' # resolvectl status 
 alias hosts='/etc/hosts' 
 alias netman='/etc/network/interfaces' # `man interfaces`
-alias netpln='/etc/netplan/01-netcfg.yaml'
+alias netpln='/etc/netplan/01-netcfg.yaml' # add `optional: true` under ethernets: interface: to prevent boot waiting on network
 alias mailr='/var/mail/root ' # mail
-alias osr='cat /etc/os-release' # os name
+alias osr='/etc/os-release' # os name
+alias sysd='/etc/systemd/system/multi-user.target.wants' # services startup 
 # /etc/skel has default user home files
 # common directories: # need extra space in alias for commands on files
 # /etc/default/grub.d/, /etc/apt/sources.list.d/
