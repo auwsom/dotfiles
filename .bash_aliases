@@ -16,13 +16,13 @@ set -o noclobber  # dont let accidental > overwrite. use >| to force redirection
 # alias # unalias # put extra space at end of aliased command will make bash look if the next arg is an alias
 alias vibash='vi ~/.bash_aliases ' # use `vimtutor` to learn (`esc` then `:q` to quit. `ctrl+w` sometimes). or use `nano` editor.
 alias rebash='source ~/.bashrc ' # have to use `source` command to load the settings file. ~ is home directory
-alias ra='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc' 
+alias realias='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc' 
 dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
 shopt -s lastpipe; set +m # allows last pipe to affect shell; needs Job Control disabled
 shopt -s dotglob # makes `mv/cp /dir/*` copy all contents, both * and .*; or use `mv /path/{.,}* /path/`
 shopt -s globstar # makes ** be recursive for directories
 shopt -s nocaseglob # ignores case of * globs
-if [ -f ~/.env ]; then source ~/.env ; fi # for storing env vars
+#if [ -f ~/.env ]; then source ~/.env ; fi # for storing env vars
 export LC_ALL="C" # makes ls list dotfiles before others
 #set -x # show aliases expanded when running them.. but causes too much other noise as debug
 function rescue_history { history -a; }; trap rescue_history SIGHUP # saves history on interupt
@@ -33,8 +33,10 @@ stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would
 stty intr ^S # this changes the ctrl+c for interrupt process to ctrl+s, to allow modern ctrl+c for copy.
 stty lnext ^N # this changes the ctrl+v for lnext to ctrl+b, to allow modern ctrl+v for paste. lnext shows the keycode of the next key typed.
 stty susp ^F #stty susp undef; #stty intr undef # ctrl+z for undo have to remove default. https://www.computerhope.com/unix/bash/bind.htm
-bind '"\C-Z": undo' && bind '"\ez": yank' # crtl+z and alt+z (bash bind wont do ctrl+shift+key, will do alt+shift+key ^[z) \e is esc and alt(meta). 
-bind '"\C-f": revert-line' # clear the line
+if [[ "$VIMRUNTIME" != "/usr/share/vim/vim82" ]]; then  # dont run in non-inteactive (ie vim)
+bind '"\C-Z": undo' && bind '"\ez": yank'; fi # crtl+z and alt+z (bash bind wont do ctrl+shift+key, will do alt+shift+key ^[z) \e is esc and alt(meta). 
+if [[ "$VIMRUNTIME" != "/usr/share/vim/vim82" ]]; then 
+bind '"\C-f": revert-line'; fi # clear the line
 
 ## short abc's of common commands. be careful when making one letter test files or variables. use \ to escape alias.
 ## commands. use `whatis` then command name for official explanation of any command. then command plus `--help`
@@ -144,7 +146,8 @@ alias flm='find . -type f -mmin -1 '
 alias free='type free; free -h ' # check memory, human readable
 alias gm='guestmount -i $file -a /mnt' # set file=<vm/partition-backup> first 
 # `inotifywait -m ~/.config/ -e create -e modify` (inotify-tools), watch runs every x sec, entr runs command after file changes
-alias jo='journalctl -x' # -p,  -err, --list-boots, -b boot, -b -1 last boot, -r reverse, -k (kernel/dmesg), -f follow, --grep -g, --catalog -x (use error notes), -e goto end
+alias jo='journalctl' # -p,  -err, --list-boots, -b boot, -b -1 last boot, -r reverse, -k (kernel/dmesg), -f follow, --grep -g, --catalog -x (use error notes), -e goto end
+alias jox='journalctl -x' # --catalog -x (use error notes)
 alias ku='pkill -KILL -u user ' # kill another users processes. use `skill` default is TERM.
 alias lsof='type lsof; lsof -e /run/user/*' # remove cant stat errors
 #alias lnf='ln -f ' # symlink. use -f to overwrite. <target> <linkname>
@@ -205,13 +208,13 @@ export VISUAL='vi' # export EDITOR='vi' is for old line editors like ed
 # ***very helpful*** press `ctrl+alt+e` to expand the symbol to show. press double keys slowly to use normally. 
 # `bind -r <keycode>` to remove. use ctrl+V (lnext) to use key normally. https://en.wikipedia.org/wiki/ANSI_escape_code
 # `set -o posix ; set` or `set | more` lists all variables
-bind '"\\\\": "|"' # quick shortcut to | pipe key. double slash key `\\` (two of the 4 slashes are escape chars)
-bind '",,": "!$"' # easy way to get last argument from last line. can expand. delete $ for ! bang commands.
-bind '",.": "$"' # quick shortcut to $ key. 
+#if [[ "$VIMRUNTIME" != "-" ]]; then bind '"\\\\": "|"'; fi # quick shortcut to | pipe key. double slash key `\\` (two of the 4 slashes are escape chars)
+if [[ "$VIMRUNTIME" != "/usr/share/vim/vim82" ]]; then bind '",,": "!$"'; fi # easy way to get last argument from last line. can expand. delete $ for ! bang commands.
+#if [[ "$VIMRUNTIME" != "-" ]]; then bind '",.": "$"'; fi # quick shortcut to $ key. 
 #bind '"..": shell-expand-line' # easy `ctrl+alt+e` expand
-bind '".,": "$(!!)"' # easy way to add last output. can expand
-bind '"///": reverse-search-history' # easy ctrl+r for history search.
-bind '\C-Q: shell-kill-word' # crtl+q is erase forward one word. (ctrl+a, ctrl+q to change first command on line)
+#if [[ "$VIMRUNTIME" != "-" ]]; then bind '".,": "$(!!)"'; fi # easy way to add last output. can expand
+#if [[ "$VIMRUNTIME" != "-" ]]; then bind '"///": reverse-search-history'; fi # easy ctrl+r for history search.
+#if [[ "$VIMRUNTIME" != "-" ]]; then bind '\C-Q: shell-kill-word'; fi # crtl+q is erase forward one word. (ctrl+a, ctrl+q to change first command on line)
 
 : <<'END' 
 basic bash commands:
@@ -249,17 +252,17 @@ END
 ## common files: # need extra space in alias for commands on files
 shopt -s cdable_vars # makes directories aliasable. see bottom for commonly used directories
 alias fstab='/etc/fstab' 
-alias pass='/etc/passwd' 
-alias group='/etc/group' 
+alias pwd1='/etc/passwd' 
+alias group1='/etc/group' 
 alias shadow='/etc/shadow' 
 alias sudoers='/etc/sudoers' 
-alias grub='/etc/default/grub' 
+alias grub1='/etc/default/grub' 
 alias sources='/etc/apt/sources.list' 
-alias crontabf='/etc/crontab' 
+alias crontab='/etc/crontab' # runs /etc/cron.daily and /etc/cron.hourly
 alias resolv='/etc/resolv.conf' # resolvectl status 
-alias hosts='/etc/hosts' 
+alias hosts1='/etc/hosts' 
 alias netman='/etc/network/interfaces' # `man interfaces`
-alias netpln='/etc/netplan/01-netcfg.yaml' # add `optional: true` under ethernets: interface: to prevent boot waiting on network
+alias netplan1='/etc/netplan/01-netcfg.yaml' # add `optional: true` under ethernets: interface: to prevent boot waiting on network
 alias mailr='/var/mail/root ' # mail
 alias osr='/etc/os-release' # os name
 alias sysd='/etc/systemd/system/multi-user.target.wants' # services startup 
@@ -282,20 +285,22 @@ alias sysd='/etc/systemd/system/multi-user.target.wants' # services startup
 # careful with changing all permissions to 777: https://superuser.com/questions/132891/how-to-reset-folder-permissions-to-their-default-in-ubuntu
 
 ## basic vim settings: 
+#if ! [[ -f ~/.vimrc ]]; then
 echo -e '
 set nocompatible
 set showmode
 set whichwrap+=<,> "arrow key wraparound"
-"set number   " :set nonumber"
+"set number   "set nonumber" "set nu" "set nonu"
 set autowrite
 set autoindent
-set ruler
+set ruler "set ru"
 set wrapscan 
 set hlsearch
 autocmd InsertEnter,InsertLeave * set cul!
 if has("autocmd")\n  au BufReadPost * if line("'\''\"") > 0 && line("'\''\"") <= line("$") | exe "normal! g`\"" | endif\nendif
-nnoremap <F5> <esc>:w<enter>:!%:p<enter> "run script in normal mode"
-inoremap <F5> <esc>:w<enter>:!%:p<enter> "in insert mode too"
+set autowrite "save before run, also when changing buffer"
+nnoremap <F5> :!clear && %:p<Enter> "run script in normal mode" 
+inoremap <F5> <esc>:!clear && %:p<enter> "in insert mode too"
 let $BASH_ENV = "~/.bash_aliases" "<--to use aliases in vi plus `shopt -s expand_aliases`"
 "set list " shows hidden characters
 "set ruf " ruler format
@@ -303,8 +308,9 @@ set tabstop=4       " The width of a TAB is set to 4.
 set shiftwidth=4    " Indents will have a width of 4
 set softtabstop=4   " Sets the number of columns for a TAB
 set expandtab       " Expand TABs to spaces
-
-' >| ~/.vimrc   # >> to not overwrite 
+set shell=/bin/bash
+' >| ~/.vimrc   # > to not overwrite 
+#fi
 # basic vim commands: https://gist.github.com/auwsom/78c837fde60fe36159ee89e4e29ed6f1
 # `:e <filename>` to open file or `:e .` to browse directory 
 # `:!bash %` to run script from within vim
