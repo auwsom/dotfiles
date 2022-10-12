@@ -8,9 +8,11 @@
 
 ## basic .bashrc settings
 HISTCONTROL=ignorespace:ignoredups:erasedups   # no duplicate entries
+#HISTTIMEFORMAT="%F %T "
 #shopt -s histverify   # confirm bash history (!number) commands before executing. optional for beginners using bang ! commands. can also use ctrl+alt+e to expand before enter.
 #alias ha='history -a ' # append current history before opening new terminal, to have it available.
-#export PROMPT_COMMAND='history -a' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file.
+export PROMPT_COMMAND='history -a' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file.
+#history -w # writes history on every new bash shell to remove duplicates
 # `history -a;history -c;history -r` # this will reload history with commands from other shells 
 set -o noclobber  # dont let accidental > overwrite. use >| to force redirection even with noclobber
 # alias # unalias # put extra space at end of aliased command will make bash look if the next arg is an alias
@@ -285,7 +287,7 @@ alias sysd='/etc/systemd/system/multi-user.target.wants' # services startup
 # careful with changing all permissions to 777: https://superuser.com/questions/132891/how-to-reset-folder-permissions-to-their-default-in-ubuntu
 
 ## basic vim settings: 
-#if ! [[ -f ~/.vimrc ]]; then
+if ! [[ -f ~/.vimrc ]]; then
 echo -e '
 set nocompatible
 set showmode
@@ -309,8 +311,8 @@ set shiftwidth=4    " Indents will have a width of 4
 set softtabstop=4   " Sets the number of columns for a TAB
 set expandtab       " Expand TABs to spaces
 set shell=/bin/bash
-' >| ~/.vimrc   # > to not overwrite 
-#fi
+' >| ~/.vimrc >| ~/.vimrc   # > to not overwrite 
+fi
 # basic vim commands: https://gist.github.com/auwsom/78c837fde60fe36159ee89e4e29ed6f1
 # `:e <filename>` to open file or `:e .` to browse directory 
 # `:!bash %` to run script from within vim
