@@ -294,6 +294,7 @@ alias sysd='/etc/systemd/system/multi-user.target.wants' # services startup
 ## basic vim settings: 
 if ! [[ -f ~/.vimrc ]]; then
 echo -e '
+nnoremap <c-z> <nop> "no ctrl-z stop because exits without saving and makes .swp file"
 set nocompatible
 set showmode
 set whichwrap+=<,> "arrow key wraparound"
