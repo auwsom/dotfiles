@@ -7,11 +7,16 @@
 # see further down for more general Linux tips and learning sites
 
 ## basic .bashrc settings
-HISTCONTROL=ignorespace:ignoredups:erasedups   # no duplicate entries
-#HISTTIMEFORMAT="%F %T "
+#shopt -s histappend # append to history, don't overwrite it. for using multiple shells at once. is default set in .bashrc
+export HISTFILESIZE=10000        # increase history file size
+export HISTSIZE=${HISTFILESIZE}  # increase history list (in memory) size 
+HISTCONTROL=ignorespace:ignoredups:erasedups   # no duplicate entries. ignoredups is onlt for consecutive
+#HISTTIMEFORMAT="%h %d %H:%M " # "%F %T "
+export HISTIGNORE="!(+(*\ *))" # ignores commands without arguments. not compatible with HISTTIMEFORMAT. should be the same as `grep -v -E "^\S+\s.*" $HISTFILE`
+#export HISTIGNORE="&:ls:[bf]g:exit:pwd:clear:mount:umount" # ignore these single commands
 #shopt -s histverify   # confirm bash history (!number) commands before executing. optional for beginners using bang ! commands. can also use ctrl+alt+e to expand before enter.
 #alias ha='history -a ' # append current history before opening new terminal, to have it available.
-export PROMPT_COMMAND='history -a' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file.
+export PROMPT_COMMAND='history -a' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups.
 #history -w # writes history on every new bash shell to remove duplicates
 # `history -a;history -c;history -r` # this will reload history with commands from other shells 
 set -o noclobber  # dont let accidental > overwrite. use >| to force redirection even with noclobber
@@ -24,7 +29,7 @@ shopt -s lastpipe; set +m # allows last pipe to affect shell; needs Job Control 
 shopt -s dotglob # makes `mv/cp /dir/*` copy all contents, both * and .*; or use `mv /path/{.,}* /path/`
 shopt -s globstar # makes ** be recursive for directories
 shopt -s nocaseglob # ignores case of * globs
-#if [ -f ~/.env ]; then source ~/.env ; fi # for storing env vars
+#if [ -f ~/.env ]; then source ~/.env ; fi # dont use env vars for storing secrets. create dir .env and store files in there. $(cat ~/.env/mykey)
 export LC_ALL="C" # makes ls list dotfiles before others
 #set -x # show aliases expanded when running them.. but causes too much other noise as debug
 function rescue_history { history -a; }; trap rescue_history SIGHUP # saves history on interupt

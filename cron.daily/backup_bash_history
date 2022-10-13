@@ -1,0 +1,2 @@
+cp --force $HISTFILE "$HISTFILE"_bak
+su user -c "cp --force ~/.bash_history ~/.bash_history_bak"

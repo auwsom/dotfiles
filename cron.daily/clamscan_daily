@@ -1,0 +1,4 @@
+#!/bin/bash
+clamlog=/var/log/clamav/clamav.log
+truncate -s 0 $clamlog && nice -n 19 clamscan -ri / --exclude=/proc --exclude=/sys --exclude=/dev --exclude=/media --exclude=/mnt -l $clamlog 
+MALWARE=$(tail "$clamlog"|grep Infected|cut -d" " -f3) && if [ "$MALWARE" -ne "0" ]; then mail -s "Malware Found $(hostname -i; uname -a)" $(cat ~/.env/EMAIL) <<< $(cat $clamlog); fi

@@ -1,0 +1,10 @@
+#!/bin/sh -e
+
+tripwire=/usr/sbin/tripwire
+
+[ -x $tripwire ] || exit 0
+
+umask 027
+
+$tripwire --check --quiet --email-report
+FILE="/var/lib/tripwire/report/$(ls -Art /var/lib/tripwire/report/ | tail -n 1 )";SUMMARY=$(twprint -m r -t 0 -r $FILE);VIOLS=$(echo $SUMMARY | cut -d" " -f9 | sed s/V://);REPORT=$(twprint -m r -t 1 -r $FILE);if [ "$VIOLS" -ne "0" ]; then echo $REPORT | mail -s "TripWire Alert Viols: $VIOLS $(hostname -i; uname -a)" $(cat ~/.env/EMAIL); fi
