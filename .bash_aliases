@@ -317,6 +317,7 @@ set shiftwidth=4    " Indents will have a width of 4
 set softtabstop=4   " Sets the number of columns for a TAB
 set expandtab       " Expand TABs to spaces
 set shell=/bin/bash
+nnoremap <F3> :set hlsearch!<CR> "toggle search highligh. or use :noh"
 ' >| ~/.vimrc >| ~/.vimrc   # > to not overwrite 
 fi
 # basic vim commands: https://gist.github.com/auwsom/78c837fde60fe36159ee89e4e29ed6f1
@@ -359,8 +360,9 @@ alias gpl='git pull ' # (git fetch && git merge)
 # git clone git@github.com:auwsom/dotfiles.git # will ask to connect. need to `eval $(ssh-agent -s) && ssh-add ~/.ssh/id_rsa` (will display email of GH account) 
 ## add from local create:
 # `apt install gh` then click enter until auth through webpage
-# gh repo create <newrepo> --public 
+alias gc='gh repo create <newrepo> --public '
 alias gi='git init  && git remote add origin git@github.com:auwsom/<newrepo>.git  && git branch -M main'
+alias gi2='git push --set-upstream origin main'
 # git config --global init.defaultBranch main 
 
 
