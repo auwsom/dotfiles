@@ -305,7 +305,9 @@ set ruler "set ru"
 set wrapscan 
 set hlsearch
 autocmd InsertEnter,InsertLeave * set cul!
-if has("autocmd")\n  au BufReadPost * if line("'\''\"") > 0 && line("'\''\"") <= line("$") | exe "normal! g`\"" | endif\nendif
+if has("autocmd")\n
+  au BufReadPost * if line("'\''\"") > 0 && line("'\''\"") <= line("$") | exe "normal! g`\"" | endif\n
+endif
 set autowrite "save before run, also when changing buffer"
 nnoremap <F5> :!clear && %:p<Enter> "run script in normal mode" 
 inoremap <F5> <esc>:!clear && %:p<enter> "in insert mode too"
@@ -358,7 +360,7 @@ alias gpl='git pull ' # (git fetch && git merge)
 # git clone is for first copy # git status, git log, git branch
 # git clone https://github.com/auwsom/dotfiles.git # add ssh priv and pub key, and will pull but not push
 # git clone git@github.com:auwsom/dotfiles.git # will ask to connect. need to `eval $(ssh-agent -s) && ssh-add ~/.ssh/id_rsa` (will display email of GH account) 
-## add from local create:
+## add from local creatJust found this tool called Briefcase to deploy python apps to 6 platforms (mac,win,linux,ios,android,web) looks great. Produces standalone binariese:
 # `apt install gh` then click enter until auth through webpage
 alias gc='gh repo create <newrepo> --public '
 alias gi='git init  && git remote add origin git@github.com:auwsom/<newrepo>.git  && git branch -M main'
