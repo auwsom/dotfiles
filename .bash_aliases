@@ -180,7 +180,7 @@ alias zzr='shutdown -r now || true ' # reboot in ssh, otherwise freezes
 alias zzs='shutdown -h now || true ' # shutdown in ssh, otherwise freezes
 # common typos
 alias unmount='umount ' ; alias um='umount ' ; alias mounts='mount ' ; alias m='type m; printf "\033[?7l"; mount | g -v -e cgroup -e fs; printf "\033[?7h"' ; alias ma='mount -a' ; alias mg='mount | grep '; alias mr='mount -o remount,'; 
-alias uml='umount -l ' # unmount lazy works when force doesnt
+alias umforce='umount -l ' # unmount lazy works when force doesnt
 # change tty term from cli: `chvt 2`
 # keyrings https://itnext.io/what-is-linux-keyring-gnome-keyring-secret-service-and-d-bus-349df9411e67 
 # encrypt files with `gpg -c`
