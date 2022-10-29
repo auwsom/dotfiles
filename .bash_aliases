@@ -362,9 +362,9 @@ alias gpl='git pull ' # (git fetch && git merge)
 # git clone git@github.com:auwsom/dotfiles.git # will ask to connect. need to `eval $(ssh-agent -s) && ssh-add ~/.ssh/id_rsa` (will display email of GH account) 
 ## add from local creatJust found this tool called Briefcase to deploy python apps to 6 platforms (mac,win,linux,ios,android,web) looks great. Produces standalone binariese:
 # `apt install gh` then click enter until auth through webpage
-alias gc='gh repo create <newrepo> --public '
 alias gi='git init  && git remote add origin git@github.com:auwsom/<newrepo>.git  && git branch -M main'
-alias gi2='git push --set-upstream origin main'
+alias gi2='gh repo create <newrepo> --public '
+alias gi3='git push --set-upstream origin main'
 # git config --global init.defaultBranch main 
 
 
