@@ -66,7 +66,7 @@ alias cpr='type cpr; rsync -aAX --info=progress2 ' # copy with progress info, -a
 alias df='df -h -x"squashfs" ' # "disk free" human readable, will exclude show all the snap mounts
 alias du='du -hs ' # human readable, summarize
 alias e='echo ' # print <args>. or for 'exit '-01/816-5165/history-1/index.html
-alias fh='find . -iname ' # wildcard * have to be in double quotes (no expansion). -exec needs escaped semicolon \;
+alias fh='find . -iname ' # have to use wildcards/globs * to find from partital text. have to be in double quotes (no expansion). -exec needs escaped semicolon \;
 alias fr='find / -iname ' # use `tldr find` for basics. -L will follow symlinks
 alias fm='findmnt ' # shows mountpoints as tree
 alias g='grep -i ' # search for text and more. "Global Regular Expressions Print" -i is case-insensitive. use -v to exclude. add mulitple with `-e <pattern>`. use `-C 3` to show 3 lines above and below.
@@ -353,7 +353,7 @@ alias gb='git branch '
 alias ga='git add . '
 alias gc='git commit -m "commit" '
 alias gac='ga && gc ' #git
-alias gacp='ga && gc && gph ' #git
+alias gacp='gs && ga && gc && gph ' #git
 #alias gph='git push -u origin main '
 alias gph='git push '
 alias gpl='git pull ' # (git fetch && git merge) 
@@ -364,8 +364,9 @@ alias gpl='git pull ' # (git fetch && git merge)
 # `apt install gh` then click enter until auth through webpage
 alias gi='git init  && git remote add origin git@github.com:auwsom/<newrepo>.git  && git branch -M main'
 alias gi2='gh repo create <newrepo> --public '
-alias gi3='git push --set-upstream origin main'
+alias gi3='git add . && git push --set-upstream origin main'
 # git config --global init.defaultBranch main 
+# https://www.freecodecamp.org/news/how-to-make-your-first-pull-request-on-github-3/
 
 
 # mv ~/.bash_aliases ~/.bash_aliases0 && ln -s ~/git/dotfiles/.bash_aliases ~/.bash_aliases
