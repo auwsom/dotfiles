@@ -66,7 +66,7 @@ alias cpr='type cpr; rsync -aAX --info=progress2 ' # copy with progress info, -a
 alias df='df -h -x"squashfs" ' # "disk free" human readable, will exclude show all the snap mounts
 alias du='du -hs ' # human readable, summarize
 alias e='echo ' # print <args>. or for 'exit '-01/816-5165/history-1/index.html
-alias fh='find . -iname ' # have to use wildcards/globs * to find from partital text. have to be in double quotes (no expansion). -exec needs escaped semicolon \;
+alias fh='find . -iname ' # i means case insensitive. have to use wildcards/globs * to find from partital text. have to be in double quotes (no expansion). -exec needs escaped semicolon \;
 alias fr='find / -iname ' # use `tldr find` for basics. -L will follow symlinks
 alias fm='findmnt ' # shows mountpoints as tree
 alias g='grep -i ' # search for text and more. "Global Regular Expressions Print" -i is case-insensitive. use -v to exclude. add mulitple with `-e <pattern>`. use `-C 3` to show 3 lines above and below.
@@ -222,6 +222,7 @@ if [[ "$VIMRUNTIME" != "/usr/share/vim/vim82" ]]; then bind '",,": "!$"'; fi # e
 #if [[ "$VIMRUNTIME" != "-" ]]; then bind '".,": "$(!!)"'; fi # easy way to add last output. can expand
 #if [[ "$VIMRUNTIME" != "-" ]]; then bind '"///": reverse-search-history'; fi # easy ctrl+r for history search.
 #if [[ "$VIMRUNTIME" != "-" ]]; then bind '\C-Q: shell-kill-word'; fi # crtl+q is erase forward one word. (ctrl+a, ctrl+q to change first command on line)
+bind 'set show-all-if-ambiguous on' # this makes only one Tab necessary to show completion possibilites
 
 : <<'END' 
 basic bash commands:
