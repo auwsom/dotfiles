@@ -222,7 +222,7 @@ if [[ "$VIMRUNTIME" != "/usr/share/vim/vim82" ]]; then bind '",,": "!$"'; fi # e
 #if [[ "$VIMRUNTIME" != "-" ]]; then bind '".,": "$(!!)"'; fi # easy way to add last output. can expand
 #if [[ "$VIMRUNTIME" != "-" ]]; then bind '"///": reverse-search-history'; fi # easy ctrl+r for history search.
 #if [[ "$VIMRUNTIME" != "-" ]]; then bind '\C-Q: shell-kill-word'; fi # crtl+q is erase forward one word. (ctrl+a, ctrl+q to change first command on line)
-bind 'set show-all-if-ambiguous on' # this makes only one Tab necessary to show completion possibilites
+bind 'set show-all-if-ambiguous on' # this makes only one Tab necessary to show completion possibilities
 
 : <<'END' 
 basic bash commands:
@@ -330,6 +330,7 @@ fi
 # https://askubuntu.com/questions/202075/how-do-i-get-vim-to-remember-the-line-i-was-on-when-i-reopen-a-file
 # more ideas: https://github.com/amix/vimrc, https://github.com/rwxrob/dot/blob/main/vim/.vimrc
 # https://rwxrob.github.io/vi-help/
+# deindent ctrl-D
 shopt -s expand_aliases # to use bash aliases inside vi plus the `let $BASH_ENV = "~/.bash_aliase` in .vimrc
 
 : <<'END3'
