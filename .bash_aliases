@@ -152,7 +152,7 @@ alias flmh='find ~ -type d \( -name .cache -o -name .mozilla \) -prune -o -type 
 alias flm='find . -type f -mmin -1 '
 alias free='type free; free -h ' # check memory, human readable
 alias gm='guestmount -i $file -a /mnt' # set file=<vm/partition-backup> first 
-# `inotifywait -m ~/.config/ -e create -e modify` (inotify-tools), watch runs every x sec, entr runs command after file changes
+# `inotifywait -m ~/.config/ -e create -e modify` (inotify-tools), watch runs every x sec, entr runs command after file changes. use examples from bottom of `man entr` `ls *.js | entr -r node app.js`
 alias jo='journalctl' # -p,  -err, --list-boots, -b boot, -b -1 last boot, -r reverse, -k (kernel/dmesg), -f follow, --grep -g, --catalog -x (use error notes), -e goto end
 alias jox='journalctl -x' # --catalog -x (use error notes)
 alias ku='pkill -KILL -u user ' # kill another users processes. use `skill` default is TERM.
