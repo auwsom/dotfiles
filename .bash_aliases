@@ -62,7 +62,7 @@ alias cdh='cd ~ ' # cd home.. just use `cd ` with one space to goto home.
 alias cdb='cd - ' # cd back
 alias cdu='cd .. ' # change directory up
 alias cp='type cp; cp -ar ' # achive and recursive. but rsync is better because shows progress (not possible with cp without piping to pv). also try `install` command - copies and keeps permissions of target dir. type shows the alias to avoid confusion.
-alias cpr='type cpr; rsync -aAX --info=progress2 ' # copy with progress info, -a --archive mode: recursive, copies symlinks, keeps permissions, times, owner, group, device. -A acls -X extended attributes.
+alias cpr='type cpr; rsync -aAX --info=progress2 ' # copy with progress info, -a --archive mode: recursive, copies symlinks, keeps permissions, times, owner, group, device. -A acls -X extended attributes. -c checks/verify
 alias df='df -h -x"squashfs" ' # "disk free" human readable, will exclude show all the snap mounts
 alias du='du -hs ' # human readable, summarize
 alias e='echo ' # print <args>. or for 'exit '-01/816-5165/history-1/index.html
@@ -76,7 +76,7 @@ alias hhh='history ' # `apt install hstr`. replaces ctrl-r with `hstr --show-con
 alias hg='history | grep -i '
 #alias hd='history -d -2--1 ' #not working # delete last line. `history -d -10--2` to del 9 lines from -10 to -2 inclusive, counting itself. or use space in front of command to hide. 
 alias j='jobs ' # dont use much unless `ctrl+z` to stop process
-alias k='kill -9 <id> ' # or `kill SIGTERM` to terminate process (or job). or `pgreg __` and then `pkill __`
+alias k='kill -9 '#<id> # or `kill SIGTERM` to terminate process (or job). or `pgreg __` and then `pkill __`
 alias kk='kill %1 ' # kill job 1 gently
 alias k3='kill -TERM %1 ' # terminate job 1
 alias loc='locate --limit 5' # `apt install locate` finds common file locations fast (fstab, etc) 
@@ -144,7 +144,7 @@ alias ds='dirs ' # shows dir stack for pushd/popd
 # dbus-monitor, qdbus
 # `env` # shows environment variables
 alias r='fc -s ' #<query> # search and rerun command from history. shebang is similar !<query> or !number. fc -s [old=new] [command]   https://docs.oracle.com/cd/E19253
-alias fsck='type fsck; fsck -p ' # automatic. or use -y for yes to all except multiple choice.
+alias fsck='type fsck; fsck '#-p automatically fix. or use -y for yes to all except multiple choice.
 alias redo='fc -s ' # redo from history. see fc.
 alias fn='find . -iname ' # find, search in name
 alias flmr='find / -type d \( -name proc -o -name sys -o -name dev -o -name run -o -name var -o -name media \) -prune -o -type f -mmin -1 '
