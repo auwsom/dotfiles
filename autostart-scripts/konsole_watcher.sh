@@ -18,10 +18,10 @@ fi
 
 # Function to get the current sessions and write them to a file
 function getSessions {
-    pid=$(pgrep konsole -u $USER)
+    pid=$(pgrep -x konsole -u $USER)
     local SESSIONS=$(qdbus org.kde.konsole-$pid | grep /Sessions/)
     if [[ ${SESSIONS} ]] ; then
-       echo "# Most recent session list " $(date) > ${SAVEFILE_TERMINAL}
+       echo "# Most recent session list " $(date) >| ${SAVEFILE_TERMINAL}
        for i in ${SESSIONS}; do
        local FORMAT=$(qdbus org.kde.konsole-$pid $i tabTitleFormat 0)
        local PROCESSID=$(qdbus org.kde.konsole-$pid $i processId)

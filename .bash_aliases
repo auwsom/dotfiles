@@ -76,7 +76,7 @@ alias hhh='history ' # `apt install hstr`. replaces ctrl-r with `hstr --show-con
 alias hg='history | grep -i '
 #alias hd='history -d -2--1 ' #not working # delete last line. `history -d -10--2` to del 9 lines from -10 to -2 inclusive, counting itself. or use space in front of command to hide. 
 alias j='jobs ' # dont use much unless `ctrl+z` to stop process
-alias k='kill -9 '#<id> # or `kill SIGTERM` to terminate process (or job). or `pgreg __` and then `pkill __`
+alias k='kill -9 ' #<id> # or `kill SIGTERM` to terminate process (or job). or `pgreg __` and then `pkill __`
 alias kk='kill %1 ' # kill job 1 gently
 alias k3='kill -TERM %1 ' # terminate job 1
 alias loc='locate --limit 5' # `apt install locate` finds common file locations fast (fstab, etc) 
@@ -144,7 +144,7 @@ alias ds='dirs ' # shows dir stack for pushd/popd
 # dbus-monitor, qdbus
 # `env` # shows environment variables
 alias r='fc -s ' #<query> # search and rerun command from history. shebang is similar !<query> or !number. fc -s [old=new] [command]   https://docs.oracle.com/cd/E19253
-alias fsck='type fsck; fsck '#-p automatically fix. or use -y for yes to all except multiple choice.
+alias fsck='type fsck; fsck ' #-p automatically fix. or use -y for yes to all except multiple choice.
 alias redo='fc -s ' # redo from history. see fc.
 alias fn='find . -iname ' # find, search in name
 alias flmr='find / -type d \( -name proc -o -name sys -o -name dev -o -name run -o -name var -o -name media \) -prune -o -type f -mmin -1 '
