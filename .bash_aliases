@@ -342,6 +342,8 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 echo -e "
 set -g prefix C-a # change default prefix to match Screen's
 set mouse on # allows scrolling
+set -g status-position top
+bind-key C-a last-window
 set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'tmux-plugins/tmux-continuum'
 set -g @plugin 'tmux-plugins/tmux-resurrect' # C-s, C-r  to save and restore
