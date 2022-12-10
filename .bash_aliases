@@ -331,6 +331,7 @@ fi
 # more ideas: https://github.com/amix/vimrc, https://github.com/rwxrob/dot/blob/main/vim/.vimrc
 # https://rwxrob.github.io/vi-help/
 # deindent ctrl-D
+# https://github.com/tpope/vim-sensible # sensible settings repo
 shopt -s expand_aliases # to use bash aliases inside vi plus the `let $BASH_ENV = "~/.bash_aliase` in .vimrc
 
 : <<'END3'
@@ -362,7 +363,7 @@ alias remux='tmux source ~/.tmux.conf' # reload tmux
 # https://tmuxcheatsheet.com/
 # Scrolling: Ctrl-b then [ then you can use your normal navigation keys to scroll around (eg. Up Arrow or PgDn). Press q to quit scroll mode.
 END3
-https://github.com/akinomyoga/ble.sh
+
 ## basic git settings
 alias gs='git status '
 alias gl='git log '
@@ -446,3 +447,12 @@ alias py='python3'
 
 # nerd-dictation voice commands
 alias list='ll '
+
+# ble - Bash autosuggestion
+# https://github.com/akinomyoga/ble.sh
+#bleopt complete_auto_complete= # Disable auto-complete 
+
+
+
+
+
