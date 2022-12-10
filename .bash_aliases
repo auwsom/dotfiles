@@ -10,9 +10,9 @@
 #shopt -s histappend # append to history, don't overwrite it. for using multiple shells at once. is default set in .bashrc
 export HISTFILESIZE=10000        # increase history file size
 export HISTSIZE=${HISTFILESIZE}  # increase history list (in memory) size 
-HISTCONTROL=ignorespace:ignoredups:erasedups   # no duplicate entries. ignoredups is onlt for consecutive
+HISTCONTROL=ignoredups:erasedups   # no duplicate entries. ignoredups is onlt for consecutive
 #HISTTIMEFORMAT="%h %d %H:%M " # "%F %T "
-export HISTIGNORE="!(+(*\ *))" # ignores commands without arguments. not compatible with HISTTIMEFORMAT. should be the same as `grep -v -E "^\S+\s.*" $HISTFILE`
+#export HISTIGNORE="!(+(*\ *))" # ignores commands without arguments. not compatible with HISTTIMEFORMAT. should be the same as `grep -v -E "^\S+\s.*" $HISTFILE`
 #export HISTIGNORE="&:ls:[bf]g:exit:pwd:clear:mount:umount" # ignore these single commands
 #shopt -s histverify   # confirm bash history (!number) commands before executing. optional for beginners using bang ! commands. can also use ctrl+alt+e to expand before enter.
 #alias ha='history -a ' # append current history before opening new terminal, to have it available.
