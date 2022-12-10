@@ -37,7 +37,7 @@ function rescue_history { history -a; }; trap rescue_history SIGHUP # saves hist
 
 # some familiar keyboard shortcuts 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
-stty intr ^S # this changes the ctrl+c for interrupt process to ctrl+s, to allow modern ctrl+c for copy.
+#stty intr ^S # this changes the ctrl+c for interrupt process to ctrl+s, to allow modern ctrl+c for copy.
 stty lnext ^N # this changes the ctrl+v for lnext to ctrl+b, to allow modern ctrl+v for paste. lnext shows the keycode of the next key typed.
 stty susp ^F #stty susp undef; #stty intr undef # ctrl+z for undo have to remove default. https://www.computerhope.com/unix/bash/bind.htm
 if [[ "$VIMRUNTIME" != "/usr/share/vim/vim82" ]]; then  # dont run in non-inteactive (ie vim)
@@ -133,7 +133,7 @@ alias cx="chmod +x " # make executable
 alias cm="chmod -R 777 " # change perms to all
 alias diff='diff --color ' # compare
 alias dmesg='type dmesg; dmesg -HTw ' # messages from the kernel, human readable, timestamp, follow
-alias dli='tac var/log/dpkg.log | grep -i "install"' # list installed packages
+alias dli='tac /var/log/dpkg.log | grep -i "install"' # list installed packages
 alias ali='apt list | grep -i "installed"' # list installed apt packages
 alias alig='apt list | grep -i "installed" | grep -i ' # list installed apt packages
 alias dlk='dpkg --list | grep -i -E "linux-image|linux-kernel" | grep "^ii"' # list kernels
@@ -335,15 +335,21 @@ shopt -s expand_aliases # to use bash aliases inside vi plus the `let $BASH_ENV 
 
 : <<'END3'
 ## tmux   wget https://raw.githubusercontent.com/rwxrob/dot/main/tmux/.tmux.conf
-# C-a, (d = detach, [ = copy mode, q = quit) g G w b / ? n N space enter esc ] = paste
+# tmux a # to attach (start) old session. C-a,d to detach
+# C-a,[ for copy mode, q to quit, space to start selection, enter to copy, C-a,] to paste
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+# C-b + I (shift+i) to install plugins with tpm
 echo -e "
+set -g prefix C-a # change default prefix to match Screen's
+set mouse on # allows scrolling
 set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-continuum'
+set -g @plugin 'tmux-plugins/tmux-resurrect' # C-s, C-r  to save and restore
 set -g @plugin 'tmux-plugins/tmux-sensible'
-set -g @plugin 'tmux-plugins/tmux-resurrect' # C-a, C-b  to save and restore
 set -g @continuum-restore 'on' # every 15 min
 run '~/.tmux/plugins/tpm/tpm'
 " >> ~/.tmux.conf
+alias remux='tmux source ~/.tmux.conf' # reload tmux
 # https://tmuxcheatsheet.com/
 # Scrolling: Ctrl-b then [ then you can use your normal navigation keys to scroll around (eg. Up Arrow or PgDn). Press q to quit scroll mode.
 END3
