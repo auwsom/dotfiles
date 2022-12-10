@@ -342,7 +342,7 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 # C-b + I (shift+i) to install plugins with tpm
 echo -e "
 set -g prefix C-a # change default prefix to match Screen's
-set mouse on # allows scrolling
+set mouse on # allows scrolling # !! hold shift to select text 
 set -g status-style "fg=#665c54"
 set -g status-bg default
 set-option -g status-interval 5
