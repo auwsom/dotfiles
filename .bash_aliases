@@ -335,15 +335,22 @@ shopt -s expand_aliases # to use bash aliases inside vi plus the `let $BASH_ENV 
 
 : <<'END3'
 ## tmux   wget https://raw.githubusercontent.com/rwxrob/dot/main/tmux/.tmux.conf
-# tmux a # to attach (start) old session. C-a,d to detach
+# tmux a # to attach (start) old session. C-a,d to detach. C-a,x to close. C-a,: for command mode.
 # C-a,[ for copy mode, q to quit, space to start selection, enter to copy, C-a,] to paste
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 # C-b + I (shift+i) to install plugins with tpm
 echo -e "
 set -g prefix C-a # change default prefix to match Screen's
 set mouse on # allows scrolling
-set -g status-position top
+set -g status-style "fg=#665c54"
+set -g status-bg default
+set-option -g status-interval 5
+set-option -g automatic-rename on
+set-option -g automatic-rename-format '#{b:pane_current_path}'
 bind-key C-a last-window
+bind c new-window -c "#{pane_current_path}"
+bind -r r source-file ~/.tmux.conf
+
 set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'tmux-plugins/tmux-continuum'
 set -g @plugin 'tmux-plugins/tmux-resurrect' # C-s, C-r  to save and restore
@@ -355,7 +362,7 @@ alias remux='tmux source ~/.tmux.conf' # reload tmux
 # https://tmuxcheatsheet.com/
 # Scrolling: Ctrl-b then [ then you can use your normal navigation keys to scroll around (eg. Up Arrow or PgDn). Press q to quit scroll mode.
 END3
-
+https://github.com/akinomyoga/ble.sh
 ## basic git settings
 alias gs='git status '
 alias gl='git log '
