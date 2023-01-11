@@ -128,7 +128,8 @@ alias au='sudo apt update'
 alias auu='sudo apt update && apt -y upgrade' # show all users logged in. `last` show last logins
 alias aca='sudo apt clean && sudo apt autoremove'
 alias bc="BC_ENV_ARGS=<(echo "scale=2") \bc"
-alias cu="chown -R user:user " # change ownership to user
+alias cu="chown -R $USER:$USER " # change ownership to current user
+alias cur="chown -R root:root " # change ownership to root
 alias cx="chmod +x " # make executable
 alias cm="chmod -R 777 " # change perms to all
 alias diff='diff --color ' # compare
@@ -156,6 +157,7 @@ alias gm='guestmount -i $file -a /mnt' # set file=<vm/partition-backup> first
 alias jo='journalctl' # -p,  -err, --list-boots, -b boot, -b -1 last boot, -r reverse, -k (kernel/dmesg), -f follow, --grep -g, --catalog -x (use error notes), -e goto end
 alias jox='journalctl -x' # --catalog -x (use error notes)
 alias ku='pkill -KILL -u user ' # kill another users processes. use `skill` default is TERM.
+alias lsblk='lsblk -f' # -f lists UUIDs and percent full
 alias lsof='type lsof; lsof -e /run/user/*' # remove cant stat errors
 #alias lnf='ln -f ' # symlink. use -f to overwrite. <target> <linkname>
 alias pegrep='grep -P ' # PCRE grep https://stackoverflow.com/a/67943782/4240654
