@@ -8,8 +8,10 @@
 
 ## basic .bashrc settings
 #shopt -s histappend # append to history, don't overwrite it. for using multiple shells at once. is default set in .bashrc
-export HISTFILESIZE=10000        # increase history file size
-export HISTSIZE=${HISTFILESIZE}  # increase history list (in memory) size 
+export HISTFILESIZE= #10000        # increase history file size # just leave blank for unlimited
+export HISTSIZE= #${HISTFILESIZE}  # increase history list (in memory) size 
+HISTFILE=~/.bash_eternal_history # "certain bash sessions truncate .bash_history" (like Screen) SU
+#sed -i 's,HISTFILESIZE=,HISTFILESIZE= #,' ~/.bashrc && sed -i 's,HISTSIZE=,HISTSIZE= #,' ~/.bashrc # run once for unlimited. have to clear the default setting in .bashrc
 HISTCONTROL=ignoredups:erasedups   # no duplicate entries. ignoredups is onlt for consecutive
 #HISTTIMEFORMAT="%h %d %H:%M " # "%F %T "
 #export HISTIGNORE="!(+(*\ *))" # ignores commands without arguments. not compatible with HISTTIMEFORMAT. should be the same as `grep -v -E "^\S+\s.*" $HISTFILE`
