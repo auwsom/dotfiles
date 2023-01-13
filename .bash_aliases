@@ -91,7 +91,7 @@ alias lsd='ls -d $PWD/* ' # returns full paths. have to be in the directory.
 alias mo='more ' # break output into pages. or `less`.
 alias md='type md; mkdir -p ' # makes all --parents directories necessary
 alias mf='type mf; touch ' # make file. or `echo $text | tee $newfile`. also `netstat`
-alias mv='type mv; mv -in ' # interactive. -n for no clobber
+alias mv='type mv; mv -i ' # interactive. -n for no clobber, but cant be used with -i (will not notify)
 alias mvu='install -o user -g user -D -t ' # target/ dir/* # this copies while keeping target dir ownership. change <user>
 alias ncdu='ncdu -x ' # manage disk space utility. `apt install ncdu`
 alias o='eval $(history -p !!) | read var; echo var=$var ' # this var only works with shopt lastpipe and set +m to disable pipe subshells
