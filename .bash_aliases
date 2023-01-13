@@ -29,7 +29,7 @@ alias realias='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bas
 dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
 shopt -s lastpipe; set +m # allows last pipe to affect shell; needs Job Control disabled
 shopt -s dotglob # makes `mv/cp /dir/*` copy all contents, both * and .*; or use `mv /path/{.,}* /path/`
-shopt -s globstar # makes ** be recursive for directories
+#shopt -s globstar # makes ** be recursive for directories
 shopt -s nocaseglob # ignores case of * globs
 #if [ -f ~/.env ]; then source ~/.env ; fi # dont use env vars for storing secrets. create dir .env and store files in there. $(cat ~/.env/mykey)
 export LC_ALL="C" # makes ls list dotfiles before others
@@ -270,7 +270,7 @@ alias shadow='/etc/shadow'
 alias sudoers='/etc/sudoers' 
 alias grub1='/etc/default/grub' 
 alias sources='/etc/apt/sources.list' 
-alias crontab='/etc/crontab' # runs /etc/cron.daily and /etc/cron.hourly
+alias crntab='/etc/crontab' # runs /etc/cron.daily and /etc/cron.hourly. `crontab -e` is official /var/spool/cron/crontabs/root
 alias resolv='/etc/resolv.conf' # resolvectl status 
 alias hosts1='/etc/hosts' 
 alias netman='/etc/network/interfaces' # `man interfaces`
