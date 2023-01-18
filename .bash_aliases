@@ -98,7 +98,9 @@ alias o='eval $(history -p !!) | read var; echo var=$var ' # this var only works
 alias p='echo $PATH' # show path
 #alias pd='pushd ' # a way to move through directories in a row (https://linux.101hacks.com/cd-command/dirs-pushd-popd/) ..aliased as `cd`
 alias pd='popd ' # going back through the 'stack' history
-alias psp='ps -o ppid= -p ' # <PID> show parent PID
+alias ps='ps -ef' # show processes
+#alias psp='ps -o ppid= -p ' # <PID> show parent PID
+alias psp='ps -Flww -p ' # <PID> show info on just one process
 alias pgrep='pgrep -af ' # grep processes - full, list-full. use \pgrep for just the PID.
 alias pkill='pkill -f ' # kill processed - full
 # p for pipe `|` a very powerful feature of shell language. transfers command output to input next command.
