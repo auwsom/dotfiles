@@ -23,8 +23,8 @@ export PROMPT_COMMAND='history -a' # will save (append) history every time a new
 # `history -a;history -c;history -r` # this will reload history with commands from other shells 
 set -o noclobber  # dont let accidental > overwrite. use >| to force redirection even with noclobber
 # alias # unalias # put extra space at end of aliased command will make bash look if the next arg is an alias
-alias vibash='vi ~/.bash_aliases ' # use `vimtutor` to learn (`esc` then `:q` to quit. `ctrl+w` sometimes). or use `nano` editor.
-alias rebash='source ~/.bashrc ' # have to use `source` command to load the settings file. ~ is home directory
+alias vibash='vi ~/.bash_aliases' # use `vimtutor` to learn (`esc` then `:q` to quit. `ctrl+w` sometimes). or use `nano` editor.
+alias rebash='source ~/.bashrc' # have to use `source` command to load the settings file. ~ is home directory
 alias realias='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc' 
 dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
 shopt -s lastpipe; set +m # allows last pipe to affect shell; needs Job Control disabled
@@ -54,33 +54,33 @@ bind '"\C-f": revert-line'; fi # clear the line
 # list all builtins with `\help`. then `\help <builtin>` for any single one.
 # use \ before any alias command to use the original command
 alias apt="sudo apt" # also extend sudo timeout: `echo 'Defaults timestamp_timeout=360 #minutes' | sudo EDITOR='tee -a' visudo`
-alias b='bg 1 ' # put background job 1
-alias f='fg 1 ' # put foreground job 1
-alias c='clear ' # clear terminal
+alias b='bg 1' # put background job 1
+alias f='fg 1' # put foreground job 1
+alias c='clear' # clear terminal
 alias cat='cat ' # concatenate (if more than one file) and display. use `realpath` for piping to cat.
 alias cd='pushd > /dev/null ' # extra space allows aliasing directories `alias fstab='/etc/fstab '`. use `pd` to go back through dir stack.
-alias cdh='cd ~ ' # cd home.. just use `cd ` with one space to goto home. 
+alias cdh='cd ~' # cd home.. just use `cd ` with one space to goto home. 
 #alias cdb='pd - ' # cd back
-alias cdb='cd - ' # cd back
-alias cdu='cd .. ' # change directory up
+alias cdb='cd -' # cd back
+alias cdu='cd ..' # change directory up
 alias cp='type cp; cp -ar ' # achive and recursive. but rsync is better because shows progress (not possible with cp without piping to pv). also try `install` command - copies and keeps permissions of target dir. type shows the alias to avoid confusion.
 alias cpr='type cpr; rsync -aAX --info=progress2 ' # copy with progress info, -a --archive mode: recursive, copies symlinks, keeps permissions, times, owner, group, device. -A acls -X extended attributes. -c checks/verify
-alias df='df -h -x"squashfs" ' # "disk free" human readable, will exclude show all the snap mounts
-alias du='du -hs ' # human readable, summarize
+alias df='df -h -x"squashfs"' # "disk free" human readable, will exclude show all the snap mounts
+alias du='du -hs' # human readable, summarize
 alias e='echo ' # print <args>. or for 'exit '-01/816-5165/history-1/index.html
-alias fh='find . -iname ' # i means case insensitive. have to use wildcards/globs * to find from partital text. have to be in double quotes (no expansion). -exec needs escaped semicolon \;
-alias fr='find / -iname ' # use `tldr find` for basics. -L will follow symlinks
-alias fm='findmnt ' # shows mountpoints as tree
+alias fh='find . -iname' # i means case insensitive. have to use wildcards/globs * to find from partital text. have to be in double quotes (no expansion). -exec needs escaped semicolon \;
+alias fr='find / -iname' # use `tldr find` for basics. -L will follow symlinks
+alias fm='findmnt' # shows mountpoints as tree
 alias g='grep -i ' # search for text and more. "Global Regular Expressions Print" -i is case-insensitive. use -v to exclude. add mulitple with `-e <pattern>`. use `-C 3` to show 3 lines above and below.
-alias i='ip -color a ' # network info
-alias h='history 50 '
-alias hhh='history ' # `apt install hstr`. replaces ctrl-r with `hstr --show-configuration >> ~/.bashrc` https://github.com/dvorka/hstr. disables hide by default.
-alias hg='history | grep -i '
+alias i='ip -color a' # network info
+alias h='history 50'
+alias hhh='history' # `apt install hstr`. replaces ctrl-r with `hstr --show-configuration >> ~/.bashrc` https://github.com/dvorka/hstr. disables hide by default.
+alias hg='history | grep -i'
 #alias hd='history -d -2--1 ' #not working # delete last line. `history -d -10--2` to del 9 lines from -10 to -2 inclusive, counting itself. or use space in front of command to hide. 
-alias j='jobs ' # dont use much unless `ctrl+z` to stop process
-alias k='kill -9 ' #<id> # or `kill SIGTERM` to terminate process (or job). or `pgreg __` and then `pkill __`
-alias kk='kill %1 ' # kill job 1 gently
-alias k3='kill -TERM %1 ' # terminate job 1
+alias j='jobs' # dont use much unless `ctrl+z` to stop process
+alias k='kill -9' #<id> # or `kill SIGTERM` to terminate process (or job). or `pgreg __` and then `pkill __`
+alias kk='kill %1' # kill job 1 gently
+alias k3='kill -TERM %1' # terminate job 1
 alias loc='locate --limit 5' # `apt install locate` finds common file locations fast (fstab, etc) 
 #alias ls='ls -F ' # list. F is --classify with symbols or colors. already included in most .bashrc
 #alias la='ls -A' # list all. included. 
@@ -89,42 +89,42 @@ alias lll='ls -alF ' # "list" all long format. full bytec count.
 alias ltr='ls -ltr ' # "list" long, time, reverse. sorted bottom is latest changed. 
 alias lsd='ls -d $PWD/* ' # returns full paths. have to be in the directory. 
 alias mo='more ' # break output into pages. or `less`.
-alias md='type md; mkdir -p ' # makes all --parents directories necessary
-alias mf='type mf; touch ' # make file. or `echo $text | tee $newfile`. also `netstat`
+alias md='type md; mkdir -p' # makes all --parents directories necessary
+alias mf='type mf; touch' # make file. or `echo $text | tee $newfile`. also `netstat`
 alias mv='type mv; mv -i ' # interactive. -n for no clobber, but cant be used with -i (will not notify)
-alias mvu='install -o user -g user -D -t ' # target/ dir/* # this copies while keeping target dir ownership. change <user>
-alias ncdu='ncdu -x ' # manage disk space utility. `apt install ncdu`
-alias o='eval $(history -p !!) | read var; echo var=$var ' # this var only works with shopt lastpipe and set +m to disable pipe subshells
+alias mvu='install -o user -g user -D -t' # target/ dir/* # this copies while keeping target dir ownersperms and ownership. change <user>
+alias ncdu='ncdu -x' # manage disk space utility. `apt install ncdu`
+alias o='eval $(history -p !!) | read v; echo v=$v' # this var only works with shopt lastpipe and set +m to disable pipe subshells. copies output to $v. also can use xclip and xsel.
 alias p='echo $PATH' # show path
 #alias pd='pushd ' # a way to move through directories in a row (https://linux.101hacks.com/cd-command/dirs-pushd-popd/) ..aliased as `cd`
-alias pd='popd ' # going back through the 'stack' history
+alias pd='popd' # going back through the 'stack' history
 alias ps='ps -ef' # show processes
 #alias psp='ps -o ppid= -p ' # <PID> show parent PID
-alias psp='ps -Flww -p ' # <PID> show info on just one process
-alias pgrep='pgrep -af ' # grep processes - full, list-full. use \pgrep for just the PID.
-alias pkill='pkill -f ' # kill processed - full
+alias psp='ps -Flww -p' # <PID> show info on just one process
+alias pgrep='pgrep -af' # grep processes - full, list-full. use \pgrep for just the PID.
+alias pkill='pkill -f' # kill processed - full
 # p for pipe `|` a very powerful feature of shell language. transfers command output to input next command.
-alias q='helpany ' # see helpany function
+alias q='helpany' # see helpany function
 alias rm='rm -Irv ' # make remove confirm and also recursive for directories by default. v is for verbose. 
 # ^^ ***maybe most important one***, avoids deleting uninended files. use -i to approve each deletion.
 alias sudo='sudo '; alias s='sudo '; alias ss='sudo -s ' # elevate privelege for command. see `visudo` to set. And `usermod -aG sudo add`, security caution when adding.
-alias sss='eval sudo $(history -p !!) ' # redo with sudo
+alias sss='eval sudo $(history -p !!)' # redo with sudo
 alias ssh='ssh -vvv ' # most verbose level
 # `sort` `sort --numeric-sort` `sort --human-numeric-sort` `unique`
 # `stat` will show file info 
-alias top='htop ' # `q` to exit like in many utilities. htop allows deleting directly. `apt install htop`
-alias tree='tree -h --du -L 2 ' #<dir>. `apt install tree`
+alias top='htop' # `q` to exit like in many utilities. htop allows deleting directly. `apt install htop`
+alias tree='tree -h --du -L 2' #<dir>. `apt install tree`
 # `type` will show info on commands and show functions
-alias untar='tar -xvf ' # -C /target/directory
-alias urel='cat /etc/os-release ' # show OS info
+alias untar='tar -xvf' # -C /target/directory
+alias urel='cat /etc/os-release' # show OS info
 alias vi='vi ' # needs space at end for alias chaining
 #alias w='whatis ' # display one-line manual page descriptions
 #alias w='whereis ' # locate the binary, source, and manual page files for a...
 #alias w='which ' # locate a command
 alias x='xargs ' # take last output and pipe into new command. not all commands support it, but many do. 
 # use `xargs -I % some-command %` to use output as non-standard argument
-alias rrr='reboot ' # uncomment if you want this. also `systemctl reboot`. DE `reboot -t 120`   
-alias zzz='systemctl poweroff ' # uncomment if you want this. also `systemctl halt` or `shutdown -H now`. halt leaves on
+alias rrr='reboot' # uncomment if you want this. also `systemctl reboot`. DE `reboot -t 120`   
+alias zzz='systemctl poweroff' # uncomment if you want this. also `systemctl halt` or `shutdown -H now`. halt leaves on
 
 
 ### more advanced:
@@ -132,24 +132,25 @@ alias au='sudo apt update'
 alias auu='sudo apt update && apt -y upgrade' # show all users logged in. `last` show last logins
 alias aca='sudo apt clean && sudo apt autoremove'
 alias bc="BC_ENV_ARGS=<(echo "scale=2") \bc"
-alias cu="chown -R $USER:$USER " # change ownership to current user
-alias cur="chown -R root:root " # change ownership to root
-alias cx="chmod +x " # make executable
-alias cm="chmod -R 777 " # change perms to all
+alias cu="chown -R $USER:$USER" # change ownership to current user
+alias cur="chown -R root:root" # change ownership to root
+alias cx="chmod +x" # make executable
+alias cm="chmod -R 777" # change perms to all
 alias diff='diff --color ' # compare
-alias dmesg='type dmesg; dmesg -HTw ' # messages from the kernel, human readable, timestamp, follow
+alias dmesg='type dmesg; dmesg -HTw' # messages from the kernel, human readable, timestamp, follow
 alias dli='tac /var/log/dpkg.log | grep -i "install"' # list installed packages
 alias ali='apt list | grep -i "installed"' # list installed apt packages
-alias alig='apt list | grep -i "installed" | grep -i ' # list installed apt packages
+alias alig='apt list | grep -i "installed" | grep -i' # list installed apt packages
 alias dlk='dpkg --list | grep -i -E "linux-image|linux-kernel" | grep "^ii"' # list kernels
 alias dll='grep -i install /var/log/dpkg.log' # list last installed
-alias dl='dpkg --listfiles ' # -L list package install locations
+alias dl='dpkg --listfiles' # -L list package install locations
 alias dc='dpkg-reconfigure -a' # use when apt install breaks. use `apt -f install` install dependencies when using `apt install debfile.deb`
-alias ds='dirs ' # shows dir stack for pushd/popd
+alias ds='dirs' # shows dir stack for pushd/popd
 # dbus-monitor, qdbus
 # `env` # shows environment variables
-alias r='fc -s ' #<query> # search and rerun command from history. shebang is similar !<query> or !number. fc -s [old=new] [command]   https://docs.oracle.com/cd/E19253
-alias fsck='type fsck; fsck ' #-p automatically fix. or use -y for yes to all except multiple choice.
+alias r='fc -s' #<query> # search and rerun command from history. shebang is similar !<query> or !number. fc -s [old=new] [command]   https://docs.oracle.com/cd/E19253
+alias fsck='type fsck; fsck' #-p automatically fix. or use -y for yes to all except multiple choice.
+
 alias redo='fc -s ' # redo from history. see fc.
 alias fn='find . -iname ' # find, search in name
 alias flmr='find / -type d \( -name proc -o -name sys -o -name dev -o -name run -o -name var -o -name media \) -prune -o -type f -mmin -1 '
