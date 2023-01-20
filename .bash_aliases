@@ -27,7 +27,7 @@ alias vibash='vi ~/.bash_aliases' # use `vimtutor` to learn (`esc` then `:q` to 
 alias rebash='source ~/.bashrc' # have to use `source` command to load the settings file. ~ is home directory
 alias realias='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc' 
 dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
-shopt -s lastpipe; set +m # allows last pipe to affect shell; needs Job Control disabled
+shopt -s lastpipe; set +m # allows last pipe to affect shell; needs Job Control disabled +m
 shopt -s dotglob # makes `mv/cp /dir/*` copy all contents, both * and .*; or use `mv /path/{.,}* /path/`
 #shopt -s globstar # makes ** be recursive for directories
 shopt -s nocaseglob # ignores case of * globs
@@ -47,12 +47,13 @@ bind '"\C-Z": undo' && bind '"\ez": yank'; fi # crtl+z and alt+z (bash bind wont
 if [[ "$VIMRUNTIME" != "/usr/share/vim/vim82" ]]; then 
 bind '"\C-f": revert-line'; fi # clear the line
 
-## short abc's of common commands. be careful when making one letter test files or variables. use \ to escape alias.
-## commands. use `whatis` then command name for official explanation of any command. then command plus `--help`
-# use `--help` flag or `man`, `info`, `tldr` and `whatis` commands for more info on any command
-# full list: https://www.computerhope.com/unix.htm or `ls /bin`. https://www.gnu.org/software/coreutils/manual/coreutils.html
+## short abc's of common commands. be careful when making one letter test files or variables. 
+## use \ to escape any alias. `type <command>` is in front to show it's an alias and avoid confusion.
+## cant use type in front with sudo, so same name is used only when least confusion.
+## aliases need space at end for chaining so can be used before alaised directories or files.
+## use `whatis` then command name for official explanation of any command. then command plus `--help` flag or `man`, `info`, `tldr` and `whatis` commands for more info on any command. or q.
+# full list of shell commmands: https://www.computerhope.com/unix.htm or `ls /bin`. https://www.gnu.org/software/coreutils/manual/coreutils.html
 # list all builtins with `\help`. then `\help <builtin>` for any single one.
-# use \ before any alias command to use the original command
 alias apt="sudo apt" # also extend sudo timeout: `echo 'Defaults timestamp_timeout=360 #minutes' | sudo EDITOR='tee -a' visudo`
 alias b='bg 1' # put background job 1
 alias f='fg 1' # put foreground job 1
@@ -63,12 +64,12 @@ alias cdh='cd ~' # cd home.. just use `cd ` with one space to goto home.
 #alias cdb='pd - ' # cd back
 alias cdb='cd -' # cd back
 alias cdu='cd ..' # change directory up
-alias cp='type cp; cp -ar ' # achive and recursive. but rsync is better because shows progress (not possible with cp without piping to pv). also try `install` command - copies and keeps permissions of target dir. type shows the alias to avoid confusion.
-alias cpr='type cpr; rsync -aAX --info=progress2 ' # copy with progress info, -a --archive mode: recursive, copies symlinks, keeps permissions, times, owner, group, device. -A acls -X extended attributes. -c checks/verify
-alias df='df -h -x"squashfs"' # "disk free" human readable, will exclude show all the snap mounts
+alias cpa='type cp; cp -ar ' # achive and recursive. but rsync is better because shows progress (not possible with cp without piping to pv). also try `install` command - copies and keeps permissions of target dir. type shows the alias to avoid confusion.
+alias cpr='rsync -aAX --info=progress2 ' # copy with progress info, -a --archive mode: recursive, copies symlinks, keeps permissions, times, owner, group, device. -A acls -X extended attributes. -c checks/verify. cant use `type` (to show it is an alias) with sudo in front.
+alias df='type df; df -h -x"squashfs"' # "disk free" human readable, will exclude show all the snap mounts
 alias du='du -hs' # human readable, summarize
-alias e='echo ' # print <args>. or for 'exit '-01/816-5165/history-1/index.html
-alias fh='find . -iname' # i means case insensitive. have to use wildcards/globs * to find from partital text. have to be in double quotes (no expansion). -exec needs escaped semicolon \;
+# 'echo' # print <args>. 'exit '.
+alias fh='find . -iname' # i means case insensitive. have to use wildcards/globs * to find from partial text. have to be in double quotes (no expansion). -exec needs escaped semicolon \;
 alias fr='find / -iname' # use `tldr find` for basics. -L will follow symlinks
 alias fm='findmnt' # shows mountpoints as tree
 alias g='grep -i ' # search for text and more. "Global Regular Expressions Print" -i is case-insensitive. use -v to exclude. add mulitple with `-e <pattern>`. use `-C 3` to show 3 lines above and below.
@@ -80,7 +81,7 @@ alias hg='history | grep -i'
 alias j='jobs' # dont use much unless `ctrl+z` to stop process
 alias k='kill -9' #<id> # or `kill SIGTERM` to terminate process (or job). or `pgreg __` and then `pkill __`
 alias kk='kill %1' # kill job 1 gently
-alias k3='kill -TERM %1' # terminate job 1
+alias kj='kill -TERM %1' # terminate job 1
 alias loc='locate --limit 5' # `apt install locate` finds common file locations fast (fstab, etc) 
 #alias ls='ls -F ' # list. F is --classify with symbols or colors. already included in most .bashrc
 #alias la='ls -A' # list all. included. 
@@ -91,14 +92,14 @@ alias lsd='ls -d $PWD/* ' # returns full paths. have to be in the directory.
 alias mo='more ' # break output into pages. or `less`.
 alias md='type md; mkdir -p' # makes all --parents directories necessary
 alias mf='type mf; touch' # make file. or `echo $text | tee $newfile`. also `netstat`
-alias mv='type mv; mv -i ' # interactive. -n for no clobber, but cant be used with -i (will not notify)
+alias mva='mv -i ' # interactive. -n for no clobber, but cant be used with -i (will not notify)
 alias mvu='install -o user -g user -D -t' # target/ dir/* # this copies while keeping target dir ownersperms and ownership. change <user>
 alias ncdu='ncdu -x' # manage disk space utility. `apt install ncdu`
 alias o='eval $(history -p !!) | read v; echo v=$v' # this var only works with shopt lastpipe and set +m to disable pipe subshells. copies output to $v. also can use xclip and xsel.
 alias p='echo $PATH' # show path
 #alias pd='pushd ' # a way to move through directories in a row (https://linux.101hacks.com/cd-command/dirs-pushd-popd/) ..aliased as `cd`
 alias pd='popd' # going back through the 'stack' history
-alias ps='ps -ef' # show processes
+alias psa='ps -ef' # show processes
 #alias psp='ps -o ppid= -p ' # <PID> show parent PID
 alias psp='ps -Flww -p' # <PID> show info on just one process
 alias pgrep='pgrep -af' # grep processes - full, list-full. use \pgrep for just the PID.
@@ -106,13 +107,13 @@ alias pkill='pkill -f' # kill processed - full
 # p for pipe `|` a very powerful feature of shell language. transfers command output to input next command.
 alias q='helpany' # see helpany function
 alias rm='rm -Irv ' # make remove confirm and also recursive for directories by default. v is for verbose. 
-# ^^ ***maybe most important one***, avoids deleting uninended files. use -i to approve each deletion.
+# ^^maybe most helpful alias^^, avoids deleting unintended files. use -i to approve each deletion.
 alias sudo='sudo '; alias s='sudo '; alias ss='sudo -s ' # elevate privelege for command. see `visudo` to set. And `usermod -aG sudo add`, security caution when adding.
 alias sss='eval sudo $(history -p !!)' # redo with sudo
 alias ssh='ssh -vvv ' # most verbose level
 # `sort` `sort --numeric-sort` `sort --human-numeric-sort` `unique`
 # `stat` will show file info 
-alias top='htop' # `q` to exit like in many utilities. htop allows deleting directly. `apt install htop`
+alias top='htop' # `q` to exit (common in unix). htop allows deleting directly. `apt install htop`
 alias tree='tree -h --du -L 2' #<dir>. `apt install tree`
 # `type` will show info on commands and show functions
 alias untar='tar -xvf' # -C /target/directory
