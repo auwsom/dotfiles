@@ -201,7 +201,7 @@ alias umforce='umount -l ' # unmount lazy works when force doesnt
 # export -f <alias> # will export alias as function to be used in scripts. or source .bash_aliases after settinge `shopt -s expand_aliases`
 set -a # sets for export to env the following functions, for calling in scripts and subshells (aliases dont get called).
 function hdn { history -d $1; history -w; } # delete history line number
-function hdl { history -d $(($HISTCMD - 2)); history -w; } # delete history last number
+function hdl { history -d $(($HISTCMD - 1)); history -w; } # delete history last number
 function hdln { history -d $(($HISTCMD - $1 -1))-$(($HISTCMD - 2)); history -w; } # delete last n lines. (add 1 for this command) (history -d -$1--1; has error)
 function help { $1 --help; } # use `\help` if you ever want to see the default commands list
 function hh { $1 --help; } 
