@@ -137,7 +137,7 @@ alias cu="chown -R $USER:$USER" # change ownership to current user
 alias cur="chown -R root:root" # change ownership to root
 alias cx="chmod +x" # make executable
 alias cm="chmod -R 777" # change perms to all
-alias diff='diff --color ' # compare
+alias diff='diff -y --color ' # compare. -y show
 alias dmesg='type dmesg; dmesg -HTw' # messages from the kernel, human readable, timestamp, follow
 alias dli='tac /var/log/dpkg.log | grep -i "install"' # list installed packages
 alias ali='apt list | grep -i "installed"' # list installed apt packages
@@ -149,7 +149,7 @@ alias dc='dpkg-reconfigure -a' # use when apt install breaks. use `apt -f instal
 alias ds='dirs' # shows dir stack for pushd/popd
 # dbus-monitor, qdbus
 # `env` # shows environment variables
-alias r='fc -s' #<query> # search and rerun command from history. shebang is similar !<query> or !number. fc -s [old=new] [command]   https://docs.oracle.com/cd/E19253
+alias r='fc -s' #<query> # search and rerun command from history. shebang is similar !<query> or !number. fc -s [old=new] [command]   https://docs.oracle.com/cd/E19253 (fix command)
 alias fsck='type fsck; fsck' #-p automatically fix. or use -y for yes to all except multiple choice.
 
 alias redo='fc -s ' # redo from history. see fc.
@@ -173,6 +173,7 @@ alias pip='type pip; pip3 --verbose'
 alias pstree='pstree ' # shows what started a process
 alias py='type py; python3 ' 
 alias ra='read -a ' # reads into array/list. 
+alias rkonsole='/home/user/.config/autostart-scripts/konsole_watcher.sh restore' # restore konsole tabs 
 alias rplasma='pkill plasmashell && plasmashell & ' # restart plasmashell in KDE Kubuntu
 alias sys='systemctl' # `enable --now` will enable and start
 alias sysl='systemctl list-unit-files ' # | grep <arg>
@@ -187,7 +188,7 @@ alias wdu='watch du -d1 .' # `watch du -s <dir>`
 alias zzr='shutdown -r now || true ' # reboot in ssh, otherwise freezes
 alias zzs='shutdown -h now || true ' # shutdown in ssh, otherwise freezes
 # common typos
-alias unmount='umount ' ; alias um='umount ' ; alias mounts='mount ' ; alias m='type m; printf "\033[?7l"; mount | g -v -e cgroup -e fs; printf "\033[?7h"' ; alias ma='mount -a' ; alias mg='mount | grep '; alias mr='mount -o remount,'; 
+alias unmount='umount ' ; alias um='umount ' ; alias mounts='mount ' ; alias m='type m; printf "\033[?7l"; mount | g -v -e cgroup -e fs; printf "\033[?7h"' ; alias ma='mount -a' ; alias mg='mount | grep '; alias mr='mount -o remount,rw'; 
 alias umforce='umount -l ' # unmount lazy works when force doesnt
 # change tty term from cli: `chvt 2`
 # keyrings https://itnext.io/what-is-linux-keyring-gnome-keyring-secret-service-and-d-bus-349df9411e67 
