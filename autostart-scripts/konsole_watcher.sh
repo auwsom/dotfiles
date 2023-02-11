@@ -7,8 +7,8 @@
 
 # Configuration
 COMMAND=''
-WATCH_INTERVAL_SECONDS=15
-SAVEFILE_TERMINAL="${HOME}/.konsole/current-tabs"
+WATCH_INTERVAL_SECONDS=115
+SAVEFILE_TERMINAL="${HOME}/current-tabs"
 
 # Restore if asked to
 if [ "$1" = "restore" ] ; then
@@ -18,7 +18,7 @@ fi
 
 # Function to get the current sessions and write them to a file
 function getSessions {
-    pid=$(pgrep -x konsole -u $USER)
+    pid=$(pgrep konsole -u $USER | head -1 | awk '{print $1}')
     local SESSIONS=$(qdbus org.kde.konsole-$pid | grep /Sessions/)
     if [[ ${SESSIONS} ]] ; then
        echo "# Most recent session list " $(date) >| ${SAVEFILE_TERMINAL}
