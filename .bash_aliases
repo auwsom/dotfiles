@@ -168,6 +168,7 @@ alias lsof='type lsof; lsof -e /run/user/*' # remove cant stat errors
 #alias lnf='ln -f ' # symlink. use -f to overwrite. <target> <linkname>
 alias pegrep='grep -P ' # PCRE grep https://stackoverflow.com/a/67943782/4240654
 alias perl='type perl; perl -p -i -e ' # loop through stdin lines. in-place. use as command. https://stackoverflow.com/questions/6302025/perl-flags-pe-pi-p-w-d-i-t
+alias ping='type ping; ping -c 3 8.8.8.8' # count 3. google ip.
 alias pip='type pip; pip3 --verbose'
 #alias pipd='pip --download -d /media/user/data ' 
 alias pstree='pstree ' # shows what started a process
@@ -268,27 +269,33 @@ END
 
 ## common files: # need extra space in alias for commands on files
 shopt -s cdable_vars # makes directories aliasable. see bottom for commonly used directories
-alias fstab='/etc/fstab' 
-alias pwd1='/etc/passwd' 
-alias group1='/etc/group' 
-alias shadow='/etc/shadow' 
-alias sudoers='/etc/sudoers' 
-alias grub1='/etc/default/grub' 
-alias sources='/etc/apt/sources.list' 
-alias crntab='/etc/crontab' # runs /etc/cron.daily and /etc/cron.hourly. `crontab -e` is official /var/spool/cron/crontabs/root
-alias resolv='/etc/resolv.conf' # resolvectl status 
-alias hosts1='/etc/hosts' 
-alias netman='/etc/network/interfaces' # `man interfaces`
-alias netplan1='/etc/netplan/01-netcfg.yaml' # add `optional: true` under ethernets: interface: to prevent boot waiting on network
-alias mailr='/var/mail/root ' # mail
-alias osr='/etc/os-release' # os name
-alias sysd='/etc/systemd/system/multi-user.target.wants' # services startup 
+alias fstab='/etc/fstab' #dir
+alias pwd1='/etc/passwd' #dir
+alias group1='/etc/group' #dir
+alias shadow='/etc/shadow' #dir
+alias sudoers='/etc/sudoers' #dir
+alias grub1='/etc/default/grub' #dir
+alias grubd='/etc/default/grub.d/' #dir
+alias sources='/etc/apt/sources.list' #dir
+alias sourcesd='/etc/apt/sources.list.d/' #dir
+alias crntab='/etc/crontab' # runs /etc/cron.daily and /etc/cron.hourly. `crontab -e` is official /var/spool/cron/crontabs/root #dir
+alias crondd='/etc/cron.d/' #dir # misc cron files 
+alias crond='/etc/cron.daily' #dir
+alias cronh='/etc/cron.hourly' #dir
+alias cronw='/etc/cron.weekly' #dir
+alias cronm='/etc/cron.monthly' #dir
+alias resolv='/etc/resolv.conf' #dir # resolvectl status
+alias hosts1='/etc/hosts' #dir
+alias log='/var/log/' #dir # logs: syslog auth.log boot.log lastlog
+lias netman='/etc/network/interfaces' # `man interfaces`#dir
+alias netpln='/etc/netplan/01-netcfg.yaml' # add `optional: true` under ethernets: interface: to prevent boot waiting on network #dir
+alias mailr='/var/mail/root ' # mail #dir
+alias osr='/etc/os-release' # os name #dir
+alias sysd='/etc/systemd/system/multi-user.target.wants' # services startup #dir
 # /etc/skel has default user home files
 # common directories: # need extra space in alias for commands on files
-# /etc/default/grub.d/, /etc/apt/sources.list.d/
-# /etc/cron.d/, /etc/cron.daily/ (etc),  /var/cache/apt/archives/ (use apt clean?)visudo
+# /var/cache/apt/archives/ (use apt clean?)visudo
 # /proc/cmdline, /dev/disk/by-id (etc), /proc, /dev, /media/user, /home/user
-# /var/log/.. syslog auth.log boot.log lastlog
 # admin commands: last, w, who, whoami, users, login, uptime, free -th, mpstat, iostat, bashtop, ssh, lsof, lspci, dmesg, dbus, strace, 
 # editing: `sed -i 's/<search>/<replace>/g' (g global optional), `awk '{ print $1 }' file` for printing column(s)
 # info: file, stat, type, date, +date %F,
