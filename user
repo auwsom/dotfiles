@@ -26,4 +26,6 @@
 # m h  dom mon dow   command
 
 @reboot /home/user/autostart-scripts/*
-* * * * *  xsel -c # clear clipboard
+* * * * *  xsel -b -c # clear clipboard
+comm -23 .bash_history .bash_history-bak >> .bash_history-bak # Show lines that only exist in file a:
+
