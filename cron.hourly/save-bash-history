@@ -1,6 +1,0 @@
-#!/bin/bash
-HISTFILE=~/.bash_history
-set -o history
-history -a
-#su user "history -a"
-exec sudo -u user -- "$0" "$@"
