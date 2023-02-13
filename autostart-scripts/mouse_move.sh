@@ -5,7 +5,7 @@ HOUR="$(date +'%H')";
 if [ $HOUR -lt 20 -a $HOUR -gt 8 ] ; 
 then xdotool mousemove_relative 1 1; 
 fi; 
-sleep 3; 
+sleep 300; 
 #echo mousemove;
 done 
 
