@@ -1,1 +1,4 @@
-snap list --all | awk '/disabled/{print $1,$3 }' | while read name rev; do snap remove "$name" --revision="$rev"; done
+#!/bin/bash
+sudo cronic snap refresh &>/dev/null && cronic snap list --all | awk '/disabled/{print $1, $3}' | while read name rev; do echo $name >| report; done; echo $date >> report
+#do snap remove "$name" --revision="$rev"; done
+
