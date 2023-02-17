@@ -292,6 +292,7 @@ alias netpln='/etc/netplan/01-netcfg.yaml' # add `optional: true` under ethernet
 alias mailr='/var/mail/root ' # mail #dir
 alias osr='/etc/os-release' # os name #dir
 alias sysd='/etc/systemd/system/multi-user.target.wants' # services startup #dir
+alias userd='/home/user' #dir 
 # /etc/skel has default user home files
 # common directories: # need extra space in alias for commands on files
 # /var/cache/apt/archives/ (use apt clean?)visudo
