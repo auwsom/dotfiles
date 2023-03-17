@@ -35,6 +35,7 @@ shopt -s nocaseglob # ignores case of * globs
 export LC_ALL="C" # makes ls list dotfiles before others
 #set -x # show aliases expanded when running them.. but causes too much other noise as debug
 function rescue_history { history -a; }; trap rescue_history SIGHUP # saves history on interupt
+echo -ne '\e[?7l' # no line wrap in terminal
 
 
 # some familiar keyboard shortcuts 
@@ -95,7 +96,8 @@ alias mf='type mf; touch' # make file. or `echo $text | tee $newfile`. also `net
 alias mva='mv -i ' # interactive. -n for no clobber, but cant be used with -i (will not notify)
 alias mvu='install -o user -g user -D -t' # target/ dir/* # this copies while keeping target dir ownersperms and ownership. change <user>
 alias ncdu='ncdu -x' # manage disk space utility. `apt install ncdu`
-alias o='eval $(history -p !!) | read v; echo v=$v' # this var only works with shopt lastpipe and set +m to disable pipe subshells. copies output to $v. also can use xclip and xsel.
+#alias o='eval $(history -p !!) | read v; echo v=$v' # this var only works with shopt lastpipe and set +m to disable pipe subshells. copies output to $v. 
+alias o='v=$(eval $(history -p !!))' # copies output of last command to $v. also can use xclip and xsel
 alias p='echo $PATH' # show path
 #alias pd='pushd ' # a way to move through directories in a row (https://linux.101hacks.com/cd-command/dirs-pushd-popd/) ..aliased as `cd`
 alias pd='popd' # going back through the 'stack' history
@@ -108,11 +110,12 @@ alias pkill='pkill -f' # kill processed - full
 alias q='helpany' # see helpany function
 alias rm='rm -Irv ' # make remove confirm and also recursive for directories by default. v is for verbose. 
 # ^^maybe most helpful alias^^, avoids deleting unintended files. use -i to approve each deletion.
-alias sudo='sudo '; alias s='sudo '; alias ss='sudo -s ' # elevate privelege for command. see `visudo` to set. And `usermod -aG sudo add`, security caution when adding.
+alias sudo='sudo '; alias s='sudo '; alias sd='sudo -s ' # elevate privelege for command. see `visudo` to set. And `usermod -aG sudo add`, security caution when adding.
 alias sss='eval sudo $(history -p !!)' # redo with sudo
 alias ssh='ssh -vvv ' # most verbose level
-# `sort` `sort --numeric-sort` `sort --human-numeric-sort` `unique`
-# `stat` will show file info 
+alias sortn=`sort --numeric-sort` # `sort --human-numeric-sort` `unique`. Find dupiclates `sort <file> | unique -c | sort -nr`
+# `stat` will show file info including rwx octet value of perms.
+alias t='touch' # new file. see mf also.
 alias top='htop' # `q` to exit (common in unix). htop allows deleting directly. `apt install htop`
 alias tree='tree -h --du -L 2' #<dir>. `apt install tree`
 # `type` will show info on commands and show functions
@@ -122,26 +125,30 @@ alias vi='vi ' # needs space at end for alias chaining
 #alias w='whatis ' # display one-line manual page descriptions
 #alias w='whereis ' # locate the binary, source, and manual page files for a...
 #alias w='which ' # locate a command
-alias x='xargs ' # take last output and pipe into new command. not all commands support it, but many do. 
+alias x='xargs ' # take last output and pipe into new command. not all commands support it, but many do
 # use `xargs -I % some-command %` to use output as non-standard argument
 alias rrr='reboot' # uncomment if you want this. also `systemctl reboot`. DE `reboot -t 120`   
-alias zzz='systemctl poweroff' # uncomment if you want this. also `systemctl halt` or `shutdown -H now`. halt leaves on
+alias zzz='systemctl poweroff' # also `systemctl halt` or `shutdown -H now`. halt leaves on
 
 
 ### more advanced:
+alias sze='7z x -o*' # extracts in to subdirectory
 alias au='sudo apt update'
 alias auu='sudo apt update && apt -y upgrade' # show all users logged in. `last` show last logins
 alias aca='sudo apt clean && sudo apt autoremove'
-alias bc="BC_ENV_ARGS=<(echo "scale=2") \bc"
-alias cu="chown -R $USER:$USER" # change ownership to current user
-alias cur="chown -R root:root" # change ownership to root
-alias cx="chmod +x" # make executable
-alias cm="chmod -R 777" # change perms to all
-alias diff='diff -y --color ' # compare. -y show
+alias bc='BC_ENV_ARGS=<(echo "scale=2") \bc'
+alias cu='chown -R $USER:$USER' # change ownership to current user
+alias cur='chown -R root:root' # change ownership to root
+alias cx='chmod +x' # make executable
+alias cm='chmod -R' # change perms to rwx octet
+alias cm7='chmod -R 777' # change perms to all
+alias comm='comm -12 <(sort a.txt) <(sort b.txt)' # compares and shows all same lines of tex. `comm -12` for diffs
+alias diff='diff -y --color --brief' # compare. -y show. --breif only shows diffs. Use Meld for GUI.
+alias dedup="tac /root/.bash_history | awk '!a[$0]++' | tac > /root/.bash_history" 
 alias dmesg='type dmesg; dmesg -HTw' # messages from the kernel, human readable, timestamp, follow
 alias dli='tac /var/log/dpkg.log | grep -i "install"' # list installed packages
-alias ali='apt list | grep -i "installed"' # list installed apt packages
-alias alig='apt list | grep -i "installed" | grep -i' # list installed apt packages
+alias aptli='apt list | grep -i "installed"' # list installed apt packages
+alias aptlig='apt list | grep -i "installed" | grep -i' # list installed apt packages
 alias dlk='dpkg --list | grep -i -E "linux-image|linux-kernel" | grep "^ii"' # list kernels
 alias dll='grep -i install /var/log/dpkg.log' # list last installed
 alias dl='dpkg --listfiles' # -L list package install locations
@@ -151,7 +158,6 @@ alias ds='dirs' # shows dir stack for pushd/popd
 # `env` # shows environment variables
 alias r='fc -s' #<query> # search and rerun command from history. shebang is similar !<query> or !number. fc -s [old=new] [command]   https://docs.oracle.com/cd/E19253 (fix command)
 alias fsck='type fsck; fsck' #-p automatically fix. or use -y for yes to all except multiple choice.
-
 alias redo='fc -s ' # redo from history. see fc.
 alias fn='find . -iname ' # find, search in name
 alias flmr='find / -type d \( -name proc -o -name sys -o -name dev -o -name run -o -name var -o -name media \) -prune -o -type f -mmin -1 '
@@ -161,36 +167,37 @@ alias free='type free; free -h ' # check memory, human readable
 alias gm='guestmount -i $file -a /mnt' # set file=<vm/partition-backup> first 
 # `inotifywait -m ~/.config/ -e create -e modify` (inotify-tools), watch runs every x sec, entr runs command after file changes. use examples from bottom of `man entr` `ls *.js | entr -r node app.js`
 alias jo='journalctl' # -p,  -err, --list-boots, -b boot, -b -1 last boot, -r reverse, -k (kernel/dmesg), -f follow, --grep -g, --catalog -x (use error notes), -e goto end
-alias jox='journalctl -x' # --catalog -x (use error notes)
+alias jof='journalctl -f' # follow.
 alias ku='pkill -KILL -u user ' # kill another users processes. use `skill` default is TERM.
 alias lsblk='lsblk -f' # -f lists UUIDs and percent full
 alias lsof='type lsof; lsof -e /run/user/*' # remove cant stat errors
 #alias lnf='ln -f ' # symlink. use -f to overwrite. <target> <linkname>
+alias netstat='type netstat; netstat -atnp' 
 alias pegrep='grep -P ' # PCRE grep https://stackoverflow.com/a/67943782/4240654
 alias perl='type perl; perl -p -i -e ' # loop through stdin lines. in-place. use as command. https://stackoverflow.com/questions/6302025/perl-flags-pe-pi-p-w-d-i-t
-alias ping='type ping; ping -c 3 8.8.8.8' # count 3. google ip.
+alias pingt='type ping; ping -c 3 8.8.8.8' # ping test. count 3. google ip.
 alias pip='type pip; pip3 --verbose'
 #alias pipd='pip --download -d /media/user/data ' 
 alias pstree='pstree ' # shows what started a process
 alias py='type py; python3 ' 
 alias ra='read -a ' # reads into array/list. 
-alias rkonsole='/home/user/.config/autostart-scripts/konsole_watcher.sh restore' # restore konsole tabs 
+alias rkonsole='/home/user/.config/autostart-scripts/konsole_watcher.sh restore' # restore konsole tabs
 alias rplasma='pkill plasmashell && plasmashell & ' # restart plasmashell in KDE Kubuntu
 alias sys='systemctl' # `enable --now` will enable and start
 alias sysl='systemctl list-unit-files ' # | grep <arg>
-alias t='truncate -s' # <size, eg 10G> creates dynamic file; format with mkfs.ext4; `ls -s` to show true size on disk 
-alias t0='truncate -s 0' # reset file with zeros to wipe. also use wipe -qr.
-alias u='users ' # show all users logged in. `last` show last logins
-alias unama='uname -a ' # show all kernel info 
+alias tc='truncate -s' # <size, eg 10G> creates dynamic file; format with mkfs.ext4; `ls -s` to show true size on disk. use fallocate --length 1GiB for swapon /swapfile. 
+alias tc0='truncate -s 0' # reset file with zeros to wipe. also use wipe -qr.
+alias u='users' # show all users logged in. `last` show last logins
+alias unamea='uname -a' # show all kernel info 
 #alias uname='uname -a ' # show all kernel info 
 #alias w='w ' # Show who is logged on and what they are doing. Or `who`.
 alias wget='type wget; wget --no-clobber --content-disposition --trust-server-names' # -N overwrites only if newer file and disables timestamping # or curl to download webfile (curl -JLO)
 alias wdu='watch du -d1 .' # `watch du -s <dir>`
-alias zzr='shutdown -r now || true ' # reboot in ssh, otherwise freezes
-alias zzs='shutdown -h now || true ' # shutdown in ssh, otherwise freezes
+alias zzr='shutdown -r now || true' # reboot in ssh, otherwise freezes
+alias zzs='shutdown -h now || true' # shutdown in ssh, otherwise freezes
 # common typos
-alias unmount='umount ' ; alias um='umount ' ; alias mounts='mount ' ; alias m='type m; printf "\033[?7l"; mount | g -v -e cgroup -e fs; printf "\033[?7h"' ; alias ma='mount -a' ; alias mg='mount | grep '; alias mr='mount -o remount,rw'; 
-alias umforce='umount -l ' # unmount lazy works when force doesnt
+alias unmount='umount' ; alias um='umount' ; alias mounts='mount' ; alias m='type m; printf "\033[?7l"; mount | g -v -e cgroup -e fs; printf "\033[?7h"' ; alias ma='mount -a' ; alias mg='mount | grep'; alias mr='mount -o remount,rw'; 
+alias umf='umount -l' # unmount lazy works when force doesnt
 # change tty term from cli: `chvt 2`
 # keyrings https://itnext.io/what-is-linux-keyring-gnome-keyring-secret-service-and-d-bus-349df9411e67 
 # encrypt files with `gpg -c`
@@ -267,10 +274,11 @@ https://linux.101hacks.com/toc/ CDPATH info
 https://www.gnu.org/software/bash/manual/html_node/index.html#SEC_Contents
 END
 
-## common files: # need extra space in alias for commands on files
+## common dirs and files: # need extra space in alias for commands on files
 shopt -s cdable_vars # makes directories aliasable. see bottom for commonly used directories
+alias alias1='~/.bash_aliases' 
 alias fstab='/etc/fstab' #dir
-alias pwd1='/etc/passwd' #dir
+alias passwd1'/etc/passwd' #dir
 alias group1='/etc/group' #dir
 alias shadow='/etc/shadow' #dir
 alias sudoers='/etc/sudoers' #dir
@@ -278,7 +286,7 @@ alias grub1='/etc/default/grub' #dir
 alias grubd='/etc/default/grub.d/' #dir
 alias sources='/etc/apt/sources.list' #dir
 alias sourcesd='/etc/apt/sources.list.d/' #dir
-alias crntab='/etc/crontab' # runs /etc/cron.daily and /etc/cron.hourly. `crontab -e` is official /var/spool/cron/crontabs/root #dir
+alias crontab1='/etc/crontab' # runs /etc/cron.daily and /etc/cron.hourly. `crontab -e` is official /var/spool/cron/crontabs/root #dir
 alias crondd='/etc/cron.d/' #dir # misc cron files 
 alias crond='/etc/cron.daily' #dir
 alias cronh='/etc/cron.hourly' #dir
@@ -287,12 +295,14 @@ alias cronm='/etc/cron.monthly' #dir
 alias resolv='/etc/resolv.conf' #dir # resolvectl status
 alias hosts1='/etc/hosts' #dir
 alias log='/var/log/' #dir # logs: syslog auth.log boot.log lastlog
-alias netman='/etc/network/interfaces' # `man interfaces`#dir
-alias netpln='/etc/netplan/01-netcfg.yaml' # add `optional: true` under ethernets: interface: to prevent boot waiting on network #dir
+#alias netman='/etc/network/interfaces' # `man interfaces`#dir
+alias netplan1='/etc/netplan/01-netcfg.yaml' # add `optional: true` under ethernets: interface: to prevent boot waiting on network #dir
+alias known='~/.ssh/known_hosts' # rm this to remove unused store ssh connections
 alias mailr='/var/mail/root ' # mail #dir
 alias osr='/etc/os-release' # os name #dir
 alias sysd='/etc/systemd/system/multi-user.target.wants' # services startup #dir
 alias userd='/home/user' #dir 
+export hh="--help" # can use like `bash $hh` (man bash)
 # /etc/skel has default user home files
 # common directories: # need extra space in alias for commands on files
 # /var/cache/apt/archives/ (use apt clean?)visudo
@@ -338,6 +348,7 @@ set softtabstop=4   " Sets the number of columns for a TAB
 set expandtab       " Expand TABs to spaces
 set shell=/bin/bash
 nnoremap <F3> :set hlsearch!<CR> "toggle search highligh. or use :noh"
+cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 ' >| ~/.vimrc >| ~/.vimrc   # > to not overwrite 
 fi
 # basic vim commands: https://gist.github.com/auwsom/78c837fde60fe36159ee89e4e29ed6f1
