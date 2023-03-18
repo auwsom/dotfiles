@@ -36,7 +36,7 @@ shopt -s nocaseglob # ignores case of * globs
 export LC_ALL="C" # makes ls list dotfiles before others
 #set -x # show aliases expanded when running them.. but causes too much other noise as debug
 function rescue_history { history -a; }; trap rescue_history SIGHUP # saves history on interupt
-
+set +m
 
 # some familiar keyboard shortcuts 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
@@ -96,8 +96,8 @@ alias mf='type mf; touch' # make file. or `echo $text | tee $newfile`. also `net
 alias mva='mv -i ' # interactive. -n for no clobber, but cant be used with -i (will not notify)
 alias mvu='install -o user -g user -D -t' # target/ dir/* # this copies while keeping target dir ownersperms and ownership. change <user>
 alias ncdu='ncdu -x' # manage disk space utility. `apt install ncdu`
-#alias o='eval $(history -p !!) | read v; echo v=$v' # this var only works with shopt lastpipe and set +m to disable pipe subshells. copies output to $v. 
-alias o='v=$(eval $(history -p !!))' # copies output of last command to $v. also can use xclip and xsel
+alias o='eval $(history -p !!) | read v; echo v=$v' # this var only works with shopt lastpipe and set +m to disable pipe subshells. copies output to $v. 
+alias ov='v=$(eval $(history -p !!))' # copies output of last command to $v. also can use xclip and xsel. works without lastpip or set +m.
 alias p='echo $PATH' # show path
 #alias pd='pushd ' # a way to move through directories in a row (https://linux.101hacks.com/cd-command/dirs-pushd-popd/) ..aliased as `cd`
 alias pd='popd' # going back through the 'stack' history
