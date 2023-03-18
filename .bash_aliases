@@ -113,7 +113,7 @@ alias rm='rm -Irv ' # make remove confirm and also recursive for directories by 
 alias sudo='sudo '; alias s='sudo '; alias sd='sudo -s ' # elevate privelege for command. see `visudo` to set. And `usermod -aG sudo add`, security caution when adding.
 alias sss='eval sudo $(history -p !!)' # redo with sudo
 alias ssh='ssh -vvv ' # most verbose level
-alias sortn=`sort --numeric-sort` # `sort --human-numeric-sort` `unique`. Find dupiclates `sort <file> | unique -c | sort -nr`
+alias sortn='sort --numeric-sort' # `sort --human-numeric-sort` `unique`. Find dupiclates `sort <file> | unique -c | sort -nr`
 # `stat` will show file info including rwx octet value of perms.
 alias t='touch' # new file. see mf also.
 alias top='htop' # `q` to exit (common in unix). htop allows deleting directly. `apt install htop`
@@ -278,7 +278,7 @@ END
 shopt -s cdable_vars # makes directories aliasable. see bottom for commonly used directories
 alias alias1='~/.bash_aliases' 
 alias fstab='/etc/fstab' #dir
-alias passwd1'/etc/passwd' #dir
+#alias passwd1'/etc/passwd' #dir
 alias group1='/etc/group' #dir
 alias shadow='/etc/shadow' #dir
 alias sudoers='/etc/sudoers' #dir
