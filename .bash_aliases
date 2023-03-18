@@ -19,7 +19,7 @@ HISTCONTROL=ignoredups:erasedups   # no duplicate entries. ignoredups is onlt fo
 #export HISTIGNORE="&:ls:[bf]g:exit:pwd:clear:mount:umount" # ignore these single commands
 #shopt -s histverify   # confirm bash history (!number) commands before executing. optional for beginners using bang ! commands. can also use ctrl+alt+e to expand before enter.
 #alias ha='history -a ' # append current history before opening new terminal, to have it available.
-export PROMPT_COMMAND='history -a' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups.
+export PROMPT_COMMAND='history -a; set +m' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups.
 #history -w # writes history on every new bash shell to remove duplicates
 # `history -a;history -c;history -r` # this will reload history with commands from other shells 
 set -o noclobber  # dont let accidental > overwrite. use >| to force redirection even with noclobber
@@ -28,7 +28,7 @@ alias vibash='vi ~/.bash_aliases' # use `vimtutor` to learn (`esc` then `:q` to 
 alias rebash='source ~/.bashrc' # have to use `source` command to load the settings file. ~ is home directory
 alias realias='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc' 
 dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
-shopt -s lastpipe; set +m # allows last pipe to affect shell; needs Job Control disabled +m
+shopt -s lastpipe; set +m # allows last pipe to affect shell; needs Job Control disabled +m #https://askubuntu.com/questions/1395963/bash-set-m-option-does-not-work-when-placed-in-the-bashrc-file ..put it in PROMPT_COMMAND
 shopt -s dotglob # makes `mv/cp /dir/*` copy all contents, both * and .*; or use `mv /path/{.,}* /path/`
 #shopt -s globstar # makes ** be recursive for directories
 shopt -s nocaseglob # ignores case of * globs
@@ -36,7 +36,7 @@ shopt -s nocaseglob # ignores case of * globs
 export LC_ALL="C" # makes ls list dotfiles before others
 #set -x # show aliases expanded when running them.. but causes too much other noise as debug
 function rescue_history { history -a; }; trap rescue_history SIGHUP # saves history on interupt
-set +m
+set -o monitor
 
 # some familiar keyboard shortcuts 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
