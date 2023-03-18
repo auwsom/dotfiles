@@ -7,6 +7,7 @@
 # see further down for more general Linux tips and learning sites
 
 ## basic .bashrc settings
+echo -ne '\e[?7l' # no line wrap in terminal <---------------- comment this out if you want line wrap
 #shopt -s histappend # append to history, don't overwrite it. for using multiple shells at once. is default set in .bashrc
 export HISTFILESIZE= #10000        # increase history file size # just leave blank for unlimited
 export HISTSIZE= #${HISTFILESIZE}  # increase history list (in memory) size 
@@ -35,7 +36,6 @@ shopt -s nocaseglob # ignores case of * globs
 export LC_ALL="C" # makes ls list dotfiles before others
 #set -x # show aliases expanded when running them.. but causes too much other noise as debug
 function rescue_history { history -a; }; trap rescue_history SIGHUP # saves history on interupt
-echo -ne '\e[?7l' # no line wrap in terminal
 
 
 # some familiar keyboard shortcuts 
@@ -149,10 +149,10 @@ alias dmesg='type dmesg; dmesg -HTw' # messages from the kernel, human readable,
 alias dli='tac /var/log/dpkg.log | grep -i "install"' # list installed packages
 alias aptli='apt list | grep -i "installed"' # list installed apt packages
 alias aptlig='apt list | grep -i "installed" | grep -i' # list installed apt packages
-alias dlk='dpkg --list | grep -i -E "linux-image|linux-kernel" | grep "^ii"' # list kernels
-alias dll='grep -i install /var/log/dpkg.log' # list last installed
-alias dl='dpkg --listfiles' # -L list package install locations
-alias dc='dpkg-reconfigure -a' # use when apt install breaks. use `apt -f install` install dependencies when using `apt install debfile.deb`
+alias dpkglk='dpkg --list | grep -i -E "linux-image|linux-kernel" | grep "^ii"' # list kernels
+alias dpkgll='grep -i install /var/log/dpkg.log' # list last installed
+alias dpkgli='dpkg --listfiles' # -L package file install locations. reverse search for pkg from file `dpkg -S <file>`. `apt-files --list <pkg>` also works, but not for Snaps.
+alias dpkgrc='dpkg-reconfigure -a' # use when apt install breaks. use `apt -f install` install dependencies when using `apt install debfile.deb`
 alias ds='dirs' # shows dir stack for pushd/popd
 # dbus-monitor, qdbus
 # `env` # shows environment variables
