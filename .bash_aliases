@@ -62,6 +62,7 @@ alias c='clear' # clear terminal
 alias cat='cat ' # concatenate (if more than one file) and display. 
 # < works the same as cat because of "redirection" in either form: `command < in | command2 > out` or `<in command | command2 > out` https://en.wikipedia.org/wiki/Cat_(Unix)#Useless_use_of_cat 
 # (`echo hello > file; echo world >> file`): `cat file | tee /dev/tty | grep hello` and `< file tee /dev/tty | grep hello` and `tee /dev/tty < file | grep hello` all output the same.
+# redirect sterr and stdout to files `command 2> error.txt 1> output.txt` or to null `command 2> /dev/null`
 alias cd='pushd > /dev/null ' # extra space allows aliasing directories `alias fstab='/etc/fstab '`. use `pd` to go back through dir stack.
 alias cdh='cd ~' # cd home.. just use `cd ` with one space to goto home. 
 #alias cdb='pd - ' # cd back
