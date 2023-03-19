@@ -61,7 +61,7 @@ alias f='fg 1' # put foreground job 1
 alias c='clear' # clear terminal
 alias cat='cat ' # concatenate (if more than one file) and display. 
 # < works the same as cat because of "redirection" in either form: `command < in | command2 > out` or `<in command | command2 > out` https://en.wikipedia.org/wiki/Cat_(Unix)#Useless_use_of_cat 
-#(`echo hello > file; echo world >> file`): `cat file | tee /dev/tty | grep hello` and `< file tee /dev/tty | grep hello` and `tee /dev/tty < file | grep hello` all output the same.
+# (`echo hello > file; echo world >> file`): `cat file | tee /dev/tty | grep hello` and `< file tee /dev/tty | grep hello` and `tee /dev/tty < file | grep hello` all output the same.
 alias cd='pushd > /dev/null ' # extra space allows aliasing directories `alias fstab='/etc/fstab '`. use `pd` to go back through dir stack.
 alias cdh='cd ~' # cd home.. just use `cd ` with one space to goto home. 
 #alias cdb='pd - ' # cd back
@@ -191,6 +191,7 @@ alias sys='systemctl' # `enable --now` will enable and start
 alias sysl='systemctl list-unit-files ' # | grep <arg>
 alias tc='truncate -s' # <size, eg 10G> creates dynamic file; format with mkfs.ext4; `ls -s` to show true size on disk. use fallocate --length 1GiB for swapon /swapfile. 
 alias tc0='truncate -s 0' # reset file with zeros to wipe. also use wipe -qr.
+# tty will show current terminal. then can redirect to it with > /dev/tty<number>
 alias u='users' # show all users logged in. `last` show last logins
 alias unamea='uname -a' # show all kernel info 
 #alias uname='uname -a ' # show all kernel info 
@@ -271,7 +272,8 @@ ways to kill runaway process: `ctrl+c`, `ctrl+d` (exit current shell), `ctrl+\`
 apt: remove. purge deletes config except in home dir. autoremove deletes unused.    
 apt -s, --simulate, --just-print, --dry-run, --recon, --no-act  = No action; perform a simulation..
 `apt show <package>` shows size, unlike simulate, even if not installed, but sizes not same as install info
-conditional expressions, if [  ];then ;fi, `man bash` search / comparsion, https://tldp.org
+Conditional Expressions (`man bash` search / "comparsion"): `if [ <> ];then <>;fi`. Use double [[ ]] to disable expansion. `test 1 -eq 2 && echo true || echo false` is same as `[ 1 -eq 2 ] && echo true || echo false]`
+https://tldp.org
 learnshell.org
 linuxcommand.org
 https://linux.101hacks.com/toc/ CDPATH info
@@ -358,6 +360,7 @@ fi
 # basic vim commands: https://gist.github.com/auwsom/78c837fde60fe36159ee89e4e29ed6f1
 # `:e <filename>` to open file or `:e .` to browse directory 
 # `:!bash %` to run script from within vim
+# find and replace: `:%s,baz,boz,g`
 # vim tabs: (open multiple files or open more from inside vim) then `gt` and `gT` for forward/back, `2gt`, `:tabs` list
 # https://askubuntu.com/questions/202075/how-do-i-get-vim-to-remember-the-line-i-was-on-when-i-reopen-a-file
 # more ideas: https://github.com/amix/vimrc, https://github.com/rwxrob/dot/blob/main/vim/.vimrc
