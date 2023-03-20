@@ -7,7 +7,6 @@
 # see further down for more general Linux tips and learning sites
 
 ## basic .bashrc settings
-echo -ne '\e[?7l' # no line wrap in terminal <---------------- comment this out if you want line wrap
 #shopt -s histappend # append to history, don't overwrite it. for using multiple shells at once. is default set in .bashrc
 export HISTFILESIZE= #10000        # increase history file size # just leave blank for unlimited
 export HISTSIZE= #${HISTFILESIZE}  # increase history list (in memory) size 
@@ -199,6 +198,8 @@ alias unamea='uname -a' # show all kernel info
 #alias w='w ' # Show who is logged on and what they are doing. Or `who`.
 alias wget='type wget; wget --no-clobber --content-disposition --trust-server-names' # -N overwrites only if newer file and disables timestamping # or curl to download webfile (curl -JLO)
 alias wdu='watch du -d1 .' # `watch du -s <dir>`
+alias won='echo -ne "\033[?7h"' # line wrap on
+alias woff='echo -ne "\033[?7l"' # line wrap off
 alias zzr='shutdown -r now || true' # reboot in ssh, otherwise freezes
 alias zzs='shutdown -h now || true' # shutdown in ssh, otherwise freezes
 # common typos
