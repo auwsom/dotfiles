@@ -9,7 +9,7 @@
 ## basic .bashrc settings
 #shopt -s histappend # append to history, don't overwrite it. for using multiple shells at once. is default set in .bashrc
 export HISTSIZE=10000  # increase history list (in memory) size 
-export HISTFILESIZE=$(HISTSIZE)  # increase history file size # or just leave blank for unlimited
+export HISTFILESIZE=$HISTSIZE  # increase history file size # or just leave blank for unlimited
 HISTFILE=~/.bash_eternal_history # "certain bash sessions truncate .bash_history" (like Screen) SU
 #sed -i 's,HISTFILESIZE=,HISTFILESIZE= #,' ~/.bashrc && sed -i 's,HISTSIZE=,HISTSIZE= #,' ~/.bashrc # run once for unlimited. have to clear the default setting in .bashrc
 HISTCONTROL=ignoredups:erasedups   # no duplicate entries. ignoredups is onlt for consecutive
