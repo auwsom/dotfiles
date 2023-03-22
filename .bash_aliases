@@ -199,8 +199,8 @@ alias unamea='uname -a' # show all kernel info
 #alias w='w ' # Show who is logged on and what they are doing. Or `who`.
 alias wget='type wget; wget --no-clobber --content-disposition --trust-server-names' # -N overwrites only if newer file and disables timestamping # or curl to download webfile (curl -JLO)
 alias wdu='watch du -d1 .' # `watch du -s <dir>`
-alias won='echo -ne "\033[?7h"' # line wrap on
-alias woff='echo -ne "\033[?7l"' # line wrap off
+alias wrapon='echo -ne "\033[?7h"' # line wrap on
+alias wrapoff='echo -ne "\033[?7l"' # line wrap off
 alias zzr='shutdown -r now || true' # reboot in ssh, otherwise freezes
 alias zzs='shutdown -h now || true' # shutdown in ssh, otherwise freezes
 # common typos
