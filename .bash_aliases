@@ -173,6 +173,7 @@ alias gm='guestmount -i $file -a /mnt' # set file=<vm/partition-backup> first
 alias jo='journalctl' # -p,  -err, --list-boots, -b boot, -b -1 last boot, -r reverse, -k (kernel/dmesg), -f follow, --grep -g, --catalog -x (use error notes), -e goto end
 alias jof='journalctl -f' # follow.
 alias ku='pkill -KILL -u user ' # kill another users processes. use `skill` default is TERM.
+alias launch='gio launch' # launch *.desktop files from the CLI
 alias lsblk='lsblk -f' # -f lists UUIDs and percent full
 alias lsof='type lsof; lsof -e /run/user/*' # remove cant stat errors
 #alias lnf='ln -f ' # symlink. use -f to overwrite. <target> <linkname>
