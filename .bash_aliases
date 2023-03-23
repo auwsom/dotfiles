@@ -153,9 +153,9 @@ alias dmesg='type dmesg; dmesg -HTw' # messages from the kernel, human readable,
 alias dli='tac /var/log/dpkg.log | grep -i "install"' # list installed packages
 alias aptli='apt list | grep -i "installed"' # list installed apt packages
 alias aptlig='apt list | grep -i "installed" | grep -i' # list installed apt packages
+alias dpkgl='dpkg --listfiles' # -L package file install locations. reverse search for pkg from file `dpkg -S <file>`. `apt-files --list <pkg>` also works, but not for Snaps.
 alias dpkglk='dpkg --list | grep -i -E "linux-image|linux-kernel" | grep "^ii"' # list kernels
 alias dpkgll='grep -i install /var/log/dpkg.log' # list last installed
-alias dpkgli='dpkg --listfiles' # -L package file install locations. reverse search for pkg from file `dpkg -S <file>`. `apt-files --list <pkg>` also works, but not for Snaps.
 alias dpkgrc='dpkg-reconfigure -a' # use when apt install breaks. use `apt -f install` install dependencies when using `apt install debfile.deb`
 alias ds='dirs' # shows dir stack for pushd/popd
 # dbus-monitor, qdbus
