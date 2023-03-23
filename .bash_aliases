@@ -189,7 +189,8 @@ alias ra='read -a ' # reads into array/list.
 # use `realpath` for piping absolute file path to cat. 
 alias rkonsole='/home/user/.config/autostart-scripts/konsole_watcher.sh restore' # restore konsole tabs
 alias rplasma='pkill plasmashell && plasmashell & ' # restart plasmashell in KDE Kubuntu
-alias sys='systemctl' # `enable --now` will enable and start
+alias rvmm='pkill virt-manager && sys restart libvirtd ' # restart VMM. doenst stop runnning VMs
+alias sys='systemctl' # `enable --now` will enable and start 
 alias sysl='systemctl list-unit-files ' # | grep <arg>
 alias tc='truncate -s' # <size, eg 10G> creates dynamic file; format with mkfs.ext4; `ls -s` to show true size on disk. use fallocate --length 1GiB for swapon /swapfile. 
 alias tc0='truncate -s 0' # reset file with zeros to wipe. also use wipe -qr.
