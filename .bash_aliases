@@ -94,8 +94,8 @@ alias lll='ls -alF ' # "list" all long format. full byte count.
 alias ltr='ls -ltr ' # "list" long, time, reverse. sorted bottom is latest changed. 
 alias lsd='ls -d $PWD/* ' # returns full paths. have to be in the directory. 
 alias mo='more ' # break output into pages. or `less`.
-alias md='type md; mkdir -p' # makes all --parents directories necessary
-alias mf='type mf; touch' # make file. or `echo $text | tee $newfile`. also `netstat`
+alias md='mkdir -p' # makes all --parents directories necessary
+alias mf='touch' # make file. or `echo $text | tee $newfile`. also `netstat`
 alias mva='mv -i ' # interactive. -n for no clobber, but cant be used with -i (will not notify)
 alias mvu='install -o user -g user -D -t' # target/ dir/* # this copies while keeping target dir ownersperms and ownership. change <user>
 alias ncdu='type ncdu; ncdu -x' # manage disk space utility. `apt install ncdu`. -x is exclude other filesytems.
@@ -111,7 +111,7 @@ alias pgrep='pgrep -af' # grep processes - full, list-full. use \pgrep for just 
 alias pkill='pkill -f' # kill processed - full
 # p for pipe `|` a very powerful feature of shell language. transfers command output to input next command.
 alias q='helpany' # see helpany function
-alias rm='type rm; rm -Irv ' # make remove confirm and also recursive for directories by default. v is for verbose. 
+alias rm='rm -Irv ' # make remove confirm and also recursive for directories by default. v is for verbose. 
 # ^^maybe most helpful alias^^, avoids deleting unintended files. use -i to approve each deletion.
 alias sudo='sudo '; alias s='sudo '; alias sd='sudo -s ' # elevate privelege for command. see `visudo` to set. And `usermod -aG sudo add`, security caution when adding.
 alias sss='eval sudo $(history -p !!)' # redo with sudo
