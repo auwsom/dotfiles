@@ -54,6 +54,7 @@ bind '"\C-f": revert-line'; fi # clear the line
 ## use `whatis` then command name for official explanation of any command. then command plus `--help` flag or `man`, `info`, `tldr` and `whatis` commands for more info on any command. or q.
 # full list of shell commmands: https://www.computerhope.com/unix.htm or `ls /bin`. https://www.gnu.org/software/coreutils/manual/coreutils.html
 # list all builtins with `\help`. then `\help <builtin>` for any single one.
+alias ag='alias | grep' # search the aliases for commands
 alias apt="sudo apt" # also extend sudo timeout: `echo 'Defaults timestamp_timeout=360 #minutes' | sudo EDITOR='tee -a' visudo`
 alias b='bg 1' # put background job 1
 alias f='fg 1' # put foreground job 1
@@ -88,8 +89,8 @@ alias kj='kill -TERM %1' # terminate job 1
 alias loc='locate --limit 5' # `apt install locate` finds common file locations fast (fstab, etc) 
 #alias ls='ls -F ' # list. F is --classify with symbols or colors. already included in most .bashrc
 #alias la='ls -A' # list all. included. 
-alias ll='ls -alFh ' # "list" all long format. included. added human readable. # maybe better:lsl
-alias lll='ls -alF ' # "list" all long format. full bytec count. 
+alias ll='ls -alFh ' # "list" all, long format. included in .bashrc, added human readable. 
+alias lll='ls -alF ' # "list" all long format. full byte count. 
 alias ltr='ls -ltr ' # "list" long, time, reverse. sorted bottom is latest changed. 
 alias lsd='ls -d $PWD/* ' # returns full paths. have to be in the directory. 
 alias mo='more ' # break output into pages. or `less`.
@@ -97,73 +98,72 @@ alias md='type md; mkdir -p' # makes all --parents directories necessary
 alias mf='type mf; touch' # make file. or `echo $text | tee $newfile`. also `netstat`
 alias mva='mv -i ' # interactive. -n for no clobber, but cant be used with -i (will not notify)
 alias mvu='install -o user -g user -D -t' # target/ dir/* # this copies while keeping target dir ownersperms and ownership. change <user>
-alias ncdu='ncdu -x' # manage disk space utility. `apt install ncdu`
+alias ncdu='type ncdu; ncdu -x' # manage disk space utility. `apt install ncdu`. -x is exclude other filesytems.
 alias o='eval $(history -p !!) | read v; echo v=$v' # this var only works with shopt lastpipe and set +m to disable pipe subshells. copies output to $v. 
 alias ov='v=$(eval $(history -p !!))' # copies output of last command to $v. also can use xclip and xsel. works without lastpip or set +m.
-alias p='echo $PATH' # show path
+alias path='echo $PATH' # show path
 #alias pd='pushd ' # a way to move through directories in a row (https://linux.101hacks.com/cd-command/dirs-pushd-popd/) ..aliased as `cd`
 alias pd='popd' # going back through the 'stack' history
-alias psa='ps -ef' # show processes
+alias ps1='ps -ef' # show processes
 #alias psp='ps -o ppid= -p ' # <PID> show parent PID
 alias psp='ps -Flww -p' # <PID> show info on just one process
 alias pgrep='pgrep -af' # grep processes - full, list-full. use \pgrep for just the PID.
 alias pkill='pkill -f' # kill processed - full
 # p for pipe `|` a very powerful feature of shell language. transfers command output to input next command.
 alias q='helpany' # see helpany function
-alias rm='rm -Irv ' # make remove confirm and also recursive for directories by default. v is for verbose. 
+alias rm='type rm; rm -Irv ' # make remove confirm and also recursive for directories by default. v is for verbose. 
 # ^^maybe most helpful alias^^, avoids deleting unintended files. use -i to approve each deletion.
 alias sudo='sudo '; alias s='sudo '; alias sd='sudo -s ' # elevate privelege for command. see `visudo` to set. And `usermod -aG sudo add`, security caution when adding.
 alias sss='eval sudo $(history -p !!)' # redo with sudo
 alias ssh='ssh -vvv ' # most verbose level
-alias sortn='sort --numeric-sort' # `sort --human-numeric-sort` `unique`. Find dupiclates `sort <file> | unique -c | sort -nr`
+alias sort1='sort --numeric-sort' # `sort --human-numeric-sort` `unique`. Find dupiclates `sort <file> | unique -c | sort -nr`
 # `stat` will show file info including rwx octet value of perms.
 alias t='touch' # new file. see mf also.
 # `tee` allows side-piping. eg `cat file.txt tee /dev/tty | grep 'word' > output.txt` will both show the file and pipe it
 alias top='htop' # `q` to exit (common in unix). htop allows deleting directly. `apt install htop`
-alias tree='tree -h --du -L 2' #<dir>. `apt install tree`
+alias tree1='tree -h --du -L 2' #<dir>. `apt install tree`
 # `type` will show info on commands and show functions
 alias untar='tar -xvf' # -C /target/directory
-alias urel='cat /etc/os-release' # show OS info
 alias vi='vi ' # needs space at end for alias chaining
 #alias w='whatis ' # display one-line manual page descriptions
 #alias w='whereis ' # locate the binary, source, and manual page files for a...
 #alias w='which ' # locate a command
 alias x='xargs ' # take last output and pipe into new command. not all commands support it, but many do
 # use `xargs -I % some-command %` to use output as non-standard argument
-alias rrr='reboot' # uncomment if you want this. also `systemctl reboot`. DE `reboot -t 120`   
-alias zzz='systemctl poweroff' # also `systemctl halt` or `shutdown -H now`. halt leaves on
+alias zr='reboot' # uncomment if you want this. also `systemctl reboot`. DE `reboot -t 120`   
+alias zz='systemctl poweroff' # also `systemctl halt` or `shutdown -H now`. halt leaves on
 
 
 ### more advanced:
-alias sze='7z x -o*' # extracts in to subdirectory
+alias sz='7z x -o*' # extracts in to subdirectory
 alias au='sudo apt update'
 alias auu='sudo apt update && apt -y upgrade' # show all users logged in. `last` show last logins
 alias aca='sudo apt clean && sudo apt autoremove'
-alias bc='BC_ENV_ARGS=<(echo "scale=2") \bc'
+alias bc='type bc; BC_ENV_ARGS=<(echo "scale=2") \bc'
 alias cu='chown -R $USER:$USER' # change ownership to current user
 alias cur='chown -R root:root' # change ownership to root
 alias cx='chmod +x' # make executable
 alias cm='chmod -R' # change perms to rwx octet
 alias cm7='chmod -R 777' # change perms to all
-alias comm='comm -12 <(sort a.txt) <(sort b.txt)' # compares and shows all same lines of tex. `comm -12` for diffs
-alias diff='diff -y --color --brief' # compare. -y show. --breif only shows diffs. Use Meld for GUI.
+alias comm='type comm; comm -12 <(sort a.txt) <(sort b.txt)' # compares and shows all same lines of tex. `comm -12` for diffs
+alias diff='type diff; diff -y --color --brief' # compare. -y show. --breif only shows diffs. Use Meld for GUI.
 alias dedup='tac /root/.bash_history | awk '!a[$0]++' | tac > /root/.bash_history'
 alias desk='kioclient exec' # in KDE will open .desktop file from CLI
 alias dmesg='type dmesg; dmesg -HTw' # messages from the kernel, human readable, timestamp, follow
 alias dli='tac /var/log/dpkg.log | grep -i "install"' # list installed packages
-alias aptl='apt list | grep -i "installed"' # list installed apt packages
-alias aptlg='apt list | grep -i "installed" | grep -i' # list installed apt packages
+alias aptli='apt list | grep -i "installed"' # list installed apt packages
+alias aptlig='apt list | grep -i "installed" | grep -i' # list installed apt packages
 alias dpkgl='dpkg --listfiles' # -L package file install locations. reverse search for pkg from file `dpkg -S <file>`. `apt-files --list <pkg>` also works, but not for Snaps.
 alias dpkglk='dpkg --list | grep -i -E "linux-image|linux-kernel" | grep "^ii"' # list kernels
 alias dpkgll='grep -i install /var/log/dpkg.log' # list last installed
 alias dpkgrc='dpkg-reconfigure -a' # use when apt install breaks. use `apt -f install` install dependencies when using `apt install debfile.deb`
-alias ds='dirs' # shows dir stack for pushd/popd
+alias d='dirs' # shows dir stack for pushd/popd
 # dbus-monitor, qdbus
 # `env` # shows environment variables
-alias r='fc -s' #<query> # search and rerun command from history. shebang is similar !<query> or !number. fc -s [old=new] [command]   https://docs.oracle.com/cd/E19253 (fix command)
-alias fsck='type fsck; fsck' #-p automatically fix. or use -y for yes to all except multiple choice.
+alias r='fc -s' #<query> # search and redo command from history. shebang is similar !<query> or !number. fc -s [old=new] [command]   https://docs.oracle.com/cd/E19253 (fix command)
 alias redo='fc -s ' # redo from history. see fc.
-alias fn='find . -iname ' # find, search in name
+alias fsck='type fsck; fsck' #-p automatically fix. or use -y for yes to all except multiple choice.
+alias fn='find . -iname ' # find, search in name. 
 alias flmr='find / -type d \( -name proc -o -name sys -o -name dev -o -name run -o -name var -o -name media \) -prune -o -type f -mmin -1 '
 alias flmh='find ~ -type d \( -name .cache -o -name .mozilla \) -prune -o -type f -mmin -1 '
 alias flm='find . -type f -mmin -1 '
@@ -174,16 +174,16 @@ alias jo='journalctl' # -p,  -err, --list-boots, -b boot, -b -1 last boot, -r re
 alias jof='journalctl -f' # follow.
 alias ku='pkill -KILL -u user ' # kill another users processes. use `skill` default is TERM.
 alias launch='gio launch' # launch *.desktop files from the CLI
-alias lsblk='lsblk -f' # -f lists UUIDs and percent full
+alias lsblk='type lsblk; lsblk -f' # -f lists UUIDs and percent full
 alias lsof='type lsof; lsof -e /run/user/*' # remove cant stat errors
 #alias lnf='ln -f ' # symlink. use -f to overwrite. <target> <linkname>
 alias netstat='type netstat; netstat -atnp' 
 alias pegrep='grep -P ' # PCRE grep https://stackoverflow.com/a/67943782/4240654
 alias perl='type perl; perl -p -i -e ' # loop through stdin lines. in-place. use as command. https://stackoverflow.com/questions/6302025/perl-flags-pe-pi-p-w-d-i-t
-alias pingt='type ping; ping -c 3 8.8.8.8' # ping test. count 3. google ip.
+alias ping1='type ping; ping -c 3 8.8.8.8' # ping test. count 3. google ip.
 alias pip='type pip; pip3 --verbose'
 #alias pipd='pip --download -d /media/user/data ' 
-alias pstree='pstree ' # shows what started a process
+#alias pstree='pstree ' # shows what started a process
 alias py='type py; python3 ' 
 alias ra='read -a ' # reads into array/list. 
 # use `realpath` for piping absolute file path to cat. 
@@ -196,8 +196,9 @@ alias tc='truncate -s' # <size, eg 10G> creates dynamic file; format with mkfs.e
 alias tc0='truncate -s 0' # reset file with zeros to wipe. also use wipe -qr.
 # tty will show current terminal. then can redirect to it with > /dev/tty<number>
 alias u='users' # show all users logged in. `last` show last logins
-alias unamea='uname -a' # show all kernel info 
-#alias uname='uname -a ' # show all kernel info 
+alias uname1='uname -a' # show all kernel info 
+alias uname2='uname -r ' # show kernel version
+alias urel='cat /etc/os-release' # show OS info
 #alias w='w ' # Show who is logged on and what they are doing. Or `who`.
 alias wget='type wget; wget --no-clobber --content-disposition --trust-server-names' # -N overwrites only if newer file and disables timestamping # or curl to download webfile (curl -JLO)
 alias wdu='watch du -d1 .' # `watch du -s <dir>`
