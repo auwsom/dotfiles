@@ -60,7 +60,7 @@ alias b='bg 1' # put background job 1
 alias f='fg 1' # put foreground job 1
 alias c='clear' # clear terminal
 alias cat='cat ' # concatenate (if more than one file) and display. 
-# < works the same as cat because of "redirection" in either form: `command < in | command2 > out` or `<in command | command2 > out` https://en.wikipedia.org/wiki/Cat_(Unix)#Useless_use_of_cat 
+# `<` works the same as `cat` because of "redirection" in either form: `command < in | command2 > out` or `<in command | command2 > out` https://en.wikipedia.org/wiki/Cat_(Unix)#Useless_use_of_cat 
 # (`echo hello > file; echo world >> file`): `cat file | tee /dev/tty | grep hello` and `< file tee /dev/tty | grep hello` and `tee /dev/tty < file | grep hello` all output the same.
 # redirect sterr and stdout to files `command 2> error.txt 1> output.txt` or to null `command 2> /dev/null`
 alias cd='pushd > /dev/null ' # extra space allows aliasing directories `alias fstab='/etc/fstab '`. use `pd` to go back through dir stack.
@@ -120,7 +120,7 @@ alias ssh='ssh -vvv ' # most verbose level
 alias sort1='sort --numeric-sort' # `sort --human-numeric-sort` `unique`. Find dupiclates `sort <file> | unique -c | sort -nr`
 # `stat` will show file info including rwx octet value of perms.
 alias t='touch' # new file. see mf also.
-# `tee` allows side-piping. eg `cat file.txt tee /dev/tty | grep 'word' > output.txt` will both show the file and pipe it
+# `tee` allows tee-piping. eg `cat file.txt tee /dev/tty | grep 'word' > output.txt` will both show the file and pipe it. `echo $(date) | tee file.txt` will pipe to file and output to stdout.
 alias top='htop' # `q` to exit (common in unix). htop allows deleting directly. `apt install htop`
 alias tree1='tree -h --du -L 2' #<dir>. `apt install tree`
 # `type` will show info on commands and show functions
