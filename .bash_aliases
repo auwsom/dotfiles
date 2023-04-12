@@ -164,10 +164,9 @@ alias d='dirs' # shows dir stack for pushd/popd
 alias r='fc -s' #<query> # search and redo command from history. shebang is similar !<query> or !number. fc -s [old=new] [command]   https://docs.oracle.com/cd/E19253 (fix command)
 alias redo='fc -s ' # redo from history. see fc.
 alias fsck='type fsck; fsck' #-p automatically fix. or use -y for yes to all except multiple choice.
-alias fn='find . -iname ' # find, search in name. 
-alias flmr='find / -type d \( -name proc -o -name sys -o -name dev -o -name run -o -name var -o -name media \) -prune -o -type f -mmin -1 '
-alias flmh='find ~ -type d \( -name .cache -o -name .mozilla \) -prune -o -type f -mmin -1 '
 alias flm='find . -type f -mmin -1 '
+alias flmh='find ~ -type d \( -name .cache -o -name .mozilla \) -prune -o -type f -mmin -1 '
+alias flmr='find / -type d \( -name proc -o -name sys -o -name dev -o -name run -o -name var -o -name media \) -prune -o -type f -mmin -1 '
 alias free='type free; free -h ' # check memory, human readable
 alias gm='guestmount -i $file -a /mnt' # set file=<vm/partition-backup> first 
 # `inotifywait -m ~/.config/ -e create -e modify` (inotify-tools), watch runs every x sec, entr runs command after file changes. use examples from bottom of `man entr` `ls *.js | entr -r node app.js`
