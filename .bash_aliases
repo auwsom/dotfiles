@@ -139,7 +139,7 @@ alias zz='systemctl poweroff' # also `systemctl halt` or `shutdown -H now`. halt
 
 ### more advanced:
 alias sz='7z x -o*' # extracts in to subdirectory
-alias szc='7z a -t7z -m0=lzma2:d1024m -mx=9 -aoa -mfb=64 -md=32m -ms=on'#<dir> <output> # highest compression or use PeaZip
+alias szc='7z a -t7z -m0=lzma2:d1024m -mx=9 -aoa -mfb=64 -md=32m -ms=on' #<dir> <output> # highest compression or use PeaZip
 alias au='sudo apt update'
 alias auu='sudo apt update && apt -y upgrade' # show all users logged in. `last` show last logins
 alias aca='sudo apt clean && sudo apt autoremove'
