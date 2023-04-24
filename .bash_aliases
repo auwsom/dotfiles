@@ -139,6 +139,7 @@ alias zz='systemctl poweroff' # also `systemctl halt` or `shutdown -H now`. halt
 
 ### more advanced:
 alias sz='7z x -o*' # extracts in to subdirectory
+alias szc='7z a -t7z -m0=lzma2:d1024m -mx=9 -aoa -mfb=64 -md=32m -ms=on'#<dir> <output> # highest compression or use PeaZip
 alias au='sudo apt update'
 alias auu='sudo apt update && apt -y upgrade' # show all users logged in. `last` show last logins
 alias aca='sudo apt clean && sudo apt autoremove'
@@ -156,6 +157,7 @@ alias dmesg='type dmesg; dmesg -HTw' # messages from the kernel, human readable,
 alias dli='tac /var/log/dpkg.log | grep -i "install"' # list installed packages
 alias aptli='apt list | grep -i "installed"' # list installed apt packages
 alias aptlig='apt list | grep -i "installed" | grep -i' # list installed apt packages
+alias aptrd='apt-cache showpkg' # find dependencies in reverse. also apt-rdepends is similar.
 alias dpkgl='dpkg --listfiles' # -L package file install locations. reverse search for pkg from file `dpkg -S <file>`. `apt-files --list <pkg>` also works, but not for Snaps.
 alias dpkglk='dpkg --list | grep -i -E "linux-image|linux-kernel" | grep "^ii"' # list kernels
 alias dpkgll='grep -i install /var/log/dpkg.log' # list last installed
