@@ -17,11 +17,11 @@ if [ "$1" = "restore" ] ; then
 fi
 # Function to get the current sessions and write them to a file
 function getSessions {
-    pgrep "konsole" > /dev/pts/6
+    #pgrep "konsole" > /dev/pts/6
     pid=$(pgrep "konsole" -u $USER | awk '{print $1}')
-    echo fuck2 $USER $pid  f > /dev/pts/6
+    #echo test1 $USER $pid  f > /dev/pts/6
     pid=$(pgrep "konsole" -u $USER )
-    echo fuck2 $USER $pid  f > /dev/pts/6
+    #echo test2 $USER $pid  f > /dev/pts/6
 
     local SESSIONS=$(qdbus org.kde.konsole-$pid | grep /Sessions/)
     if [[ ${SESSIONS} ]] ; then
@@ -31,14 +31,14 @@ function getSessions {
        local FORMAT=$(qdbus org.kde.konsole-$pid $i tabTitleFormat 0)
        local PROCESSID=$(qdbus org.kde.konsole-$pid $i processId)
        local CWD=$(pwdx ${PROCESSID} | sed -e "s/^[0-9]*: //")
-       echo $FORMAT $PROCESSID > /dev/pts/6
+       #echo $FORMAT $PROCESSID > /dev/pts/6
 
        if [[ $(pgrep --parent ${PROCESSID}) ]] ; then
            CHILDPID=$(pgrep --parent ${PROCESSID})
            COMMAND=$(ps -p ${CHILDPID} -o args=)
        fi 
        #echo $FORMAT $PROCESSID $CHILDPID $COMMAND > /dev/pts/6
-       echo $FORMAT $PROCESSID > /dev/pts/6
+       #echo $FORMAT $PROCESSID > /dev/pts/6
        echo "workdir: ${CWD};; title: ${FORMAT};; command:${COMMAND}" >> ${SAVEFILE_TERMINAL}
        COMMAND=''
        done
@@ -47,3 +47,4 @@ function getSessions {
 
 #Update the Konsole sessions every WATCH_INTERVAL_SECONDS seconds
 while true; do sleep ${WATCH_INTERVAL_SECONDS}; getSessions; done &
+

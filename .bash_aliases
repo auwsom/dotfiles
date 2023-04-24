@@ -95,8 +95,10 @@ alias lll='ls -alF ' # "list" all long format. full byte count.
 alias ltr='ls -lcr ' # "list" long, time, reverse. sorted bottom is latest changed. c is changed time. 
 alias lsd='ls -d $PWD/* ' # returns full paths. have to be in the directory. 
 alias mo='more ' # break output into pages. or `less`.
-alias md='mkdir -p' # makes all --parents directories necessary
-alias mf='touch' # make file. or `echo $text | tee $newfile`. also `netstat`
+#alias md='mkdir -p' # makes all --parents directories necessary
+alias md='install -D /dev/null' # using `install` keeps same perms as parent dir and -D creates dirs
+#alias mf='touch' # make file. or `echo $text | tee $newfile`. also `netstat`
+alias mf='install -D /dev/null' # using `install -D` creates needed dirs and then file
 alias mv='mv -i ' # interactive. -n for no clobber, but cant be used with -i (will not notify)
 alias mvu='install -o user -g user -D -t' # target/ dir/* # this copies while keeping target dir ownersperms and ownership. change <user>
 alias ncdu='type ncdu; ncdu -x' # manage disk space utility. `apt install ncdu`. -x is exclude other filesytems.
@@ -360,8 +362,8 @@ set softtabstop=4   " Sets the number of columns for a TAB
 set expandtab       " Expand TABs to spaces
 set shell=/bin/bash
 nnoremap <F3> :set hlsearch!<CR> "toggle search highligh. or use :noh"
-cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
-' >| ~/.vimrc >| ~/.vimrc   # > to not overwrite 
+cnoremap w!! execute "silent! write !sudo tee % > /dev/null" <bar> edit!
+' >| ~/.vimrc   # > to not overwrite or >> to append
 fi
 # basic vim commands: https://gist.github.com/auwsom/78c837fde60fe36159ee89e4e29ed6f1
 # `:e <filename>` to open file or `:e .` to browse directory 
