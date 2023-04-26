@@ -12,7 +12,7 @@ export HISTSIZE=10000  # increase history list (in memory) size
 export HISTFILESIZE=5000 #$HISTSIZE  # increase history file size # or just leave blank for unlimited
 HISTFILE=~/.bash_eternal_history # "certain bash sessions truncate .bash_history" (like Screen) SU
 #sed -i 's,HISTFILESIZE=,HISTFILESIZE= #,' ~/.bashrc && sed -i 's,HISTSIZE=,HISTSIZE= #,' ~/.bashrc # run once for unlimited. have to clear the default setting in .bashrc
-HISTCONTROL=ignoreboth:erasedups   # no duplicate entries. ignoredups is onlt for consecutive
+HISTCONTROL=ignoreboth:erasedups   # no duplicate entries. ignoredups is only for consecutive. ignore both = ignoredups+ignorespace (will not record commands with space in front)
 #HISTTIMEFORMAT="%h %d %H:%M " # "%F %T "
 #export HISTIGNORE="!(+(*\ *))" # ignores commands without arguments. not compatible with HISTTIMEFORMAT. should be the same as `grep -v -E "^\S+\s.*" $HISTFILE`
 #export HISTIGNORE="&:ls:[bf]g:exit:pwd:clear:mount:umount" # ignore these single commands
@@ -37,7 +37,7 @@ export LC_ALL="C" # makes ls list dotfiles before others
 function rescue_history { history -a; }; trap rescue_history SIGHUP # saves history on interupt
 set -o monitor
 
-# some familiar keyboard shortcuts 
+# some familiar keyboard shortcuts. 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
 #stty intr ^S # this changes the ctrl+c for interrupt process to ctrl+s, to allow modern ctrl+c for copy.
 stty lnext ^N # this changes the ctrl+v for lnext to ctrl+b, to allow modern ctrl+v for paste. lnext shows the keycode of the next key typed.
