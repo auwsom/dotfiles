@@ -90,6 +90,7 @@ alias kj='kill -TERM %1' # terminate job 1
 alias loc='locate --limit 5' # `apt install locate` finds common file locations fast (fstab, etc) 
 #alias ls='ls -F ' # list. F is --classify with symbols or colors. already included in most .bashrc
 #alias la='ls -A' # list all. included. 
+alias l='echo $(history -p !!) | xclip' # copies last command line to clipboard. see `o` for output.
 alias ll='ls -alFh ' # "list" all, long format. included in .bashrc, added human readable. 
 alias lll='ls -alF ' # "list" all long format. full byte count. 
 alias ltr='ls -lcr ' # "list" long, time, reverse. sorted bottom is latest changed. c is changed time. 
@@ -229,6 +230,7 @@ function hdln { history -d $(($HISTCMD - $1 -1))-$(($HISTCMD - 2)); history -w; 
 function help { $1 --help; } # use `\help` if you ever want to see the default commands list
 function hh { $1 --help; } 
 function helpany { $1 --help || help $1 || man $1 || info $1; } # use any of the help docs. # also use tldr. 
+function lns { dir=$1; lastdir="${dir##*/}"; sudo ln -s $2/$lastdir $1; } # quick symlink using arg order from cp or mv
 function ren { mv $1 $2; } # rename
 function sudov { while true; do sudo -v; sleep 360; done; } # will grant sudo 'for 60 minutes
 function addpath { export PATH="$1:$PATH"; } # add to path
@@ -239,7 +241,7 @@ export CDPATH=".:/home/user" # can cd to any dir in user home from anywhere just
 #export CDPATH=".:/etc" # just type `cd grub.d`
 #export CDPATH=".:/" # could use at root to remove need for typing lead /, but could cause confusion
 export VISUAL='vi' # export EDITOR='vi' is for old line editors like ed
-# ! dont use single quotes when setting `export PATH="_:$PATH"`. single quotes do not do parameter expansion.
+# ! dont use single quotes when setting `export PATH="_:$PATH"`. single quotes do not use parameter expansion.
 # export TERM='xterm' # makes vim use End and Home keys. but only vt220 on ubuntu cloud image
 
 ## key bindings. custom emacs. or use `set -o vi` for vim bindings. `set -o emacs` to reverse.
@@ -282,12 +284,16 @@ ways to kill runaway process: `ctrl+c`, `ctrl+d` (exit current shell), `ctrl+\`
 apt: remove. purge deletes config except in home dir. autoremove deletes unused.    
 apt -s, --simulate, --just-print, --dry-run, --recon, --no-act  = No action; perform a simulation..
 `apt show <package>` shows size, unlike simulate, even if not installed, but sizes not same as install info
-Conditional Expressions (`man bash` search / "comparsion"): `if [ <> ];then <>;fi`. Use double [[ ]] to disable expansion. `test 1 -eq 2 && echo true || echo false` is same as `[ 1 -eq 2 ] && echo true || echo false]`
+Conditional Expressions: (`man bash` search / "comparsion"): `if [ <> ];then <>;fi`. Use double [[ ]] to disable expansion. `test 1 -eq 2 && echo true || echo false` is same as `[ 1 -eq 2 ] && echo true || echo false]`
+
+https://www.gnu.org/software/bash/manual/html_node/index.html#SEC_Contents
+Quoting, Shell Expansions: Brace, Tilde, Parameter Expansion (substrings, etc), Command Substitution, Arithmetic,, Redirections, Builtins.
+https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html https://opensource.com/article/17/6/bash-parameter-expansion
+
 https://tldp.org
 learnshell.org
 linuxcommand.org
 https://linux.101hacks.com/toc/ CDPATH info
-https://www.gnu.org/software/bash/manual/html_node/index.html#SEC_Contents
 END
 
 ## common dirs and files: # need extra space in alias for commands on files
