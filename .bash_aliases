@@ -171,7 +171,7 @@ alias redo='fc -s ' # redo from history. see fc.
 alias fsck='type fsck; fsck' #-p automatically fix. or use -y for yes to all except multiple choice.
 alias flm='find . -type f -mmin -1 '
 alias flmh='find ~ -type d \( -name .cache -o -name .mozilla \) -prune -o -type f -mmin -1 '
-alias flmr='find / -type d \( -name proc -o -name sys -o -name dev -o -name run -o -name var -o -name media \) -prune -o -type f -mmin -1 '
+alias flmr='find / -type d \( -name proc -o -name sys -o -name dev -o -name run -o -name var -o -name media -o -name -home \) -prune -o -type f -mmin 0 '
 alias free='type free; free -h ' # check memory, human readable
 alias gm='guestmount -i $file -a /mnt' # set file=<vm/partition-backup> first 
 # `inotifywait -m ~/.config/ -e create -e modify` (inotify-tools), watch runs every x sec, entr runs command after file changes. use examples from bottom of `man entr` `ls *.js | entr -r node app.js`
