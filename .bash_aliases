@@ -503,7 +503,16 @@ alias list='ll '
 # https://github.com/akinomyoga/ble.sh
 #bleopt complete_auto_complete= # Disable auto-complete 
 
+alias wq='wg-quick'
+alias wqu='wg-quick up wg0'
+alias wqd='wg-quick down wg0'
 
+alias pm='podman'
+alias pmi='podman images'
+alias pmcl='podman container list --all'
+alias db='distrobox'
+alias dbl='distrobox list'
+alias dbe='distrobox enter'
 
 
 
