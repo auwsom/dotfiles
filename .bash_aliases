@@ -59,7 +59,7 @@ alias apt="sudo apt" # also extend sudo timeout: `echo 'Defaults timestamp_timeo
 alias b='bg 1' # put background job 1
 alias f='fg 1' # put foreground job 1
 alias c='clear' # clear terminal
-alias cat='cat ' # concatenate (if more than one file) and display. 
+alias cat='cat ' # concatenate (if more than one file) and display. `tac` cat in reverse order.
 # `<` works the same as `cat` because of "redirection" in either form: `command < in | command2 > out` or `<in command | command2 > out` https://en.wikipedia.org/wiki/Cat_(Unix)#Useless_use_of_cat 
 # (`echo hello > file; echo world >> file`): `cat file | tee /dev/tty | grep hello` and `< file tee /dev/tty | grep hello` and `tee /dev/tty < file | grep hello` all output the same.
 # redirect sterr and stdout to files `command 2> error.txt 1> output.txt` or to null `command 2> /dev/null`
@@ -77,7 +77,7 @@ alias du='du -hs' # human readable, summarize
 alias fh='find . -iname' # i means case insensitive. have to use wildcards/globs * to find from partial text. have to be in double quotes (no expansion). -exec needs escaped semicolon \;
 alias fr='find / -iname' # use `tldr find` for basics. -L will follow symlinks
 alias fm='findmnt' # shows mountpoints as tree
-alias g='grep -i ' # search for text and more. "Global Regular Expressions Print" -i is case-insensitive. use -v to exclude. add mulitple with `-e <pattern>`. use `-C 3` to show 3 lines above and below.
+alias g='grep -i ' # search for text and more. "Global Regular Expressions Print" -i is case-insensitive. use -v to exclude. add mulitple with `-e <pattern>`. use `-C 3` to show 3 lines of context.
 alias i='ip -color a' # network info
 alias h='history 50'
 alias hhh='history' # `apt install hstr`. replaces ctrl-r with `hstr --show-configuration >> ~/.bashrc` https://github.com/dvorka/hstr. disables hide by default.
@@ -173,6 +173,7 @@ alias flm='find . -type f -mmin -1 '
 alias flmh='find ~ -type d \( -name .cache -o -name .mozilla \) -prune -o -type f -mmin -1 '
 alias flmr='find / -type d \( -name proc -o -name sys -o -name dev -o -name run -o -name var -o -name media -o -name -home \) -prune -o -type f -mmin 0 '
 alias free='type free; free -h ' # check memory, human readable
+# head and tail: `head -1 <file>` shows the first line. defaults to 10 lines without number.
 alias gm='guestmount -i $file -a /mnt' # set file=<vm/partition-backup> first 
 # `inotifywait -m ~/.config/ -e create -e modify` (inotify-tools), watch runs every x sec, entr runs command after file changes. use examples from bottom of `man entr` `ls *.js | entr -r node app.js`
 alias jo='journalctl' # -p,  -err, --list-boots, -b boot, -b -1 last boot, -r reverse, -k (kernel/dmesg), -f follow, --grep -g, --catalog -x (use error notes), -e goto end
