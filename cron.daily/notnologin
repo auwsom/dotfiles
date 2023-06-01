@@ -1,0 +1,2 @@
+#!/bin/bash
+if [ ! $(head -1 /etc/passwd | grep nologin) ]; then echo mail -s "not nologin $(hostname)" $(cat ~/.env/EMAIL) "message"; fi

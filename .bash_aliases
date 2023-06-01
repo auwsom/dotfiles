@@ -503,9 +503,9 @@ alias list='ll '
 # https://github.com/akinomyoga/ble.sh
 #bleopt complete_auto_complete= # Disable auto-complete 
 
-alias wq='wg-quick'
-alias wqu='wg-quick up wg0'
-alias wqd='wg-quick down wg0'
+alias wg='wg-quick'
+alias wgu='wg-quick up wg0'
+alias wgd='wg-quick down wg0'
 
 alias pm='podman'
 alias pmi='podman images'
