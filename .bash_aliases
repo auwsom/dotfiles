@@ -76,6 +76,7 @@ alias du='du -hs' # human readable, summarize
 # 'echo' # print <args>. 'exit '.
 alias fh='find . -iname' # i means case insensitive. have to use wildcards/globs * to find from partial text. have to be in double quotes (no expansion). -exec needs escaped semicolon \;
 alias fr='find / -iname' # use `tldr find` for basics. -L will follow symlinks
+alias fe='find . -iname "f" -exec echo {} \; -exec grep word {} \;' # execute command(s) on found file
 alias fm='findmnt' # shows mountpoints as tree
 alias g='grep -i ' # search for text and more. "Global Regular Expressions Print" -i is case-insensitive. use -v to exclude. add mulitple with `-e <pattern>`. use `-C 3` to show 3 lines of context.
 alias i='ip -color a' # network info
