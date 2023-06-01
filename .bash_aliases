@@ -153,6 +153,7 @@ alias cur='chown -R root:root' # change ownership to root
 alias cx='chmod +x' # make executable
 alias cm='chmod -R' # change perms to rwx octet
 alias cm7='chmod -R 777' # change perms to all
+alias cmp='type cmp; cmp -b' # compares and shows different lines. no sorting needed.
 alias comm='type comm; comm -12 <(sort a.txt) <(sort b.txt)' # compares and shows all same lines of tex. `comm -12` for diffs
 alias diff='type diff; diff -y --color --brief' # compare. -y show. --breif only shows diffs. Use Meld for GUI.
 alias dedup='tac /root/.bash_history | awk '!a[$0]++' | tac > /root/.bash_history'
