@@ -70,7 +70,8 @@ alias cdb='cd -' # cd back
 alias cdu='cd ..' # change directory up
 alias cpa='type cp; cp -ar ' # achive and recursive. but rsync is better because shows progress (not possible with cp without piping to pv). also try `install` command - copies and keeps permissions of target dir. 
 # type shows the alias to avoid confusion. but cant use type in combo with sudo, so not used with some.
-alias cp='cp -i' # copy interactive to avoid littering dir with files unintentionally.
+alias cp='cp -i' # copy interactive to avoid littering dir with files unintentionally. 
+
 alias cpr='rsync -aAX --info=progress2 ' # copy with progress info, -a --archive mode: recursive, copies symlinks, keeps permissions, times, owner, group, device. -A acls -X extended attributes. -c checks/verify. cant use `type` (to show it is an alias) with sudo in front.
 alias df='type df; df -h -x"squashfs"' # "disk free" human readable, will exclude show all the snap mounts
 alias du='du -hs' # human readable, summarize
@@ -98,10 +99,10 @@ alias lll='ls -alF ' # "list" all long format. full byte count.
 alias ltr='ls -lcr ' # "list" long, time, reverse. sorted bottom is latest changed. c is changed time. 
 alias lsd='ls -d $PWD/* ' # returns full paths. have to be in the directory. 
 alias mo='more ' # break output into pages. or `less`.
-#alias md='mkdir -p' # makes all --parents directories necessary
-alias md='install -D /dev/null' # using `install` keeps same perms as parent dir and -D creates dirs
 #alias mf='touch' # make file. or `echo $text | tee $newfile`. also `netstat`
-alias mf='install -D /dev/null' # using `install -D` creates needed dirs and then file
+#alias md='mkdir -p' # makes all --parents directories necessary
+alias md='install -d' # using `install` keeps same perms as parent dir and -D creates dirs
+alias mf='install -D /dev/null' # creates needed dirs with parent perms and owns, and then file
 alias mv='mv -i ' # interactive. -n for no clobber, but cant be used with -i (will not notify)
 alias mvu='install -o user -g user -D -t' # target/ dir/* # this copies while keeping target dir ownersperms and ownership. change <user>
 alias ncdu='type ncdu; ncdu -x' # manage disk space utility. `apt install ncdu`. -x is exclude other filesytems.
