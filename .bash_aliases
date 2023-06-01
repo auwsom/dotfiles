@@ -2,7 +2,7 @@
 # `wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc`
 # `wget https://bit.ly/3EjgWdx -O ~/.bash_aliases && source ~/.bashrc`
 # `cp -f ~/.bash_aliases /home/user/.bash_aliases && chown user:user /home/user/.bash_aliases`
-#shellcheck "$0" # `apt install shellcheck` to check any script for any errors. uncomment line to check this one.
+# `apt install shellcheck` then run `shellcheck ~/.bash_aliases` to check this script for any errors. 
 
 # see further down for more general Linux tips and learning sites
 
@@ -187,6 +187,7 @@ alias lsblk='type lsblk; lsblk -f' # -f lists UUIDs and percent full
 alias lsof='type lsof; lsof -e /run/user/*' # remove cant stat errors
 #alias lnf='ln -f ' # symlink. use -f to overwrite. <target> <linkname>
 alias netstat='type netstat; netstat -atnp' 
+alias na='netplan apply'
 alias pegrep='grep -P ' # PCRE grep https://stackoverflow.com/a/67943782/4240654
 alias perl='type perl; perl -p -i -e ' # loop through stdin lines. in-place. use as command. https://stackoverflow.com/questions/6302025/perl-flags-pe-pi-p-w-d-i-t
 alias ping1='type ping; ping -c 3 8.8.8.8' # ping test. count 3. google ip.
@@ -228,14 +229,14 @@ alias umf='umount -l' # unmount lazy works when force doesnt
 # `declare -f <function>` will show it
 # export -f <alias> # will export alias as function to be used in scripts. or source .bash_aliases after settinge `shopt -s expand_aliases`
 set -a # sets for export to env the following functions, for calling in scripts and subshells (aliases dont get called).
-function hdn { history -d $1; history -w; } # delete history line number
+function hdn { history -d "$1"; history -w; } # delete history line number
 function hdl { history -d $(($HISTCMD - 1)); history -w; } # delete history last number
-function hdln { history -d $(($HISTCMD - $1 -1))-$(($HISTCMD - 2)); history -w; } # delete last n lines. (add 1 for this command) (history -d -$1--1; has error)
-function help { $1 --help; } # use `\help` if you ever want to see the default commands list
-function hh { $1 --help; } 
-function helpany { $1 --help || help $1 || man $1 || info $1; } # use any of the help docs. # also use tldr. 
-function lns { dir=$1; lastdir="${dir##*/}"; sudo ln -s $2/$lastdir $1; } # quick symlink using arg order from cp or mv
-function ren { mv $1 $2; } # rename
+function hdln { history -d $(($HISTCMD - "$1" -1))-$(($HISTCMD - 2)); history -w; } # delete last n lines. (add 1 for this command) (history -d -$1--1; has error)
+function help { "$1" --help; } # use `\help` to disable the function alias
+function hh { "$1" --help; } 
+function ? { "$1" --help || help "$1" || man "$1" || info "$1"; } # use any of the help docs. # also use tldr. 
+function lns { dir="$1"; lastdir="${dir##*/}"; sudo ln -s $2/$lastdir "$1"; } # quick symlink using arg order from cp or mv
+function ren { mv "$1" "$2"; } # rename
 function sudov { while true; do sudo -v; sleep 360; done; } # will grant sudo 'for 60 minutes
 function addpath { export PATH="$1:$PATH"; } # add to path
 function addpathp { echo "PATH="$1':$PATH' >> ~/.profile; } # add to path permanently
@@ -507,7 +508,6 @@ alias list='ll '
 # https://github.com/akinomyoga/ble.sh
 #bleopt complete_auto_complete= # Disable auto-complete 
 
-alias na='netplan apply'
 
 alias wg='wg-quick'
 alias wgu='wg-quick up wg0'
