@@ -70,6 +70,7 @@ alias cdb='cd -' # cd back
 alias cdu='cd ..' # change directory up
 alias cpa='type cp; cp -ar ' # achive and recursive. but rsync is better because shows progress (not possible with cp without piping to pv). also try `install` command - copies and keeps permissions of target dir. 
 # type shows the alias to avoid confusion. but cant use type in combo with sudo, so not used with some.
+alias cp='cp -i' # copy interactive to avoid littering dir with files unintentionally.
 alias cpr='rsync -aAX --info=progress2 ' # copy with progress info, -a --archive mode: recursive, copies symlinks, keeps permissions, times, owner, group, device. -A acls -X extended attributes. -c checks/verify. cant use `type` (to show it is an alias) with sudo in front.
 alias df='type df; df -h -x"squashfs"' # "disk free" human readable, will exclude show all the snap mounts
 alias du='du -hs' # human readable, summarize
