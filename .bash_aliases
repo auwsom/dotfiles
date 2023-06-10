@@ -143,6 +143,7 @@ alias zz='systemctl poweroff' # also `systemctl halt` or `shutdown -H now`. halt
 ### more advanced:
 alias sz='7z x -o*' # extracts in to subdirectory
 alias szc='7z a -t7z -m0=lzma2:d1024m -mx=9 -aoa -mfb=64 -md=32m -ms=on' #<dir> <output> # highest compression or use PeaZip
+alias awk1='awk "{print \$1}"' # print first column; end column {print $NF}; second to last $(NF-1); use single quotes when not using alias; awk more common than `cut -f1 -d " "`
 alias au='sudo apt update'
 alias auu='sudo apt update && apt -y upgrade' # show all users logged in. `last` show last logins
 alias aca='sudo apt clean && sudo apt autoremove'
@@ -289,7 +290,7 @@ ways to kill runaway process: `ctrl+c`, `ctrl+d` (exit current shell), `ctrl+\`
 apt: remove. purge deletes config except in home dir. autoremove deletes unused.    
 apt -s, --simulate, --just-print, --dry-run, --recon, --no-act  = No action; perform a simulation..
 `apt show <package>` shows size, unlike simulate, even if not installed, but sizes not same as install info
-Conditional Expressions: (`man bash` search / "comparsion"): `if [ <> ];then <>;fi`. Use double [[ ]] to disable expansion. `test 1 -eq 2 && echo true || echo false` is same as `[ 1 -eq 2 ] && echo true || echo false]`
+Conditional Expressions: (`man test` or `man bash` search with / for "comparsion"): `if [ <> ];then <>;fi`. Use double [[ ]] to disable expansion. `test 1 -eq 2 && echo true || echo false` is same as `[ 1 -eq 2 ] && echo true || echo false]`
 
 https://www.gnu.org/software/bash/manual/html_node/index.html#SEC_Contents
 Quoting, Shell Expansions: Brace, Tilde, Parameter Expansion (substrings, etc), Command Substitution, Arithmetic,, Redirections, Builtins.
