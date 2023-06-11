@@ -34,7 +34,6 @@ shopt -s dotglob # makes `mv/cp /dir/*` copy all contents, both * and .*; or use
 shopt -s nocaseglob # ignores case of * globs
 #if [ -f ~/.env ]; then source ~/.env ; fi # dont use env vars for storing secrets. create dir .env and store files in there. $(cat ~/.env/mykey)
 export LC_ALL="C" # makes ls list dotfiles before others
-set -x # show aliases/functions expanded when running them.. for beginners for learning full command.
 function rescue_history { history -a; }; trap rescue_history SIGHUP # saves history on interupt
 set -o monitor # enable job control.
 
@@ -523,4 +522,6 @@ alias dbl='distrobox list'
 alias dbe='distrobox enter'
 
 
+#set -x # show aliases/functions expanded when running them.. for beginners for learning full command.
+trap 'echo ${BASH_COMMAND}' DEBUG
 
