@@ -18,7 +18,8 @@ HISTCONTROL=ignoreboth:erasedups   # no duplicate entries. ignoredups is only fo
 #export HISTIGNORE="&:ls:[bf]g:exit:pwd:clear:mount:umount" # ignore these single commands
 #shopt -s histverify   # confirm bash history (!number) commands before executing. optional for beginners using bang ! commands. can also use ctrl+alt+e to expand before enter.
 #alias ha='history -a ' # append current history before opening new terminal, to have it available.
-export PROMPT_COMMAND='history -a; set +m' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups.
+export PROMPT_COMMAND='history -a' # ;set +m' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. set +m makes disables job control for aliases in vi.
+#history -a; set +m # same as above but runs every command with .bashrc
 #history -w # writes history on every new bash shell to remove duplicates
 # `history -a;history -c;history -r` # this will reload history with commands from other shells 
 set -o noclobber  # dont let accidental > overwrite. use >| to force redirection even with noclobber
@@ -33,9 +34,9 @@ shopt -s dotglob # makes `mv/cp /dir/*` copy all contents, both * and .*; or use
 shopt -s nocaseglob # ignores case of * globs
 #if [ -f ~/.env ]; then source ~/.env ; fi # dont use env vars for storing secrets. create dir .env and store files in there. $(cat ~/.env/mykey)
 export LC_ALL="C" # makes ls list dotfiles before others
-#set -x # show aliases expanded when running them.. but causes too much other noise as debug
+set -x # show aliases/functions expanded when running them.. for beginners for learning full command.
 function rescue_history { history -a; }; trap rescue_history SIGHUP # saves history on interupt
-set -o monitor
+set -o monitor # enable job control.
 
 # some familiar keyboard shortcuts. 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
@@ -389,7 +390,7 @@ fi
 # https://rwxrob.github.io/vi-help/
 # deindent ctrl-D
 # https://github.com/tpope/vim-sensible # sensible settings repo
-shopt -s expand_aliases # to use bash aliases inside vi plus the `let $BASH_ENV = "~/.bash_aliase` in .vimrc
+shopt -s expand_aliases # to use bash aliases inside vi. also add `let $BASH_ENV = "~/.bash_aliases` in .vimrc. using aliases inside scripts makes them unclear for others.
 
 : <<'END3'
 ## tmux   wget https://raw.githubusercontent.com/rwxrob/dot/main/tmux/.tmux.conf
