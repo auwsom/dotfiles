@@ -72,7 +72,8 @@ alias cpa='type cp; cp -ar ' # achive and recursive. but rsync is better because
 alias cp='cp -i' # copy interactive to avoid littering dir with files unintentionally. use `find <dir> -type f -mmin -1` to find files copied in last 1 min. then add `-exec rm {} \;` once sure to delete. or `find <dir> -maxdepth 1 -type f -exec cmp -s '{}' "$destdir/{}" \; -print` can compare dirs. -a vs -R.
 alias cpr='rsync -aAX --info=progress2 ' # copy with progress info, -a --archive mode: recursive, copies symlinks, keeps permissions, times, owner, group, device. -A acls -X extended attributes. -c checks/verify. cant use `type` (to show it is an alias) with sudo in front.
 alias df='type df; df -h -x"squashfs"' # "disk free" human readable, will exclude show all the snap mounts
-alias du='du -hs' # human readable, summarize
+alias du='type du; du -hs' # human readable, summarize. 
+alias du1='du -cd1 . | sort -n' # du --total --max-depth 1, pipe to sort numerically
 # 'echo' # print <args>. 'exit '.
 alias fh='find . -iname' # i means case insensitive. have to use wildcards/globs * to find from partial text. have to be in double quotes (no expansion). -exec needs escaped semicolon \;
 alias fr='find / -iname' # use `tldr find` for basics. -L will follow symlinks
@@ -269,37 +270,36 @@ if [[ "$VIMRUNTIME" != "/usr/share/vim/vim82" ]]; then bind '",,": "!$"'; fi # e
 bind 'set show-all-if-ambiguous on' # this makes only one Tab necessary to show completion possibilities
 
 : <<'END' 
-basic bash commands:
+CLI emacs mode common keys:
+press `ctrl+alt+e` to expand symbols to show them, such as `!!`
+clear line: `ctrl+e`,`ctrl+u` goto end then clear to left, (or ctrl+a, ctrl+k)
+cut word backward `ctrl w`, paste that word `ctrl y`, use `alt d` to cut word forward
+undo like this : `ctrl+_`
+kill runaway process: `ctrl+c`, `ctrl+d` (exit current shell), `ctrl+\` 
+search history, reverse (type afterward): `ctrl+r`, go forward `ctrl+f`. `ctrl+g` cancels. `alt(meta)+>` go back to history bottom.
+https://dokumen.tips/documents/macintosh-terminal-pocket-guide.html?page=42 (good compare to vi mode)
+
+basic bash system commands:
 `fdisk -l` # partition table list. also see `cfdisk` for changing
 `blkid` # block id
 `lsblk` # list block `lsblk --output UUID /dev/sda1`
 `mount` # list mounts. or `findmnt` list as tree
-`df -h` # filesystem disk usage, human readable
-`du -sh`; `du -cd1 . | sort -n` # disk usage --summarize --human-readable or du --total --max-depth 1 pipe to sort numerically
 `ncdu -x /` # `apt install ncdu` to find disk usage to delete when full
-`ps -ef | grep`   # process snapshot --all in `full format` then search for text string
 `kill -9 <pid>` `kill -TERM <pid>` `pidof <> | xargs kill` `pkill` to kill processes
 `systemctl status | grep`   # systemctl is the current process manager using services
 `uname -a`   # get quick system info
 `cat /etc/*release`   # get kernel info
 `dircolors -p | sed 's/;42/;01/' >| ~/.dircolors`   # if you need to remove colorization
-press `ctrl+alt+e` to expand symbols to show them, such as `!!`
-clear line: `ctrl+e`,`ctrl+u` goto end then clear to left, (or ctrl+a, ctrl+k)
-cut left word `ctrl w`, paste that word `ctrl y`, use `alt d` to cut forward
-undo like this : `ctrl+_`
-creation time if available: `stat`
+file stats including creation time if available: `stat`
 terminal key shortcuts: `stty -a`
-search history reverse (type afterward): `ctrl+r`, go forward `ctrl+f`. `ctrl+g` cancels. `alt(meta)+>` go back to history bottom.
-ways to kill runaway process: `ctrl+c`, `ctrl+d` (exit current shell), `ctrl+\` 
-apt: remove. purge deletes config except in home dir. autoremove deletes unused.    
-apt -s, --simulate, --just-print, --dry-run, --recon, --no-act  = No action; perform a simulation..
-`apt show <package>` shows size, unlike simulate, even if not installed, but sizes not same as install info
-Conditional Expressions: (`man test` or `man bash` search with / for "comparsion"): `if [ <> ];then <>;fi`. Use double [[ ]] to disable expansion. `test 1 -eq 2 && echo true || echo false` is same as `[ 1 -eq 2 ] && echo true || echo false]`
-`man bash` then search `/pattern` and `man regex` for info on Pattern Matching https://www.gnu.org/software/bash/manual/html_node/Pattern-Matching.html
+apt: `remove` uninstalls. `purge` deletes config except in home dir. `autoremove` deletes unused.    
+apt -s, --simulate, --just-print, --dry-run, --recon, --no-act = No action; perform a simulation..
+`apt show <package>` shows size, unlike simulate, before install (but sizes not same as in apt install)
 
-https://www.gnu.org/software/bash/manual/html_node/index.html#SEC_Contents
-Quoting, Shell Expansions: Brace, Tilde, Parameter Expansion (substrings, etc), Command Substitution, Arithmetic,, Redirections, Builtins.
-https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html https://opensource.com/article/17/6/bash-parameter-expansion
+Bash Manual (`man bash`) https://www.gnu.org/software/bash/manual/html_node/index.html#SEC_Contents 
+Conditional Expressions: (`man test` or `man bash` and search with / for "comparsion"): `if [ <> ];then <>;fi`. Use double [[ ]] to disable expansion. `test 1 -eq 2 && echo true || echo false` is same as `[ 1 -eq 2 ] && echo true || echo false]`
+Pattern Matching: `man bash` then search `/pattern` and `man regex` https://www.gnu.org/software/bash/manual/html_node/Pattern-Matching.html
+Quoting, Shell Expansions: Brace, Tilde, Parameter Expansion (substrings, etc), Command Substitution, Arithmetic,, Redirections, Builtins. https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html https://opensource.com/article/17/6/bash-parameter-expansion
 
 https://tldp.org
 learnshell.org
