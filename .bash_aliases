@@ -145,10 +145,11 @@ alias zz='systemctl poweroff' # also `systemctl halt` or `shutdown -H now`. halt
 ### more advanced:
 alias sz='7z x -o*' # extracts in to subdirectory
 alias szc='7z a -t7z -m0=lzma2:d1024m -mx=9 -aoa -mfb=64 -md=32m -ms=on' #<dir> <output> # highest compression or use PeaZip
-alias awk1='awk "{print \$1}"' # print first column; end column {print $NF}; second to last $(NF-1); use single quotes when not using alias; awk more common than `cut -f1 -d " "`
 alias au='sudo apt update'
 alias auu='sudo apt update && apt -y upgrade' # show all users logged in. `last` show last logins
 alias aca='sudo apt clean && sudo apt autoremove'
+# `arp` # lists all devices on network layer 2. apt install net-tools
+alias awk1='awk "{print \$1}"' # print first column; end column {print $NF}; second to last $(NF-1); use single quotes when not using alias; awk more common than `cut -f1 -d " "`
 alias bc='type bc; BC_ENV_ARGS=<(echo "scale=2") \bc' # basic calculator. with 2 decimal places.
 alias cu='chown -R $USER:$USER' # change ownership to current user
 alias cur='chown -R root:root' # change ownership to root
@@ -190,8 +191,9 @@ alias launch='gio launch' # launch *.desktop files from the CLI
 alias lsblk='type lsblk; lsblk -f' # -f lists UUIDs and percent full
 alias lsof='type lsof; lsof -e /run/user/*' # remove cant stat errors
 #alias lnf='ln -f ' # symlink. use -f to overwrite. <target> <linkname>
-alias netstat='type netstat; netstat -atnp' 
 alias na='netplan apply'
+alias netstat='type netstat; netstat -atnp' 
+alias nmap1='nmap -sn 192.168.1.0/24'
 alias pegrep='grep -P ' # PCRE grep https://stackoverflow.com/a/67943782/4240654
 alias perl='type perl; perl -p -i -e ' # loop through stdin lines. in-place. use as command. https://stackoverflow.com/questions/6302025/perl-flags-pe-pi-p-w-d-i-t
 alias ping1='type ping; ping -c 3 8.8.8.8' # ping test. count 3. google ip.
@@ -352,6 +354,7 @@ export hh="--help" # can use like `bash $hh` (man bash)
 # use `sudo -s` to elevate user but stay in same user environment (history and bashrc prefs). 
 # add user to sudo group: `usermod -aG sudo user` to protect root user (can remove privelege from user if needed)
 # careful with changing all permissions to 777: https://superuser.com/questions/132891/how-to-reset-folder-permissions-to-their-default-in-ubuntu
+# use envdir or direnv for storing project secrets safely
 
 ## basic vim settings: 
 if ! [[ -f ~/.vimrc ]]; then
