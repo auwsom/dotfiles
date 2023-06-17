@@ -18,7 +18,7 @@ HISTCONTROL=ignoreboth:erasedups   # no duplicate entries. ignoredups is only fo
 #export HISTIGNORE="&:ls:[bf]g:exit:pwd:clear:mount:umount" # ignore these single commands
 #shopt -s histverify   # confirm bash history (!number) commands before executing. optional for beginners using bang ! commands. can also use ctrl+alt+e to expand before enter.
 #alias ha='history -a ' # append current history before opening new terminal, to have it available.
-export PROMPT_COMMAND='history -a' # ;set +m' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. set +m makes disables job control for aliases in vi.
+export PROMPT_COMMAND='history -a; ' # ;set +m' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. set +m makes disables job control for aliases in vi.
 #history -a; set +m # same as above but runs every command with .bashrc
 #history -w # writes history on every new bash shell to remove duplicates
 # `history -a;history -c;history -r` # this will reload history with commands from other shells 
@@ -380,6 +380,7 @@ cnoremap w!! execute "silent! write !sudo tee % > /dev/null" <bar> edit!
 ' >| ~/.vimrc   # > to not overwrite or >> to append
 fi
 # basic vim commands: https://gist.github.com/auwsom/78c837fde60fe36159ee89e4e29ed6f1
+# ctrl-o goes to last edit
 # `:e <filename>` to open file or `:e .` to browse directory 
 # `:!bash %` to run script from within vim
 # find and replace: `:%s,baz,boz,g`
@@ -523,5 +524,7 @@ alias dbe='distrobox enter'
 
 
 #set -x # show aliases/functions expanded when running them.. for beginners for learning full command.
-trap 'echo ${BASH_COMMAND}' DEBUG
+#trap 'echo ${BASH_COMMAND}' DEBUG # prints all commands 
+#trap 'type ${BASH_COMMAND[1]}' DEBUG # array doesnt work on this bash var for some reason
+#trap 'if [[ $(echo $(type ${BASH_COMMAND} | awk "{print \$1}" ) | grep builtin) ]]; then echo yes; fi' DEBUG # prints all commands. also prints an error ?
 
