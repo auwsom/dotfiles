@@ -230,6 +230,7 @@ alias umf='umount -l' # unmount lazy works when force doesnt
 # change tty term from cli: `chvt 2`
 # keyrings https://itnext.io/what-is-linux-keyring-gnome-keyring-secret-service-and-d-bus-349df9411e67 
 # encrypt files with `gpg -c`
+if [[ $(whoami) == 'root' ]]; then export TMOUT=18000 && readonly TMOUT; fi
 
 ## extra stuff
 # `!!` for last command, as in `sudo !!`. `ctrl+alt+e` expand works here. `!-1:-1` for second to last arg in last command.
@@ -532,11 +533,28 @@ alias dbe='distrobox enter'
 
 
 #set -x; complete -r # enable debugging. show aliases/functions expanded when running them.. for beginners for learning full command. unfortunately prints out all the tab completion so needs `complete -r` remove all function completions.
-# trap DEBUG needs `shopt -s extdebug`? and runs on every command.
+# trap DEBUG needs `shopt -s extdebug` and runs on every command.
 #history -a; set +m # same as above but runs every command with .bashrc
 #trap 'echo ${BASH_COMMAND}' DEBUG # prints all commands 
 #trap 'type ${BASH_COMMAND[1]}' DEBUG # array doesnt work on this bash var for some reason
 #trap 'if [[ $(echo $(type ${BASH_COMMAND} | awk "{print \$1}" ) | grep builtin) ]]; then echo "this is an alias"; fi' DEBUG # prints all commands. also prints an error ?
 #https://stackoverflow.com/questions/27493184/can-i-create-a-wildcard-bash-alias-that-alters-any-command
+
+# use help or hh instead of --help
+reverse_command() {
+  # check `BASH_SOURCE` array length is 0 for interactive mode.
+  if (( ${#BASH_SOURCE[@]} == 1 )); then
+    if [[ $BASH_COMMAND == *" help"* || $BASH_COMMAND == *" hh"* ]]; then 
+      eval "${BASH_COMMAND} --help"
+    # ...then return false to suppress the non-reversed version.
+      false
+    fi
+#  else
+    # for a noninteractive command, return true to run the original unmodified
+#    true
+  fi
+}
+shopt -s extdebug
+trap reverse_command DEBUG
 
 
