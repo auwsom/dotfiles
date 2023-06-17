@@ -290,6 +290,7 @@ apt: remove. purge deletes config except in home dir. autoremove deletes unused.
 apt -s, --simulate, --just-print, --dry-run, --recon, --no-act  = No action; perform a simulation..
 `apt show <package>` shows size, unlike simulate, even if not installed, but sizes not same as install info
 Conditional Expressions: (`man test` or `man bash` search with / for "comparsion"): `if [ <> ];then <>;fi`. Use double [[ ]] to disable expansion. `test 1 -eq 2 && echo true || echo false` is same as `[ 1 -eq 2 ] && echo true || echo false]`
+`man bash` then search `/pattern` and `man regex` for info on Pattern Matching https://www.gnu.org/software/bash/manual/html_node/Pattern-Matching.html
 
 https://www.gnu.org/software/bash/manual/html_node/index.html#SEC_Contents
 Quoting, Shell Expansions: Brace, Tilde, Parameter Expansion (substrings, etc), Command Substitution, Arithmetic,, Redirections, Builtins.
@@ -524,8 +525,9 @@ alias dbl='distrobox list'
 alias dbe='distrobox enter'
 
 
-set -x # show aliases/functions expanded when running them.. for beginners for learning full command.
-# trap DEBUG needs `shopt -s extdebug` and runs on every command.
+#set -x; complete -r # show aliases/functions expanded when running them.. for beginners for learning full command. unfortunately prints out all the tab completion so needs `complete -r` remove all function completions.
+# trap DEBUG needs `shopt -s extdebug`? and runs on every command.
+#history -a; set +m # same as above but runs every command with .bashrc
 #trap 'echo ${BASH_COMMAND}' DEBUG # prints all commands 
 #trap 'type ${BASH_COMMAND[1]}' DEBUG # array doesnt work on this bash var for some reason
 #trap 'if [[ $(echo $(type ${BASH_COMMAND} | awk "{print \$1}" ) | grep builtin) ]]; then echo "this is an alias"; fi' DEBUG # prints all commands. also prints an error ?
