@@ -28,7 +28,7 @@ alias rebash='source ~/.bashrc' # have to use `source` command to load the setti
 alias realias='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc' 
 dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
 shopt -s lastpipe; set +m # allows last pipe to affect shell; needs Job Control disabled +m #https://askubuntu.com/questions/1395963/bash-set-m-option-does-not-work-when-placed-in-the-bashrc-file ..put it in PROMPT_COMMAND
-shopt -s dotglob # makes `mv/cp /dir/*` copy all contents, both * and .*; or use `mv /path/{.,}* /path/`
+shopt -s dotglob # makes `mv/cp /dir/*` copy all contents both * and .*; or use `mv /path/{.,}* /path/`
 #shopt -s globstar # makes ** be recursive for directories
 shopt -s nocaseglob # ignores case of * globs
 #if [ -f ~/.env ]; then source ~/.env ; fi # dont use env vars for storing secrets. create dir .env and store files in there. $(cat ~/.env/mykey)
@@ -69,7 +69,7 @@ alias cdb='cd -' # cd back
 alias cdu='cd ..' # change directory up
 alias cpa='type cp; cp -ar ' # achive and recursive. but rsync is better because shows progress (not possible with cp without piping to pv). also try `install` command - copies and keeps permissions of target dir. 
 # type shows the alias to avoid confusion. but cant use type in combo with sudo, so not used with some.
-alias cp='cp -i' # copy interactive to avoid littering dir with files unintentionally. use `find <dir> -type f -mmin -1` to find files copied in last 1 min. then add `-exec rm {} \;` once sure to delete. or `find <dir> -maxdepth 1 -type f -exec cmp -s '{}' "$destdir/{}" \; -print` can compare dirs.
+alias cp='cp -i' # copy interactive to avoid littering dir with files unintentionally. use `find <dir> -type f -mmin -1` to find files copied in last 1 min. then add `-exec rm {} \;` once sure to delete. or `find <dir> -maxdepth 1 -type f -exec cmp -s '{}' "$destdir/{}" \; -print` can compare dirs. -a vs -R.
 alias cpr='rsync -aAX --info=progress2 ' # copy with progress info, -a --archive mode: recursive, copies symlinks, keeps permissions, times, owner, group, device. -A acls -X extended attributes. -c checks/verify. cant use `type` (to show it is an alias) with sudo in front.
 alias df='type df; df -h -x"squashfs"' # "disk free" human readable, will exclude show all the snap mounts
 alias du='du -hs' # human readable, summarize
@@ -96,6 +96,7 @@ alias ll='ls -alFh ' # "list" all, long format. included in .bashrc, added human
 alias lll='ls -alF ' # "list" all long format. full byte count. 
 alias ltr='ls -lcr ' # "list" long, time, reverse. sorted bottom is latest changed. c is changed time. 
 alias lsd='ls -d $PWD/* ' # returns full paths. have to be in the directory. 
+alias ln='type ln; ln -st' # <source> <target> # symlink <target> <linkname>. -t reversed to reuse mv or cp lines. hardlinks accumulate and dont work across disks.
 alias mo='more ' # break output into pages. or `less`.
 #alias mf='touch' # make file. or `echo $text | tee $newfile`. also `netstat`
 #alias md='mkdir -p' # makes all --parents directories necessary
@@ -109,7 +110,7 @@ alias ov='v=$(eval $(history -p !!))' # copies output of last command to $v. als
 alias path='echo $PATH' # show path
 #alias pd='pushd ' # a way to move through directories in a row (https://linux.101hacks.com/cd-command/dirs-pushd-popd/) ..aliased as `cd`
 alias pd='popd' # going back through the 'stack' history
-alias ps1='ps -ef' # show processes
+alias ps1='ps -ef' # show processes. -e/-A all. -f full.
 #alias psp='ps -o ppid= -p ' # <PID> show parent PID
 alias psp='ps -Flww -p' # <PID> show info on just one process
 alias pgrep='pgrep -af' # grep processes - full, list-full. use \pgrep for just the PID.
@@ -118,6 +119,7 @@ alias pkill='pkill -f' # kill processed - full
 alias q='helpany' # see helpany function
 alias rm='rm -Irv ' # make remove confirm and also recursive for directories by default. v is for verbose. 
 # ^^maybe most helpful alias^^, avoids deleting unintended files. use -i to approve each deletion.
+# `sed` # Stream EDitor `sed -i 's/aaa/bbb/g' file` -i inplace, replace aaa with bbb. g globally. can use any char instead of /, such as `sed -i 's,aaa,bbb,' file`. -E to use re pattern matching.
 alias sudo='sudo '; alias s='sudo '; alias sd='sudo -s ' # elevate privelege for command. see `visudo` to set. And `usermod -aG sudo add`, security caution when adding.
 alias sss='eval sudo $(history -p !!)' # redo with sudo
 alias ssh='ssh -vvv ' # most verbose level
@@ -146,7 +148,7 @@ alias awk1='awk "{print \$1}"' # print first column; end column {print $NF}; sec
 alias au='sudo apt update'
 alias auu='sudo apt update && apt -y upgrade' # show all users logged in. `last` show last logins
 alias aca='sudo apt clean && sudo apt autoremove'
-alias bc='type bc; BC_ENV_ARGS=<(echo "scale=2") \bc'
+alias bc='type bc; BC_ENV_ARGS=<(echo "scale=2") \bc' # basic calculator. with 2 decimal places.
 alias cu='chown -R $USER:$USER' # change ownership to current user
 alias cur='chown -R root:root' # change ownership to root
 alias cx='chmod +x' # make executable
@@ -155,7 +157,8 @@ alias cm7='chmod -R 777' # change perms to all
 alias cmp='type cmp; cmp -b' # compares and shows different lines. no sorting needed.
 alias comm='type comm; comm -12 <(sort a.txt) <(sort b.txt)' # compares and shows all same lines of tex. `comm -12` for diffs
 alias diff='type diff; diff -y --color --brief' # compare. -y show. --breif only shows diffs. Use Meld for GUI.
-alias dedup='tac /root/.bash_history | awk '!a[$0]++' | tac > /root/.bash_history'
+# date +"%D %T" (MM/DD/YY HH:MM:SS). date +%s (epoch secs). date +"%Y-%m-%d %T" (YYYY-MM-DD HH:MM:SS).
+alias dedup='tac ~/.bash_history | awk '!a[$0]++' | tac > ~/.bash_history'
 alias desk='kioclient exec' # in KDE will open .desktop file from CLI
 alias dmesg='type dmesg; dmesg -HTw' # messages from the kernel, human readable, timestamp, follow
 alias dli='tac /var/log/dpkg.log | grep -i "install"' # list installed packages
@@ -200,10 +203,12 @@ alias ra='read -a ' # reads into array/list.
 alias rkonsole='/home/user/.config/autostart-scripts/konsole_watcher.sh restore' # restore konsole tabs
 alias rplasma='pkill plasmashell && plasmashell & ' # restart plasmashell in KDE Kubuntu
 alias rvmm='pkill virt-manager && sys restart libvirtd ' # restart VMM. doenst stop runnning VMs
+# `sha256sum` hash generation
 alias sys='systemctl' # `enable --now` will enable and start 
 alias sysl='systemctl list-unit-files ' # | grep <arg>
 alias tc='truncate -s' # <size, eg 10G> creates dynamic file; format with mkfs.ext4; `ls -s` to show true size on disk. use fallocate --length 1GiB for swapon /swapfile. 
 alias tc0='truncate -s 0' # reset file with zeros to wipe. also use wipe -qr.
+# `traceroute -U www.google.com` or tracepath (without root).
 # tty will show current terminal. then can redirect to it with > /dev/tty<number>
 alias u='users' # show all users logged in. `last` show last logins
 alias uname1='uname -a' # show all kernel info 
@@ -300,6 +305,7 @@ https://tldp.org
 learnshell.org
 linuxcommand.org
 https://linux.101hacks.com/toc/ CDPATH info
+https://dokumen.tips/documents/macintosh-terminal-pocket-guide.html (has great Vim to Emacs compare)
 END
 
 ## common dirs and files: # need extra space in alias for commands on files
