@@ -525,7 +525,7 @@ alias dbl='distrobox list'
 alias dbe='distrobox enter'
 
 
-#set -x; complete -r # show aliases/functions expanded when running them.. for beginners for learning full command. unfortunately prints out all the tab completion so needs `complete -r` remove all function completions.
+#set -x; complete -r # enable debugging. show aliases/functions expanded when running them.. for beginners for learning full command. unfortunately prints out all the tab completion so needs `complete -r` remove all function completions.
 # trap DEBUG needs `shopt -s extdebug`? and runs on every command.
 #history -a; set +m # same as above but runs every command with .bashrc
 #trap 'echo ${BASH_COMMAND}' DEBUG # prints all commands 
