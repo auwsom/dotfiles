@@ -192,8 +192,8 @@ alias lsblk='type lsblk; lsblk -f' # -f lists UUIDs and percent full
 alias lsof='type lsof; lsof -e /run/user/*' # remove cant stat errors
 #alias lnf='ln -f ' # symlink. use -f to overwrite. <target> <linkname>
 alias na='netplan apply'
-alias netstat='type netstat; netstat -atnp' 
-alias nmap1='nmap -sn 192.168.1.0/24'
+alias netstat='type netstat; netstat -atnp' # print network connections info
+alias nmap1='nmap -sn 192.168.1.0/24' # maps open ports on a network
 alias pegrep='grep -P ' # PCRE grep https://stackoverflow.com/a/67943782/4240654
 alias perl='type perl; perl -p -i -e ' # loop through stdin lines. in-place. use as command. https://stackoverflow.com/questions/6302025/perl-flags-pe-pi-p-w-d-i-t
 alias ping1='type ping; ping -c 3 8.8.8.8' # ping test. count 3. google ip.
@@ -343,18 +343,15 @@ export hh="--help" # can use like `bash $hh` (man bash)
 # common directories: # need extra space in alias for commands on files
 # /var/cache/apt/archives/ (use apt clean?)visudo
 # /proc/cmdline, /dev/disk/by-id (etc), /proc, /dev, /media/user, /home/user
-# admin commands: last, w, who, whoami, users, login, uptime, free -th, mpstat, iostat, bashtop, ssh, lsof, lspci, dmesg, dbus, strace, 
-# editing: `sed -i 's/<search>/<replace>/g' (g global optional), `awk '{ print $1 }' file` for printing column(s)
-# info: file, stat, type, date, +date %F,
-# `locate *.desktop`
-# `locate *.desktop | grep -v usr` shows program shortcuts location. also: https://askubuntu.com/questions/5172/running-a-desktop-file-in-the-terminal
+# admin commands: last, w, who, whoami, users, login, uptime, free -th, mpstat, iostat, bashtop, ssh, lsof, lspci, dmesg, dbus, strace, scp, file
+# `locate *.desktop` to find apps # `locate *.desktop | grep -v usr` shows program shortcuts location. also: https://askubuntu.com/questions/5172/running-a-desktop-file-in-the-terminal
 
 ## basic settings:
 # be careful of your filesystem filling up space as it will freeze your OS.. ways to deal with that: create a large dummy file that can be erased, like swapfile, `echo 'SystemMaxUse=200M' >> journald.conf` then limit /tmp and /home 
 # use `sudo -s` to elevate user but stay in same user environment (history and bashrc prefs). 
 # add user to sudo group: `usermod -aG sudo user` to protect root user (can remove privelege from user if needed)
 # careful with changing all permissions to 777: https://superuser.com/questions/132891/how-to-reset-folder-permissions-to-their-default-in-ubuntu
-# use envdir or direnv for storing project secrets safely
+# envdir or direnv for storing project secrets safely. DONT store them in a GitHub repo (.gitignore) http://thedjbway.b0llix.net/daemontools/envdir.html and python os.environ['HOME']
 
 ## basic vim settings: 
 if ! [[ -f ~/.vimrc ]]; then
