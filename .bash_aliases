@@ -19,7 +19,6 @@ HISTCONTROL=ignoreboth:erasedups   # no duplicate entries. ignoredups is only fo
 #shopt -s histverify   # confirm bash history (!number) commands before executing. optional for beginners using bang ! commands. can also use ctrl+alt+e to expand before enter.
 #alias ha='history -a ' # append current history before opening new terminal, to have it available.
 export PROMPT_COMMAND='history -a; ' # ;set +m' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. set +m makes disables job control for aliases in vi.
-#history -a; set +m # same as above but runs every command with .bashrc
 #history -w # writes history on every new bash shell to remove duplicates
 # `history -a;history -c;history -r` # this will reload history with commands from other shells 
 set -o noclobber  # dont let accidental > overwrite. use >| to force redirection even with noclobber
@@ -444,6 +443,8 @@ alias gi3='git add . && git push --set-upstream origin main'
 # git config --global init.defaultBranch main 
 # https://www.freecodecamp.org/news/how-to-make-your-first-pull-request-on-github-3/
 alias gd='git diff origin/HEAD' # <commit> diff head to a commit
+alias gd2='git diff origin/main main' # diff remote (GH repo) to local
+alias gpf='git push --force' # use only after diffing remote to local. also if warning from remote being ahead, you can pull and merge.
 
 # mv ~/.bash_aliases ~/.bash_aliases0 && ln -s ~/git/dotfiles/.bash_aliases ~/.bash_aliases
 # to push new repo from CLI you have to create it using curl and PERSONAL_ACCESS_TOKEN.
@@ -524,6 +525,7 @@ alias dbe='distrobox enter'
 
 
 set -x # show aliases/functions expanded when running them.. for beginners for learning full command.
+# trap DEBUG needs `shopt -s extdebug` and runs on every command.
 #trap 'echo ${BASH_COMMAND}' DEBUG # prints all commands 
 #trap 'type ${BASH_COMMAND[1]}' DEBUG # array doesnt work on this bash var for some reason
 #trap 'if [[ $(echo $(type ${BASH_COMMAND} | awk "{print \$1}" ) | grep builtin) ]]; then echo "this is an alias"; fi' DEBUG # prints all commands. also prints an error ?
