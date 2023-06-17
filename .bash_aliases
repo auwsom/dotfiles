@@ -443,7 +443,7 @@ alias gi2='gh repo create <newrepo> --public '
 alias gi3='git add . && git push --set-upstream origin main'
 # git config --global init.defaultBranch main 
 # https://www.freecodecamp.org/news/how-to-make-your-first-pull-request-on-github-3/
-
+alias gd='git diff origin/HEAD' # <commit> diff head to a commit
 
 # mv ~/.bash_aliases ~/.bash_aliases0 && ln -s ~/git/dotfiles/.bash_aliases ~/.bash_aliases
 # to push new repo from CLI you have to create it using curl and PERSONAL_ACCESS_TOKEN.
@@ -523,9 +523,10 @@ alias dbl='distrobox list'
 alias dbe='distrobox enter'
 
 
-#set -x # show aliases/functions expanded when running them.. for beginners for learning full command.
+set -x # show aliases/functions expanded when running them.. for beginners for learning full command.
 #trap 'echo ${BASH_COMMAND}' DEBUG # prints all commands 
 #trap 'type ${BASH_COMMAND[1]}' DEBUG # array doesnt work on this bash var for some reason
 #trap 'if [[ $(echo $(type ${BASH_COMMAND} | awk "{print \$1}" ) | grep builtin) ]]; then echo "this is an alias"; fi' DEBUG # prints all commands. also prints an error ?
+#https://stackoverflow.com/questions/27493184/can-i-create-a-wildcard-bash-alias-that-alters-any-command
 
-#trap 'eval "echo ${BASH_COMMAND}"' DEBUG # prints all commands 
+
