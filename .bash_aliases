@@ -528,4 +528,4 @@ alias dbe='distrobox enter'
 #trap 'type ${BASH_COMMAND[1]}' DEBUG # array doesnt work on this bash var for some reason
 #trap 'if [[ $(echo $(type ${BASH_COMMAND} | awk "{print \$1}" ) | grep builtin) ]]; then echo "this is an alias"; fi' DEBUG # prints all commands. also prints an error ?
 
-trap 'eval "echo ${BASH_COMMAND}"' DEBUG # prints all commands 
+#trap 'eval "echo ${BASH_COMMAND}"' DEBUG # prints all commands 
