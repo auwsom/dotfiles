@@ -526,5 +526,6 @@ alias dbe='distrobox enter'
 #set -x # show aliases/functions expanded when running them.. for beginners for learning full command.
 #trap 'echo ${BASH_COMMAND}' DEBUG # prints all commands 
 #trap 'type ${BASH_COMMAND[1]}' DEBUG # array doesnt work on this bash var for some reason
-#trap 'if [[ $(echo $(type ${BASH_COMMAND} | awk "{print \$1}" ) | grep builtin) ]]; then echo yes; fi' DEBUG # prints all commands. also prints an error ?
+#trap 'if [[ $(echo $(type ${BASH_COMMAND} | awk "{print \$1}" ) | grep builtin) ]]; then echo "this is an alias"; fi' DEBUG # prints all commands. also prints an error ?
 
+trap 'eval "echo ${BASH_COMMAND}"' DEBUG # prints all commands 
