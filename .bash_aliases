@@ -352,7 +352,8 @@ export hh="--help" # can use like `bash $hh` (man bash)
 # /var/cache/apt/archives/ (use apt clean?)visudo
 # /proc/cmdline, /dev/disk/by-id (etc), /proc, /dev, /media/user, /home/user
 # admin commands: last, w, who, whoami, users, login, uptime, free -th, mpstat, iostat, bashtop, ssh, lsof, lspci, dmesg, dbus, strace, scp, file
-# `locate *.desktop` to find apps # `locate *.desktop | grep -v usr` shows program shortcuts location. also: https://askubuntu.com/questions/5172/running-a-desktop-file-in-the-terminal
+# `locate *.desktop` to find appls # `locate *.desktop | grep -v usr` shows program shortcuts location. also: https://askubuntu.com/questions/5172/running-a-desktop-file-in-the-terminal
+# run appls .desktop files with dex, gtklaunch or kioclient exec https://askubuntu.com/a/1114798/795299
 
 ## basic settings:
 # be careful of your filesystem filling up space as it will freeze your OS.. ways to deal with that: create a large dummy file that can be erased, like swapfile, `echo 'SystemMaxUse=200M' >> journald.conf` then limit /tmp and /home 
