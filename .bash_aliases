@@ -306,6 +306,11 @@ Conditional Expressions: (`man test` or `man bash` and search with / for "compar
 Pattern Matching: `man bash` then search `/pattern` and `man regex` https://www.gnu.org/software/bash/manual/html_node/Pattern-Matching.html
 Quoting, Shell Expansions: Brace, Tilde, Parameter Expansion (substrings, etc), Command Substitution, Arithmetic,, Redirections, Builtins. https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html https://opensource.com/article/17/6/bash-parameter-expansion
 
+for i in {1..5}; do echo $i; done
+while true; do echo $var; sleep 300; done
+echo text | tee test{1,2,3}; cat test* 
+if [[ -e test1 || $(cat file) == "text" ]]; then echo yes; fi
+
 https://tldp.org
 learnshell.org
 linuxcommand.org
