@@ -133,9 +133,9 @@ alias tree1='tree -h --du -L 2' #<dir>. `apt install tree`
 # `type` will show info on commands and show functions
 alias untar='tar -xvf' # -C /target/directory
 alias vi='vi ' # needs space at end for alias chaining
-#alias w='whatis ' # display one-line manual page descriptions
-#alias w='whereis ' # locate the binary, source, and manual page files for a...
-#alias w='which ' # locate a command
+#alias w='whatis' # display one-line manual page descriptions
+#alias w='whereis' # locate the binary, source, and manual page files for a...
+#alias w='which' # locate a command
 alias x='xargs ' # take last output and pipe into new command. not all commands support it, but many do
 # use `xargs -I % some-command %` to use output as non-standard argument
 alias zr='reboot' # uncomment if you want this. also `systemctl reboot`. DE `reboot -t 120`   
@@ -178,47 +178,47 @@ alias d='dirs' # shows dir stack for pushd/popd
 alias r='fc -s' #<query> # search and redo command from history. shebang is similar !<query> or !number. fc -s [old=new] [command]   https://docs.oracle.com/cd/E19253 (fix command)
 alias redo='fc -s ' # redo from history. see fc.
 alias fsck='type fsck; fsck' #-p automatically fix. or use -y for yes to all except multiple choice.
-alias flm='find . -type f -mmin -1 '
-alias flmh='find ~ -type d \( -name .cache -o -name .mozilla \) -prune -o -type f -mmin -1 '
-alias flmr='find / -type d \( -name proc -o -name sys -o -name dev -o -name run -o -name var -o -name media -o -name -home \) -prune -o -type f -mmin 0 '
-alias free='type free; free -h ' # check memory, human readable
+alias flm='find . -type f -mmin -1'
+alias flmh='find ~ -type d \( -name .cache -o -name .mozilla \) -prune -o -type f -mmin -1'
+alias flmr='find / -type d \( -name proc -o -name sys -o -name dev -o -name run -o -name var -o -name media -o -name -home \) -prune -o -type f -mmin 0'
+alias free='type free; free -h' # check memory, human readable
 # head and tail: `head -1 <file>` shows the first line. defaults to 10 lines without number.
 alias gm='guestmount -i $file -a /mnt' # set file=<vm/partition-backup> first 
 # `inotifywait -m ~/.config/ -e create -e modify` (inotify-tools), watch runs every x sec, entr runs command after file changes. use examples from bottom of `man entr` `ls *.js | entr -r node app.js`
 alias jo='journalctl' # -p,  -err, --list-boots, -b boot, -b -1 last boot, -r reverse, -k (kernel/dmesg), -f follow, --grep -g, --catalog -x (use error notes), -e goto end
 alias jof='journalctl -f' # follow.
-alias ku='pkill -KILL -u user ' # kill another users processes. use `skill` default is TERM.
+alias ku='pkill -KILL -u user' # kill another users processes. use `skill` default is TERM.
 alias launch='gio launch' # launch *.desktop files from the CLI
 alias lsblk='type lsblk; lsblk -f' # -f lists UUIDs and percent full
 alias lsof='type lsof; lsof -e /run/user/*' # remove cant stat errors
-#alias lnf='ln -f ' # symlink. use -f to overwrite. <target> <linkname>
+#alias lnf='ln -f' # symlink. use -f to overwrite. <target> <linkname>
 alias na='netplan apply'
 alias netstat='type netstat; netstat -atnp' # print network connections info
 alias nmap1='nmap -sn 192.168.1.0/24' # maps open ports on a network
-alias pegrep='grep -P ' # PCRE grep https://stackoverflow.com/a/67943782/4240654
-alias perl='type perl; perl -p -i -e ' # loop through stdin lines. in-place. use as command. https://stackoverflow.com/questions/6302025/perl-flags-pe-pi-p-w-d-i-t
+alias pegrep='grep -P' # PCRE grep https://stackoverflow.com/a/67943782/4240654
+alias perl='type perl; perl -p -i -e' # loop through stdin lines. in-place. use as command. https://stackoverflow.com/questions/6302025/perl-flags-pe-pi-p-w-d-i-t
 alias ping1='type ping; ping -c 3 8.8.8.8' # ping test. count 3. google ip.
 alias pip='type pip; pip3 --verbose'
-#alias pipd='pip --download -d /media/user/data ' 
-#alias pstree='pstree ' # shows what started a process
-alias py='type py; python3 ' 
-alias ra='read -a ' # reads into array/list. 
+#alias pipd='pip --download -d /media/user/data' 
+#alias pstree='pstree' # shows what started a process
+alias py='type py; python3' 
+alias ra='read -a' # reads into array/list. 
 # use `realpath` for piping absolute file path to cat. 
 alias rkonsole='/home/user/.config/autostart-scripts/konsole_watcher.sh restore' # restore konsole tabs
-alias rplasma='pkill plasmashell && plasmashell & ' # restart plasmashell in KDE Kubuntu
-alias rvmm='pkill virt-manager && sys restart libvirtd ' # restart VMM. doenst stop runnning VMs
+alias rplasma='pkill plasmashell && plasmashell &' # restart plasmashell in KDE Kubuntu
+alias rvmm='pkill virt-manager && sys restart libvirtd' # restart VMM. doenst stop runnning VMs
 # `sha256sum` hash generation
 alias sys='systemctl' # `enable --now` will enable and start 
-alias sysl='systemctl list-unit-files ' # | grep <arg>
+alias sysl='systemctl list-unit-files' # | grep <arg>
 alias tc='truncate -s' # <size, eg 10G> creates dynamic file; format with mkfs.ext4; `ls -s` to show true size on disk. use fallocate --length 1GiB for swapon /swapfile. 
 alias tc0='truncate -s 0' # reset file with zeros to wipe. also use wipe -qr.
 # `traceroute -U www.google.com` or tracepath (without root).
 # tty will show current terminal. then can redirect to it with > /dev/tty<number>
 alias u='users' # show all users logged in. `last` show last logins
 alias uname1='uname -a' # show all kernel info 
-alias uname2='uname -r ' # show kernel version
+alias uname2='uname -r' # show kernel version
 alias urel='cat /etc/os-release' # show OS info
-#alias w='w ' # Show who is logged on and what they are doing. Or `who`.
+#alias w='w' # Show who is logged on and what they are doing. Or `who`.
 alias wget='type wget; wget --no-clobber --content-disposition --trust-server-names' # -N overwrites only if newer file and disables timestamping # or curl to download webfile (curl -JLO)
 alias wdu='watch du -d1 .' # `watch du -s <dir>`
 alias wrapon='echo -ne "\033[?7h"' # line wrap on
