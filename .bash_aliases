@@ -8,8 +8,8 @@
 
 ## basic .bashrc settings
 #shopt -s histappend # append to history, don't overwrite it. for using multiple shells at once. is default set in .bashrc
-export HISTSIZE=10000  # increase history list (in memory) size 
-export HISTFILESIZE=5000 #$HISTSIZE  # increase history file size # or just leave blank for unlimited
+export HISTSIZE=500  # increase history list (in memory) size 
+export HISTFILESIZE=10000 #$HISTSIZE  # increase history file size # or just leave blank for unlimited
 HISTFILE=~/.bash_eternal_history # "certain bash sessions truncate .bash_history" (like Screen) SU
 #sed -i 's,HISTFILESIZE=,HISTFILESIZE= #,' ~/.bashrc && sed -i 's,HISTSIZE=,HISTSIZE= #,' ~/.bashrc # run once for unlimited. have to clear the default setting in .bashrc
 HISTCONTROL=ignoreboth:erasedups   # no duplicate entries. ignoredups is only for consecutive. ignore both = ignoredups+ignorespace (will not record commands with space in front)
@@ -160,7 +160,7 @@ alias cmp='type cmp; cmp -b' # compares and shows different lines. no sorting ne
 alias comm='type comm; comm -12 <(sort a.txt) <(sort b.txt)' # compares and shows all same lines of tex. `comm -12` for diffs
 alias diff='type diff; diff -y --color --brief' # compare. -y show. --breif only shows diffs. Use Meld for GUI.
 # date +"%D %T" (MM/DD/YY HH:MM:SS). date +%s (epoch secs). date +"%Y-%m-%d %T" (YYYY-MM-DD HH:MM:SS).
-alias dedup='tac ~/.bash_history | awk '!a[$0]++' | tac > ~/.bash_history'
+alias dedup='tac $HISTFILE | awk "!a[$0]++" | tac > $HISTFILE2'
 alias desk='kioclient exec' # in KDE will open .desktop file from CLI
 alias dmesg='type dmesg; dmesg -HTw' # messages from the kernel, human readable, timestamp, follow
 alias dli='tac /var/log/dpkg.log | grep -i "install"' # list installed packages
@@ -168,6 +168,7 @@ alias aptli='apt list | grep -i "installed"' # list installed apt packages
 alias aptlig='apt list | grep -i "installed" | grep -i' # list installed apt packages
 alias aptrd='apt-cache showpkg' # find dependencies in reverse. also apt-rdepends is similar.
 alias dpkgl='dpkg --listfiles' # -L package file install locations. reverse search for pkg from file `dpkg -S <file>`. `apt-files --list <pkg>` also works, but not for Snaps.
+alias dpkgli='dpkg --list | grep "^ii"' # list kernels
 alias dpkglk='dpkg --list | grep -i -E "linux-image|linux-kernel" | grep "^ii"' # list kernels
 alias dpkgll='grep -i install /var/log/dpkg.log' # list last installed
 alias dpkgrc='dpkg-reconfigure -a' # use when apt install breaks. use `apt -f install` install dependencies when using `apt install debfile.deb`
