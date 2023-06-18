@@ -1,0 +1,5 @@
+#!/bin/bash
+set -Cex; shellcheck %
+
+if ! [[ -e /ipcheck ]];then touch /ipcheck;fi 
+ip=$(\curl ifconfig.me); if [[ $(cat /ipcheck) != $ip ]]; then echo $(date) $ip >| /ipcheck; mail -s "ip change $(hostname)" $(cat ~/.env/EMAIL) "msg"; fi

@@ -231,6 +231,7 @@ alias umf='umount -l' # unmount lazy works when force doesnt
 # keyrings https://itnext.io/what-is-linux-keyring-gnome-keyring-secret-service-and-d-bus-349df9411e67 
 # encrypt files with `gpg -c`
 if [[ $(whoami) == 'root' ]]; then export TMOUT=18000 && readonly TMOUT; fi
+# `sudo echo foo > /rootfile` errors.. so `echo foo | sudo tee /rootfile`. sudo doesnt pass redirection
 
 ## extra stuff
 # `!!` for last command, as in `sudo !!`. `ctrl+alt+e` expand works here. `!-1:-1` for second to last arg in last command.
