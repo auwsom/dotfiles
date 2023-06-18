@@ -74,7 +74,7 @@ alias cpr='rsync -aAX --info=progress2 ' # copy with progress info, -a --archive
 alias df='type df; df -h -x"squashfs"' # "disk free" human readable, will exclude show all the snap mounts
 alias du='type du; du -hs' # human readable, summarize. 
 alias du1='du -cd1 . | sort -n' # du --total --max-depth 1, pipe to sort numerically
-# 'echo' # print <args>. 'exit '.
+# 'echo' # print <args>. 'exit '. `printf` has formatting options.
 alias fh='find . -iname' # i means case insensitive. have to use wildcards/globs * to find from partial text. have to be in double quotes (no expansion). -exec needs escaped semicolon \;
 alias fr='find / -iname' # use `tldr find` for basics. -L will follow symlinks
 alias fe='find . -iname "f" -exec echo {} \; -exec grep word {} \;' # execute command(s) on found file
@@ -544,8 +544,8 @@ alias dbe='distrobox enter'
 reverse_command() {
   # check `BASH_SOURCE` array length is 0 for interactive mode.
   if (( ${#BASH_SOURCE[@]} == 1 )); then
-    if [[ $BASH_COMMAND == *" help"* || $BASH_COMMAND == *" hh"* ]]; then 
-      eval "${BASH_COMMAND} --help"
+    if [[ $BASH_COMMAND == *" help"* ]]; then 
+      eval "${BASH_COMMAND/help/} --help"
     # ...then return false to suppress the non-reversed version.
       false
     fi
