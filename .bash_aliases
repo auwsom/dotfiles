@@ -14,8 +14,8 @@ HISTFILE=~/.bash_eternal_history # "certain bash sessions truncate .bash_history
 #sed -i 's,HISTFILESIZE=,HISTFILESIZE= #,' ~/.bashrc && sed -i 's,HISTSIZE=,HISTSIZE= #,' ~/.bashrc # run once for unlimited. have to clear the default setting in .bashrc
 HISTCONTROL=ignoreboth:erasedups   # no duplicate entries. ignoredups is only for consecutive. ignore both = ignoredups+ignorespace (will not record commands with space in front)
 #HISTTIMEFORMAT="%h %d %H:%M " # "%F %T "
-export HISTIGNORE="!(+(*\ *))" # ignores commands without arguments. not compatible with HISTTIMEFORMAT. should be the same as `grep -v -E "^\S+\s.*" $HISTFILE`
-#export HISTIGNORE="&:ls:ll:[bf]g:exit:pwd:clear:mount:umount" # ignore these single commands
+#export HISTIGNORE="!(+(*\ *))" # ignores commands without arguments. not compatible with HISTTIMEFORMAT. should be the same as `grep -v -E "^\S+\s.*" $HISTFILE`
+export HISTIGNORE="c:cdb:cdh:cdu:df:i:h:hhh:l:ll:lll:ltr:ls::mount:umount:vibash:rebash:path:env:pd:ps1:sd:sss:top:tree1:zr:zz:au:auu:aca:cu:cur:cx:dedup:dmesg:dli:aptli:d:flmh:flmho:flmr:fm:free:lsblk:na:netstat:ping1:wrapon:wrapoff:um:m:hdl" # ignore these single commands
 #shopt -s histverify   # confirm bash history (!number) commands before executing. optional for beginners using bang ! commands. can also use ctrl+alt+e to expand before enter.
 #alias ha='history -a ' # append current history before opening new terminal, to have it available.
 export PROMPT_COMMAND='history -a; ' # ;set +m' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. set +m makes disables job control for aliases in vi.
@@ -34,7 +34,7 @@ shopt -s nocaseglob # ignores case of * globs
 #if [ -f ~/.env ]; then source ~/.env ; fi # dont use env vars for storing secrets. create dir .env and store files in there. $(cat ~/.env/mykey)
 export LC_ALL="C" # makes ls list dotfiles before others
 function rescue_history { history -a; }; trap rescue_history SIGHUP # saves history on interupt
-set -o monitor # enable job control.
+set -o monitor # enable job control. same as `set +m`. for o alias.
 
 # some familiar keyboard shortcuts. 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
@@ -78,7 +78,6 @@ alias du1='du -cd1 . | sort -n' # du --total --max-depth 1, pipe to sort numeric
 alias fh='find . -iname' # i means case insensitive. have to use wildcards/globs * to find from partial text. have to be in double quotes (no expansion). -exec needs escaped semicolon \;
 alias fr='find / -iname' # use `tldr find` for basics. -L will follow symlinks
 alias fe='find . -iname "f" -exec echo {} \; -exec grep word {} \;' # execute command(s) on found file
-alias fm='findmnt' # shows mountpoints as tree
 alias g='grep -i ' # search for text and more. "Global Regular Expressions Print" -i is case-insensitive. use -v to exclude. add mulitple with `-e <pattern>`. use `-C 3` to show 3 lines of context.
 alias i='ip -color a' # network info
 alias h='history 50'
@@ -107,7 +106,7 @@ alias mv='mv -i ' # interactive. -n for no clobber, but cant be used with -i (wi
 alias mvu='install -o user -g user -D -t' # target/ dir/* # this copies while keeping target dir ownersperms and ownership. change <user>
 alias ncdu='type ncdu; ncdu -x' # manage disk space utility. `apt install ncdu`. -x is exclude other filesytems.
 alias o='eval $(history -p !!) | read v; echo v=$v' # this var only works with shopt lastpipe and set +m to disable pipe subshells. copies output to $v. 
-alias ov='v=$(eval $(history -p !!))' # copies output of last command to $v. also can use xclip and xsel. works without lastpip or set +m.
+alias ov='v=$(eval $(history -p !!))' # copies output of last command to $v. also can use xclip and xsel. works without lastpipe or set +m.
 alias path='echo $PATH' # show path
 #alias pd='pushd ' # a way to move through directories in a row (https://linux.101hacks.com/cd-command/dirs-pushd-popd/) ..aliased as `cd`
 alias pd='popd' # going back through the 'stack' history
@@ -175,12 +174,12 @@ alias dpkgrc='dpkg-reconfigure -a' # use when apt install breaks. use `apt -f in
 alias d='dirs' # shows dir stack for pushd/popd
 # dbus-monitor, qdbus
 # `env` # shows environment variables
-alias r='fc -s' #<query> # search and redo command from history. shebang is similar !<query> or !number. fc -s [old=new] [command]   https://docs.oracle.com/cd/E19253 (fix command)
-alias redo='fc -s ' # redo from history. see fc.
-alias fsck='type fsck; fsck' #-p automatically fix. or use -y for yes to all except multiple choice.
-alias flm='find . -type f -mmin -1'
-alias flmh='find ~ -type d \( -name .cache -o -name .mozilla \) -prune -o -type f -mmin -1'
+#'fc -s' #<query> # search and redo command from history. shebang is similar !<query> or !number. fc -s [old=new] [command]   https://docs.oracle.com/cd/E19253 (fix command)
+alias fsck1='fsck -p # </dev/sdX#>' # -p auto fix. or use -y for yes to all except multiple choice.
+alias flmh='find . -type f -mmin -1'
+alias flmho='find ~ -type d \( -name .cache -o -name .mozilla \) -prune -o -type f -mmin -1'
 alias flmr='find / -type d \( -name proc -o -name sys -o -name dev -o -name run -o -name var -o -name media -o -name -home \) -prune -o -type f -mmin 0'
+alias fm='findmnt' # shows mountpoints as tree. shows bind mounts.
 alias free='type free; free -h' # check memory, human readable
 # head and tail: `head -1 <file>` shows the first line. defaults to 10 lines without number.
 alias gm='guestmount -i $file -a /mnt' # set file=<vm/partition-backup> first 
@@ -244,7 +243,6 @@ function hdn { history -d "$1"; history -w; } # delete history line number
 function hdl { history -d $(($HISTCMD - 1)); history -w; } # delete history last number
 function hdln { history -d $(($HISTCMD - "$1" -1))-$(($HISTCMD - 2)); history -w; } # delete last n lines. (add 1 for this command) (history -d -$1--1; has error)
 function help { "$1" --help; } # use `\help` to disable the function alias
-function hh { "$1" --help; } 
 function ? { "$1" --help || help "$1" || man "$1" || info "$1"; } # use any of the help docs. # also use tldr. 
 function lns { dir="$1"; lastdir="${dir##*/}"; sudo ln -s $2/$lastdir "$1"; } # quick symlink using arg order from cp or mv
 function ren { mv "$1" "$2"; } # rename
