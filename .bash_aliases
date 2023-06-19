@@ -399,15 +399,14 @@ vnoremap <F4> :s/^/#
 ' >| ~/.vimrc   # > to not overwrite or >> to append
 fi
 # basic vim commands: https://gist.github.com/auwsom/78c837fde60fe36159ee89e4e29ed6f1
-# ctrl-o goes to last edit
+# paste normally use capital P. deindent ctrl-D. ctrl-o goes to last edit
 # `:e <filename>` to open file or `:e .` to browse directory 
 # `:!bash %` to run script from within vim
 # find and replace: `:%s,baz,boz,g`
 # vim tabs: (open multiple files or open more from inside vim) then `gt` and `gT` for forward/back, `2gt`, `:tabs` list
 # https://askubuntu.com/questions/202075/how-do-i-get-vim-to-remember-the-line-i-was-on-when-i-reopen-a-file
 # more ideas: https://github.com/amix/vimrc, https://github.com/rwxrob/dot/blob/main/vim/.vimrc
-# https://rwxrob.github.io/vi-help/
-# deindent ctrl-D
+# https://rwxrob.github.io/vi-help/ https://www.keycdn.com/blog/vim-commands
 # https://github.com/tpope/vim-sensible # sensible settings repo
 #shopt -s expand_aliases # to use bash aliases inside vi. also add `let $BASH_ENV = "~/.bash_aliases` in .vimrc. using aliases inside scripts makes them unclear for others.
 # q: opens Command Line Window. :q closes it.
