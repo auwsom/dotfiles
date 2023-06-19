@@ -1,13 +1,12 @@
-## These lines for importing these command aliases and functions into .bash_aliases (or .bashrc), the settings file for bash
+## These lines for importing these command aliases and functions into .bash_aliases (or .bashrc)
 # `wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc`
-# `wget https://bit.ly/3EjgWdx -O ~/.bash_aliases && source ~/.bashrc`
-# `cp -f ~/.bash_aliases /home/user/.bash_aliases && chown user:user /home/user/.bash_aliases`
-# `apt install shellcheck` then run `shellcheck ~/.bash_aliases` to check this script for any errors. 
+# `wget https://bit.ly/3EjgWdx -O ~/.bash_aliases && source ~/.bashrc` # shortened urls
+# `cp -f ~/.bash_aliases /home/user/.bash_aliases && chown user:user /home/user/.bash_aliases` #root cp
+# `apt install shellcheck` then run `shellcheck ~/.bash_aliases` to check this script for errors. 
 
-# see further down for more general Linux tips and learning sites
+# see further down for more general Linux tips and learning sites. 
 
-## basic .bashrc settings
-#shopt -s histappend # append to history, don't overwrite it. for using multiple shells at once. is default set in .bashrc
+## basic Bash settings:
 export HISTSIZE=10000  # history size in terminal. limits numbering and masks if list is truncated. 
 export HISTFILESIZE=10000 #$HISTSIZE  # increase history file size # or just leave blank for unlimited
 HISTFILE=~/.bash_eternal_history # "certain bash sessions truncate .bash_history" (like Screen) SU
@@ -16,27 +15,28 @@ HISTCONTROL=ignoreboth:erasedups   # no duplicate entries. ignoredups is only fo
 #HISTTIMEFORMAT="%h %d %H:%M " # "%F %T "
 #export HISTIGNORE="!(+(*\ *))" # ignores commands without arguments. not compatible with HISTTIMEFORMAT. should be the same as `grep -v -E "^\S+\s.*" $HISTFILE`
 export HISTIGNORE="c:cdb:cdh:cdu:df:i:h:hhh:l:ll:lll:ltr:ls::mount:umount:vibash:rebash:path:env:pd:ps1:sd:sss:top:tree1:zr:zz:au:auu:aca:cu:cur:cx:dedup:dmesg:dli:aptli:d:flmh:flmho:flmr:fm:free:lsblk:na:netstat:ping1:wrapon:wrapoff:um:m:hdl" # ignore these single commands
-#shopt -s histverify   # confirm bash history (!number) commands before executing. optional for beginners using bang ! commands. can also use ctrl+alt+e to expand before enter.
-#alias ha='history -a ' # append current history before opening new terminal, to have it available.
 export PROMPT_COMMAND='history -a; ' # ;set +m' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. set +m makes disables job control for aliases in vi.
-#history -w # writes history on every new bash shell to remove duplicates
-# `history -a;history -c;history -r` # this will reload history with commands from other shells 
-set -o noclobber  # dont let accidental > overwrite. use >| to force redirection even with noclobber
-# alias # unalias # put extra space at end of aliased command will make bash look if the next arg is an alias
-alias vibash='vi ~/.bash_aliases' # use `vimtutor` to learn (`esc` then `:q` to quit. `ctrl+w` sometimes). or use `nano` editor.
-alias rebash='source ~/.bashrc' # have to use `source` command to load the settings file. ~ is home directory
-alias realias='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc' 
+export LC_ALL="C" # makes ls list dotfiles before others
 dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
-shopt -s lastpipe; set +m # allows last pipe to affect shell; needs Job Control disabled +m #https://askubuntu.com/questions/1395963/bash-set-m-option-does-not-work-when-placed-in-the-bashrc-file ..put it in PROMPT_COMMAND
+#history -w # writes history on every new bash shell to remove duplicates
+# alias # unalias # extra space at end will look if the next arg is an alias for chaining
+alias ha='history -a ' # append current history before opening a new terminal.
+alias hs='history -a;history -c;history -r' # this will share history with commands from other shells 
+alias vibash='vi ~/.bash_aliases' 
+alias rebash='source ~/.bashrc' # have to use `source` to load the settings file. ~ is home directory
+alias realias='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc' 
+## `shopt` list shell options. `set -o` lists settings. `set -<opt>` enables like flag options.
+set -o noclobber  # dont let accidental > overwrite. use >| to force redirection even with noclobber
+#shopt -s lastpipe; set -o monitor' # (set +m). allows last pipe to affect shell; needs Job Control enabled #https://askubuntu.com/questions/1395963/bash-set-m-option-does-not-work-when-placed-in-the-bashrc-file ..put it in PROMPT_COMMAND. also for the o alias.
+shopt -s nocaseglob # ignores upper or lower case of globs (*)
 shopt -s dotglob # makes `mv/cp /dir/*` copy all contents both * and .*; or use `mv /path/{.,}* /path/`
 #shopt -s globstar # makes ** be recursive for directories
-shopt -s nocaseglob # ignores case of * globs
-#if [ -f ~/.env ]; then source ~/.env ; fi # dont use env vars for storing secrets. create dir .env and store files in there. $(cat ~/.env/mykey)
-export LC_ALL="C" # makes ls list dotfiles before others
-function rescue_history { history -a; }; trap rescue_history SIGHUP # saves history on interupt
-set -o monitor # enable job control. same as `set +m`. for o alias.
+#shopt -s histappend # append to history, don't overwrite it. for using multiple shells at once. is default set in .bashrc
+#shopt -s histverify   # confirm bash history (!number) commands before executing. optional for beginners using bang ! commands. can also use ctrl+alt+e to expand before enter.
+#if [ -f ~/.env ]; then source ~/.env ; fi # dont use this or env vars for storing secrets. create dir .env and store files in there, then call with $(cat ~/.env/mykey). see envdir below.
+function rh { history -a; }; trap rh SIGHUP # saves history on interupt. see functions below.
 
-# some familiar keyboard shortcuts. 
+## some familiar keyboard shortcuts: 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
 #stty intr ^S # this changes the ctrl+c for interrupt process to ctrl+s, to allow modern ctrl+c for copy.
 stty lnext ^N # this changes the ctrl+v for lnext to ctrl+b, to allow modern ctrl+v for paste. lnext shows the keycode of the next key typed.
@@ -46,11 +46,11 @@ bind '"\C-Z": undo' && bind '"\ez": yank'; fi # crtl+z and alt+z (bash bind wont
 if [[ "$VIMRUNTIME" != "/usr/share/vim/vim82" ]]; then 
 bind '"\C-f": revert-line'; fi # clear the line
 
-## short abc's of common commands. be careful when making one letter test files or variables. 
-## use \ to escape any alias. `type <command>` is in front to show it's an alias and avoid confusion.
-## cant use type in front with sudo, so same name is used only when least confusion.
-## aliases need space at end for chaining so can be used before alaised directories or files.
-## use `whatis` then command name for official explanation of any command. then command plus `--help` flag or `man`, `info`, `tldr` and `whatis` commands for more info on any command. or q.
+## short abc's of common commands: (avoid one letter test files or variables to avoid conflicts)
+# use \ to escape any alias. `type <command>` is in front to show it's an alias and avoid confusion.
+# cant use type in front with sudo, so same name is used only when least confusion.
+# aliases need space at end for chaining so can be used before alaised directories or files.
+# use `whatis` then command name for official explanation of any command. then command plus `--help` flag or `man`, `info`, `tldr` and `whatis` commands for more info on any command. or q.
 # full list of shell commmands: https://www.computerhope.com/unix.htm or `ls /bin`. https://www.gnu.org/software/coreutils/manual/coreutils.html
 # list all builtins with `\help`. then `\help <builtin>` for any single one.
 alias ag='alias | grep' # search the aliases for commands
@@ -104,10 +104,10 @@ alias md='install -d' # using `install` keeps same perms as parent dir and -D cr
 alias mf='install -D -m 664 /dev/null' # creates needed dirs with parent perms and owns, and then file. however it makes files executable following parent dir. 
 alias mv='mv -i ' # interactive. -n for no clobber, but cant be used with -i (will not notify)
 alias mvu='install -o user -g user -D -t' # target/ dir/* # this copies while keeping target dir ownersperms and ownership. change <user>
-alias ncdu='type ncdu; ncdu -x' # manage disk space utility. `apt install ncdu`. -x is exclude other filesytems.
+alias ncdu='type ncdu; ncdu -x' # disk space utility. `apt install ncdu`. -x exclude other filesytems.
 alias o='eval $(history -p !!) | read v; echo v=$v' # this var only works with shopt lastpipe and set +m to disable pipe subshells. copies output to $v. 
-alias ov='v=$(eval $(history -p !!))' # copies output of last command to $v. also can use xclip and xsel. works without lastpipe or set +m.
-alias path='echo $PATH' # show path
+alias ov='v=$(eval $(history -p !!))' # copies output of last command to $v. also can use xclip and xsel. works without lastpipe and set +m.
+alias path='sed 's/:/\n/g' <<< "$PATH"' # list with newlines. 'echo $PATH' # show path
 #alias pd='pushd ' # a way to move through directories in a row (https://linux.101hacks.com/cd-command/dirs-pushd-popd/) ..aliased as `cd`
 alias pd='popd' # going back through the 'stack' history
 alias ps1='ps -ef' # show processes. -e/-A all. -f full.
@@ -115,23 +115,23 @@ alias ps1='ps -ef' # show processes. -e/-A all. -f full.
 alias psp='ps -Flww -p' # <PID> show info on just one process
 alias pgrep='pgrep -af' # grep processes - full, list-full. use \pgrep for just the PID.
 alias pkill='pkill -f' # kill processed - full
-# p for pipe `|` a very powerful feature of shell language. transfers command output to input next command.
+# p for pipe `|` powerful feature of shell language. transfers command output to input next command.
 alias q='helpany' # see helpany function
-alias rm='rm -Irv ' # make remove confirm and also recursive for directories by default. v is for verbose. 
-# ^^maybe most helpful alias^^, avoids deleting unintended files. use -i to approve each deletion.
+alias rm='rm -Irv ' # -I requires confirmation. -r recursive into directories. -v verbose. 
+# ^^^^^ maybe most helpful alias. avoids deleting unintended files. use -i to approve each deletion.
 # `sed` # Stream EDitor `sed -i 's/aaa/bbb/g' file` -i inplace, replace aaa with bbb. g globally. can use any char instead of /, such as `sed -i 's,aaa,bbb,' file`. -E to use re pattern matching.
 alias sudo='sudo '; alias s='sudo '; alias sd='sudo -s ' # elevate privelege for command. see `visudo` to set. And `usermod -aG sudo add`, security caution when adding.
 alias sss='eval sudo $(history -p !!)' # redo with sudo
 alias ssh='ssh -vvv ' # most verbose level
-alias sort1='sort --numeric-sort' # `sort --human-numeric-sort` `unique`. Find dupiclates `sort <file> | unique -c | sort -nr`
-# `stat` will show file info including rwx octet value of perms.
+alias sort1='sort --numeric-sort' # or --human-numeric-sort. dups `sort <file> | unique -c | sort -nr`
+# `stat` will show file info including -rwxrwxrwx octet values of permissions and ownership.
 alias t='touch' # new file. see mf also.
 # `tee` allows tee-piping. eg `cat file.txt tee /dev/tty | grep 'word' > output.txt` will both show the file and pipe it. `echo $(date) | tee file.txt` will pipe to file and output to stdout.
 alias top='htop' # `q` to exit (common in unix). htop allows deleting directly. `apt install htop`
 alias tree1='tree -h --du -L 2' #<dir>. `apt install tree`
-# `type` will show info on commands and show functions
-alias untar='tar -xvf' # -C /target/directory
-alias vi='vi ' # needs space at end for alias chaining
+# `type` will show info on commands and show functions.
+alias untar='tar -xvf' # -C /target/directory ..change to dir
+alias vi='vi ' # `vimtutor` (`esc` then `:q` to quit. `ctrl+w` if type q:). (or use `nano` editor)
 #alias w='whatis' # display one-line manual page descriptions
 #alias w='whereis' # locate the binary, source, and manual page files for a...
 #alias w='which' # locate a command
@@ -237,7 +237,7 @@ if [[ $(whoami) == 'root' ]]; then export TMOUT=18000 && readonly TMOUT; fi
 # `!!` for last command, as in `sudo !!`. `ctrl+alt+e` expand works here. `!-1:-1` for second to last arg in last command.
 # `vi $(!!)` to use output of last command. or use backticks: vi `!!`
 # `declare -f <function>` will show it
-# export -f <alias> # will export alias as function to be used in scripts. or source .bash_aliases after settinge `shopt -s expand_aliases`
+# export -f <alias> # will export alias as function to be used in scripts. or source .bash_aliases after setting `shopt -s expand_aliases`
 set -a # sets for export to env the following functions, for calling in scripts and subshells (aliases dont get called).
 function hdn { history -d "$1"; history -w; } # delete history line number
 function hdl { history -d $(($HISTCMD - 1)); history -w; } # delete history last number
@@ -249,7 +249,8 @@ function ren { mv "$1" "$2"; } # rename
 function sudov { while true; do sudo -v; sleep 360; done; } # will grant sudo 'for 60 minutes
 function addpath { export PATH="$1:$PATH"; } # add to path
 function addpathp { echo "PATH="$1':$PATH' >> ~/.profile; } # add to path permanently
-set +a
+function cmt1 { while IFS= read -r line; do echo "${1:-#} $line"; done; }
+set +a # end of `set -a` above
 # `unset -f foo`; or `unset -f` to remove all functions
 export CDPATH=".:/home/user" # can cd to any dir in user home from anywhere just by `cd Documents`
 #export CDPATH=".:/etc" # just type `cd grub.d`
@@ -270,7 +271,7 @@ if [[ "$VIMRUNTIME" != "/usr/share/vim/vim82" ]]; then bind '",,": "!$"'; fi # e
 #if [[ "$VIMRUNTIME" != "-" ]]; then bind '".,": "$(!!)"'; fi # easy way to add last output. can expand
 #if [[ "$VIMRUNTIME" != "-" ]]; then bind '"///": reverse-search-history'; fi # easy ctrl+r for history search.
 #if [[ "$VIMRUNTIME" != "-" ]]; then bind '\C-Q: shell-kill-word'; fi # crtl+q is erase forward one word. (ctrl+a, ctrl+q to change first command on line)
-bind 'set show-all-if-ambiguous on' # this makes only one Tab necessary to show completion possibilities
+#bind 'set show-all-if-ambiguous on' # this makes only one Tab necessary to show completion possibilities
 
 : <<'END' 
 CLI emacs mode common keys:
@@ -389,8 +390,12 @@ set shiftwidth=4    " Indents will have a width of 4
 set softtabstop=4   " Sets the number of columns for a TAB
 set expandtab       " Expand TABs to spaces
 set shell=/bin/bash
-nnoremap <F3> :set hlsearch!<CR> "toggle search highligh. or use :noh"
+"nnoremap=normal mode. toggle search highligh. or use :noh"
+nnoremap <F3> :set hlsearch!<CR> "toggl "
+"cnoremap=commandmode. use sudo to write file"
 cnoremap w!! execute "silent! write !sudo tee % > /dev/null" <bar> edit!
+"vnoremap=visual mose. comment lines selected with v or V (full lines). or use :norm i#
+vnoremap <F4> :s/^/#
 ' >| ~/.vimrc   # > to not overwrite or >> to append
 fi
 # basic vim commands: https://gist.github.com/auwsom/78c837fde60fe36159ee89e4e29ed6f1
@@ -406,6 +411,8 @@ fi
 # https://github.com/tpope/vim-sensible # sensible settings repo
 #shopt -s expand_aliases # to use bash aliases inside vi. also add `let $BASH_ENV = "~/.bash_aliases` in .vimrc. using aliases inside scripts makes them unclear for others.
 # q: opens Command Line Window. :q closes it.
+# `!!` =>  :.!<cmd> runs line through any command. `!}` runs paragraph. `:3,5!bash` use lines 3-5.
+
 
 : <<'END3'
 ## tmux   wget https://raw.githubusercontent.com/rwxrob/dot/main/tmux/.tmux.conf
@@ -562,10 +569,10 @@ reverse_command() {
 #    true
   fi
 }
-shopt -s extdebug
+#shopt -s extdebug
 trap reverse_command DEBUG
 
-source ~/.local/share/blesh/ble.sh
+#source ~/.local/share/blesh/ble.sh
 #ble-bind -m isearch -f 'RET' isearch/accept-line # allows single RET to accept ctrl-R search
 #ble-face auto_complete fg=242,bg=235 # removes colors. ble-update to restore.
 
