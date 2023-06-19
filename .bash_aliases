@@ -8,14 +8,14 @@
 
 ## basic .bashrc settings
 #shopt -s histappend # append to history, don't overwrite it. for using multiple shells at once. is default set in .bashrc
-export HISTSIZE=500  # increase history list (in memory) size 
+export HISTSIZE=10000  # history size in terminal. limits numbering and masks if list is truncated. 
 export HISTFILESIZE=10000 #$HISTSIZE  # increase history file size # or just leave blank for unlimited
 HISTFILE=~/.bash_eternal_history # "certain bash sessions truncate .bash_history" (like Screen) SU
 #sed -i 's,HISTFILESIZE=,HISTFILESIZE= #,' ~/.bashrc && sed -i 's,HISTSIZE=,HISTSIZE= #,' ~/.bashrc # run once for unlimited. have to clear the default setting in .bashrc
 HISTCONTROL=ignoreboth:erasedups   # no duplicate entries. ignoredups is only for consecutive. ignore both = ignoredups+ignorespace (will not record commands with space in front)
 #HISTTIMEFORMAT="%h %d %H:%M " # "%F %T "
-#export HISTIGNORE="!(+(*\ *))" # ignores commands without arguments. not compatible with HISTTIMEFORMAT. should be the same as `grep -v -E "^\S+\s.*" $HISTFILE`
-#export HISTIGNORE="&:ls:[bf]g:exit:pwd:clear:mount:umount" # ignore these single commands
+export HISTIGNORE="!(+(*\ *))" # ignores commands without arguments. not compatible with HISTTIMEFORMAT. should be the same as `grep -v -E "^\S+\s.*" $HISTFILE`
+#export HISTIGNORE="&:ls:ll:[bf]g:exit:pwd:clear:mount:umount" # ignore these single commands
 #shopt -s histverify   # confirm bash history (!number) commands before executing. optional for beginners using bang ! commands. can also use ctrl+alt+e to expand before enter.
 #alias ha='history -a ' # append current history before opening new terminal, to have it available.
 export PROMPT_COMMAND='history -a; ' # ;set +m' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. set +m makes disables job control for aliases in vi.
@@ -82,7 +82,7 @@ alias fm='findmnt' # shows mountpoints as tree
 alias g='grep -i ' # search for text and more. "Global Regular Expressions Print" -i is case-insensitive. use -v to exclude. add mulitple with `-e <pattern>`. use `-C 3` to show 3 lines of context.
 alias i='ip -color a' # network info
 alias h='history 50'
-alias hhh='history' # `apt install hstr`. replaces ctrl-r with `hstr --show-configuration >> ~/.bashrc` https://github.com/dvorka/hstr. disables hide by default.
+alias hhh='history 500' # `apt install hstr`. replaces ctrl-r with `hstr --show-configuration >> ~/.bashrc` https://github.com/dvorka/hstr. disables hide by default.
 alias hg='history | grep -i'
 #alias hd='history -d -2--1 ' #not working # delete last line. `history -d -10--2` to del 9 lines from -10 to -2 inclusive, counting itself. or use space in front of command to hide. 
 alias j='jobs' # dont use much unless `ctrl+z` to stop process
@@ -310,6 +310,7 @@ for i in {1..5}; do echo $i; done
 while true; do echo $var; sleep 300; done
 echo text | tee test{1,2,3}; cat test* 
 if [[ -e test1 || $(cat file) == "text" ]]; then echo yes; fi
+first line for scripts: #!/bin/bash -Cex; shellcheck "$0" #no-clobber, exit on error, debugging.
 
 https://tldp.org
 learnshell.org
@@ -565,4 +566,7 @@ reverse_command() {
 shopt -s extdebug
 trap reverse_command DEBUG
 
+source ~/.local/share/blesh/ble.sh
+#ble-bind -m isearch -f 'RET' isearch/accept-line # allows single RET to accept ctrl-R search
+#ble-face auto_complete fg=242,bg=235 # removes colors. ble-update to restore.
 
