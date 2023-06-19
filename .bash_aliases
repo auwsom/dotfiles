@@ -406,7 +406,8 @@ fi
 # https://rwxrob.github.io/vi-help/
 # deindent ctrl-D
 # https://github.com/tpope/vim-sensible # sensible settings repo
-shopt -s expand_aliases # to use bash aliases inside vi. also add `let $BASH_ENV = "~/.bash_aliases` in .vimrc. using aliases inside scripts makes them unclear for others.
+#shopt -s expand_aliases # to use bash aliases inside vi. also add `let $BASH_ENV = "~/.bash_aliases` in .vimrc. using aliases inside scripts makes them unclear for others.
+# q: opens Command Line Window. :q closes it.
 
 : <<'END3'
 ## tmux   wget https://raw.githubusercontent.com/rwxrob/dot/main/tmux/.tmux.conf
