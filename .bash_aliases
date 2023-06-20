@@ -249,7 +249,8 @@ function ren { mv "$1" "$2"; } # rename
 function sudov { while true; do sudo -v; sleep 360; done; } # will grant sudo 'for 60 minutes
 function addpath { export PATH="$1:$PATH"; } # add to path
 function addpathp { echo "PATH="$1':$PATH' >> ~/.profile; } # add to path permanently
-function cmt1 { while IFS= read -r line; do echo "${1:-#} $line"; done; }
+function cmtf { while IFS= read -r line; do echo "${1:-#} $line"; done; }
+alias cmt='read -r line; echo "${1:-#} $line"'
 set +a # end of `set -a` above
 # `unset -f foo`; or `unset -f` to remove all functions
 export CDPATH=".:/home/user" # can cd to any dir in user home from anywhere just by `cd Documents`
@@ -376,6 +377,7 @@ set ruler "set ru"
 set wrapscan 
 set hlsearch
 autocmd InsertEnter,InsertLeave * set cul!
+"remember editing position after close"
 if has("autocmd")\n
   au BufReadPost * if line("'\''\"") > 0 && line("'\''\"") <= line("$") | exe "normal! g`\"" | endif\n
 endif
@@ -399,15 +401,14 @@ vnoremap <F4> :s/^/#
 ' >| ~/.vimrc   # > to not overwrite or >> to append
 fi
 # basic vim commands: https://gist.github.com/auwsom/78c837fde60fe36159ee89e4e29ed6f1
+# https://rwxrob.github.io/vi-help/ https://www.keycdn.com/blog/vim-commands
 # paste normally use capital P. deindent ctrl-D. ctrl-o goes to last edit
 # `:e <filename>` to open file or `:e .` to browse directory 
 # `:!bash %` to run script from within vim
-# find and replace: `:%s,baz,boz,g`
+# find and replace: `:%s/baz/boz/g` or use any char instead of / like , `:%s,baz,boz,g`
 # vim tabs: (open multiple files or open more from inside vim) then `gt` and `gT` for forward/back, `2gt`, `:tabs` list
-# https://askubuntu.com/questions/202075/how-do-i-get-vim-to-remember-the-line-i-was-on-when-i-reopen-a-file
 # more ideas: https://github.com/amix/vimrc, https://github.com/rwxrob/dot/blob/main/vim/.vimrc
-# https://rwxrob.github.io/vi-help/ https://www.keycdn.com/blog/vim-commands
-# https://github.com/tpope/vim-sensible # sensible settings repo
+# https://github.com/tpope/vim-sensible 
 #shopt -s expand_aliases # to use bash aliases inside vi. also add `let $BASH_ENV = "~/.bash_aliases` in .vimrc. using aliases inside scripts makes them unclear for others.
 # q: opens Command Line Window. :q closes it.
 # `!!` =>  :.!<cmd> runs line through any command. `!}` runs paragraph. `:3,5!bash` use lines 3-5.
@@ -571,7 +572,7 @@ reverse_command() {
 #shopt -s extdebug
 trap reverse_command DEBUG
 
-#source ~/.local/share/blesh/ble.sh
+source ~/.local/share/blesh/ble.sh
 #ble-bind -m isearch -f 'RET' isearch/accept-line # allows single RET to accept ctrl-R search
 #ble-face auto_complete fg=242,bg=235 # removes colors. ble-update to restore.
 
