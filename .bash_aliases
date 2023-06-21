@@ -574,7 +574,7 @@ reverse_command() {
 #shopt -s extdebug
 trap reverse_command DEBUG
 
-source ~/.local/share/blesh/ble.sh
+source /home/user/.local/share/blesh/ble.sh
 #ble-bind -m isearch -f 'RET' isearch/accept-line # allows single RET to accept ctrl-R search
 #ble-face auto_complete fg=242,bg=235 # removes colors. ble-update to restore.
 
