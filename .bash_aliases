@@ -21,7 +21,7 @@ dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
 #history -w # writes history on every new bash shell to remove duplicates
 # alias # unalias # extra space at end will look if the next arg is an alias for chaining
 alias ha='history -a ' # append current history before opening a new terminal.
-alias hs='history -a;history -c;history -r' # this will share history with commands from other shells 
+alias hs='history -a; history -c; history -r' # share history from other terminals to current one.
 alias vibash='vi ~/.bash_aliases' 
 alias rebash='source ~/.bashrc' # have to use `source` to load the settings file. ~ is home directory
 alias realias='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc' 
@@ -35,6 +35,7 @@ shopt -s dotglob # makes `mv/cp /dir/*` copy all contents both * and .*; or use 
 #shopt -s histverify   # confirm bash history (!number) commands before executing. optional for beginners using bang ! commands. can also use ctrl+alt+e to expand before enter.
 #if [ -f ~/.env ]; then source ~/.env ; fi # dont use this or env vars for storing secrets. create dir .env and store files in there, then call with $(cat ~/.env/mykey). see envdir below.
 function rh { history -a; }; trap rh SIGHUP # saves history on interupt. see functions below.
+IFS=$' \t\n' # restricts "internal field separator" to tab and newline. handles spaces in filenames.
 
 ## some familiar keyboard shortcuts: 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
@@ -107,6 +108,7 @@ alias mvu='install -o user -g user -D -t' # target/ dir/* # this copies while ke
 alias ncdu='type ncdu; ncdu -x' # disk space utility. `apt install ncdu`. -x exclude other filesytems.
 alias o='eval $(history -p !!) | read v; echo v=$v' # this var only works with shopt lastpipe and set +m to disable pipe subshells. copies output to $v. 
 alias ov='v=$(eval $(history -p !!))' # copies output of last command to $v. also can use xclip and xsel. works without lastpipe and set +m.
+alias p='pwd' # print present working directory
 alias path='sed 's/:/\n/g' <<< "$PATH"' # list with newlines. 'echo $PATH' # show path
 #alias pd='pushd ' # a way to move through directories in a row (https://linux.101hacks.com/cd-command/dirs-pushd-popd/) ..aliased as `cd`
 alias pd='popd' # going back through the 'stack' history
@@ -302,7 +304,7 @@ apt -s, --simulate, --just-print, --dry-run, --recon, --no-act = No action; perf
 `apt show <package>` shows size, unlike simulate, before install (but sizes not same as in apt install)
 
 Bash Manual (`man bash`) https://www.gnu.org/software/bash/manual/html_node/index.html#SEC_Contents 
-Conditional Expressions: (`man test` or `man bash` and search with / for "comparsion"): `if [ <> ];then <>;fi`. Use double [[ ]] to disable expansion. `test 1 -eq 2 && echo true || echo false` is same as `[ 1 -eq 2 ] && echo true || echo false]`
+Conditional Expressions: (`man test` or `man bash` and search with / for "comparsion"): `if [ <> ];then <>;fi`. Use double [[ ]] to disable expansion and wont fail if var is empty. `test 1 -eq 2 && echo true || echo false` is same as `[ 1 -eq 2 ] && echo true || echo false]`
 Pattern Matching: `man bash` then search `/pattern` and `man regex` https://www.gnu.org/software/bash/manual/html_node/Pattern-Matching.html
 Quoting, Shell Expansions: Brace, Tilde, Parameter Expansion (substrings, etc), Command Substitution, Arithmetic,, Redirections, Builtins. https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html https://opensource.com/article/17/6/bash-parameter-expansion
 
@@ -311,6 +313,7 @@ while true; do echo $var; sleep 300; done
 echo text | tee test{1,2,3}; cat test* 
 if [[ -e test1 || $(cat file) == "text" ]]; then echo yes; fi
 first line for scripts: #!/bin/bash -Cex; shellcheck "$0" #no-clobber, exit on error, debugging.
+put scripts in /usr/local/bin and the can be used in Vim
 
 https://tldp.org
 learnshell.org
@@ -347,7 +350,7 @@ alias mailr='/var/mail/root ' # mail #dir
 alias osr='/etc/os-release' # os name #dir
 alias sysd='/etc/systemd/system/multi-user.target.wants' # services startup #dir
 alias userd='/home/user' #dir 
-export hh="--help" # can use like `bash $hh` (man bash)
+export h="--help" # can use like `bash $h` (man bash)
 # /etc/skel has default user home files
 # common directories: # need extra space in alias for commands on files
 # /var/cache/apt/archives/ (use apt clean?)visudo
@@ -411,7 +414,7 @@ fi
 # https://github.com/tpope/vim-sensible 
 #shopt -s expand_aliases # to use bash aliases inside vi. also add `let $BASH_ENV = "~/.bash_aliases` in .vimrc. using aliases inside scripts makes them unclear for others.
 # q: opens Command Line Window. :q closes it.
-# `!!` =>  :.!<cmd> runs line through any command. `!}` runs paragraph. `:3,5!bash` use lines 3-5.
+# type `!!` and `cmt` to run this alias/function/script on the line (:.!cmt), or !} on a paragraph (:.,$!cmt) or with line numbers (:3,5!cmt), or use Visual mode crtl-V (:'<,'>!cmt)
 
 
 : <<'END3'
@@ -478,7 +481,6 @@ alias gpf='git push --force' # use only after diffing remote to local. also if w
 # undo last commit added to remote `git reset --soft HEAD~` then `git pull -f` 
 #https://alvar3z.com/blog/git-going-gud/
 # delete a file from all commits: git filter-branch --index-filter     'git rm -rf --cached --ignore-unmatch <file>' HEAD
-
 
 ## misc linux/ubuntu help
 # -- marks the end of the option list. This avoids issues with filenames starting with hyphens.
