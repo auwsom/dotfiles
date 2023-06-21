@@ -234,12 +234,13 @@ alias umf='umount -l' # unmount lazy works when force doesnt
 # encrypt files with `gpg -c`
 if [[ $(whoami) == 'root' ]]; then export TMOUT=18000 && readonly TMOUT; fi
 # `sudo echo foo > /rootfile` errors.. so `echo foo | sudo tee /rootfile`. sudo doesnt pass redirection
+# other admin commands: last, w, who, whoami, users, login, uptime, free -th, mpstat, iostat, bashtop, ssh, lsof, lspci, dmesg, dbus, strace, scp, file
 
 ## extra stuff
 # `!!` for last command, as in `sudo !!`. `ctrl+alt+e` expand works here. `!-1:-1` for second to last arg in last command.
 # `vi $(!!)` to use output of last command. or use backticks: vi `!!`
 # `declare -f <function>` will show it
-# export -f <alias> # will export alias as function to be used in scripts. or source .bash_aliases after setting `shopt -s expand_aliases`
+# export -f <alias> # will export alias as function to be used in scripts. 
 set -a # sets for export to env the following functions, for calling in scripts and subshells (aliases dont get called).
 function hdn { history -d "$1"; history -w; } # delete history line number
 function hdl { history -d $(($HISTCMD - 1)); history -w; } # delete history last number
@@ -266,10 +267,9 @@ export VISUAL='vi' # export EDITOR='vi' is for old line editors like ed
 # bind -p # will list all current key bindings. https://www.computerhope.com/unix/bash/bind.htm
 # ***very helpful*** press `ctrl+alt+e` to expand the symbol to show. press double keys slowly to use normally. 
 # `bind -r <keycode>` to remove. use ctrl+V (lnext) to use key normally. https://en.wikipedia.org/wiki/ANSI_escape_code
-# `set -o posix ; set` or `set | more` lists all variables
 #if [[ "$VIMRUNTIME" != "-" ]]; then bind '"\\\\": "|"'; fi # quick shortcut to | pipe key. double slash key `\\` (two of the 4 slashes are escape chars)
 if [[ "$VIMRUNTIME" != "/usr/share/vim/vim82" ]]; then bind '",,": "!$"'; fi # easy way to get last argument from last line. can expand. delete $ for ! bang commands.
-#if [[ "$VIMRUNTIME" != "-" ]]; then bind '",.": "$"'; fi # quick shortcut to $ key. 
+if [[ "$VIMRUNTIME" != "-" ]]; then bind '"..": "$"'; fi # quick shortcut to $ key. 
 #bind '"..": shell-expand-line' # easy `ctrl+alt+e` expand
 #if [[ "$VIMRUNTIME" != "-" ]]; then bind '".,": "$(!!)"'; fi # easy way to add last output. can expand
 #if [[ "$VIMRUNTIME" != "-" ]]; then bind '"///": reverse-search-history'; fi # easy ctrl+r for history search.
@@ -322,40 +322,39 @@ https://linux.101hacks.com/toc/ CDPATH info
 https://dokumen.tips/documents/macintosh-terminal-pocket-guide.html (has great Vim to Emacs compare)
 END
 
-## common dirs and files: # need extra space in alias for commands on files
-shopt -s cdable_vars # makes directories aliasable. see bottom for commonly used directories
-alias alias1='~/.bash_aliases' 
-alias fstab='/etc/fstab' #dir
-#alias passwd1'/etc/passwd' #dir
-alias group1='/etc/group' #dir
-alias shadow='/etc/shadow' #dir
-alias sudoers='/etc/sudoers' #dir
-alias grub1='/etc/default/grub' #dir
-alias grubd='/etc/default/grub.d/' #dir
-alias sources='/etc/apt/sources.list' #dir
-alias sourcesd='/etc/apt/sources.list.d/' #dir
-alias crontab1='/etc/crontab' # runs /etc/cron.daily and /etc/cron.hourly. `crontab -e` is official /var/spool/cron/crontabs/root #dir
-alias crondd='/etc/cron.d/' #dir # misc cron files 
-alias crond='/etc/cron.daily' #dir
-alias cronh='/etc/cron.hourly' #dir
-alias cronw='/etc/cron.weekly' #dir
-alias cronm='/etc/cron.monthly' #dir
-alias resolv='/etc/resolv.conf' #dir # resolvectl status
-alias hosts1='/etc/hosts' #dir
-alias log='/var/log/' #dir # logs: syslog auth.log boot.log lastlog
-#alias netman='/etc/network/interfaces' # `man interfaces`#dir
-alias netplan1='/etc/netplan/01-netcfg.yaml' # add `optional: true` under ethernets: interface: to prevent boot waiting on network #dir
-alias known='~/.ssh/known_hosts' # rm this to remove unused store ssh connections
-alias mailr='/var/mail/root ' # mail #dir
-alias osr='/etc/os-release' # os name #dir
-alias sysd='/etc/systemd/system/multi-user.target.wants' # services startup #dir
-alias userd='/home/user' #dir 
+## common dirs and files: 
+shopt -s cdable_vars # dirs exportable. shell-expand-line ctrl-alt-e not work on aliases after command.
+export alias1='~/.bash_aliases'
+export fstab='/etc/fstab' # mounts volumes
+export passwd1='/etc/passwd' # controls user perms
+export group1='/etc/group' # groups
+export sudoers='/etc/sudoers' # sudo settings
+export grub1='/etc/default/grub' # grub file
+export grubd='/etc/default/grub.d/' # other grub files
+export sources='/etc/apt/sources.list' # sources file for apt
+export sourcesd='/etc/apt/sources.list.d/' # other sources files
+export crontab1='/etc/crontab' # runs /etc/cron.daily and /etc/cron.hourly. `crontab -e` is official /var/spool/cron/crontabs/root 
+export crondd='/etc/cron.d/' # other cron files 
+export crond='/etc/cron.daily' # file run daily
+export cronh='/etc/cron.hourly' #
+export cronw='/etc/cron.weekly' #
+export cronm='/etc/cron.monthly' #
+export resolv='/etc/resolv.conf' # DNS info
+export hosts='/etc/hosts' # maps domain names to IPs
+export hostname1='/etc/hostname' # sets hostname. also a command
+export log='/var/log/' # logs: syslog auth.log boot.log lastlog
+#export netman='/etc/network/interfaces' # `man interfaces`. use netplan instead.
+export netplan1='/etc/netplan/01-netcfg.yaml' # add `optional: true` under ethernets: interface: to prevent boot waiting on network
+export known='~/.ssh/known_hosts' # rm this to remove unused store ssh connections
+export mailr='/var/mail/root ' # mail file
+export osr='/etc/os-release' # os names
+export sysd='/etc/systemd/system/multi-user.target.wants' # services startup
+export home='/home/user' # also $HOME
+export bin='/usr/local/bin' # user scripts dir
 export h="--help" # can use like `bash $h` (man bash)
 # /etc/skel has default user home files
-# common directories: # need extra space in alias for commands on files
-# /var/cache/apt/archives/ (use apt clean?)visudo
+# /var/cache/apt/archives/ (use apt clean?) visudo
 # /proc/cmdline, /dev/disk/by-id (etc), /proc, /dev, /media/user, /home/user
-# admin commands: last, w, who, whoami, users, login, uptime, free -th, mpstat, iostat, bashtop, ssh, lsof, lspci, dmesg, dbus, strace, scp, file
 # `locate *.desktop` to find appls # `locate *.desktop | grep -v usr` shows program shortcuts location. also: https://askubuntu.com/questions/5172/running-a-desktop-file-in-the-terminal
 # run appls .desktop files with dex, gtklaunch or kioclient exec https://askubuntu.com/a/1114798/795299
 
@@ -387,7 +386,7 @@ endif
 set autowrite "save before run, also when changing buffer"
 nnoremap <F5> :!clear && %:p<Enter> "run script in normal mode" 
 inoremap <F5> <esc>:!clear && %:p<enter> "in insert mode too"
-let $BASH_ENV = "~/.bash_aliases" "<--to use aliases in vi plus `shopt -s expand_aliases`"
+let $BASH_ENV = "~/.bash_aliases" "<--to use aliases in vi"
 "set list " shows hidden characters
 "set ruf " ruler format
 set tabstop=4       " The width of a TAB is set to 4.
@@ -412,10 +411,9 @@ fi
 # vim tabs: (open multiple files or open more from inside vim) then `gt` and `gT` for forward/back, `2gt`, `:tabs` list
 # more ideas: https://github.com/amix/vimrc, https://github.com/rwxrob/dot/blob/main/vim/.vimrc
 # https://github.com/tpope/vim-sensible 
-#shopt -s expand_aliases # to use bash aliases inside vi. also add `let $BASH_ENV = "~/.bash_aliases` in .vimrc. using aliases inside scripts makes them unclear for others.
 # q: opens Command Line Window. :q closes it.
 # type `!!` and `cmt` to run this alias/function/script on the line (:.!cmt), or !} on a paragraph (:.,$!cmt) or with line numbers (:3,5!cmt), or use Visual mode crtl-V (:'<,'>!cmt)
-
+# `@:` repeats last command, like `:s/aa/bb/`. also up arrow history. `.` repeats last action.
 
 : <<'END3'
 ## tmux   wget https://raw.githubusercontent.com/rwxrob/dot/main/tmux/.tmux.conf
@@ -574,7 +572,8 @@ reverse_command() {
 #shopt -s extdebug
 trap reverse_command DEBUG
 
+# https://github.com/akinomyoga/ble.sh
 source /home/user/.local/share/blesh/ble.sh
 #ble-bind -m isearch -f 'RET' isearch/accept-line # allows single RET to accept ctrl-R search
-#ble-face auto_complete fg=242,bg=235 # removes colors. ble-update to restore.
+# ble-update. ~/.blerc. 
 
