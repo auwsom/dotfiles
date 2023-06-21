@@ -14,7 +14,7 @@ HISTFILE=~/.bash_eternal_history # "certain bash sessions truncate .bash_history
 HISTCONTROL=ignoreboth:erasedups   # no duplicate entries. ignoredups is only for consecutive. ignore both = ignoredups+ignorespace (will not record commands with space in front)
 #HISTTIMEFORMAT="%h %d %H:%M " # "%F %T "
 #export HISTIGNORE="!(+(*\ *))" # ignores commands without arguments. not compatible with HISTTIMEFORMAT. should be the same as `grep -v -E "^\S+\s.*" $HISTFILE`
-export HISTIGNORE="c:cdb:cdh:cdu:df:i:h:hhh:l:ll:lll:ltr:ls::mount:umount:vibash:rebash:path:env:pd:ps1:sd:sss:top:tree1:zr:zz:au:auu:aca:cu:cur:cx:dedup:dmesg:dli:aptli:d:flmh:flmho:flmr:fm:free:lsblk:na:netstat:ping1:wrapon:wrapoff:um:m:hdl" # ignore these single commands
+export HISTIGNORE="c:cdb:cdh:cdu:df:i:h:hhh:l:ll:lll:ltr:ls::mount:umount:rebash:path:env:pd:ps1:sd:sss:top:tree1:zr:zz:au:auu:aca:cu:cur:cx:dedup:dmesg:dli:aptli:d:flmh:flmho:flmr:fm:free:lsblk:na:netstat:ping1:wrapon:wrapoff:um:m:hdl" # ignore these single commands
 export PROMPT_COMMAND='history -a; ' # ;set +m' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. set +m makes disables job control for aliases in vi.
 export LC_ALL="C" # makes ls list dotfiles before others
 dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
@@ -250,7 +250,7 @@ function sudov { while true; do sudo -v; sleep 360; done; } # will grant sudo 'f
 function addpath { export PATH="$1:$PATH"; } # add to path
 function addpathp { echo "PATH="$1':$PATH' >> ~/.profile; } # add to path permanently
 function cmtf { while IFS= read -r line; do echo "${1:-#} $line"; done; }
-alias cmt='read -r line; echo "${1:-#} $line"'
+alias cmt='while read -r line; do echo "${1:-#} $line"; done;' # IFS is set above.
 shopt -s expand_aliases # default? expands aliases in non-interactive (scripts and Vim calls)
 
 set +a # end of `set -a` above
@@ -556,20 +556,14 @@ alias dbe='distrobox enter'
 #https://stackoverflow.com/questions/27493184/can-i-create-a-wildcard-bash-alias-that-alters-any-command
 
 # use help or hh instead of --help
-reverse_command() {
-  # check `BASH_SOURCE` array length is 0 for interactive mode.
-  if (( ${#BASH_SOURCE[@]} == 1 )); then
-    if [[ $BASH_COMMAND == *" help"* ]]; then 
-      eval "${BASH_COMMAND/help/} --help"; echo test
-    # ...then return false to suppress the non-reversed version.
-      false
-    fi
-#  else
-    # for a noninteractive command, return true to run the original unmodified
-#    true
+reverse_command() { 
+if (( ${#BASH_SOURCE[@]} == 1 )); then
+  if [[ $BASH_COMMAND == *" help"* ]]; then 
+    eval "${BASH_COMMAND/help/} --help"; false
   fi
+fi
 }
-shopt -s extdebug
+if [[ $- == *i* ]]; then shopt -s extdebug; fi 
 trap reverse_command DEBUG
 
 # https://github.com/akinomyoga/ble.sh
