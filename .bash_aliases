@@ -159,7 +159,7 @@ alias cmp='type cmp; cmp -b' # compares and shows different lines. no sorting ne
 alias comm='type comm; comm -12 <(sort a.txt) <(sort b.txt)' # compares and shows all same lines of tex. `comm -12` for diffs
 alias diff='type diff; diff -y --color --brief' # compare. -y show. --breif only shows diffs. Use Meld for GUI.
 # date +"%D %T" (MM/DD/YY HH:MM:SS). date +%s (epoch secs). date +"%Y-%m-%d %T" (YYYY-MM-DD HH:MM:SS).
-alias dedup="tac $HISTFILE | awk '!a[\$0]++' | tac || > $HISTFILE" # test and remove ||
+alias dedup="tac $HISTFILE | awk '!a[\$0]++' | tac > $HISTFILE" # careful, backup first
 alias desk='kioclient exec' # in KDE will open .desktop file from CLI
 alias dmesg='type dmesg; dmesg -HTw' # messages from the kernel, human readable, timestamp, follow
 alias dli='tac /var/log/dpkg.log | grep -i "install"' # list installed packages
@@ -230,7 +230,7 @@ alias umf='umount -l' # unmount lazy works when force doesnt
 # change tty term from cli: `chvt 2`
 # keyrings https://itnext.io/what-is-linux-keyring-gnome-keyring-secret-service-and-d-bus-349df9411e67 
 # encrypt files with `gpg -c`
-if [[ $(whoami) == 'root' ]]; then export TMOUT=18000 && readonly TMOUT; fi
+if [[ $(whoami) == 'root' ]]; then export TMOUT=18000 && readonly TMOUT; fi # timeout root login
 # `sudo echo foo > /rootfile` errors.. so `echo foo | sudo tee /rootfile`. sudo doesnt pass redirection
 # other admin commands: last, w, who, whoami, users, login, uptime, free -th, mpstat, iostat, bashtop, ssh, lsof, lspci, dmesg, dbus, strace, scp, file
 
@@ -251,7 +251,9 @@ function addpath { export PATH="$1:$PATH"; } # add to path
 function addpathp { echo "PATH="$1':$PATH' >> ~/.profile; } # add to path permanently
 function cmtf { while IFS= read -r line; do echo "${1:-#} $line"; done; }
 alias cmt='while read -r line; do echo "${1:-#} $line"; done;' # IFS is set above.
+alias ucmt='while read -r line; do echo "${line/\#\ /}"; done;' # IFS is set above.
 shopt -s expand_aliases # default? expands aliases in non-interactive (scripts and Vim calls)
+function aw { echo "$1" >> ~/.bash_aliases } # alias write
 
 set +a # end of `set -a` above
 # `unset -f foo`; or `unset -f` to remove all functions
@@ -400,6 +402,7 @@ nnoremap <F3> :set hlsearch!<CR> "toggl "
 cnoremap w!! execute "silent! write !sudo tee % > /dev/null" <bar> edit!
 "vnoremap=visual mose. comment lines selected with v or V (full lines). or use :norm i#
 vnoremap <F4> :s/^/#
+nnoremap <F4> :s/^/#
 ' >| ~/.vimrc   # > to not overwrite or >> to append
 fi
 # basic vim commands: https://gist.github.com/auwsom/78c837fde60fe36159ee89e4e29ed6f1
@@ -451,11 +454,12 @@ alias gl='git log '
 alias gb='git branch '
 alias ga='git add . '
 alias gc='git commit -m "commit" '
-alias gac='ga && gc ' #git
-alias gacp='gs && ga && gc && gph ' #git
-#alias gph='git push -u origin main '
 alias gph='git push '
 alias gpl='git pull ' # (git fetch && git merge) 
+alias gac='ga && gc ' # add and commit
+alias gacp='gs && ga && gc && gph ' # also push
+alias gacpa='su user -c "cd ~/git/dotfiles && git add . && git commit -m commit && git push -u origin main"' # gacp on aliases
+#alias gph='git push -u origin main '
 # git clone is for first copy # git status, git log, git branch
 # git clone https://github.com/auwsom/dotfiles.git # add ssh priv and pub key, and will pull but not push
 # git clone git@github.com:auwsom/dotfiles.git # will ask to connect. need to `eval $(ssh-agent -s) && ssh-add ~/.ssh/id_rsa` (will display email of GH account) 
@@ -556,14 +560,14 @@ alias dbe='distrobox enter'
 #https://stackoverflow.com/questions/27493184/can-i-create-a-wildcard-bash-alias-that-alters-any-command
 
 # use help or hh instead of --help
-reverse_command() { 
-if (( ${#BASH_SOURCE[@]} == 1 )); then
-  if [[ $BASH_COMMAND == *" help"* ]]; then 
-    eval "${BASH_COMMAND/help/} --help"; false
-  fi
-fi
+# reverse_command() {
+# if (( ${#BASH_SOURCE[@]} == 1 )); then
+# if [[ $BASH_COMMAND == *" help"* ]]; then
+# eval "${BASH_COMMAND/help/} --help"; false
+# fi
+# fi
 }
-if [[ $- == *i* ]]; then shopt -s extdebug; fi 
+#if [[ $- == *i* ]]; then shopt -s extdebug; fi 
 trap reverse_command DEBUG
 
 # https://github.com/akinomyoga/ble.sh

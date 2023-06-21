@@ -1,5 +1,5 @@
 #!/bin/bash
 echo $(date +%F) >> /home/user/git/home/day
 su user -c "cd ~/git/home && git add . && git commit -m commit && git push -u origin main"
-su user -c "cd ~/git/dotfiles && git add . && git commit -m commit && git push -u origin main"
+# su user -c "cd ~/git/dotfiles && git add . && git commit -m commit && git push -u origin main"
 
