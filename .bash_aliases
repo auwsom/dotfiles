@@ -42,16 +42,14 @@ stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would
 #stty intr ^S # this changes the ctrl+c for interrupt process to ctrl+s, to allow modern ctrl+c for copy.
 stty lnext ^N # this changes the ctrl+v for lnext to ctrl+b, to allow modern ctrl+v for paste. lnext shows the keycode of the next key typed.
 stty susp ^F #stty susp undef; #stty intr undef # ctrl+z for undo have to remove default. https://www.computerhope.com/unix/bash/bind.htm
-if [[ "$VIMRUNTIME" != "/usr/share/vim/vim82" ]]; then  # dont run in non-inteactive (ie vim)
-bind '"\C-Z": undo' && bind '"\ez": yank'; fi # crtl+z and alt+z (bash bind wont do ctrl+shift+key, will do alt+shift+key ^[z) \e is esc and alt(meta). 
-if [[ "$VIMRUNTIME" != "/usr/share/vim/vim82" ]]; then 
-bind '"\C-f": revert-line'; fi # clear the line
+if [[ $- == *i* ]]; then bind '"\C-Z": undo' && bind '"\ez": yank'; fi # crtl+z and alt+z (bash bind wont do ctrl+shift+key, will do alt+shift+key ^[z) \e is esc and alt(meta). # dont run in non-inteactive (ie vim)
+#if [[ $- == *i* ]]; then bind '"\C-f": revert-line'; fi # clear line. use ctrl-shift-c or C-c or C-\
 
 ## short abc's of common commands: (avoid one letter test files or variables to avoid conflicts)
 # use \ to escape any alias. `type <command>` is in front to show it's an alias and avoid confusion.
 # cant use type in front with sudo, so same name is used only when least confusion.
 # aliases need space at end for chaining so can be used before alaised directories or files.
-# use `whatis` then command name for official explanation of any command. then command plus `--help` flag or `man`, `info`, `tldr` and `whatis` commands for more info on any command. or q.
+# use `whatis` then command name for official explanation of any command. then command plus `--help` flag or `man`, `info`, `tldr` and `whatis` commands for more info on any command. or q alias below.
 # full list of shell commmands: https://www.computerhope.com/unix.htm or `ls /bin`. https://www.gnu.org/software/coreutils/manual/coreutils.html
 # list all builtins with `\help`. then `\help <builtin>` for any single one.
 alias ag='alias | grep' # search the aliases for commands
@@ -240,7 +238,6 @@ if [[ $(whoami) == 'root' ]]; then export TMOUT=18000 && readonly TMOUT; fi
 # `!!` for last command, as in `sudo !!`. `ctrl+alt+e` expand works here. `!-1:-1` for second to last arg in last command.
 # `vi $(!!)` to use output of last command. or use backticks: vi `!!`
 # `declare -f <function>` will show it
-# export -f <alias> # will export alias as function to be used in scripts. 
 set -a # sets for export to env the following functions, for calling in scripts and subshells (aliases dont get called).
 function hdn { history -d "$1"; history -w; } # delete history line number
 function hdl { history -d $(($HISTCMD - 1)); history -w; } # delete history last number
@@ -254,6 +251,8 @@ function addpath { export PATH="$1:$PATH"; } # add to path
 function addpathp { echo "PATH="$1':$PATH' >> ~/.profile; } # add to path permanently
 function cmtf { while IFS= read -r line; do echo "${1:-#} $line"; done; }
 alias cmt='read -r line; echo "${1:-#} $line"'
+shopt -s expand_aliases # default? expands aliases in non-interactive (scripts and Vim calls)
+
 set +a # end of `set -a` above
 # `unset -f foo`; or `unset -f` to remove all functions
 export CDPATH=".:/home/user" # can cd to any dir in user home from anywhere just by `cd Documents`
@@ -267,13 +266,14 @@ export VISUAL='vi' # export EDITOR='vi' is for old line editors like ed
 # bind -p # will list all current key bindings. https://www.computerhope.com/unix/bash/bind.htm
 # ***very helpful*** press `ctrl+alt+e` to expand the symbol to show. press double keys slowly to use normally. 
 # `bind -r <keycode>` to remove. use ctrl+V (lnext) to use key normally. https://en.wikipedia.org/wiki/ANSI_escape_code
-#if [[ "$VIMRUNTIME" != "-" ]]; then bind '"\\\\": "|"'; fi # quick shortcut to | pipe key. double slash key `\\` (two of the 4 slashes are escape chars)
-if [[ "$VIMRUNTIME" != "/usr/share/vim/vim82" ]]; then bind '",,": "!$"'; fi # easy way to get last argument from last line. can expand. delete $ for ! bang commands.
-if [[ "$VIMRUNTIME" != "-" ]]; then bind '"..": "$"'; fi # quick shortcut to $ key. 
-#bind '"..": shell-expand-line' # easy `ctrl+alt+e` expand
-#if [[ "$VIMRUNTIME" != "-" ]]; then bind '".,": "$(!!)"'; fi # easy way to add last output. can expand
-#if [[ "$VIMRUNTIME" != "-" ]]; then bind '"///": reverse-search-history'; fi # easy ctrl+r for history search.
-#if [[ "$VIMRUNTIME" != "-" ]]; then bind '\C-Q: shell-kill-word'; fi # crtl+q is erase forward one word. (ctrl+a, ctrl+q to change first command on line)
+#if [[ $- == *i* ]]; then bind '"\\\\": "|"'; fi # quick shortcut to | pipe key. double slash key `\\` (two of the 4 slashes are escape chars)
+if [[ $- == *i* ]]; then bind '",,": "!$"'; fi # easy way to get last argument from last line. can expand. delete $ for ! bang commands.
+#if [[ $- == *i* ]]; then bind '"..": "$"'; fi # quick shortcut to $ key. 
+if [[ $- == *i* ]]; then bind '"..": "$"'; fi # quick $
+#if [[ $- == *i* ]]; then bind '"..": shell-expand-line'; fi # easy `ctrl+alt+e` expand
+#if [[ $- == *i* ]]; then bind '".,": "$(!!)"'; fi # easy way to add last output. can expand
+#if [[ $- == *i* ]]; then bind '"///": reverse-search-history'; fi # easy ctrl+r for history search.
+#if [[ $- == *i* ]]; then bind '\C-Q: shell-kill-word'; fi # crtl+q is erase forward one word. (ctrl+a, ctrl+q to change first command on line)
 #bind 'set show-all-if-ambiguous on' # this makes only one Tab necessary to show completion possibilities
 
 : <<'END' 
@@ -560,7 +560,7 @@ reverse_command() {
   # check `BASH_SOURCE` array length is 0 for interactive mode.
   if (( ${#BASH_SOURCE[@]} == 1 )); then
     if [[ $BASH_COMMAND == *" help"* ]]; then 
-      eval "${BASH_COMMAND/help/} --help"
+      eval "${BASH_COMMAND/help/} --help"; echo test
     # ...then return false to suppress the non-reversed version.
       false
     fi
@@ -573,7 +573,7 @@ reverse_command() {
 trap reverse_command DEBUG
 
 # https://github.com/akinomyoga/ble.sh
-source /home/user/.local/share/blesh/ble.sh
+#source /home/user/.local/share/blesh/ble.sh
 #ble-bind -m isearch -f 'RET' isearch/accept-line # allows single RET to accept ctrl-R search
 # ble-update. ~/.blerc. 
 
