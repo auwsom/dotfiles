@@ -386,7 +386,7 @@ endif
 set autowrite "save before run, also when changing buffer"
 nnoremap <F5> :!clear && %:p<Enter> "run script in normal mode" 
 inoremap <F5> <esc>:!clear && %:p<enter> "in insert mode too"
-let $BASH_ENV = "~/.bash_aliases" "<--to use aliases in vi"
+let $BASH_ENV = "~/.bash_aliases" "<--to use functions or aliases in vi. `shopt -s expand_aliases` in .bashrc also for aliased"
 "set list " shows hidden characters
 "set ruf " ruler format
 set tabstop=4       " The width of a TAB is set to 4.
@@ -569,7 +569,7 @@ reverse_command() {
 #    true
   fi
 }
-#shopt -s extdebug
+shopt -s extdebug
 trap reverse_command DEBUG
 
 # https://github.com/akinomyoga/ble.sh
