@@ -250,7 +250,7 @@ function sudov { while true; do sudo -v; sleep 360; done; } # will grant sudo 'f
 function addpath { export PATH="$1:$PATH"; } # add to path
 function addpathp { echo "PATH="$1':$PATH' >> ~/.profile; } # add to path permanently
 function cmtf { while IFS= read -r line; do echo "${1:-#} $line"; done; }
-alias cmt='while read -r line; do echo "${1:-#} $line"; done;' # IFS is set above.
+alias cmt='while read -r line; do echo "# $line"; done;' # IFS is set above.
 alias ucmt='while read -r line; do echo "${line/\#\ /}"; done;' # IFS is set above.
 shopt -s expand_aliases # default? expands aliases in non-interactive (scripts and Vim calls)
 function aw { echo "$1" >> ~/.bash_aliases } # alias write
