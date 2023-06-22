@@ -32,13 +32,13 @@ set -o noclobber  # dont let accidental > overwrite. use >| to force redirection
 #shopt -s lastpipe; set -o monitor' # (set +m). allows last pipe to affect shell; needs Job Control enabled #https://askubuntu.com/questions/1395963/bash-set-m-option-does-not-work-when-placed-in-the-bashrc-file ..put it in PROMPT_COMMAND. also for the o alias.
 shopt -s nocaseglob # ignores upper or lower case of globs (*)
 shopt -s dotglob # makes `mv/cp /dir/*` copy all contents both * and .*; or use `mv /path/{.,}* /path/`
-#shopt -s globstar # makes ** be recursive for directories
+shopt -s globstar # makes ** be recursive for directories
 #shopt -s histappend # append to history, don't overwrite it. for using multiple shells at once. is default set in .bashrc
 #shopt -s histverify   # confirm bash history (!number) commands before executing. optional for beginners using bang ! commands. can also use ctrl+alt+e to expand before enter.
 #if [ -f ~/.env ]; then source ~/.env ; fi # dont use this or env vars for storing secrets. create dir .env and store files in there, then call with $(cat ~/.env/mykey). see envdir below.
 function rh { history -a; }; trap rh SIGHUP # saves history on interupt. see functions below.
 IFS=$' \t\n' # restricts "internal field separator" to tab and newline. handles spaces in filenames.
-nohist() { history -d $HISTCMD; }; trap nohist ERR # traps error and deletes from hist before written.
+nohist() { e=$BASH_COMMAND; history -d $HISTCMD; }; trap nohist ERR # traps error and deletes from hist before written. $e is line for reuse. ctrl-alt-e expands it.
 
 ## some familiar keyboard shortcuts: 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
@@ -82,7 +82,7 @@ alias fr='find / -iname' # use `tldr find` for basics. -L will follow symlinks
 alias fe='find . -iname "f" -exec echo {} \; -exec grep word {} \;' # execute command(s) on found file
 alias g='grep -i ' # search for text and more. "Global Regular Expressions Print" -i is case-insensitive. use -v to exclude. add mulitple with `-e <pattern>`. use `-C 3` to show 3 lines of context.
 alias i='ip -color a' # network info
-alias h='history 50'
+alias h='history 30'
 alias hhh='history 500' # `apt install hstr`. replaces ctrl-r with `hstr --show-configuration >> ~/.bashrc` https://github.com/dvorka/hstr. disables hide by default.
 alias hg='history | grep -i'
 #alias hd='history -d -2--1 ' #not working # delete last line. `history -d -10--2` to del 9 lines from -10 to -2 inclusive, counting itself. or use space in front of command to hide. 
@@ -97,7 +97,9 @@ alias l='echo $(history -p !!) | xclip' # copies last command line to clipboard.
 alias ll='ls -alFh ' # "list" all, long format. included in .bashrc, added human readable. 
 alias lll='ls -alF ' # "list" all long format. full byte count. 
 alias ltr='ls -lcr ' # "list" long, time, reverse. sorted bottom is latest changed. c is changed time. 
-alias lsd='ls -d $PWD/* ' # returns full paths. have to be in the directory. 
+alias lld='ls -dlFh ' # list only directories.
+alias lsd='ls -d ' # list only directories.
+alias lsp='ls -d $PWD/* ' # returns full paths. have to be in the directory. 
 alias ln='type ln; ln -st' # <source> <target> ie <target> <linkname>. -t reversed to reuse mv or cp lines. hardlinks accumulate and dont work across disks. rm symlink wont remove underlying file. 
 alias mo='more ' # break output into pages. or `less`.
 #alias mf='touch' # make file. also `echo foo | tee $newfile`. `(umask 644; touch file)` to set perms
@@ -258,7 +260,6 @@ alias cmt='while read -r line; do echo "# $line"; done;' # IFS is set above.
 alias ucmt='while read -r line; do echo "${line/\#\ /}"; done;' # IFS is set above.
 shopt -s expand_aliases # default? expands aliases in non-interactive (scripts and Vim calls)
 function aw { echo "$1" >> ~/.bash_aliases; } # alias write
-
 set +a # end of `set -a` above
 # `unset -f foo`; or `unset -f` to remove all functions
 export CDPATH=".:/home/user" # can cd to any dir in user home from anywhere just by `cd Documents`
@@ -274,8 +275,9 @@ export VISUAL='vi' # export EDITOR='vi' is for old line editors like ed
 # `bind -r <keycode>` to remove. use ctrl+V (lnext) to use key normally. https://en.wikipedia.org/wiki/ANSI_escape_code
 #if [[ $- == *i* ]]; then bind '"\\\\": "|"'; fi # quick shortcut to | pipe key. double slash key `\\` (two of the 4 slashes are escape chars)
 if [[ $- == *i* ]]; then bind '",,": "!$"'; fi # easy way to get last argument from last line. can expand. delete $ for ! bang commands.
-#if [[ $- == *i* ]]; then bind '"..": "$"'; fi # quick shortcut to $ key. 
-if [[ $- == *i* ]]; then bind '".,": "$"'; fi # quick $
+if [[ $- == *i* ]]; then bind '"..": "$"'; fi # quick shortcut to $ key. 
+#if [[ $- == *i* ]]; then bind '".,": "$"'; fi # quick $
+#if [[ $- == *i* ]]; then bind '"?": "$"'; fi # quick $
 #if [[ $- == *i* ]]; then bind '"..": shell-expand-line'; fi # easy `ctrl+alt+e` expand
 #if [[ $- == *i* ]]; then bind '".,": "$(!!)"'; fi # easy way to add last output. can expand
 #if [[ $- == *i* ]]; then bind '"///": reverse-search-history'; fi # easy ctrl+r for history search.
