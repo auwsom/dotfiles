@@ -15,7 +15,9 @@ HISTCONTROL=ignoreboth:erasedups   # no duplicate entries. ignoredups is only fo
 #HISTTIMEFORMAT="%h %d %H:%M " # "%F %T "
 #export HISTIGNORE="!(+(*\ *))" # ignores commands without arguments. not compatible with HISTTIMEFORMAT. should be the same as `grep -v -E "^\S+\s.*" $HISTFILE`
 export HISTIGNORE="c:cdb:cdh:cdu:df:i:h:hhh:l:ll:lll:ltr:ls::mount:umount:rebash:path:env:pd:ps1:sd:sss:top:tree1:zr:zz:au:auu:aca:cu:cur:cx:dedup:dmesg:dli:aptli:d:flmh:flmho:flmr:fm:free:lsblk:na:netstat:ping1:wrapon:wrapoff:um:m:hdl" # ignore these single commands
-export PROMPT_COMMAND='history -a; ' # ;set +m' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. set +m makes disables job control for aliases in vi.
+#export PROMPT_COMMAND='history -a; ' # ;set +m' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. set +m makes disables job control for aliases in vi.
+#export PROMPT_COMMAND='EC=$? && history -a && test $EC -eq 1 && echo error $HISTCMD && history -d $HISTCMD && history -w' # excludes errors from history
+export PROMPT_COMMAND='history -a' # && test $EC -eq 1 && echo error $HISTCMD && history -d $HISTCMD && history -w' # excludes errors from history
 export LC_ALL="C" # makes ls list dotfiles before others
 dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
 #history -w # writes history on every new bash shell to remove duplicates
@@ -36,6 +38,7 @@ shopt -s dotglob # makes `mv/cp /dir/*` copy all contents both * and .*; or use 
 #if [ -f ~/.env ]; then source ~/.env ; fi # dont use this or env vars for storing secrets. create dir .env and store files in there, then call with $(cat ~/.env/mykey). see envdir below.
 function rh { history -a; }; trap rh SIGHUP # saves history on interupt. see functions below.
 IFS=$' \t\n' # restricts "internal field separator" to tab and newline. handles spaces in filenames.
+nohist() { history -d $HISTCMD; }; trap nohist ERR # traps error and deletes from history
 
 ## some familiar keyboard shortcuts: 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
@@ -95,7 +98,7 @@ alias ll='ls -alFh ' # "list" all, long format. included in .bashrc, added human
 alias lll='ls -alF ' # "list" all long format. full byte count. 
 alias ltr='ls -lcr ' # "list" long, time, reverse. sorted bottom is latest changed. c is changed time. 
 alias lsd='ls -d $PWD/* ' # returns full paths. have to be in the directory. 
-alias ln='type ln; ln -st' # <source> <target> # symlink <target> <linkname>. -t reversed to reuse mv or cp lines. hardlinks accumulate and dont work across disks. rm symlink wont remove underlying file. 
+alias ln='type ln; ln -st' # <source> <target> ie <target> <linkname>. -t reversed to reuse mv or cp lines. hardlinks accumulate and dont work across disks. rm symlink wont remove underlying file. 
 alias mo='more ' # break output into pages. or `less`.
 #alias mf='touch' # make file. also `echo foo | tee $newfile`. `(umask 644; touch file)` to set perms
 #alias md='mkdir -p' # makes all --parents directories necessary
@@ -107,7 +110,7 @@ alias ncdu='type ncdu; ncdu -x' # disk space utility. `apt install ncdu`. -x exc
 alias o='eval $(history -p !!) | read v; echo v=$v' # this var only works with shopt lastpipe and set +m to disable pipe subshells. copies output to $v. 
 alias ov='v=$(eval $(history -p !!))' # copies output of last command to $v. also can use xclip and xsel. works without lastpipe and set +m.
 alias p='pwd' # print present working directory
-alias path='sed 's/:/\n/g' <<< "$PATH"' # list with newlines. 'echo $PATH' # show path
+alias path='type path; sed 's/:/\n/g' <<< "$PATH"' # list with newlines. 'echo $PATH' # show path
 #alias pd='pushd ' # a way to move through directories in a row (https://linux.101hacks.com/cd-command/dirs-pushd-popd/) ..aliased as `cd`
 alias pd='popd' # going back through the 'stack' history
 alias ps1='ps -ef' # show processes. -e/-A all. -f full.
@@ -240,10 +243,11 @@ if [[ $(whoami) == 'root' ]]; then export TMOUT=18000 && readonly TMOUT; fi # ti
 # `declare -f <function>` will show it
 set -a # sets for export to env the following functions, for calling in scripts and subshells (aliases dont get called).
 function hdn { history -d "$1"; history -w; } # delete history line number
-function hdl { history -d $(($HISTCMD - 1)); history -w; } # delete history last number
+# function hdl { history -d $(($HISTCMD - 1)); history -w; } # delete history last number
+function hdl { history -d $HISTCMD; history -w; } # delete history last number
 function hdln { history -d $(($HISTCMD - "$1" -1))-$(($HISTCMD - 2)); history -w; } # delete last n lines. (add 1 for this command) (history -d -$1--1; has error)
 function help { "$1" --help; } # use `\help` to disable the function alias
-function ? { "$1" --help || help "$1" || man "$1" || info "$1"; } # use any of the help docs. # also use tldr. 
+function ? { "$1" --help || help "$1" || man "$1" || info "$1"; } # use any help doc. # also use tldr. 
 function lns { dir="$1"; lastdir="${dir##*/}"; sudo ln -s $2/$lastdir "$1"; } # quick symlink using arg order from cp or mv
 function ren { mv "$1" "$2"; } # rename
 function sudov { while true; do sudo -v; sleep 360; done; } # will grant sudo 'for 60 minutes
@@ -253,7 +257,7 @@ function cmtf { while IFS= read -r line; do echo "${1:-#} $line"; done; }
 alias cmt='while read -r line; do echo "# $line"; done;' # IFS is set above.
 alias ucmt='while read -r line; do echo "${line/\#\ /}"; done;' # IFS is set above.
 shopt -s expand_aliases # default? expands aliases in non-interactive (scripts and Vim calls)
-function aw { echo "$1" >> ~/.bash_aliases } # alias write
+function aw { echo "$1" >> ~/.bash_aliases; } # alias write
 
 set +a # end of `set -a` above
 # `unset -f foo`; or `unset -f` to remove all functions
@@ -271,7 +275,7 @@ export VISUAL='vi' # export EDITOR='vi' is for old line editors like ed
 #if [[ $- == *i* ]]; then bind '"\\\\": "|"'; fi # quick shortcut to | pipe key. double slash key `\\` (two of the 4 slashes are escape chars)
 if [[ $- == *i* ]]; then bind '",,": "!$"'; fi # easy way to get last argument from last line. can expand. delete $ for ! bang commands.
 #if [[ $- == *i* ]]; then bind '"..": "$"'; fi # quick shortcut to $ key. 
-if [[ $- == *i* ]]; then bind '"..": "$"'; fi # quick $
+if [[ $- == *i* ]]; then bind '".,": "$"'; fi # quick $
 #if [[ $- == *i* ]]; then bind '"..": shell-expand-line'; fi # easy `ctrl+alt+e` expand
 #if [[ $- == *i* ]]; then bind '".,": "$(!!)"'; fi # easy way to add last output. can expand
 #if [[ $- == *i* ]]; then bind '"///": reverse-search-history'; fi # easy ctrl+r for history search.
@@ -449,24 +453,24 @@ alias remux='tmux source ~/.tmux.conf' # reload tmux
 END3
 
 ## basic git settings
-alias gs='git status '
-alias gl='git log '
-alias gb='git branch '
-alias ga='git add . '
-alias gc='git commit -m "commit" '
-alias gph='git push '
-alias gpl='git pull ' # (git fetch && git merge) 
-alias gac='ga && gc ' # add and commit
-alias gacp='gs && ga && gc && gph ' # also push
-alias gacpa='su user -c "cd ~/git/dotfiles && git add . && git commit -m commit && git push -u origin main"' # gacp on aliases
+alias gs='git status'
+alias gl='git log'
+alias gb='git branch'
+alias ga='git add .'
+alias gc='git commit -m "commit"'
+alias gph='git push'
+alias gpl='git pull' # (git fetch && git merge) 
+alias gac='ga && gc' # add and commit
+alias gacp='gs && ga && gc && gph' # also push
+alias gacpa='pushd ~/git/dotfiles && git add . && git commit -m commit && git push -u origin main; popd' # gacp on aliases
 #alias gph='git push -u origin main '
 # git clone is for first copy # git status, git log, git branch
 # git clone https://github.com/auwsom/dotfiles.git # add ssh priv and pub key, and will pull but not push
 # git clone git@github.com:auwsom/dotfiles.git # will ask to connect. need to `eval $(ssh-agent -s) && ssh-add ~/.ssh/id_rsa` (will display email of GH account) 
 ## add from local creatJust found this tool called Briefcase to deploy python apps to 6 platforms (mac,win,linux,ios,android,web) looks great. Produces standalone binariese:
 # `apt install gh` then click enter until auth through webpage
-alias gi='git init  && git remote add origin git@github.com:auwsom/<newrepo>.git  && git branch -M main'
-alias gi2='gh repo create <newrepo> --public '
+alias gi='git init && git remote add origin git@github.com:auwsom/<newrepo>.git && git branch -M main'
+alias gi2='gh repo create <newrepo> --public'
 alias gi3='git add . && git push --set-upstream origin main'
 # git config --global init.defaultBranch main 
 # https://www.freecodecamp.org/news/how-to-make-your-first-pull-request-on-github-3/
@@ -559,16 +563,15 @@ alias dbe='distrobox enter'
 #trap 'if [[ $(echo $(type ${BASH_COMMAND} | awk "{print \$1}" ) | grep builtin) ]]; then echo "this is an alias"; fi' DEBUG # prints all commands. also prints an error ?
 #https://stackoverflow.com/questions/27493184/can-i-create-a-wildcard-bash-alias-that-alters-any-command
 
-# use help or hh instead of --help
 # reverse_command() {
 # if (( ${#BASH_SOURCE[@]} == 1 )); then
-# if [[ $BASH_COMMAND == *" help"* ]]; then
-# eval "${BASH_COMMAND/help/} --help"; false
+#   if [[ $BASH_COMMAND == *" help"* ]]; then eval "${BASH_COMMAND/help/} --help"; 
+#     false
+#   fi
 # fi
-# fi
-}
-#if [[ $- == *i* ]]; then shopt -s extdebug; fi 
-trap reverse_command DEBUG
+# }
+# if [[ $- == *i* ]]; then shopt -s extdebug; fi 
+# trap reverse_command DEBUG
 
 # https://github.com/akinomyoga/ble.sh
 #source /home/user/.local/share/blesh/ble.sh
