@@ -38,7 +38,7 @@ shopt -s dotglob # makes `mv/cp /dir/*` copy all contents both * and .*; or use 
 #if [ -f ~/.env ]; then source ~/.env ; fi # dont use this or env vars for storing secrets. create dir .env and store files in there, then call with $(cat ~/.env/mykey). see envdir below.
 function rh { history -a; }; trap rh SIGHUP # saves history on interupt. see functions below.
 IFS=$' \t\n' # restricts "internal field separator" to tab and newline. handles spaces in filenames.
-nohist() { history -d $HISTCMD; }; trap nohist ERR # traps error and deletes from history
+nohist() { history -d $HISTCMD; }; trap nohist ERR # traps error and deletes from hist before written.
 
 ## some familiar keyboard shortcuts: 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
