@@ -9,15 +9,18 @@
 ## basic Bash settings:
 export HISTSIZE=10000  # history size in terminal. limits numbering and masks if list is truncated. 
 export HISTFILESIZE=10000 #$HISTSIZE  # increase history file size # or just leave blank for unlimited
+if ! [[ -f ~/.bash_eternal_history ]]; then cp ~/.bash_history ~/.bash_eternal_history; fi
+if ! [[ -f ~/.bash_history_bak ]]; then mv ~/.bash_history ~/.bash_history_bak; fi
+if ! [[ -f ~/.bash_history ]]; then ln -s ~/.bash_eternal_history ~/.bash_history; fi
 HISTFILE=~/.bash_eternal_history # "certain bash sessions truncate .bash_history" (like Screen) SU
 #sed -i 's,HISTFILESIZE=,HISTFILESIZE= #,' ~/.bashrc && sed -i 's,HISTSIZE=,HISTSIZE= #,' ~/.bashrc # run once for unlimited. have to clear the default setting in .bashrc
 HISTCONTROL=ignoreboth:erasedups   # no duplicate entries. ignoredups is only for consecutive. ignore both = ignoredups+ignorespace (will not record commands with space in front)
 #HISTTIMEFORMAT="%h %d %H:%M " # "%F %T "
 #export HISTIGNORE="!(+(*\ *))" # ignores commands without arguments. not compatible with HISTTIMEFORMAT. should be the same as `grep -v -E "^\S+\s.*" $HISTFILE`
-export HISTIGNORE="c:cdb:cdh:cdu:df:i:h:hhh:l:ll:lll:ltr:ls::mount:umount:rebash:path:env:pd:ps1:sd:sss:top:tree1:zr:zz:au:auu:aca:cu:cur:cx:dedup:dmesg:dli:aptli:d:flmh:flmho:flmr:fm:free:lsblk:na:netstat:ping1:wrapon:wrapoff:um:m:hdl" # ignore these single commands
+export HISTIGNORE="c:cdb:cdh:cdu:df:i:h:hh:hhh:l:ll:lll:lld:lsd:lsp:ltr:ls::mount:umount:rebash:path:env:pd:ps1:sd:sss:top:tree1:zr:zz:au:auu:aca:cu:cur:cx:dedup:dmesg:dli:aptli:d:flmh:flmho:flmr:fm:free:lsblk:na:netstat:ping1:wrapon:wrapoff:um:m:hdl" # ignore these single commands
 #export PROMPT_COMMAND='history -a; ' # ;set +m' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. set +m makes disables job control for aliases in vi.
 #export PROMPT_COMMAND='EC=$? && history -a && test $EC -eq 1 && echo error $HISTCMD && history -d $HISTCMD && history -w' # excludes errors from history
-export PROMPT_COMMAND='history -a' # && test $EC -eq 1 && echo error $HISTCMD && history -d $HISTCMD && history -w' # excludes errors from history
+# export PROMPT_COMMAND='history -a' # && test $EC -eq 1 && echo error $HISTCMD && history -d $HISTCMD && history -w' # excludes errors from history
 export LC_ALL="C" # makes ls list dotfiles before others
 dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
 #history -w # writes history on every new bash shell to remove duplicates
@@ -29,7 +32,7 @@ alias rebash='source ~/.bashrc' # have to use `source` to load the settings file
 alias realias='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc' 
 ## `shopt` list shell options. `set -o` lists settings. `set -<opt>` enables like flag options.
 set -o noclobber  # dont let accidental > overwrite. use >| to force redirection even with noclobber
-#shopt -s lastpipe; set -o monitor' # (set +m). allows last pipe to affect shell; needs Job Control enabled #https://askubuntu.com/questions/1395963/bash-set-m-option-does-not-work-when-placed-in-the-bashrc-file ..put it in PROMPT_COMMAND. also for the o alias.
+shopt -s lastpipe; set -o monitor # (set +m). allows last pipe to affect shell; needs Job Control enabled. for the o output alias.
 shopt -s nocaseglob # ignores upper or lower case of globs (*)
 shopt -s dotglob # makes `mv/cp /dir/*` copy all contents both * and .*; or use `mv /path/{.,}* /path/`
 shopt -s globstar # makes ** be recursive for directories
@@ -38,7 +41,8 @@ shopt -s globstar # makes ** be recursive for directories
 #if [ -f ~/.env ]; then source ~/.env ; fi # dont use this or env vars for storing secrets. create dir .env and store files in there, then call with $(cat ~/.env/mykey). see envdir below.
 function rh { history -a; }; trap rh SIGHUP # saves history on interupt. see functions below.
 IFS=$' \t\n' # restricts "internal field separator" to tab and newline. handles spaces in filenames.
-nohist() { e=$BASH_COMMAND; history -d $HISTCMD; }; trap nohist ERR # traps error and deletes from hist before written. $e is line for reuse. ctrl-alt-e expands it.
+#nohist() { e=$BASH_COMMAND; history -d $HISTCMD; }; trap nohist ERR # traps error and deletes from hist before written. $e is line for reuse. ctrl-alt-e expands it.
+#nohist() { $BASH_COMMAND=$BASH_COMMAND" e"; }; trap nohist ERR # traps error and deletes from hist before written. $e is line for reuse. ctrl-alt-e expands it.
 
 ## some familiar keyboard shortcuts: 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
@@ -131,7 +135,7 @@ alias ssh='ssh -vvv ' # most verbose level
 alias sort1='sort --numeric-sort' # or --human-numeric-sort. dups `sort <file> | unique -c | sort -nr`
 # `stat` will show file info including -rwxrwxrwx octet values of permissions and ownership.
 alias t='touch' # new file. see mf also.
-# `tee` allows tee-piping. eg `cat file.txt tee /dev/tty | grep 'word' > output.txt` will both show the file and pipe it. `echo $(date) | tee file.txt` will pipe to file and output to stdout.
+# `tee` allows tee-piping. eg `cat file.txt | tee /dev/tty | grep 'word' > output.txt` will both show the file and pipe it. `echo $(date) | tee file.txt` will pipe to file and output to stdout.
 alias top='htop' # `q` to exit (common in unix). htop allows deleting directly. `apt install htop`
 alias tree1='tree -h --du -L 2' #<dir>. `apt install tree`
 # `type` will show info on commands and show functions.
@@ -151,7 +155,8 @@ alias sz='7z x -o*' # extracts in to subdirectory
 alias szc='7z a -t7z -m0=lzma2:d1024m -mx=9 -aoa -mfb=64 -md=32m -ms=on' #<dir> <output> # highest compression or use PeaZip
 alias au='sudo apt update'
 alias auu='sudo apt update && apt -y upgrade' # show all users logged in. `last` show last logins
-alias aca='sudo apt clean && sudo apt autoremove'
+alias aca='sudo apt clean && sudo apt autoremove' # `apt remove` leaves configs, `apt purge` doesnt. 
+alias aptr='apt install --reinstall' # reinstall pkg. 
 # `arp` # lists all devices on network layer 2. apt install net-tools
 alias awk1='awk "{print \$1}"' # print first column; end column {print $NF}; second to last $(NF-1); use single quotes when not using alias; awk more common than `cut -f1 -d " "`
 alias bc='type bc; BC_ENV_ARGS=<(echo "scale=2") \bc' # basic calculator. with 2 decimal places.
@@ -206,7 +211,7 @@ alias pip='type pip; pip3 --verbose'
 #alias pipd='pip --download -d /media/user/data' 
 #alias pstree='pstree' # shows what started a process
 alias py='type py; python3' 
-alias ra='read -a' # reads into array/list. 
+alias ra='read -a' # reads into array/list. read var defaults to $REPLY in Bash. 
 # use `realpath` for piping absolute file path to cat. 
 alias rkonsole='/home/user/.config/autostart-scripts/konsole_watcher.sh restore' # restore konsole tabs
 alias rplasma='pkill plasmashell && plasmashell &' # restart plasmashell in KDE Kubuntu
@@ -221,6 +226,7 @@ alias tc0='truncate -s 0' # reset file with zeros to wipe. also use wipe -qr.
 alias u='users' # show all users logged in. `last` show last logins
 alias uname1='uname -a' # show all kernel info 
 alias uname2='uname -r' # show kernel version
+alias ui='update-initramfs' # update kernel
 alias urel='cat /etc/os-release' # show OS info
 #alias w='w' # Show who is logged on and what they are doing. Or `who`.
 alias wget='type wget; wget --no-clobber --content-disposition --trust-server-names' # -N overwrites only if newer file and disables timestamping # or curl to download webfile (curl -JLO)
@@ -251,7 +257,7 @@ function hdln { history -d $(($HISTCMD - "$1" -1))-$(($HISTCMD - 2)); history -w
 function help { "$1" --help; } # use `\help` to disable the function alias
 function ? { "$1" --help || help "$1" || man "$1" || info "$1"; } # use any help doc. # also use tldr. 
 function lns { dir="$1"; lastdir="${dir##*/}"; sudo ln -s $2/$lastdir "$1"; } # quick symlink using arg order from cp or mv
-function ren { mv "$1" "$2"; } # rename
+function ren { mv "$1" "$1""$2"; } # rename file just add ending, eg file to file1.
 function sudov { while true; do sudo -v; sleep 360; done; } # will grant sudo 'for 60 minutes
 function addpath { export PATH="$1:$PATH"; } # add to path
 function addpathp { echo "PATH="$1':$PATH' >> ~/.profile; } # add to path permanently
@@ -275,9 +281,9 @@ export VISUAL='vi' # export EDITOR='vi' is for old line editors like ed
 # `bind -r <keycode>` to remove. use ctrl+V (lnext) to use key normally. https://en.wikipedia.org/wiki/ANSI_escape_code
 #if [[ $- == *i* ]]; then bind '"\\\\": "|"'; fi # quick shortcut to | pipe key. double slash key `\\` (two of the 4 slashes are escape chars)
 if [[ $- == *i* ]]; then bind '",,": "!$"'; fi # easy way to get last argument from last line. can expand. delete $ for ! bang commands.
-if [[ $- == *i* ]]; then bind '"..": "$"'; fi # quick shortcut to $ key. 
+#if [[ $- == *i* ]]; then bind '"..": "$"'; fi # quick shortcut to $ key. 
 #if [[ $- == *i* ]]; then bind '".,": "$"'; fi # quick $
-#if [[ $- == *i* ]]; then bind '"?": "$"'; fi # quick $
+if [[ $- == *i* ]]; then bind '",": "$"'; fi # quick $
 #if [[ $- == *i* ]]; then bind '"..": shell-expand-line'; fi # easy `ctrl+alt+e` expand
 #if [[ $- == *i* ]]; then bind '".,": "$(!!)"'; fi # easy way to add last output. can expand
 #if [[ $- == *i* ]]; then bind '"///": reverse-search-history'; fi # easy ctrl+r for history search.
@@ -323,6 +329,20 @@ if [[ -e test1 || $(cat file) == "text" ]]; then echo yes; fi
 first line for scripts: #!/bin/bash -Cex; shellcheck "$0" #no-clobber, exit on error, debugging.
 put scripts in /usr/local/bin and the can be used in Vim
 
+https://www.gnu.org/software/bash/manual/html_node/Special-Parameters.html
+    $1, $2, $3, ... are the positional parameters.
+    "$@" is an array-like construct of all positional parameters, {$1, $2, $3 ...}.
+    "$*" is the IFS expansion of all positional parameters, $1 $2 $3 ....
+    $# is the number of positional parameters.
+    $- current options set for the shell.
+    $$ pid of the current shell (not subshell).
+    $_ most recent parameter (or command path to start the current shell immediately after startup).
+    $IFS is the (input) field separator.
+    $? is the most recent foreground pipeline exit status.
+    $! is the PID of the most recent background command.
+    $0 is the name of the shell or shell script.
+https://www.gnu.org/software/bash/manual/html_node/Bash-Variables.html
+
 https://tldp.org
 learnshell.org
 linuxcommand.org
@@ -367,16 +387,15 @@ export h="--help" # can use like `bash $h` (man bash)
 # run appls .desktop files with dex, gtklaunch or kioclient exec https://askubuntu.com/a/1114798/795299
 
 ## basic settings:
-# be careful of your filesystem filling up space as it will freeze your OS.. ways to deal with that: create a large dummy file that can be erased, like swapfile, `echo 'SystemMaxUse=200M' >> journald.conf` then limit /tmp and /home 
+# be careful of your filesystem filling up space as it will freeze your OS.. ways to deal with that: create a large dummy file that can be erased, like swapfile, `echo 'SystemMaxUse=200M' >> journald.conf` then limit /tmp and /home. `dd if=/dev/zero of=/swapfile bs=1024K count=250 && chmod 0600 /swapfile && swapon /swapfile` dont use fallocate or truncate to create swapfile.. has to be continuous.
 # use `sudo -s` to elevate user but stay in same user environment (history and bashrc prefs). 
 # add user to sudo group: `usermod -aG sudo user` to protect root user (can remove privelege from user if needed)
 # careful with changing all permissions to 777: https://superuser.com/questions/132891/how-to-reset-folder-permissions-to-their-default-in-ubuntu
 # envdir or direnv for storing project secrets safely. DONT store them in a GitHub repo (.gitignore) http://thedjbway.b0llix.net/daemontools/envdir.html and python os.environ['HOME']
 
 ## basic vim settings: 
-if ! [[ -f ~/.vimrc ]]; then
+if ! [[ -f ~/.vimrc ]]; then   # just delete to remake file opening new shell
 echo -e '
-nnoremap <c-z> <nop> "no ctrl-z stop because exits without saving and makes .swp file"
 set nocompatible
 set showmode
 set whichwrap+=<,> "arrow key wraparound"
@@ -392,8 +411,10 @@ if has("autocmd")\n
   au BufReadPost * if line("'\''\"") > 0 && line("'\''\"") <= line("$") | exe "normal! g`\"" | endif\n
 endif
 set autowrite "save before run, also when changing buffer"
-nnoremap <F5> :!clear && %:p<Enter> "run script in normal mode" 
-inoremap <F5> <esc>:!clear && %:p<enter> "in insert mode too"
+nnoremap <F5> :!clear && %:p<Enter> 
+"run script in normal mode" 
+inoremap <F5> <esc>:!clear && %:p<enter> 
+"in insert mode too"
 let $BASH_ENV = "~/.bash_aliases" "<--to use functions or aliases in vi. `shopt -s expand_aliases` in .bashrc also for aliased"
 "set list " shows hidden characters
 "set ruf " ruler format
@@ -403,17 +424,31 @@ set softtabstop=4   " Sets the number of columns for a TAB
 set expandtab       " Expand TABs to spaces
 set shell=/bin/bash
 "nnoremap=normal mode. toggle search highligh. or use :noh"
-nnoremap <F3> :set hlsearch!<CR> "toggl "
+nnoremap <F3> :set hlsearch!<CR> 
 "cnoremap=commandmode. use sudo to write file"
 cnoremap w!! execute "silent! write !sudo tee % > /dev/null" <bar> edit!
 "vnoremap=visual mose. comment lines selected with v or V (full lines). or use :norm i#
-vnoremap <F4> :s/^/#
-nnoremap <F4> :s/^/#
+"comment" 
+nnoremap <F4> :s/^/# <CR> 
+vnoremap <F4> :s/^/# <CR>
+"uncomment"
+nnoremap <F6> :s/^# //<CR> 
+vnoremap <F6> :s/^# //<CR>   
+"save" 
+nnoremap <c-s> :w<CR> 
+inoremap <c-s> <esc>:w<CR> 
+"save and quit"
+nnoremap <c-s-q> :wq<CR> 
+inoremap <c-s-q> <esc>:wq<CR> 
+"quit"
+nnoremap <c-q> :q<CR> 
+inoremap <c-q> <esc>:wq<CR> 
+inoremap <c-z> <esc><u><i>  
 ' >| ~/.vimrc   # > to not overwrite or >> to append
 fi
 # basic vim commands: https://gist.github.com/auwsom/78c837fde60fe36159ee89e4e29ed6f1
 # https://rwxrob.github.io/vi-help/ https://www.keycdn.com/blog/vim-commands
-# paste normally use capital P. deindent ctrl-D. ctrl-o goes to last edit
+# paste normally use capital P. deindent ctrl-D. ctrl-o goes to prev edit. crtl-i to next.
 # `:e <filename>` to open file or `:e .` to browse directory 
 # `:!bash %` to run script from within vim
 # find and replace: `:%s/baz/boz/g` or use any char instead of / like , `:%s,baz,boz,g`
@@ -423,6 +458,7 @@ fi
 # q: opens Command Line Window. :q closes it.
 # type `!!` and `cmt` to run this alias/function/script on the line (:.!cmt), or !} on a paragraph (:.,$!cmt) or with line numbers (:3,5!cmt), or use Visual mode crtl-V (:'<,'>!cmt)
 # `@:` repeats last command, like `:s/aa/bb/`. also up arrow history. `.` repeats last action.
+# ctrl-w spit viewport. ctrl-w,ctrl-w toggle viewport. crtl-w,c to close.
 
 : <<'END3'
 ## tmux   wget https://raw.githubusercontent.com/rwxrob/dot/main/tmux/.tmux.conf
@@ -565,15 +601,28 @@ alias dbe='distrobox enter'
 #trap 'if [[ $(echo $(type ${BASH_COMMAND} | awk "{print \$1}" ) | grep builtin) ]]; then echo "this is an alias"; fi' DEBUG # prints all commands. also prints an error ?
 #https://stackoverflow.com/questions/27493184/can-i-create-a-wildcard-bash-alias-that-alters-any-command
 
-# reverse_command() {
-# if (( ${#BASH_SOURCE[@]} == 1 )); then
-#   if [[ $BASH_COMMAND == *" help"* ]]; then eval "${BASH_COMMAND/help/} --help"; 
-#     false
-#   fi
-# fi
-# }
-# if [[ $- == *i* ]]; then shopt -s extdebug; fi 
-# trap reverse_command DEBUG
+convert_help() { if [[ $- == *i* ]]; then
+  if [[ $BASH_COMMAND == *" help"* ]]; then eval "${BASH_COMMAND/help/} --help"; false; fi; fi; }
+if [[ $- == *i* ]]; then shopt -s extdebug; trap convert_help DEBUG; fi
+
+# needs lastpipe enabled and job control disabled
+# co() { if [[ $- == *i* ]]; then eval "$BASH_COMMAND | read -r o"; false; fi }
+# co() { if [[ $- == *i* ]]; then eval "$BASH_COMMAND | tee out"; false; fi }
+# co() { if [[ $- == *i* ]]; then eval "$BASH_COMMAND | xargs -I % echo %"; false; fi }
+#co() { if [[ $- == *i* ]]; then eval "$BASH_COMMAND | read ;  echo $REPLY | tee /tmp/out"; echo sha >> /tmp/out; export var=1234;false; fi }
+#co() { if [[ $- == *i* ]]; then eval "$BASH_COMMAND;  echo $BASH_COMMAND | tee /tmp/out"; false; fi }
+#co() { eval "$BASH_COMMAND | xargs -I % echo %"; false; } # piping doesnt work.
+#co() { eval "$BASH_COMMAND | read v; echo $v"; ; } # piping doesnt work.
+# co() { eval "$BASH_COMMAND | tee /tmp/out2" ; false; } # piping doesnt work.
+#co() { eval "export var=`$BASH_COMMAND`"; false; } # 
+#co() { eval "echo $($BASH_COMMAND) | read -r var; echo $var"; false; } # 
+# co() { eval "v=$BASH_COMMAND; echo $v"; false; } # 
+# co() { echo; } # 
+# co() { eval "$BASH_COMMAND >| /tmp/out; v=$(cat /tmp/out)"; false; } # piping doesnt work.
+# co() { eval "$BASH_COMMAND >> /tmp/out";  } # piping doesnt work.
+# if [[ $- == *i* ]]; then shopt -s extdebug; trap co DEBUG; fi # capture output
+ce() { eval "$BASH_COMMAND;  e='$BASH_COMMAND'"; false; }
+if [[ $- == *i* ]]; then trap ce ERR; fi # capture error command
 
 # https://github.com/akinomyoga/ble.sh
 #source /home/user/.local/share/blesh/ble.sh
