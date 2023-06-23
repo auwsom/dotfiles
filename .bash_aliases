@@ -18,7 +18,7 @@ HISTCONTROL=ignoreboth:erasedups   # no duplicate entries. ignoredups is only fo
 #HISTTIMEFORMAT="%h %d %H:%M " # "%F %T "
 #export HISTIGNORE="!(+(*\ *))" # ignores commands without arguments. not compatible with HISTTIMEFORMAT. should be the same as `grep -v -E "^\S+\s.*" $HISTFILE`
 export HISTIGNORE="c:cdb:cdh:cdu:df:i:h:hh:hhh:l:ll:lll:lld:lsd:lsp:ltr:ls::mount:umount:rebash:path:env:pd:ps1:sd:sss:top:tree1:zr:zz:au:auu:aca:cu:cur:cx:dedup:dmesg:dli:aptli:d:flmh:flmho:flmr:fm:free:lsblk:na:netstat:ping1:wrapon:wrapoff:um:m:hdl" # ignore these single commands
-#export PROMPT_COMMAND='history -a; ' # ;set +m' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. set +m makes disables job control for aliases in vi.
+export PROMPT_COMMAND='history -a; ' # ;set +m' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. set +m makes disables job control for aliases in vi.
 #export PROMPT_COMMAND='EC=$? && history -a && test $EC -eq 1 && echo error $HISTCMD && history -d $HISTCMD && history -w' # excludes errors from history
 # export PROMPT_COMMAND='history -a' # && test $EC -eq 1 && echo error $HISTCMD && history -d $HISTCMD && history -w' # excludes errors from history
 export LC_ALL="C" # makes ls list dotfiles before others
@@ -30,6 +30,7 @@ alias hs='history -a; history -c; history -r' # share history from other termina
 alias vibash='vi ~/.bash_aliases' 
 alias rebash='source ~/.bashrc' # have to use `source` to load the settings file. ~ is home directory
 alias realias='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc' 
+alias revim='rm ~/.vimrc && source ~/.bashrc'
 ## `shopt` list shell options. `set -o` lists settings. `set -<opt>` enables like flag options.
 set -o noclobber  # dont let accidental > overwrite. use >| to force redirection even with noclobber
 shopt -s lastpipe; set -o monitor # (set +m). allows last pipe to affect shell; needs Job Control enabled. for the o output alias.
@@ -408,7 +409,7 @@ set hlsearch
 autocmd InsertEnter,InsertLeave * set cul!
 "remember editing position after close"
 if has("autocmd")\n
-  au BufReadPost * if line("'\''\"") > 0 && line("'\''\"") <= line("$") | exe "normal! g`\"" | endif\n
+au BufReadPost * if line("'\''\"") > 0 && line("'\''\"") <= line("$") | exe "normal! g`\"" | endif\n
 endif
 set autowrite "save before run, also when changing buffer"
 nnoremap <F5> :!clear && %:p<Enter> 
@@ -423,11 +424,11 @@ set shiftwidth=4    " Indents will have a width of 4
 set softtabstop=4   " Sets the number of columns for a TAB
 set expandtab       " Expand TABs to spaces
 set shell=/bin/bash
-"nnoremap=normal mode. toggle search highligh. or use :noh"
+"nnoremap=normal mode. remap vs map disables inf loop btw vars. toggle search highligh. or use :noh"
 nnoremap <F3> :set hlsearch!<CR> 
 "cnoremap=commandmode. use sudo to write file"
 cnoremap w!! execute "silent! write !sudo tee % > /dev/null" <bar> edit!
-"vnoremap=visual mose. comment lines selected with v or V (full lines). or use :norm i#
+"vnoremap=visual mode. comment lines selected with v or V (full lines). or use :norm i#
 "comment" 
 nnoremap <F4> :s/^/# <CR> 
 vnoremap <F4> :s/^/# <CR>
@@ -438,12 +439,14 @@ vnoremap <F6> :s/^# //<CR>
 nnoremap <c-s> :w<CR> 
 inoremap <c-s> <esc>:w<CR> 
 "save and quit"
-nnoremap <c-s-q> :wq<CR> 
-inoremap <c-s-q> <esc>:wq<CR> 
+nnoremap <c-q>q :wq<CR> 
+inoremap <c-q>q <esc>:wq<CR> 
 "quit"
 nnoremap <c-q> :q<CR> 
 inoremap <c-q> <esc>:wq<CR> 
-inoremap <c-z> <esc><u><i>  
+inoremap <c-z> <esc>:undo<CR>
+inoremap ii <esc>i
+inoremap jj <esc>
 ' >| ~/.vimrc   # > to not overwrite or >> to append
 fi
 # basic vim commands: https://gist.github.com/auwsom/78c837fde60fe36159ee89e4e29ed6f1
