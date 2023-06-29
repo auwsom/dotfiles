@@ -454,7 +454,8 @@ inoremap ii <esc>i
 inoremap jj <esc>
 ' >| ~/.vimrc   # > to not overwrite or >> to append
 fi
-# basic vim commands: https://gist.github.com/auwsom/78c837fde60fe36159ee89e4e29ed6f1
+
+## basic vim commands: https://gist.github.com/auwsom/78c837fde60fe36159ee89e4e29ed6f1
 # https://rwxrob.github.io/vi-help/ https://www.keycdn.com/blog/vim-commands
 # paste normally use capital P. deindent ctrl-D. ctrl-o goes to prev edit. crtl-i to next.
 # `:e <filename>` to open file or `:e .` to browse directory 
@@ -513,7 +514,7 @@ alias gacpa='pushd ~/git/dotfiles && git add . && git commit -m commit && git pu
 #alias gph='git push -u origin main '
 # git clone is for first copy # git status, git log, git branch
 # git clone https://github.com/auwsom/dotfiles.git # add ssh priv and pub key, and will pull but not push
-# git clone git@github.com:auwsom/dotfiles.git # will ask to connect. need to `eval $(ssh-agent -s) && ssh-add ~/.ssh/id_rsa` (will display email of GH account) 
+# git clone git@github.com:auwsom/dotfiles.git # will ask to connect. need to `eval $(ssh-agent -s) && ssh-add ~/.ssh/id_rsa` checks if agent running and adds (will display email of GH account) 
 ## add from local creatJust found this tool called Briefcase to deploy python apps to 6 platforms (mac,win,linux,ios,android,web) looks great. Produces standalone binariese:
 # `apt install gh` then click enter until auth through webpage
 alias gi='git init && git remote add origin git@github.com:auwsom/<newrepo>.git && git branch -M main'
