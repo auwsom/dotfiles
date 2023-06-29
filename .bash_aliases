@@ -7,8 +7,8 @@
 # see further down for more general Linux tips and learning sites. 
 
 ## basic Bash settings:
-export HISTSIZE=10000  # history size in terminal. limits numbering and masks if list is truncated. 
-export HISTFILESIZE=10000 #$HISTSIZE  # increase history file size # or just leave blank for unlimited
+export HISTSIZE=11000  # history size in terminal. limits numbering and masks if list is truncated. 
+export HISTFILESIZE=11000 #$HISTSIZE  # increase history file size # or just leave blank for unlimited
 if ! [[ -f ~/.bash_eternal_history ]]; then cp ~/.bash_history ~/.bash_eternal_history; fi
 if ! [[ -f ~/.bash_history_bak ]]; then mv ~/.bash_history ~/.bash_history_bak; fi
 if ! [[ -f ~/.bash_history ]]; then ln -s ~/.bash_eternal_history ~/.bash_history; fi
@@ -17,7 +17,7 @@ HISTFILE=~/.bash_eternal_history # "certain bash sessions truncate .bash_history
 HISTCONTROL=ignoreboth:erasedups   # no duplicate entries. ignoredups is only for consecutive. ignore both = ignoredups+ignorespace (will not record commands with space in front)
 #HISTTIMEFORMAT="%h %d %H:%M " # "%F %T "
 #export HISTIGNORE="!(+(*\ *))" # ignores commands without arguments. not compatible with HISTTIMEFORMAT. should be the same as `grep -v -E "^\S+\s.*" $HISTFILE`
-export HISTIGNORE="c:cdb:cdh:cdu:df:i:h:hh:hhh:l:ll:lll:lld:lsd:lsp:ltr:ls::mount:umount:rebash:path:env:pd:ps1:sd:sss:top:tree1:zr:zz:au:auu:aca:cu:cur:cx:dedup:dmesg:dli:aptli:d:flmh:flmho:flmr:fm:free:lsblk:na:netstat:ping1:wrapon:wrapoff:um:m:hdl" # ignore these single commands
+export HISTIGNORE="c:cdb:cdh:cdu:df:i:h:hh:hhh:l:ll:lll:lld:lsd:lsp:ltr:ls::mount:umount:rebash:path:env:pd:ps1:sd:sss:top:tree1:zr:zz:au:auu:aca:cu:cur:cx:dedup:dmesg:dli:aptli:d:flmh:flmho:flmr:fm:free:lsblk:na:netstat:ping1:wrapon:wrapoff:um:m:hdl":"ls *":"hg *" # ignore these commands
 export PROMPT_COMMAND='history -a; ' # ;set +m' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. set +m makes disables job control for aliases in vi.
 #export PROMPT_COMMAND='EC=$? && history -a && test $EC -eq 1 && echo error $HISTCMD && history -d $HISTCMD && history -w' # excludes errors from history
 # export PROMPT_COMMAND='history -a' # && test $EC -eq 1 && echo error $HISTCMD && history -d $HISTCMD && history -w' # excludes errors from history
@@ -29,7 +29,8 @@ alias ha='history -a ' # append current history before opening a new terminal.
 alias hs='history -a; history -c; history -r' # share history from other terminals to current one.
 alias vibash='vi ~/.bash_aliases' 
 alias rebash='source ~/.bashrc' # have to use `source` to load the settings file. ~ is home directory
-alias realias='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc' 
+alias realias='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc'
+alias realiasr='sudo install /home/user/.bash_aliases /root/.bash_aliases && sudo chmod 0664 /root/.bash_aliases'
 alias revim='rm ~/.vimrc && source ~/.bashrc'
 ## `shopt` list shell options. `set -o` lists settings. `set -<opt>` enables like flag options.
 set -o noclobber  # dont let accidental > overwrite. use >| to force redirection even with noclobber
@@ -220,7 +221,7 @@ alias rvmm='pkill virt-manager && sys restart libvirtd' # restart VMM. doenst st
 # `sha256sum` hash generation
 alias sys='systemctl' # `enable --now` will enable and start 
 alias sysl='systemctl list-unit-files' # | grep <arg>
-alias tc='truncate -s' # <size, eg 10G> creates dynamic file; format with mkfs.ext4; `ls -s` to show true size on disk. use fallocate --length 1GiB for swapon /swapfile. 
+alias tc='truncate -s' # <size, eg 10G> creates dynamic file; format with mkfs.ext4; `ls -s` to show true size on disk.  
 alias tc0='truncate -s 0' # reset file with zeros to wipe. also use wipe -qr.
 # `traceroute -U www.google.com` or tracepath (without root).
 # tty will show current terminal. then can redirect to it with > /dev/tty<number>
@@ -342,7 +343,9 @@ https://www.gnu.org/software/bash/manual/html_node/Special-Parameters.html
     $? is the most recent foreground pipeline exit status.
     $! is the PID of the most recent background command.
     $0 is the name of the shell or shell script.
-https://www.gnu.org/software/bash/manual/html_node/Bash-Variables.html
+https://www.gnu.org/software/bash/manual/html_node/Bash-Variables.html (just fyi)
+https://www.cherryservers.com/blog/a-complete-guide-to-linux-bash-history 
+!!,!N,!-N,!<cmd>,!^,!$,!:N,!:*,!-1:0,!^aa^bb,!:s/aa/bb,:p,:h,:t,:r
 
 https://tldp.org
 learnshell.org
@@ -354,33 +357,34 @@ END
 ## common dirs and files: 
 shopt -s cdable_vars # dirs exportable. shell-expand-line ctrl-alt-e not work on aliases after command.
 export alias1='~/.bash_aliases'
-export fstab='/etc/fstab' # mounts volumes
+export fstab1='/etc/fstab' # mounts volumes
 export passwd1='/etc/passwd' # controls user perms
 export group1='/etc/group' # groups
-export sudoers='/etc/sudoers' # sudo settings
+export sudoers1='/etc/sudoers' # sudo settings
 export grub1='/etc/default/grub' # grub file
-export grubd='/etc/default/grub.d/' # other grub files
-export sources='/etc/apt/sources.list' # sources file for apt
-export sourcesd='/etc/apt/sources.list.d/' # other sources files
+export grubd1='/etc/default/grub.d/' # other grub files
+export sources1='/etc/apt/sources.list' # sources file for apt
+export sourcesd1='/etc/apt/sources.list.d/' # other sources files
 export crontab1='/etc/crontab' # runs /etc/cron.daily and /etc/cron.hourly. `crontab -e` is official /var/spool/cron/crontabs/root 
-export crondd='/etc/cron.d/' # other cron files 
-export crond='/etc/cron.daily' # file run daily
-export cronh='/etc/cron.hourly' #
-export cronw='/etc/cron.weekly' #
-export cronm='/etc/cron.monthly' #
-export resolv='/etc/resolv.conf' # DNS info
-export hosts='/etc/hosts' # maps domain names to IPs
+export crondd1='/etc/cron.d/' # other cron files 
+export crond1='/etc/cron.daily' # file run daily
+export cronh1='/etc/cron.hourly' #
+export cronw1='/etc/cron.weekly' #
+export cronm1='/etc/cron.monthly' #
+export resolv1='/etc/resolv.conf' # DNS info
+export hosts1='/etc/hosts' # maps domain names to IPs
 export hostname1='/etc/hostname' # sets hostname. also a command
-export log='/var/log/' # logs: syslog auth.log boot.log lastlog
+export log1='/var/log/' # logs: syslog auth.log boot.log lastlog
 #export netman='/etc/network/interfaces' # `man interfaces`. use netplan instead.
 export netplan1='/etc/netplan/01-netcfg.yaml' # add `optional: true` under ethernets: interface: to prevent boot waiting on network
-export known='~/.ssh/known_hosts' # rm this to remove unused store ssh connections
-export mailr='/var/mail/root ' # mail file
-export osr='/etc/os-release' # os names
-export sysd='/etc/systemd/system/multi-user.target.wants' # services startup
-export home='/home/user' # also $HOME
-export bin='/usr/local/bin' # user scripts dir
-export h="--help" # can use like `bash $h` (man bash)
+export known1='~/.ssh/known_hosts' # rm this to remove unused store ssh connections
+export mailr1='/var/mail/root ' # mail file
+export osr1='/etc/os-release' # os names
+export sysd1='/etc/systemd/system/multi-user.target.wants' # services startup
+export home1='/home/user' # also $HOME
+export bin1='/usr/local/bin' # user scripts dir
+export h="--help" # can use like `bash $h` = `bash --help` (or man bash)
+alias eg="env | grep 1=" # grep above env vars
 # /etc/skel has default user home files
 # /var/cache/apt/archives/ (use apt clean?) visudo
 # /proc/cmdline, /dev/disk/by-id (etc), /proc, /dev, /media/user, /home/user
@@ -408,7 +412,7 @@ set wrapscan
 set hlsearch
 autocmd InsertEnter,InsertLeave * set cul!
 "remember editing position after close"
-if has("autocmd")\n
+if has("autocmd")
 au BufReadPost * if line("'\''\"") > 0 && line("'\''\"") <= line("$") | exe "normal! g`\"" | endif\n
 endif
 set autowrite "save before run, also when changing buffer"
@@ -430,7 +434,7 @@ nnoremap <F3> :set hlsearch!<CR>
 cnoremap w!! execute "silent! write !sudo tee % > /dev/null" <bar> edit!
 "vnoremap=visual mode. comment lines selected with v or V (full lines). or use :norm i#
 "comment" 
-nnoremap <F4> :s/^/# <CR> 
+nnoremap <F4> :s/^/# <CR>:set hlsearch!<CR> 
 vnoremap <F4> :s/^/# <CR>
 "uncomment"
 nnoremap <F6> :s/^# //<CR> 
@@ -461,37 +465,38 @@ fi
 # q: opens Command Line Window. :q closes it.
 # type `!!` and `cmt` to run this alias/function/script on the line (:.!cmt), or !} on a paragraph (:.,$!cmt) or with line numbers (:3,5!cmt), or use Visual mode crtl-V (:'<,'>!cmt)
 # `@:` repeats last command, like `:s/aa/bb/`. also up arrow history. `.` repeats last action.
-# ctrl-w spit viewport. ctrl-w,ctrl-w toggle viewport. crtl-w,c to close.
+# ctrl-w,n new viewport. ctrl-w,ctrl-w or arrow toggle. crtl-w,c to close. :Explore file mgr.
+# https://vim.fandom.com/wiki/Mapping_keys_in_Vim_-_Tutorial_(Part_2)#Finding_unused_keys
+# https://webdevetc.com/blog/tabs-in-vim/ use Tmux or Konsole
 
-: <<'END3'
 ## tmux   wget https://raw.githubusercontent.com/rwxrob/dot/main/tmux/.tmux.conf
 # tmux a # to attach (start) old session. C-a,d to detach. C-a,x to close. C-a,: for command mode.
-# C-a,[ for copy mode, q to quit, space to start selection, enter to copy, C-a,] to paste
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+# C-a,[ for copy mode, q to quit, space to start selection, enter to copy, C-a,] to paste 
+# git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 # C-b + I (shift+i) to install plugins with tpm
-echo -e "
-set -g prefix C-a # change default prefix to match Screen's
+if ! [[ -f ~/.tmux.conf ]]; then
+echo -e '
+set -g prefix C-a # change default prefix to match Screens
 set mouse on # allows scrolling # !! hold shift to select text 
 set -g status-style "fg=#665c54"
 set -g status-bg default
 set-option -g status-interval 5
 set-option -g automatic-rename on
-set-option -g automatic-rename-format '#{b:pane_current_path}'
+set-option -g automatic-rename-format "#{b:pane_current_path}"
 bind-key C-a last-window
 bind c new-window -c "#{pane_current_path}"
 bind -r r source-file ~/.tmux.conf
-
-set -g @plugin 'tmux-plugins/tpm'
-set -g @plugin 'tmux-plugins/tmux-continuum'
-set -g @plugin 'tmux-plugins/tmux-resurrect' # C-s, C-r  to save and restore
-set -g @plugin 'tmux-plugins/tmux-sensible'
-set -g @continuum-restore 'on' # every 15 min
-run '~/.tmux/plugins/tpm/tpm'
-" >> ~/.tmux.conf
+set -g @plugin "tmux-plugins/tpm"
+set -g @plugin "tmux-plugins/tmux-continuum"
+set -g @plugin "tmux-plugins/tmux-resurrect" # C-s, C-r  to save and restore
+set -g @plugin "tmux-plugins/tmux-sensible"
+set -g @continuum-restore "on" # every 15 min
+run "~/.tmux/plugins/tpm/tpm"
+' >> ~/.tmux.conf
+fi
 alias remux='tmux source ~/.tmux.conf' # reload tmux
 # https://tmuxcheatsheet.com/
 # Scrolling: Ctrl-b then [ then you can use your normal navigation keys to scroll around (eg. Up Arrow or PgDn). Press q to quit scroll mode.
-END3
 
 ## basic git settings
 alias gs='git status'
@@ -527,7 +532,7 @@ alias gpf='git push --force' # use only after diffing remote to local. also if w
 #[Git MERGE vs REBASE - YouTube](https://www.youtube.com/watch?v=CRlGDDprdOQ) use merge squash
 # undo last commit added to remote `git reset --soft HEAD~` then `git pull -f` 
 #https://alvar3z.com/blog/git-going-gud/
-# delete a file from all commits: git filter-branch --index-filter     'git rm -rf --cached --ignore-unmatch <file>' HEAD
+# delete a file from all commits: git filter-branch --index-filter 'git rm -rf --cached --ignore-unmatch <file>' HEAD
 
 ## misc linux/ubuntu help
 # -- marks the end of the option list. This avoids issues with filenames starting with hyphens.
@@ -538,7 +543,7 @@ alias gpf='git push --force' # use only after diffing remote to local. also if w
 # `apt purge <package>` doesnt erase anything in home dir
 # list installed packages by date: `grep " install " /var/log/dpkg.log` or `apt-mark showmanual` (`apt-mark minimize-manual` is supposed to unmark all dependencies) (zgrep will search /var/log/dpkg.log.2.gz files)
 # `apt install mlocate ncdu htop`
-# ext4magic and testdisk (extundelete defunct segfault) can only recover files because of ext#. keeping data on ntfs has structure info in journal.
+# ext4magic and testdisk (extundelete defunct https://www.unix.com/fedora/279812-segmentation-fault-while-trying-recover-file-extundelete.html) ntfs keeps directory info in journal, ext4 doesnt.
 # `ntfsundelete /dev/hda1 -t 2d` Look for deleted files altered in the last two days
 
 # bash wildcards (glob/global): `*(pattern|optional-or) ? * + @ ! https://www.linuxjournal.com/content/bash-extended-globbing
@@ -606,7 +611,7 @@ alias dbe='distrobox enter'
 
 convert_help() { if [[ $- == *i* ]]; then
   if [[ $BASH_COMMAND == *" help"* ]]; then eval "${BASH_COMMAND/help/} --help"; false; fi; fi; }
-if [[ $- == *i* ]]; then shopt -s extdebug; trap convert_help DEBUG; fi
+#if [[ $- == *i* ]]; then shopt -s extdebug; trap convert_help DEBUG; fi
 
 # needs lastpipe enabled and job control disabled
 # co() { if [[ $- == *i* ]]; then eval "$BASH_COMMAND | read -r o"; false; fi }
@@ -626,9 +631,28 @@ if [[ $- == *i* ]]; then shopt -s extdebug; trap convert_help DEBUG; fi
 # if [[ $- == *i* ]]; then shopt -s extdebug; trap co DEBUG; fi # capture output
 ce() { eval "$BASH_COMMAND;  e='$BASH_COMMAND'"; false; }
 if [[ $- == *i* ]]; then trap ce ERR; fi # capture error command
+alias e='$e' # type e and then expand with ctrl-alt-e
 
 # https://github.com/akinomyoga/ble.sh
 #source /home/user/.local/share/blesh/ble.sh
 #ble-bind -m isearch -f 'RET' isearch/accept-line # allows single RET to accept ctrl-R search
 # ble-update. ~/.blerc. 
 
+# save output
+#save_output() { exec 1>&3; { [ -f /tmp/curr ] && \mv /tmp/curr /tmp/last; }; exec > >(tee /tmp/curr); }
+#save_output() { exec 1>&3; if [[ -f /tmp/curr ]]; then \mv /tmp/curr /tmp/last; fi  }
+#save_output() { exec 1>&3; if [[ -f /tmp/curr ]]; then tail -1 /tmp/curr >| /tmp/last; \rm /tmp/curr; fi  }
+#save_output() { exec 1>&3; exec > >(tee /tmp/curr); }
+#save_output() { { [ -f /tmp/curr ] && \mv /tmp/curr /tmp/last; } }
+#save_output() { { [ -f /tmp/curr ] && truncate -s 0 /tmp/curr; } }
+#exec > >(tee /tmp/curr)
+#exec 3>&1
+alias o='$(cat /tmp/curr)'
+alias eo='echo $(cat /tmp/curr)'
+#if [[ $- == *i* ]]; then trap save_output DEBUG; fi  
+#trap save_output DEBUG
+
+
+
+: <<'END'
+END
