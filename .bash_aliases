@@ -1,3 +1,4 @@
+## WARNING: Never run a script from the internet without reading and understanding it. see last line.
 ## These lines for importing these command aliases and functions into .bash_aliases (or .bashrc)
 # `wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc`
 # `wget https://bit.ly/3EjgWdx -O ~/.bash_aliases && source ~/.bashrc` # shortened urls
@@ -654,5 +655,5 @@ alias eo='echo $(cat /tmp/curr)'
 
 
 
-: <<'END'
-END
+: <<'ENDZ' # move this line to anywhere above and whatever is below it will be skipped.
+ENDZ
