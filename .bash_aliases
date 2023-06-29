@@ -31,7 +31,7 @@ alias hs='history -a; history -c; history -r' # share history from other termina
 alias vibash='vi ~/.bash_aliases' 
 alias rebash='source ~/.bashrc' # have to use `source` to load the settings file. ~ is home directory
 alias realias='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc'
-alias realiasr='sudo install /home/user/.bash_aliases /root/.bash_aliases && sudo chmod 0664 /root/.bash_aliases'
+alias realiasr='ba=".bash_aliases"; sudo install /home/user/$ba /root/$ba && sudo chmod 0664 /root/$ba'
 alias revim='rm ~/.vimrc && source ~/.bashrc'
 ## `shopt` list shell options. `set -o` lists settings. `set -<opt>` enables like flag options.
 set -o noclobber  # dont let accidental > overwrite. use >| to force redirection even with noclobber
