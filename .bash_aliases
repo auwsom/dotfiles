@@ -11,8 +11,8 @@
 export HISTSIZE=11000  # history size in terminal. limits numbering and masks if list is truncated. 
 export HISTFILESIZE=11000 #$HISTSIZE  # increase history file size # or just leave blank for unlimited
 if ! [[ -f ~/.bash_eternal_history ]]; then cp ~/.bash_history ~/.bash_eternal_history; fi
-if ! [[ -f ~/.bash_history_bak ]]; then mv ~/.bash_history ~/.bash_history_bak; fi
-if ! [[ -f ~/.bash_history ]]; then ln -s ~/.bash_eternal_history ~/.bash_history; fi
+if ! [[ -f ~/.bash_history_bak ]]; then \mv ~/.bash_history ~/.bash_history_bak; fi
+if ! [[ -f ~/.bash_history ]]; then ln -s ~/.bash_eternal_history ~/.bash_history; fi # for hstr, etc.
 HISTFILE=~/.bash_eternal_history # "certain bash sessions truncate .bash_history" (like Screen) SU
 #sed -i 's,HISTFILESIZE=,HISTFILESIZE= #,' ~/.bashrc && sed -i 's,HISTSIZE=,HISTSIZE= #,' ~/.bashrc # run once for unlimited. have to clear the default setting in .bashrc
 HISTCONTROL=ignoreboth:erasedups   # no duplicate entries. ignoredups is only for consecutive. ignore both = ignoredups+ignorespace (will not record commands with space in front)
@@ -107,7 +107,7 @@ alias ltr='ls -lcr ' # "list" long, time, reverse. sorted bottom is latest chang
 alias lld='ls -dlFh ' # list only directories.
 alias lsd='ls -d ' # list only directories.
 alias lsp='ls -d $PWD/* ' # returns full paths. have to be in the directory. 
-alias ln='type ln; ln -st' # <source> <target> ie <target> <linkname>. -t reversed to reuse mv or cp lines. hardlinks accumulate and dont work across disks. rm symlink wont remove underlying file. 
+alias lnst='ln -st' # <source> <target> ie <target> <linkname>. -t reversed to reuse mv or cp lines. hardlinks accumulate and dont work across disks. rm symlink wont remove underlying file. 
 alias mo='more ' # break output into pages. or `less`.
 #alias mf='touch' # make file. also `echo foo | tee $newfile`. `(umask 644; touch file)` to set perms
 #alias md='mkdir -p' # makes all --parents directories necessary
