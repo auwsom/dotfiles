@@ -183,6 +183,8 @@ alias dpkgl='dpkg --listfiles' # -L package file install locations. reverse sear
 alias dpkgli='dpkg --list | grep "^ii"' # list kernels
 alias dpkglk='dpkg --list | grep -i -E "linux-image|linux-kernel" | grep "^ii"' # list kernels
 alias dpkgll='grep -i install /var/log/dpkg.log' # list last installed
+alias dpkglis="dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n" # list installed by size
+alias dpkgrp='dpkg --list |grep "^rc" | cut -d " " -f 3 | xargs sudo dpkg --purge' # purge removed ^ 
 alias dpkgrc='dpkg-reconfigure -a' # use when apt install breaks. use `apt -f install` install dependencies when using `apt install debfile.deb`
 alias d='dirs' # shows dir stack for pushd/popd
 # dbus-monitor, qdbus
