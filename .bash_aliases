@@ -184,7 +184,7 @@ alias dpkgli='dpkg --list | grep "^ii"' # list kernels
 alias dpkglk='dpkg --list | grep -i -E "linux-image|linux-kernel" | grep "^ii"' # list kernels
 alias dpkgll='grep -i install /var/log/dpkg.log' # list last installed
 alias dpkglis="dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n" # list installed by size
-alias dpkgrp='dpkg --list |grep "^rc" | cut -d " " -f 3 | xargs sudo dpkg --purge' # purge removed ^ 
+alias dpkgpr='dpkg --list |grep "^rc" | cut -d " " -f 3 | xargs sudo dpkg --purge' # purge removed ^ 
 alias dpkgrc='dpkg-reconfigure -a' # use when apt install breaks. use `apt -f install` install dependencies when using `apt install debfile.deb`
 alias d='dirs' # shows dir stack for pushd/popd
 # dbus-monitor, qdbus
@@ -633,7 +633,8 @@ convert_help() { if [[ $- == *i* ]]; then
 # co() { eval "$BASH_COMMAND >| /tmp/out; v=$(cat /tmp/out)"; false; } # piping doesnt work.
 # co() { eval "$BASH_COMMAND >> /tmp/out";  } # piping doesnt work.
 # if [[ $- == *i* ]]; then shopt -s extdebug; trap co DEBUG; fi # capture output
-ce() { eval "$BASH_COMMAND;  e='$BASH_COMMAND'"; false; }
+#ce() { eval "$BASH_COMMAND;  e='$BASH_COMMAND'"; false; }
+ce() { eval "e=$BASH_COMMAND"; false; }
 if [[ $- == *i* ]]; then trap ce ERR; fi # capture error command
 alias e='$e' # type e and then expand with ctrl-alt-e
 
