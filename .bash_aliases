@@ -87,6 +87,8 @@ alias du1='du -cd1 . | sort -n' # du --total --max-depth 1, pipe to sort numeric
 alias fh='find . -iname' # i means case insensitive. have to use wildcards/globs * to find from partial text. have to be in double quotes (no expansion). -exec needs escaped semicolon \;
 alias fr='find / -iname' # use `tldr find` for basics. -L will follow symlinks
 alias fe='find . -iname "f" -exec echo {} \; -exec grep word {} \;' # execute command(s) on found file
+alias fd='find . -path excluded -prune -o -exec echo {} \;' # find echo with excluded
+alias fd2='find . -not -path excluded -o -exec echo {} \;' # find echo with excluded alt
 alias g='grep -i ' # search for text and more. "Global Regular Expressions Print" -i is case-insensitive. use -v to exclude. add mulitple with `-e <pattern>`. use `-C 3` to show 3 lines of context.
 alias i='ip -color a' # network info
 alias h='history 30'
@@ -107,7 +109,7 @@ alias ltr='ls -lcr ' # "list" long, time, reverse. sorted bottom is latest chang
 alias lld='ls -dlFh ' # list only directories.
 alias lsd='ls -d ' # list only directories.
 alias lsp='ls -d $PWD/* ' # returns full paths. have to be in the directory. 
-alias lnst='ln -st' # <source> <target> ie <target> <linkname>. -t reversed to reuse mv or cp lines. hardlinks accumulate and dont work across disks. rm symlink wont remove underlying file. 
+alias lns='ln -s' # <source> <target> = <from> <to> = <"target"> <linkname>.hardlinks accumulate and dont work across disks. rm symlink wont remove underlying file. see function lnsr for reversed args.
 alias mo='more ' # break output into pages. or `less`.
 #alias mf='touch' # make file. also `echo foo | tee $newfile`. `(umask 644; touch file)` to set perms
 #alias md='mkdir -p' # makes all --parents directories necessary
@@ -261,7 +263,8 @@ function hdl { history -d $HISTCMD; history -w; } # delete history last number
 function hdln { history -d $(($HISTCMD - "$1" -1))-$(($HISTCMD - 2)); history -w; } # delete last n lines. (add 1 for this command) (history -d -$1--1; has error)
 function help { "$1" --help; } # use `\help` to disable the function alias
 function ? { "$1" --help || help "$1" || man "$1" || info "$1"; } # use any help doc. # also use tldr. 
-function lns { dir="$1"; lastdir="${dir##*/}"; sudo ln -s $2/$lastdir "$1"; } # quick symlink using arg order from cp or mv
+function lnst { dir="$1"; lastdir="${dir##*/}"; sudo ln -s $2/$lastdir "$1"; } # ln -st?
+function lnsr { ln -s "$2" "$1"; } # symlink reversed using arg order from cp or mv
 function ren { mv "$1" "$1""$2"; } # rename file just add ending, eg file to file1.
 function sudov { while true; do sudo -v; sleep 360; done; } # will grant sudo 'for 60 minutes
 function addpath { export PATH="$1:$PATH"; } # add to path
