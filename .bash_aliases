@@ -108,7 +108,7 @@ alias lll='ls -alF ' # "list" all long format. full byte count.
 alias ltr='ls -lcr ' # "list" long, time, reverse. sorted bottom is latest changed. c is changed time. 
 alias lld='ls -dlFh ' # list only directories.
 alias lsd='ls -d ' # list only directories.
-alias lsp='ls -d $PWD/* ' # returns full paths. have to be in the directory. 
+alias lsp='ls -a | xargs -I % realpath % ' # returns full paths. have to be in the directory. 
 alias lns='ln -s' # <source> <target> = <from> <to> = <"target"> <linkname>.hardlinks accumulate and dont work across disks. rm symlink wont remove underlying file. see function lnsr for reversed args.
 alias mo='more ' # break output into pages. or `less`.
 #alias mf='touch' # make file. also `echo foo | tee $newfile`. `(umask 644; touch file)` to set perms
