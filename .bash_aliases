@@ -18,7 +18,7 @@ HISTFILE=~/.bash_eternal_history # "certain bash sessions truncate .bash_history
 HISTCONTROL=ignoreboth:erasedups   # no duplicate entries. ignoredups is only for consecutive. ignore both = ignoredups+ignorespace (will not record commands with space in front)
 #HISTTIMEFORMAT="%h %d %H:%M " # "%F %T "
 #export HISTIGNORE="!(+(*\ *))" # ignores commands without arguments. not compatible with HISTTIMEFORMAT. should be the same as `grep -v -E "^\S+\s.*" $HISTFILE`
-export HISTIGNORE="c:cdb:cdh:cdu:df:i:h:hh:hhh:l:ll:lll:lld:lsd:lsp:ltr:ls::mount:umount:rebash:path:env:pd:ps1:sd:sss:top:tree1:zr:zz:au:auu:aca:cu:cur:cx:dedup:dmesg:dli:aptli:d:flmh:flmho:flmr:fm:free:lsblk:na:netstat:ping1:wrapon:wrapoff:um:m:hdl":"ls *":"hg *" # ignore these commands
+export HISTIGNORE="c:cdb:cdh:cdu:df:i:h:hh:hhh:l:ll:lll:lld:lsd:lsp:ltr:ls::mount:umount:rebash:path:env:pd:ps1:sd:sss:top:tree1:zr:zz:au:auu:aca:cu:cur:cx:dedup:dmesg:dli:aptli:d:flmh:flmho:flmr:fm:free:lsblk:na:netstat:ping1:wrapon:wrapoff:um:m:hdl":"ls *":"hg *" # ignore these commands from history
 export PROMPT_COMMAND='history -a; ' # ;set +m' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. set +m makes disables job control for aliases in vi.
 #export PROMPT_COMMAND='EC=$? && history -a && test $EC -eq 1 && echo error $HISTCMD && history -d $HISTCMD && history -w' # excludes errors from history
 # export PROMPT_COMMAND='history -a' # && test $EC -eq 1 && echo error $HISTCMD && history -d $HISTCMD && history -w' # excludes errors from history
@@ -29,7 +29,8 @@ dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
 alias ha='history -a ' # append current history before opening a new terminal.
 alias hs='history -a; history -c; history -r' # share history from other terminals to current one.
 alias vibash='vi ~/.bash_aliases' 
-alias rebash='source ~/.bashrc' # have to use `source` to load the settings file. ~ is home directory
+alias rebashrc='source ~/.bashrc' # `source` reloads settings. ~ home dir. 
+alias rebash='exec bash -l' # reloads shell. -l is login shell for completion.
 alias realias='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc'
 alias realiasr='ba=".bash_aliases"; sudo install /home/user/$ba /root/$ba && sudo chmod 0664 /root/$ba'
 alias revim='rm ~/.vimrc && source ~/.bashrc'
@@ -195,14 +196,16 @@ alias d='dirs' # shows dir stack for pushd/popd
 alias fsck1='fsck -p # </dev/sdX#>' # -p auto fix. or use -y for yes to all except multiple choice.
 alias flmh='find . -type f -mmin -1'
 alias flmho='find ~ -type d \( -name .cache -o -name .mozilla \) -prune -o -type f -mmin -1'
-alias flmr='find / -type d \( -name proc -o -name sys -o -name dev -o -name run -o -name var -o -name media -o -name -home \) -prune -o -type f -mmin 0'
+alias flmr='find / -type d \( -name proc -o -name sys -o -name dev -o -name run -o -name var -o -name media -o -name -home \) -prune -o -type f -mmin 1'
 alias fm='findmnt' # shows mountpoints as tree. shows bind mounts.
 alias free='type free; free -h' # check memory, human readable
 # head and tail: `head -1 <file>` shows the first line. defaults to 10 lines without number.
 alias gm='guestmount -i $file -a /mnt' # set file=<vm/partition-backup> first 
 # `inotifywait -m ~/.config/ -e create -e modify` (inotify-tools), watch runs every x sec, entr runs command after file changes. use examples from bottom of `man entr` `ls *.js | entr -r node app.js`
 alias jo='journalctl' # -p,  -err, --list-boots, -b boot, -b -1 last boot, -r reverse, -k (kernel/dmesg), -f follow, --grep -g, --catalog -x (use error notes), -e goto end
-alias jof='journalctl -f' # follow.
+alias jof='journalctl -f' # follow
+alias jor='journalctl -r' # reverse (newest first)
+alias jorge='journalctl -r --lines=1000 | grep -v excluded' # grep exclude word or unit
 alias ku='pkill -KILL -u user' # kill another users processes. use `skill` default is TERM.
 alias launch='gio launch' # launch *.desktop files from the CLI
 alias lsblk='type lsblk; lsblk -f' # -f lists UUIDs and percent full
@@ -225,7 +228,9 @@ alias rplasma='pkill plasmashell && plasmashell &' # restart plasmashell in KDE 
 alias rvmm='pkill virt-manager && sys restart libvirtd' # restart VMM. doenst stop runnning VMs
 # `sha256sum` hash generation
 alias sys='systemctl' # `enable --now` will enable and start 
-alias sysl='systemctl list-unit-files' # | grep <arg>
+alias sysf='systemctl --failed' # list failed services. `systemctl reset-failed` 
+alias sysl='systemctl list-unit-files' # lists services
+alias syslg='systemctl list-unit-files | grep' # list grep services
 alias tc='truncate -s' # <size, eg 10G> creates dynamic file; format with mkfs.ext4; `ls -s` to show true size on disk.  
 alias tc0='truncate -s 0' # reset file with zeros to wipe. also use wipe -qr.
 # `traceroute -U www.google.com` or tracepath (without root).
