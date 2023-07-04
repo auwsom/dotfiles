@@ -7,6 +7,9 @@
 
 # see further down for more general Linux tips and learning sites. 
 
+if ! [[ $- == *i* ]]; then true "<<'ENDI'"; fi
+
+
 ## basic Bash settings:
 export HISTSIZE=11000  # history size in terminal. limits numbering and masks if list is truncated. 
 export HISTFILESIZE=11000 #$HISTSIZE  # increase history file size # or just leave blank for unlimited
@@ -307,7 +310,7 @@ if [[ $- == *i* ]]; then bind '",": "$"'; fi # quick $
 #if [[ $- == *i* ]]; then bind '\C-Q: shell-kill-word'; fi # crtl+q is erase forward one word. (ctrl+a, ctrl+q to change first command on line)
 #bind 'set show-all-if-ambiguous on' # this makes only one Tab necessary to show completion possibilities
 
-: <<'END' 
+true <<'END' 
 CLI emacs mode common keys:
 press `ctrl+alt+e` to expand symbols to show them, such as `!!`
 clear line: `ctrl+e`,`ctrl+u` goto end then clear to left, (or ctrl+a, ctrl+k)
@@ -671,5 +674,6 @@ alias eo='echo $(cat /tmp/curr)'
 
 
 
-: <<'ENDZ' # move this line to anywhere above and whatever is below it will be skipped.
+if ! [[ $- == *i* ]]; then true "ENDI"; fi
+true <<'ENDZ' # move this line to anywhere above and whatever is below it will be skipped.
 ENDZ
