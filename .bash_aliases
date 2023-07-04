@@ -29,8 +29,8 @@ dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
 alias ha='history -a ' # append current history before opening a new terminal.
 alias hs='history -a; history -c; history -r' # share history from other terminals to current one.
 alias vibash='vi ~/.bash_aliases' 
-alias rebashrc='source ~/.bashrc' # `source` reloads settings. ~ home dir. 
-alias rebash='exec bash -l' # reloads shell. -l is login shell for completion.
+#alias rebashrc='source ~/.bashrc' # `source` reloads settings. ~ home dir. just type `bash`.
+#alias rebash='exec bash -l' # reloads shell. -l is login shell for completion. just type `bash`.
 alias realias='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc'
 alias realiasr='ba=".bash_aliases"; sudo install /home/user/$ba /root/$ba && sudo chmod 0664 /root/$ba'
 alias revim='rm ~/.vimrc && source ~/.bashrc'
@@ -88,8 +88,10 @@ alias du1='du -cd1 . | sort -n' # du --total --max-depth 1, pipe to sort numeric
 alias fh='find . -iname' # i means case insensitive. have to use wildcards/globs * to find from partial text. have to be in double quotes (no expansion). -exec needs escaped semicolon \;
 alias fr='find / -iname' # use `tldr find` for basics. -L will follow symlinks
 alias fe='find . -iname "f" -exec echo {} \; -exec grep word {} \;' # execute command(s) on found file
-alias fd='find . -path excluded -prune -o -exec echo {} \;' # find echo with excluded
-alias fd2='find . -not -path excluded -o -exec echo {} \;' # find echo with excluded alt
+alias fp='find . -path excluded -prune -o -exec echo {} \;' # find with excluded. {} = string. ; added to each line, so must be escaped from primary command.
+alias fn='find . -not -path excluded -o -exec echo {} \;' # find with excluded by not 
+alias fl='find . -cmin -10' # created last 10 min (or use ctime for days). or mmin/mtime, amin/atime. 
+alias fd='find . -cmin -10 -exec "\rm -r {} ;"' # find recent and delete. see above for alts.
 alias g='grep -i ' # search for text and more. "Global Regular Expressions Print" -i is case-insensitive. use -v to exclude. add mulitple with `-e <pattern>`. use `-C 3` to show 3 lines of context.
 alias i='ip -color a' # network info
 alias h='history 30'
@@ -203,9 +205,11 @@ alias free='type free; free -h' # check memory, human readable
 alias gm='guestmount -i $file -a /mnt' # set file=<vm/partition-backup> first 
 # `inotifywait -m ~/.config/ -e create -e modify` (inotify-tools), watch runs every x sec, entr runs command after file changes. use examples from bottom of `man entr` `ls *.js | entr -r node app.js`
 alias jo='journalctl' # -p,  -err, --list-boots, -b boot, -b -1 last boot, -r reverse, -k (kernel/dmesg), -f follow, --grep -g, --catalog -x (use error notes), -e goto end
-alias jof='journalctl -f' # follow
-alias jor='journalctl -r' # reverse (newest first)
+alias jof='journalctl -f' # --follow
+alias jor='journalctl -r' # --reverse (newest first)
+alias jobp='journalctl -b -p3' # --priority level 3 (red color) "emerg" (0), "alert" (1), "crit" (2), "err" (3), "warning" (4), "notice" (5), "info" (6), "debug" (7)
 alias jorge='journalctl -r --lines=1000 | grep -v excluded' # grep exclude word or unit
+alias jolug='journalctl --field _SYSTEMD_UNIT | grep' # list units grep. to use with `jo -u`.
 alias ku='pkill -KILL -u user' # kill another users processes. use `skill` default is TERM.
 alias launch='gio launch' # launch *.desktop files from the CLI
 alias lsblk='type lsblk; lsblk -f' # -f lists UUIDs and percent full
@@ -281,7 +285,7 @@ shopt -s expand_aliases # default? expands aliases in non-interactive (scripts a
 function aw { echo "$1" >> ~/.bash_aliases; } # alias write
 set +a # end of `set -a` above
 # `unset -f foo`; or `unset -f` to remove all functions
-export CDPATH=".:/home/user" # can cd to any dir in user home from anywhere just by `cd Documents`
+export CDPATH=".:/home/user:/media/user:/media/root" # can cd to any dir in user home from anywhere just by `cd Documents`
 #export CDPATH=".:/etc" # just type `cd grub.d`
 #export CDPATH=".:/" # could use at root to remove need for typing lead /, but could cause confusion
 export VISUAL='vi' # export EDITOR='vi' is for old line editors like ed
