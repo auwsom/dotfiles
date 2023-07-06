@@ -41,7 +41,7 @@ alias revim='rm ~/.vimrc && source ~/.bashrc'
 set -o noclobber  # dont let accidental > overwrite. use >| to force redirection even with noclobber
 shopt -s lastpipe; set -o monitor # (set +m). allows last pipe to affect shell; needs Job Control enabled. for the o output alias.
 shopt -s nocaseglob # ignores upper or lower case of globs (*)
-shopt -s dotglob # makes `mv/cp /dir/*` copy all contents both * and .*; or use `mv /path/{.,}* /path/`
+#shopt -s dotglob # makes `mv/cp /dir/*` copy all contents both * and .*; or use `mv /path/{.,}* /path/`. use globstar option and ** below (less noise in ls file*).
 shopt -s globstar # makes ** be recursive for directories
 #shopt -s histappend # append to history, don't overwrite it. for using multiple shells at once. is default set in .bashrc
 #shopt -s histverify   # confirm bash history (!number) commands before executing. optional for beginners using bang ! commands. can also use ctrl+alt+e to expand before enter.
