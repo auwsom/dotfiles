@@ -41,8 +41,8 @@ alias revim='rm ~/.vimrc && source ~/.bashrc'
 set -o noclobber  # dont let accidental > overwrite. use >| to force redirection even with noclobber
 shopt -s lastpipe; set -o monitor # (set +m). allows last pipe to affect shell; needs Job Control enabled. for the o output alias.
 shopt -s nocaseglob # ignores upper or lower case of globs (*)
-#shopt -s dotglob # makes `mv/cp /dir/*` copy all contents both * and .*; or use `mv /path/{.,}* /path/`. use globstar option and ** below (less noise in ls file*).
-shopt -s globstar # makes ** be recursive for directories
+shopt -s dotglob # makes `mv/cp /dir/*` copy all contents both * and .*; or use `mv /path/{.,}* /path/`
+shopt -s globstar # makes ** be recursive for directories. use lld below for non-recursive ls.
 #shopt -s histappend # append to history, don't overwrite it. for using multiple shells at once. is default set in .bashrc
 #shopt -s histverify   # confirm bash history (!number) commands before executing. optional for beginners using bang ! commands. can also use ctrl+alt+e to expand before enter.
 #if [ -f ~/.env ]; then source ~/.env ; fi # dont use this or env vars for storing secrets. create dir .env and store files in there, then call with $(cat ~/.env/mykey). see envdir below.
@@ -372,7 +372,8 @@ https://linux.101hacks.com/toc/ CDPATH info
 https://dokumen.tips/documents/macintosh-terminal-pocket-guide.html (has great Vim to Emacs compare)
 END
 
-## common dirs and files: 
+## common dirs and files:
+alias el='env | egrep '^[a-z].*=.*' | sort' # list env var exports below
 shopt -s cdable_vars # dirs exportable. shell-expand-line ctrl-alt-e not work on aliases after command.
 export alias1='~/.bash_aliases'
 export fstab1='/etc/fstab' # mounts volumes
