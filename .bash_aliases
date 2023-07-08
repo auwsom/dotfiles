@@ -478,7 +478,7 @@ fi
 # paste normally use capital P. deindent ctrl-D. ctrl-o goes to prev edit. crtl-i to next.
 # `:e <filename>` to open file or `:e .` to browse directory 
 # `:!bash %` to run script from within vim
-# find and replace: `:%s/baz/boz/g` or use any char instead of / like , `:%s,baz,boz,g`
+# find and replace: `:%s/baz/boz/gc` c confirms. or use any char instead of / like , `:%s,baz,boz,g`
 # vim tabs: (open multiple files or open more from inside vim) then `gt` and `gT` for forward/back, `2gt`, `:tabs` list
 # more ideas: https://github.com/amix/vimrc, https://github.com/rwxrob/dot/blob/main/vim/.vimrc
 # https://github.com/tpope/vim-sensible 
@@ -488,6 +488,7 @@ fi
 # ctrl-w,n new viewport. ctrl-w,ctrl-w or arrow toggle. crtl-w,c to close. :Explore file mgr.
 # https://vim.fandom.com/wiki/Mapping_keys_in_Vim_-_Tutorial_(Part_2)#Finding_unused_keys
 # https://webdevetc.com/blog/tabs-in-vim/ use Tmux or Konsole
+# remap Capslock to Esc (original postion). http://www.vimgenius.com/ 
 
 ## tmux   wget https://raw.githubusercontent.com/rwxrob/dot/main/tmux/.tmux.conf
 # tmux a # to attach (start) old session. C-a,d to detach. C-a,x to close. C-a,: for command mode.
@@ -543,6 +544,8 @@ alias gi3='git add . && git push --set-upstream origin main'
 alias gd='git diff origin/HEAD' # <commit> diff head to a commit
 alias gd2='git diff origin/main main' # diff remote (GH repo) to local
 alias gpf='git push --force' # use only after diffing remote to local. also if warning from remote being ahead, you can pull and merge.
+alias gg='git grep'
+alias gr='git restore' # restores last commit to local. if pushed, likely need merge
 
 # mv ~/.bash_aliases ~/.bash_aliases0 && ln -s ~/git/dotfiles/.bash_aliases ~/.bash_aliases
 # to push new repo from CLI you have to create it using curl and PERSONAL_ACCESS_TOKEN.
