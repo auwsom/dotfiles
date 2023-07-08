@@ -7,7 +7,7 @@
 
 # see further down for more general Linux tips and learning sites. 
 
-if ! [[ $- == *i* ]]; then true "<<'ENDI'"; fi
+if ! [[ $- == *i* ]]; then true "<<'ENDI'"; fi # this skips this file when running scripts
 
 
 ## basic Bash settings:
