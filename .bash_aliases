@@ -85,8 +85,8 @@ alias cpa='type cp; cp -ar ' # achive and recursive. but rsync is better because
 alias cp='cp -i' # copy interactive to avoid littering dir with files unintentionally. use `find <dir> -type f -mmin -1` to find files copied in last 1 min. then add `-exec rm {} \;` once sure to delete. or `find <dir> -maxdepth 1 -type f -exec cmp -s '{}' "$destdir/{}" \; -print` can compare dirs. -a vs -R.
 alias cpr='rsync -aAX --info=progress2 ' # copy with progress info, -a --archive mode: recursive, copies symlinks, keeps permissions, times, owner, group, device. -A acls -X extended attributes. -c checks/verify. cant use `type` (to show it is an alias) with sudo in front.
 alias df='type df; df -h -x"squashfs"' # "disk free" human readable, will exclude show all the snap mounts
-alias du='type du; du -hs' # human readable, summarize. 
-alias du1='du -cd1 . | sort -n' # du --total --max-depth 1, pipe to sort numerically
+alias du='du -hs' # human readable, summarize. 
+alias du1='\du -cd1 . | sort -n' # du --total --max-depth 1, pipe to sort numerically
 # 'echo' # print <args>. 'exit '. `printf` has formatting options.
 alias fh='find . -iname' # i means case insensitive. have to use wildcards/globs * to find from partial text. have to be in double quotes (no expansion). -exec needs escaped semicolon \;
 alias fr='find / -iname' # use `tldr find` for basics. -L will follow symlinks
@@ -248,8 +248,9 @@ alias uname2='uname -r' # show kernel version
 alias ui='update-initramfs' # update kernel
 alias urel='cat /etc/os-release' # show OS info
 #alias w='w' # Show who is logged on and what they are doing. Or `who`.
+alias wdf='watch \df' # refresh command output every 2s 
+alias wdu='watch du -cd1 .' # or `watch du -s <dir>` or `watch '\du -cd1 . | sort -n'`
 alias wget='type wget; wget --no-clobber --content-disposition --trust-server-names' # -N overwrites only if newer file and disables timestamping # or curl to download webfile (curl -JLO)
-alias wdu='watch du -d1 .' # `watch du -s <dir>`
 alias wrapon='echo -ne "\033[?7h"' # line wrap on
 alias wrapoff='echo -ne "\033[?7l"' # line wrap off
 alias zzr='shutdown -r now || true' # reboot in ssh, otherwise freezes
@@ -489,6 +490,7 @@ fi
 # https://vim.fandom.com/wiki/Mapping_keys_in_Vim_-_Tutorial_(Part_2)#Finding_unused_keys
 # https://webdevetc.com/blog/tabs-in-vim/ use Tmux or Konsole
 # remap Capslock to Esc (original postion). http://www.vimgenius.com/ 
+# :1 uses Ex in Command mode to goto line 1. % stands for current document.
 
 ## tmux   wget https://raw.githubusercontent.com/rwxrob/dot/main/tmux/.tmux.conf
 # tmux a # to attach (start) old session. C-a,d to detach. C-a,x to close. C-a,: for command mode.
