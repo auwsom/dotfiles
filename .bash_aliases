@@ -157,8 +157,8 @@ alias vi='vi ' # `vimtutor` (`esc` then `:q` to quit. `ctrl+w` if type q:). (or 
 #alias w='which' # locate a command
 alias x='xargs ' # take last output and pipe into new command. not all commands support it
 # use `xargs -I % some-command %` to use output as non-standard argument
-alias zr='reboot' # uncomment if you want this. also `systemctl reboot`. DE `reboot -t 120`   
-alias zz='systemctl poweroff' # also `systemctl halt` or `shutdown -H now`. halt leaves on
+alias zr='reboot' # also `systemctl reboot`. DE `reboot -t 120`   
+alias zzz='systemctl poweroff' # also `systemctl halt` or `shutdown -H now`. halt leaves on
 
 
 ### more advanced:
@@ -306,7 +306,7 @@ export VISUAL='vi' # export EDITOR='vi' is for old line editors like ed
 if [[ $- == *i* ]]; then bind '",,": "!$"'; fi # easy way to get last argument from last line. can expand. delete $ for ! bang commands.
 #if [[ $- == *i* ]]; then bind '"..": "$"'; fi # quick shortcut to $ key. 
 #if [[ $- == *i* ]]; then bind '".,": "$"'; fi # quick $
-if [[ $- == *i* ]]; then bind '",": "$"'; fi # quick $
+if [[ $- == *i* ]]; then bind '",.": "$"'; fi # quick $
 #if [[ $- == *i* ]]; then bind '"..": shell-expand-line'; fi # easy `ctrl+alt+e` expand
 #if [[ $- == *i* ]]; then bind '".,": "$(!!)"'; fi # easy way to add last output. can expand
 #if [[ $- == *i* ]]; then bind '"///": reverse-search-history'; fi # easy ctrl+r for history search.
