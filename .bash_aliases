@@ -199,6 +199,8 @@ alias d='dirs' # shows dir stack for pushd/popd
 # `env` # shows environment variables
 #'fc -s' #<query> # search and redo command from history. shebang is similar !<query> or !number. fc -s [old=new] [command]   https://docs.oracle.com/cd/E19253 (fix command)
 alias fsck1='fsck -p # </dev/sdX#>' # -p auto fix. or use -y for yes to all except multiple choice.
+function flm () { find $1 -type f -mmin -1; } # modification time
+function flmc () { find $1 -type f -cmin -1; } # creation time. access time? amin.
 alias flmh='find . -type f -mmin -1'
 alias flmho='find ~ -type d \( -name .cache -o -name .mozilla \) -prune -o -type f -mmin -1'
 alias flmr='find / -type d \( -name proc -o -name sys -o -name dev -o -name run -o -name var -o -name media -o -name -home \) -prune -o -type f -mmin 1'
@@ -619,12 +621,19 @@ alias wg='wg-quick'
 alias wgu='wg-quick up wg0'
 alias wgd='wg-quick down wg0'
 
-alias pm='podman'
-alias pmi='podman images'
-alias pmcl='podman container list --all'
 alias db='distrobox'
 alias dbl='distrobox list'
 alias dbe='distrobox enter'
+
+alias pm='podman'
+alias pmi='podman info'
+alias pmil='podman images'
+alias pmcl='podman container list --all'
+alias pmm='podman machine'
+alias pmml='podman machine list'
+alias pmmsa='podman machine start'
+alias pmmsp='podman machine stop'
+
 
 
 #set -x; complete -r # enable debugging. show aliases/functions expanded when running them.. for beginners for learning full command. unfortunately prints out all the tab completion so needs `complete -r` remove all function completions.
