@@ -425,13 +425,13 @@ if ! [[ -f ~/.vimrc ]]; then   # just delete to remake file opening new shell
 echo -e '
 set nocompatible
 set showmode
-set whichwrap+=<,> "arrow key wraparound"
+set whichwrap+=<,>,h,l,[,] "arrow key wraparound"
 "set number   "set nonumber" "set nu" "set nonu"
 set autowrite
 set autoindent
 set ruler "set ru"
 set wrapscan 
-set hlsearch
+set nohlsearch "remove no for highlighting"
 autocmd InsertEnter,InsertLeave * set cul!
 "remember editing position after close"
 if has("autocmd")
