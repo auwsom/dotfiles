@@ -1,27 +1,27 @@
-## WARNING: Never run a script from the internet without reading and understanding it. see last line.
+## WARNING: Never run a script from the internet without reading and understanding it. see last line
 ## These lines for importing these command aliases and functions into .bash_aliases (or .bashrc)
 # `wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc`
 # `wget https://bit.ly/3EjgWdx -O ~/.bash_aliases && source ~/.bashrc` # shortened urls
-# `cp -f ~/.bash_aliases /home/user/.bash_aliases && chown user:user /home/user/.bash_aliases` #root cp
+# `cp -f ~/.bash_aliases /home/user/.bash_aliases && chown user:user /home/user/.bash_aliases` #root
 # `apt install shellcheck` then run `shellcheck ~/.bash_aliases` to check this script for errors. 
 
-# see further down for more general Linux tips and learning sites. 
+# see further down for more general Linux tips and learning sites.(width is 100 chars vs 80 default)
 
 if ! [[ $- == *i* ]]; then true "<<'ENDI'"; fi # this skips this file when running scripts
 
 
 ## basic Bash settings:
 export HISTSIZE=11000  # history size in terminal. limits numbering and masks if list is truncated. 
-export HISTFILESIZE=11000 #$HISTSIZE  # increase history file size # or just leave blank for unlimited
+export HISTFILESIZE=11000 #$HISTSIZE  # increase history file size or just leave blank for unlimited
 if ! [[ -f ~/.bash_eternal_history ]]; then cp ~/.bash_history ~/.bash_eternal_history; fi
 if ! [[ -f ~/.bash_history_bak ]]; then \mv ~/.bash_history ~/.bash_history_bak; fi
-if ! [[ -f ~/.bash_history ]]; then ln -s ~/.bash_eternal_history ~/.bash_history; fi # for hstr, etc.
+if ! [[ -f ~/.bash_history ]]; then ln -s ~/.bash_eternal_history ~/.bash_history; fi # for hstr
 HISTFILE=~/.bash_eternal_history # "certain bash sessions truncate .bash_history" (like Screen) SU
 #sed -i 's,HISTFILESIZE=,HISTFILESIZE= #,' ~/.bashrc && sed -i 's,HISTSIZE=,HISTSIZE= #,' ~/.bashrc # run once for unlimited. have to clear the default setting in .bashrc
 HISTCONTROL=ignoreboth:erasedups   # no duplicate entries. ignoredups is only for consecutive. ignore both = ignoredups+ignorespace (will not record commands with space in front)
 #HISTTIMEFORMAT="%h %d %H:%M " # "%F %T "
 #export HISTIGNORE="!(+(*\ *))" # ignores commands without arguments. not compatible with HISTTIMEFORMAT. should be the same as `grep -v -E "^\S+\s.*" $HISTFILE`
-export HISTIGNORE="c:cdb:cdh:cdu:df:i:h:hh:hhh:l:ll:lll:lld:lsd:lsp:ltr:ls::mount:umount:rebash:path:env:pd:ps1:sd:sss:top:tree1:zr:zz:au:auu:aca:cu:cur:cx:dedup:dmesg:dli:aptli:d:flmh:flmho:flmr:fm:free:lsblk:na:netstat:ping1:wrapon:wrapoff:um:m:hdl":"ls *":"hg *" # ignore these commands from history
+export HISTIGNORE="c:cdb:cdh:cdu:df:i:h:hh:hhh:l:ll:lll:lld:lsd:lsp:ltr:ls::mount:umount:rebash:path:env:pd:ps1:sd:sss:top:tree1:zr:zz:au:auu:aca:cu:cur:cx:dedup:dmesg:dli:aptli:d:flmh:flmho:flmr:fm:free:lsblk:na:netstat:ping1:wrapon:wrapoff:um:m:hdl":"ls *":"hg *" # ignore commands from history
 export PROMPT_COMMAND='history -a; ' # ;set +m' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. set +m makes disables job control for aliases in vi.
 #export PROMPT_COMMAND='EC=$? && history -a && test $EC -eq 1 && echo error $HISTCMD && history -d $HISTCMD && history -w' # excludes errors from history
 # export PROMPT_COMMAND='history -a' # && test $EC -eq 1 && echo error $HISTCMD && history -d $HISTCMD && history -w' # excludes errors from history
@@ -35,13 +35,13 @@ alias vibash='vi ~/.bash_aliases'
 #alias rebashrc='source ~/.bashrc' # `source` reloads settings. ~ home dir. just type `bash`.
 #alias rebash='exec bash -l' # reloads shell. -l is login shell for completion. just type `bash`.
 alias realias='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc'
-alias realiasr='ba=".bash_aliases"; sudo install /home/user/$ba /root/$ba && sudo chmod 0664 /root/$ba'
+alias realiasr='ba=".bash_aliases";sudo install $HOME/$ba /root/$ba && sudo chmod 0664 /root/$ba'
 alias revim='rm ~/.vimrc && source ~/.bashrc'
 ## `shopt` list shell options. `set -o` lists settings. `set -<opt>` enables like flag options.
 set -o noclobber  # dont let accidental > overwrite. use >| to force redirection even with noclobber
 shopt -s lastpipe; set -o monitor # (set +m). allows last pipe to affect shell; needs Job Control enabled. for the o output alias.
 shopt -s nocaseglob # ignores upper or lower case of globs (*)
-shopt -s dotglob # makes `mv/cp /dir/*` copy all contents both * and .*; or use `mv /path/{.,}* /path/`
+shopt -s dotglob # uses all contents both * and .* for cp, mv, etc. or use `mv /path/{.,}* /path/`
 shopt -s globstar # makes ** be recursive for directories. use lld below for non-recursive ls.
 #shopt -s histappend # append to history, don't overwrite it. for using multiple shells at once. is default set in .bashrc
 #shopt -s histverify   # confirm bash history (!number) commands before executing. optional for beginners using bang ! commands. can also use ctrl+alt+e to expand before enter.
@@ -53,11 +53,11 @@ IFS=$' \t\n' # restricts "internal field separator" to tab and newline. handles 
 
 ## some familiar keyboard shortcuts: 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
-#stty intr ^S # this changes the ctrl+c for interrupt process to ctrl+s, to allow modern ctrl+c for copy.
-stty lnext ^N # this changes the ctrl+v for lnext to ctrl+b, to allow modern ctrl+v for paste. lnext shows the keycode of the next key typed.
+#stty intr ^S # changes the ctrl+c for interrupt process to ctrl+s, to allow modern ctrl+c for copy.
+stty lnext ^N # changes the ctrl+v for lnext to ctrl+b, to allow modern ctrl+v for paste. lnext shows the keycode of the next key typed.
 stty susp ^F #stty susp undef; #stty intr undef # ctrl+z for undo have to remove default. https://www.computerhope.com/unix/bash/bind.htm
 if [[ $- == *i* ]]; then bind '"\C-Z": undo' && bind '"\ez": yank'; fi # crtl+z and alt+z (bash bind wont do ctrl+shift+key, will do alt+shift+key ^[z) \e is esc and alt(meta). # dont run in non-inteactive (ie vim)
-#if [[ $- == *i* ]]; then bind '"\C-f": revert-line'; fi # clear line. use ctrl-shift-c or C-c or C-\
+#if [[ $- == *i* ]]; then bind '"\C-f": revert-line'; fi# clear line. use ctrl-shift-c or C-c or C-\
 
 ## short abc's of common commands: (avoid one letter test files or variables to avoid conflicts)
 # use \ to escape any alias. `type <command>` is in front to show it's an alias and avoid confusion.
@@ -74,15 +74,15 @@ alias c='clear' # clear terminal
 alias cat='cat ' # concatenate (if more than one file) and display. `tac` cat in reverse order.
 # `<` works the same as `cat` because of "redirection" in either form: `command < in | command2 > out` or `<in command | command2 > out` https://en.wikipedia.org/wiki/Cat_(Unix)#Useless_use_of_cat 
 # (`echo hello > file; echo world >> file`): `cat file | tee /dev/tty | grep hello` and `< file tee /dev/tty | grep hello` and `tee /dev/tty < file | grep hello` all output the same.
-# redirect sterr and stdout to files `command 2> error.txt 1> output.txt` or to null `command 2> /dev/null`
+# redirect sterr and stdout to file `command 2> error.txt 1> output.txt` null `command 2> /dev/null`
 alias cd='pushd > /dev/null ' # extra space allows aliasing directories `alias fstab='/etc/fstab '`. use `pd` to go back through dir stack.
 alias cdh='cd ~' # cd home.. just use `cd ` with one space to goto home. 
 #alias cdb='pd - ' # cd back
 alias cdb='cd -' # cd back
 alias cdu='cd ..' # change directory up
-alias cpa='type cp; cp -ar ' # achive and recursive. but rsync is better because shows progress (not possible with cp without piping to pv). also try `install` command - copies and keeps permissions of target dir. 
-# type shows the alias to avoid confusion. but cant use type in combo with sudo, so not used with some.
-alias cp='cp -i' # copy interactive to avoid littering dir with files unintentionally. use `find <dir> -type f -mmin -1` to find files copied in last 1 min. then add `-exec rm {} \;` once sure to delete. or `find <dir> -maxdepth 1 -type f -exec cmp -s '{}' "$destdir/{}" \; -print` can compare dirs. -a vs -R.
+alias cpa='type cp; cp -ar ' # achive and recursive. rsync is will show progress (not possible with cp without piping to pv). also try `install` command - copies and keeps permissions of target dir. 
+# type shows the alias to avoid confusion. but cant use type in combo with sudo.
+alias cp='cp -i' # copy interactive to avoid cp with files unintentionally. use `find <dir> -type f -mmin -1` to find files copied in last 1 min. then add `-exec rm {} \;` once sure to delete. or `find <dir> -maxdepth 1 -type f -exec cmp -s '{}' "$destdir/{}" \; -print` can compare dirs. -a vs -R.
 alias cpr='rsync -aAX --info=progress2 ' # copy with progress info, -a --archive mode: recursive, copies symlinks, keeps permissions, times, owner, group, device. -A acls -X extended attributes. -c checks/verify. cant use `type` (to show it is an alias) with sudo in front.
 alias df='type df; df -h -x"squashfs"' # "disk free" human readable, will exclude show all the snap mounts
 alias du='du -hs' # human readable, summarize. 
@@ -90,10 +90,10 @@ alias du1='\du -cd1 . | sort -n' # du --total --max-depth 1, pipe to sort numeri
 # 'echo' # print <args>. 'exit '. `printf` has formatting options.
 alias fh='find . -iname' # i means case insensitive. have to use wildcards/globs * to find from partial text. have to be in double quotes (no expansion). -exec needs escaped semicolon \;
 alias fr='find / -iname' # use `tldr find` for basics. -L will follow symlinks
-alias fe='find . -iname "f" -exec echo {} \; -exec grep word {} \;' # execute command(s) on found file
+alias fe='find . -iname "f" -exec echo {} \; -exec grep word {} \;' # execute command(s) on files
 alias fp='find . -path excluded -prune -o -exec echo {} \;' # find with excluded. {} = string. ; added to each line, so must be escaped from primary command.
 alias fn='find . -not -path excluded -o -exec echo {} \;' # find with excluded by not 
-alias fl='find . -cmin -10' # created last 10 min (or use ctime for days). or mmin/mtime, amin/atime. 
+alias fl='find . -cmin -10' # created last 10 min (or use ctime for days). or mmin/mtime, amin/atime
 alias fd='find . -cmin -10 -exec "\rm -r {} ;"' # find recent and delete. see above for alts.
 alias g='grep -i ' # search for text and more. "Global Regular Expressions Print" -i is case-insensitive. use -v to exclude. add mulitple with `-e <pattern>`. use `-C 3` to show 3 lines of context.
 alias i='ip -color a' # network info
@@ -111,19 +111,19 @@ alias loc='locate --limit 5' # `apt install locate` finds common file locations 
 alias l='echo $(history -p !!) | xclip' # copies last command line to clipboard. see `o` for output.
 alias ll='ls -alFh ' # "list" all, long format. included in .bashrc, added human readable. 
 alias lll='ls -alF ' # "list" all long format. full byte count. 
-alias ltr='ls -lcr ' # "list" long, time, reverse. sorted bottom is latest changed. c is changed time. 
+alias ltr='ls -lcr ' # "list" long, time, reverse. bottom latest. c changed, a accessed, m modified
 alias lld='ls -dlFh ' # list only directories.
 alias lsd='ls -d ' # list only directories.
 alias lsp='ls -a | xargs -I % realpath % ' # returns full paths. have to be in the directory. 
-alias lns='ln -s' # <source> <target> = <from> <to> = <"target"> <linkname>.hardlinks accumulate and dont work across disks. rm symlink wont remove underlying file. see function lnsr for reversed args.
+alias lns='ln -s' # <source> <target> = <from> <to> = <"target"> <linkname>.hardlinks accumulate and dont work across disks. rm symlink wont remove underlying file. see function lnsr for reversed args
 alias mo='more ' # break output into pages. or `less`.
-#alias mf='touch' # make file. also `echo foo | tee $newfile`. `(umask 644; touch file)` to set perms
+#alias mf='touch' # make file. or `echo foo | tee $newfile`. `(umask 644; touch file)` to set perms
 #alias md='mkdir -p' # makes all --parents directories necessary
 alias md='install -d' # using `install` keeps same perms as parent dir and -D creates dirs
 alias mf='install -D -m 664 /dev/null' # creates needed dirs with parent perms and owns, and then file. however it makes files executable following parent dir. 
 alias mv='mv -i ' # interactive. -n for no clobber, but cant be used with -i (will not notify)
 alias mvu='install -o user -g user -D -t' # target/ dir/* # this copies while keeping target dir ownersperms and ownership. change <user>
-alias ncdu='type ncdu; ncdu -x' # disk space utility. `apt install ncdu`. -x exclude other filesytems.
+alias ncdu='type ncdu; ncdu -x' # disk space utility `apt install ncdu` -x exclude other filesytems.
 alias o='eval $(history -p !!) | read v; echo v=$v' # this var only works with shopt lastpipe and set +m to disable pipe subshells. copies output to $v. 
 alias ov='v=$(eval $(history -p !!))' # copies output of last command to $v. also can use xclip and xsel. works without lastpipe and set +m.
 alias p='pwd' # print present working directory
@@ -143,7 +143,7 @@ alias rm='rm -Irv ' # -I requires confirmation. -r recursive into directories. -
 alias sudo='sudo '; alias s='sudo '; alias sd='sudo -s ' # elevate privelege for command. see `visudo` to set. And `usermod -aG sudo add`, security caution when adding.
 alias sss='eval sudo $(history -p !!)' # redo with sudo
 alias ssh='ssh -vvv ' # most verbose level
-alias sort1='sort --numeric-sort' # or --human-numeric-sort. dups `sort <file> | unique -c | sort -nr`
+alias sort1='sort --numeric-sort' # --human-numeric-sort. dups `sort <file> | unique -c | sort -nr`
 # `stat` will show file info including -rwxrwxrwx octet values of permissions and ownership.
 alias t='touch' # new file. see mf also.
 # `tee` allows tee-piping. eg `cat file.txt | tee /dev/tty | grep 'word' > output.txt` will both show the file and pipe it. `echo $(date) | tee file.txt` will pipe to file and output to stdout.
@@ -155,7 +155,7 @@ alias vi='vi ' # `vimtutor` (`esc` then `:q` to quit. `ctrl+w` if type q:). (or 
 #alias w='whatis' # display one-line manual page descriptions
 #alias w='whereis' # locate the binary, source, and manual page files for a...
 #alias w='which' # locate a command
-alias x='xargs ' # take last output and pipe into new command. not all commands support it, but many do
+alias x='xargs ' # take last output and pipe into new command. not all commands support it
 # use `xargs -I % some-command %` to use output as non-standard argument
 alias zr='reboot' # uncomment if you want this. also `systemctl reboot`. DE `reboot -t 120`   
 alias zz='systemctl poweroff' # also `systemctl halt` or `shutdown -H now`. halt leaves on
@@ -166,7 +166,7 @@ alias sz='7z x -o*' # extracts in to subdirectory
 alias szc='7z a -t7z -m0=lzma2:d1024m -mx=9 -aoa -mfb=64 -md=32m -ms=on' #<dir> <output> # highest compression or use PeaZip
 alias au='sudo apt update'
 alias auu='sudo apt update && apt -y upgrade' # show all users logged in. `last` show last logins
-alias aca='sudo apt clean && sudo apt autoremove' # `apt remove` leaves configs, `apt purge` doesnt. 
+alias aca='sudo apt clean && sudo apt autoremove' # `apt remove` leaves configs, `apt purge` doesnt.
 alias aptr='apt install --reinstall' # reinstall pkg. 
 # `arp` # lists all devices on network layer 2. apt install net-tools
 alias awk1='awk "{print \$1}"' # print first column; end column {print $NF}; second to last $(NF-1); use single quotes when not using alias; awk more common than `cut -f1 -d " "`
@@ -178,8 +178,8 @@ alias cm='chmod -R' # change perms to rwx octet
 alias cm7='chmod -R 777' # change perms to all
 alias cmp='type cmp; cmp -b' # compares and shows different lines. no sorting needed.
 alias comm='type comm; comm -12 <(sort a.txt) <(sort b.txt)' # compares and shows all same lines of tex. `comm -12` for diffs
-alias diff='type diff; diff -y --color --brief' # compare. -y show. --breif only shows diffs. Use Meld for GUI.
-# date +"%D %T" (MM/DD/YY HH:MM:SS). date +%s (epoch secs). date +"%Y-%m-%d %T" (YYYY-MM-DD HH:MM:SS).
+alias diff='type diff; diff -y --color --brief' # compare. -y show. --brief only shows diffs.or Meld
+# date +"%D %T"(MM/DD/YY HH:MM:SS). date +%s(epoch secs). date +"%Y-%m-%d %T"(YYYY-MM-DD HH:MM:SS).
 alias dedup="tac $HISTFILE | awk '!a[\$0]++' | tac > $HISTFILE" # careful, backup first
 alias desk='kioclient exec' # in KDE will open .desktop file from CLI
 alias dmesg='type dmesg; dmesg -HTw' # messages from the kernel, human readable, timestamp, follow
@@ -232,7 +232,7 @@ alias pip='type pip; pip3 --verbose'
 alias py='type py; python3' 
 alias ra='read -a' # reads into array/list. read var defaults to $REPLY in Bash. 
 # use `realpath` for piping absolute file path to cat. 
-alias rkonsole='/home/user/.config/autostart-scripts/konsole_watcher.sh restore' # restore konsole tabs
+alias rkonsole='/home/user/.config/autostart-scripts/konsole_watcher.sh restore' # restore tabs
 alias rplasma='pkill plasmashell && plasmashell &' # restart plasmashell in KDE Kubuntu
 alias rvmm='pkill virt-manager && sys restart libvirtd' # restart VMM. doenst stop runnning VMs
 # `sha256sum` hash generation
@@ -257,14 +257,14 @@ alias wrapon='echo -ne "\033[?7h"' # line wrap on
 alias wrapoff='echo -ne "\033[?7l"' # line wrap off
 alias zzr='shutdown -r now || true' # reboot in ssh, otherwise freezes
 alias zzs='shutdown -h now || true' # shutdown in ssh, otherwise freezes
-# common typos
+# correct common typos
 alias unmount='umount' ; alias um='umount' ; alias mounts='mount' ; alias m='type m; printf "\033[?7l"; mount | g -v -e cgroup -e fs; printf "\033[?7h"' ; alias ma='mount -a' ; alias mg='mount | grep'; alias mr='mount -o remount,rw'; 
 alias umf='umount -l' # unmount lazy works when force doesnt
 # change tty term from cli: `chvt 2`
-# keyrings https://itnext.io/what-is-linux-keyring-gnome-keyring-secret-service-and-d-bus-349df9411e67 
+# https://itnext.io/what-is-linux-keyring-gnome-keyring-secret-service-and-d-bus-349df9411e67 
 # encrypt files with `gpg -c`
 if [[ $(whoami) == 'root' ]]; then export TMOUT=18000 && readonly TMOUT; fi # timeout root login
-# `sudo echo foo > /rootfile` errors.. so `echo foo | sudo tee /rootfile`. sudo doesnt pass redirection
+# `sudo echo foo > /rootfile` errors.. so `echo foo | sudo tee /rootfile`. sudo doesnt pass redirect
 # other admin commands: last, w, who, whoami, users, login, uptime, free -th, mpstat, iostat, bashtop, ssh, lsof, lspci, dmesg, dbus, strace, scp, file
 
 ## extra stuff
@@ -277,7 +277,7 @@ function hdn { history -d "$1"; history -w; } # delete history line number
 function hdl { history -d $HISTCMD; history -w; } # delete history last number
 function hdln { history -d $(($HISTCMD - "$1" -1))-$(($HISTCMD - 2)); history -w; } # delete last n lines. (add 1 for this command) (history -d -$1--1; has error)
 function help { "$1" --help; } # use `\help` to disable the function alias
-function ? { "$1" --help || help "$1" || man "$1" || info "$1"; } # use any help doc. # also use tldr. 
+function ? { "$1" --help || help "$1" || man "$1" || info "$1"; } # use any help doc. # also tldr. 
 function lnst { dir="$1"; lastdir="${dir##*/}"; sudo ln -s $2/$lastdir "$1"; } # ln -st?
 function lnsr { ln -s "$2" "$1"; } # symlink reversed using arg order from cp or mv
 function ren { mv "$1" "$1""$2"; } # rename file just add ending, eg file to file1.
@@ -295,12 +295,12 @@ export CDPATH=".:/home/user:/media/user:/media/root" # can cd to any dir in user
 #export CDPATH=".:/etc" # just type `cd grub.d`
 #export CDPATH=".:/" # could use at root to remove need for typing lead /, but could cause confusion
 export VISUAL='vi' # export EDITOR='vi' is for old line editors like ed
-# ! dont use single quotes when setting `export PATH="_:$PATH"`. single quotes do not use parameter expansion.
+# dont use single quotes when setting `export PATH="_:$PATH"`. single quotes no parameter expansion.
 # export TERM='xterm' # makes vim use End and Home keys. but only vt220 on ubuntu cloud image
 
 ## key bindings. custom emacs. or use `set -o vi` for vim bindings. `set -o emacs` to reverse.
 # bind -p # will list all current key bindings. https://www.computerhope.com/unix/bash/bind.htm
-# ***very helpful*** press `ctrl+alt+e` to expand the symbol to show. press double keys slowly to use normally. 
+# ***very helpful*** press `ctrl+alt+e` to expand the symbol!!!!!!!!!!  
 # `bind -r <keycode>` to remove. use ctrl+V (lnext) to use key normally. https://en.wikipedia.org/wiki/ANSI_escape_code
 #if [[ $- == *i* ]]; then bind '"\\\\": "|"'; fi # quick shortcut to | pipe key. double slash key `\\` (two of the 4 slashes are escape chars)
 if [[ $- == *i* ]]; then bind '",,": "!$"'; fi # easy way to get last argument from last line. can expand. delete $ for ! bang commands.
@@ -311,7 +311,7 @@ if [[ $- == *i* ]]; then bind '",": "$"'; fi # quick $
 #if [[ $- == *i* ]]; then bind '".,": "$(!!)"'; fi # easy way to add last output. can expand
 #if [[ $- == *i* ]]; then bind '"///": reverse-search-history'; fi # easy ctrl+r for history search.
 #if [[ $- == *i* ]]; then bind '\C-Q: shell-kill-word'; fi # crtl+q is erase forward one word. (ctrl+a, ctrl+q to change first command on line)
-#bind 'set show-all-if-ambiguous on' # this makes only one Tab necessary to show completion possibilities
+#bind 'set show-all-if-ambiguous on' # makes only one Tab necessary to show completion possibilities
 
 true <<'END' 
 CLI emacs mode common keys:
@@ -321,7 +321,7 @@ cut word backward `ctrl w`, paste that word `ctrl y`, use `alt d` to cut word fo
 undo like this : `ctrl+_`
 kill runaway process: `ctrl+c`, `ctrl+d` (exit current shell), `ctrl+\` 
 search history, reverse (type afterward): `ctrl+r`, go forward `ctrl+f`. `ctrl+g` cancels. `alt(meta)+>` go back to history bottom.
-https://dokumen.tips/documents/macintosh-terminal-pocket-guide.html?page=42 (good compare to vi mode)
+https://dokumen.tips/documents/macintosh-terminal-pocket-guide.html?page=42 (vi/emacs keys table)
 
 basic bash system commands:
 `fdisk -l` # partition table list. also see `cfdisk` for changing
@@ -338,7 +338,7 @@ file stats including creation time if available: `stat`
 terminal key shortcuts: `stty -a`
 apt: `remove` uninstalls. `purge` deletes config except in home dir. `autoremove` deletes unused.    
 apt -s, --simulate, --just-print, --dry-run, --recon, --no-act = No action; perform a simulation..
-`apt show <package>` shows size, unlike simulate, before install (but sizes not same as in apt install)
+`apt show <package>` shows size, unlike simulate, before install (sizes not same as in apt install)
 
 Bash Manual (`man bash`) https://www.gnu.org/software/bash/manual/html_node/index.html#SEC_Contents 
 Conditional Expressions: (`man test` or `man bash` and search with / for "comparsion"): `if [ <> ];then <>;fi`. Use double [[ ]] to disable expansion and wont fail if var is empty. `test 1 -eq 2 && echo true || echo false` is same as `[ 1 -eq 2 ] && echo true || echo false]`
@@ -377,7 +377,7 @@ END
 
 ## common dirs and files:
 alias el='env | egrep '^[a-z].*=.*' | sort' # list env var exports below
-shopt -s cdable_vars # dirs exportable. shell-expand-line ctrl-alt-e not work on aliases after command.
+shopt -s cdable_vars # dirs exportable.
 export alias1='~/.bash_aliases'
 export fstab1='/etc/fstab' # mounts volumes
 export passwd1='/etc/passwd' # controls user perms
@@ -411,12 +411,12 @@ alias eg="env | grep 1=" # grep above env vars
 # /var/cache/apt/archives/ (use apt clean?) visudo
 # /proc/cmdline, /dev/disk/by-id (etc), /proc, /dev, /media/user, /home/user
 # `locate *.desktop` to find appls # `locate *.desktop | grep -v usr` shows program shortcuts location. also: https://askubuntu.com/questions/5172/running-a-desktop-file-in-the-terminal
-# run appls .desktop files with dex, gtklaunch or kioclient exec https://askubuntu.com/a/1114798/795299
+# run .desktop files with dex, gtklaunch or kioclient exec https://askubuntu.com/a/1114798/795299
 
 ## basic settings:
 # be careful of your filesystem filling up space as it will freeze your OS.. ways to deal with that: create a large dummy file that can be erased, like swapfile, `echo 'SystemMaxUse=200M' >> journald.conf` then limit /tmp and /home. `dd if=/dev/zero of=/swapfile bs=1024K count=250 && chmod 0600 /swapfile && swapon /swapfile` dont use fallocate or truncate to create swapfile.. has to be continuous.
 # use `sudo -s` to elevate user but stay in same user environment (history and bashrc prefs). 
-# add user to sudo group: `usermod -aG sudo user` to protect root user (can remove privelege from user if needed)
+# add user to sudo group: `usermod -aG sudo user` to protect root user (can remove indiv priveleges)
 # careful with changing all permissions to 777: https://superuser.com/questions/132891/how-to-reset-folder-permissions-to-their-default-in-ubuntu
 # envdir or direnv for storing project secrets safely. DONT store them in a GitHub repo (.gitignore) http://thedjbway.b0llix.net/daemontools/envdir.html and python os.environ['HOME']
 
@@ -435,13 +435,13 @@ set hlsearch
 autocmd InsertEnter,InsertLeave * set cul!
 "remember editing position after close"
 if has("autocmd")
-au BufReadPost * if line("'\''\"") > 0 && line("'\''\"") <= line("$") | exe "normal! g`\"" | endif\n
+au BufReadPost * if line("'\''\"") > 0 && line("'\''\"") <= line("$") | exe "normal! g`\"" | endif
 endif
 set autowrite "save before run, also when changing buffer"
-nnoremap <F5> :!clear && %:p<Enter> 
-"run script in normal mode" 
-inoremap <F5> <esc>:!clear && %:p<enter> 
+"run script in normal mode - can add <enter>, but will skip past result 
+nnoremap <F5> :!clear && %:p
 "in insert mode too"
+inoremap <F5> <esc>:!clear && %:p
 let $BASH_ENV = "~/.bash_aliases" "<--to use functions or aliases in vi. `shopt -s expand_aliases` in .bashrc also for aliased"
 "set list " shows hidden characters
 "set ruf " ruler format
@@ -537,11 +537,11 @@ alias gacp='gs && ga && gc && gph' # also push
 alias gacpa='pushd ~/git/dotfiles && git add . && git commit -m commit && git push -u origin main; popd' # gacp on aliases
 #alias gph='git push -u origin main '
 # git clone is for first copy # git status, git log, git branch
-# git clone https://github.com/auwsom/dotfiles.git # add ssh priv and pub key, and will pull but not push
+# git clone https://github.com/auwsom/dotfiles.git #add ssh priv & pub key or will pull but not push
 # git clone git@github.com:auwsom/dotfiles.git # will ask to connect. need to `eval $(ssh-agent -s) && ssh-add ~/.ssh/id_rsa` checks if agent running and adds (will display email of GH account) 
 ## add from local creatJust found this tool called Briefcase to deploy python apps to 6 platforms (mac,win,linux,ios,android,web) looks great. Produces standalone binariese:
 # `apt install gh` then click enter until auth through webpage
-alias gi='git init && git remote add origin git@github.com:auwsom/<newrepo>.git && git branch -M main'
+alias gi='git init && git remote add origin git@github.com:auwsom/<new>.git && git branch -M main'
 alias gi2='gh repo create <newrepo> --public'
 alias gi3='git add . && git push --set-upstream origin main'
 # git config --global init.defaultBranch main 
@@ -567,9 +567,9 @@ alias gr='git restore' # restores last commit to local. if pushed, likely need m
 # renaming extensions `for f in file*.txt; do echo/mv "$f" "${f/%txt/text}"; done`
 # `apt --fix-broken install` or `dpkg --configure -a`
 # `apt clean` then `apt purge <package>` to uninstall package broken from out of disk space.
-# use `apt purge *<old kernel number>*` to clear out old kernels for space. orr `journalctl --vacuum-size=5M`
+# `apt purge *<old kernel number>*` to clear old kernels for space. or `journalctl --vacuum-size=5M`
 # `apt purge <package>` doesnt erase anything in home dir
-# list installed packages by date: `grep " install " /var/log/dpkg.log` or `apt-mark showmanual` (`apt-mark minimize-manual` is supposed to unmark all dependencies) (zgrep will search /var/log/dpkg.log.2.gz files)
+# list installed packages by date: `grep " install " /var/log/dpkg.log` or `apt-mark showmanual` (`apt-mark minimize-manual` supposed to unmark all dependencies) (zgrep search /var/log/dpkg.log.2.gz)
 # `apt install mlocate ncdu htop`
 # ext4magic and testdisk (extundelete defunct https://www.unix.com/fedora/279812-segmentation-fault-while-trying-recover-file-extundelete.html) ntfs keeps directory info in journal, ext4 doesnt.
 # `ntfsundelete /dev/hda1 -t 2d` Look for deleted files altered in the last two days
@@ -633,6 +633,8 @@ alias pmm='podman machine'
 alias pmml='podman machine list'
 alias pmmsa='podman machine start'
 alias pmmsp='podman machine stop'
+# podman machine init --cpus=4 --memory=4000 --image-path=/media/user/VM/Arch-Linux-x86_64-basic.qcow2 arch-4-4
+alias qemu='qemu-system-x86_64' # --help
 
 
 
@@ -648,25 +650,8 @@ convert_help() { if [[ $- == *i* ]]; then
   if [[ $BASH_COMMAND == *" help"* ]]; then eval "${BASH_COMMAND/help/} --help"; false; fi; fi; }
 #if [[ $- == *i* ]]; then shopt -s extdebug; trap convert_help DEBUG; fi
 
-# needs lastpipe enabled and job control disabled
-# co() { if [[ $- == *i* ]]; then eval "$BASH_COMMAND | read -r o"; false; fi }
-# co() { if [[ $- == *i* ]]; then eval "$BASH_COMMAND | tee out"; false; fi }
-# co() { if [[ $- == *i* ]]; then eval "$BASH_COMMAND | xargs -I % echo %"; false; fi }
-#co() { if [[ $- == *i* ]]; then eval "$BASH_COMMAND | read ;  echo $REPLY | tee /tmp/out"; echo sha >> /tmp/out; export var=1234;false; fi }
-#co() { if [[ $- == *i* ]]; then eval "$BASH_COMMAND;  echo $BASH_COMMAND | tee /tmp/out"; false; fi }
-#co() { eval "$BASH_COMMAND | xargs -I % echo %"; false; } # piping doesnt work.
-#co() { eval "$BASH_COMMAND | read v; echo $v"; ; } # piping doesnt work.
-# co() { eval "$BASH_COMMAND | tee /tmp/out2" ; false; } # piping doesnt work.
-#co() { eval "export var=`$BASH_COMMAND`"; false; } # 
-#co() { eval "echo $($BASH_COMMAND) | read -r var; echo $var"; false; } # 
-# co() { eval "v=$BASH_COMMAND; echo $v"; false; } # 
-# co() { echo; } # 
-# co() { eval "$BASH_COMMAND >| /tmp/out; v=$(cat /tmp/out)"; false; } # piping doesnt work.
-# co() { eval "$BASH_COMMAND >> /tmp/out";  } # piping doesnt work.
-# if [[ $- == *i* ]]; then shopt -s extdebug; trap co DEBUG; fi # capture output
-#ce() { eval "$BASH_COMMAND;  e='$BASH_COMMAND'"; false; }
 ce() { eval "e=$BASH_COMMAND"; false; }
-if [[ $- == *i* ]]; then trap ce ERR; fi # capture error command
+#if [[ $- == *i* ]]; then trap ce ERR; fi # capture error command
 alias e='$e' # type e and then expand with ctrl-alt-e
 
 # https://github.com/akinomyoga/ble.sh
