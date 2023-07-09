@@ -157,7 +157,7 @@ alias vi='vi ' # `vimtutor` (`esc` then `:q` to quit. `ctrl+w` if type q:). (or 
 #alias w='which' # locate a command
 alias x='xargs ' # take last output and pipe into new command. not all commands support it
 # use `xargs -I % some-command %` to use output as non-standard argument
-alias zr='reboot' # also `systemctl reboot`. DE `reboot -t 120`   
+alias zzr='reboot' # also `systemctl reboot`. DE `reboot -t 120`   
 alias zzz='systemctl poweroff' # also `systemctl halt` or `shutdown -H now`. halt leaves on
 
 
@@ -255,8 +255,8 @@ alias wdu='watch du -cd1 .' # or `watch du -s <dir>` or `watch '\du -cd1 . | sor
 alias wget='type wget; wget --no-clobber --content-disposition --trust-server-names' # -N overwrites only if newer file and disables timestamping # or curl to download webfile (curl -JLO)
 alias wrapon='echo -ne "\033[?7h"' # line wrap on
 alias wrapoff='echo -ne "\033[?7l"' # line wrap off
-alias zzr='shutdown -r now || true' # reboot in ssh, otherwise freezes
-alias zzs='shutdown -h now || true' # shutdown in ssh, otherwise freezes
+alias zzzr='shutdown -r now || true' # reboot in ssh, otherwise freezes
+alias zzzs='shutdown -h now || true' # shutdown in ssh, otherwise freezes
 # correct common typos
 alias unmount='umount' ; alias um='umount' ; alias mounts='mount' ; alias m='type m; printf "\033[?7l"; mount | g -v -e cgroup -e fs; printf "\033[?7h"' ; alias ma='mount -a' ; alias mg='mount | grep'; alias mr='mount -o remount,rw'; 
 alias umf='umount -l' # unmount lazy works when force doesnt
