@@ -7,7 +7,8 @@
 
 # see further down for more general Linux tips and learning sites.(width is 100 chars vs 80 default)
 
-if ! [[ $- == *i* ]]; then true "<<'ENDI'"; fi # this skips this file when running scripts
+#if ! [[ $- == *i* ]]; then true "<<'ENDI'"; fi # this skips this file when running scripts
+[[ -t 0 ]] && true "<<'ENDI'" # this skips this file when running scripts
 
 
 ## basic Bash settings:
@@ -32,6 +33,7 @@ dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
 alias ha='history -a ' # append current history before opening a new terminal.
 alias hs='history -a; history -c; history -r' # share history from other terminals to current one.
 alias vibash='vi ~/.bash_aliases' 
+alias vibashrc='vi ~/.bashrc' 
 #alias rebashrc='source ~/.bashrc' # `source` reloads settings. ~ home dir. just type `bash`.
 #alias rebash='exec bash -l' # reloads shell. -l is login shell for completion. just type `bash`.
 alias realias='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc'
