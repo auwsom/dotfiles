@@ -48,10 +48,10 @@ shopt -s globstar # makes ** be recursive for directories. use lld below for non
 #shopt -s histappend # append to history, don't overwrite it. for using multiple shells at once. is default set in .bashrc
 #shopt -s histverify   # confirm bash history (!number) commands before executing. optional for beginners using bang ! commands. can also use ctrl+alt+e to expand before enter.
 #if [ -f ~/.env ]; then source ~/.env ; fi # dont use this or env vars for storing secrets. create dir .env and store files in there, then call with $(cat ~/.env/mykey). see envdir below.
-function rh { history -a; }; trap rh SIGHUP # saves history on interupt. see functions below.
+function rh { history -a;}; trap rh SIGHUP # saves history on interupt. see functions below.
 IFS=$' \t\n' # restricts "internal field separator" to tab and newline. handles spaces in filenames.
-#nohist() { e=$BASH_COMMAND; history -d $HISTCMD; }; trap nohist ERR # traps error and deletes from hist before written. $e is line for reuse. ctrl-alt-e expands it.
-#nohist() { $BASH_COMMAND=$BASH_COMMAND" e"; }; trap nohist ERR # traps error and deletes from hist before written. $e is line for reuse. ctrl-alt-e expands it.
+#nohist() { e=$BASH_COMMAND; history -d $HISTCMD;}; trap nohist ERR # traps error and deletes from hist before written. $e is line for reuse. ctrl-alt-e expands it.
+#nohist() { $BASH_COMMAND=$BASH_COMMAND" e";}; trap nohist ERR # traps error and deletes from hist before written. $e is line for reuse. ctrl-alt-e expands it.
 
 ## some familiar keyboard shortcuts: 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
@@ -60,6 +60,7 @@ stty lnext ^N # changes the ctrl+v for lnext to ctrl+b, to allow modern ctrl+v f
 stty susp ^F #stty susp undef; #stty intr undef # ctrl+z for undo have to remove default. https://www.computerhope.com/unix/bash/bind.htm
 if [[ $- == *i* ]]; then bind '"\C-Z": undo' && bind '"\ez": yank'; fi # crtl+z and alt+z (bash bind wont do ctrl+shift+key, will do alt+shift+key ^[z) \e is esc and alt(meta). # dont run in non-inteactive (ie vim)
 #if [[ $- == *i* ]]; then bind '"\C-f": revert-line'; fi# clear line. use ctrl-shift-c or C-c or C-\
+
 
 ## short abc's of common commands: (avoid one letter test files or variables to avoid conflicts)
 # use \ to escape any alias. `type <command>` is in front to show it's an alias and avoid confusion.
@@ -195,14 +196,14 @@ alias dpkglk='dpkg --list | grep -i -E "linux-image|linux-kernel" | grep "^ii"' 
 alias dpkgll='grep -i install /var/log/dpkg.log' # list last installed
 alias dpkglis="dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n" # list installed by size
 alias dpkgpr='dpkg --list |grep "^rc" | cut -d " " -f 3 | xargs sudo dpkg --purge' # purge removed ^ 
-alias dpkgrc='dpkg-reconfigure -a' # use when apt install breaks. use `apt -f install` install dependencies when using `apt install debfile.deb`
+alias dpkgca='dpkg --configure -a' # use when apt install breaks. use `apt -f install` install dependencies when using `apt install debfile.deb`
 alias d='dirs' # shows dir stack for pushd/popd
 # dbus-monitor, qdbus
 # `env` # shows environment variables
 #'fc -s' #<query> # search and redo command from history. shebang is similar !<query> or !number. fc -s [old=new] [command]   https://docs.oracle.com/cd/E19253 (fix command)
 alias fsck1='fsck -p # </dev/sdX#>' # -p auto fix. or use -y for yes to all except multiple choice.
-function flm () { find $1 -type f -mmin -1; } # modification time
-function flmc () { find $1 -type f -cmin -1; } # creation time. access time? amin.
+function flm () { find $1 -type f -mmin -1;} # modification time
+function flmc () { find $1 -type f -cmin -1;} # creation time. access time? amin.
 alias flmh='find . -type f -mmin -1'
 alias flmho='find ~ -type d \( -name .cache -o -name .mozilla \) -prune -o -type f -mmin -1'
 alias flmr='find / -type d \( -name proc -o -name sys -o -name dev -o -name run -o -name var -o -name media -o -name -home \) -prune -o -type f -mmin 1'
@@ -269,28 +270,29 @@ if [[ $(whoami) == 'root' ]]; then export TMOUT=18000 && readonly TMOUT; fi # ti
 # `sudo echo foo > /rootfile` errors.. so `echo foo | sudo tee /rootfile`. sudo doesnt pass redirect
 # other admin commands: last, w, who, whoami, users, login, uptime, free -th, mpstat, iostat, bashtop, ssh, lsof, lspci, dmesg, dbus, strace, scp, file
 
+
 ## extra stuff
 # `!!` for last command, as in `sudo !!`. `ctrl+alt+e` expand works here. `!-1:-1` for second to last arg in last command.
 # `vi $(!!)` to use output of last command. or use backticks: vi `!!`
 # `declare -f <function>` will show it
 set -a # sets for export to env the following functions, for calling in scripts and subshells (aliases dont get called).
-function hdn { history -d "$1"; history -w; } # delete history line number
-# function hdl { history -d $(($HISTCMD - 1)); history -w; } # delete history last number
-function hdl { history -d $HISTCMD; history -w; } # delete history last number
-function hdln { history -d $(($HISTCMD - "$1" -1))-$(($HISTCMD - 2)); history -w; } # delete last n lines. (add 1 for this command) (history -d -$1--1; has error)
-function help { "$1" --help; } # use `\help` to disable the function alias
-function ? { "$1" --help || help "$1" || man "$1" || info "$1"; } # use any help doc. # also tldr. 
-function lnst { dir="$1"; lastdir="${dir##*/}"; sudo ln -s $2/$lastdir "$1"; } # ln -st?
-function lnsr { ln -s "$2" "$1"; } # symlink reversed using arg order from cp or mv
-function ren { mv "$1" "$1""$2"; } # rename file just add ending, eg file to file1.
-function sudov { while true; do sudo -v; sleep 360; done; } # will grant sudo 'for 60 minutes
-function addpath { export PATH="$1:$PATH"; } # add to path
-function addpathp { echo "PATH="$1':$PATH' >> ~/.profile; } # add to path permanently
-function cmtf { while IFS= read -r line; do echo "${1:-#} $line"; done; }
+function hdn { history -d "$1"; history -w;} # delete history line number
+# function hdl { history -d $(($HISTCMD - 1)); history -w;} # delete history last number
+function hdl { history -d $HISTCMD; history -w;} # delete history last number
+function hdln { history -d $(($HISTCMD - "$1" -1))-$(($HISTCMD - 2)); history -w;} # delete last n lines. (add 1 for this command) (history -d -$1--1; has error)
+function help { "$1" --help;} # use `\help` to disable the function alias
+function q { "$1" --help || help "$1" || man "$1" || info "$1";} # use any help doc. # also tldr. 
+function lnst { dir="$1"; lastdir="${dir##*/}"; sudo ln -s $2/$lastdir "$1";} # ln -st?
+function lnsr { ln -s "$2" "$1";} # symlink reversed using arg order from cp or mv
+function ren { mv "$1" "$1""$2";} # rename file just add ending, eg file to file1.
+function sudov { while true; do sudo -v; sleep 360; done;} # will grant sudo 'for 60 minutes
+function addpath { export PATH="$1:$PATH";} # add to path
+function addpathp { echo "PATH="$1':$PATH' >> ~/.profile;} # add to path permanently
+function cmtf { while IFS= read -r line; do echo "${1:-#} $line"; done;}
 alias cmt='while read -r line; do echo "# $line"; done;' # IFS is set above.
 alias ucmt='while read -r line; do echo "${line/\#\ /}"; done;' # IFS is set above.
 shopt -s expand_aliases # default? expands aliases in non-interactive (scripts and Vim calls)
-function aw { echo "$1" >> ~/.bash_aliases; } # alias write
+function aw { echo "$1" >> ~/.bash_aliases;} # alias write
 set +a # end of `set -a` above
 # `unset -f foo`; or `unset -f` to remove all functions
 export CDPATH=".:/home/user:/media/user:/media/root" # can cd to any dir in user home from anywhere just by `cd Documents`
@@ -299,6 +301,9 @@ export CDPATH=".:/home/user:/media/user:/media/root" # can cd to any dir in user
 export VISUAL='vi' # export EDITOR='vi' is for old line editors like ed
 # dont use single quotes when setting `export PATH="_:$PATH"`. single quotes no parameter expansion.
 # export TERM='xterm' # makes vim use End and Home keys. but only vt220 on ubuntu cloud image
+useragent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_0) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.79 Safari/537.1 Lynx"
+function ? { lynx "https://lite.duckduckgo.com/lite?kd=-1&kp=-1&q=$(urlencode "$*")";} # cli search. needs `apt install gridsite-clients` for urlencode
+
 
 ## key bindings. custom emacs. or use `set -o vi` for vim bindings. `set -o emacs` to reverse.
 # bind -p # will list all current key bindings. https://www.computerhope.com/unix/bash/bind.htm
@@ -314,6 +319,7 @@ if [[ $- == *i* ]]; then bind '",.": "$"'; fi # quick $
 #if [[ $- == *i* ]]; then bind '"///": reverse-search-history'; fi # easy ctrl+r for history search.
 #if [[ $- == *i* ]]; then bind '\C-Q: shell-kill-word'; fi # crtl+q is erase forward one word. (ctrl+a, ctrl+q to change first command on line)
 #bind 'set show-all-if-ambiguous on' # makes only one Tab necessary to show completion possibilities
+
 
 true <<'END' 
 CLI emacs mode common keys:
@@ -649,10 +655,10 @@ alias qemu='qemu-system-x86_64' # --help
 #https://stackoverflow.com/questions/27493184/can-i-create-a-wildcard-bash-alias-that-alters-any-command
 
 convert_help() { if [[ $- == *i* ]]; then
-  if [[ $BASH_COMMAND == *" help"* ]]; then eval "${BASH_COMMAND/help/} --help"; false; fi; fi; }
+  if [[ $BASH_COMMAND == *" help"* ]]; then eval "${BASH_COMMAND/help/} --help"; false; fi; fi;}
 #if [[ $- == *i* ]]; then shopt -s extdebug; trap convert_help DEBUG; fi
 
-ce() { eval "e=$BASH_COMMAND"; false; }
+ce() { eval "e=$BASH_COMMAND"; false;}
 #if [[ $- == *i* ]]; then trap ce ERR; fi # capture error command
 alias e='$e' # type e and then expand with ctrl-alt-e
 
@@ -662,12 +668,12 @@ alias e='$e' # type e and then expand with ctrl-alt-e
 # ble-update. ~/.blerc. 
 
 # save output
-#save_output() { exec 1>&3; { [ -f /tmp/curr ] && \mv /tmp/curr /tmp/last; }; exec > >(tee /tmp/curr); }
-#save_output() { exec 1>&3; if [[ -f /tmp/curr ]]; then \mv /tmp/curr /tmp/last; fi  }
-#save_output() { exec 1>&3; if [[ -f /tmp/curr ]]; then tail -1 /tmp/curr >| /tmp/last; \rm /tmp/curr; fi  }
-#save_output() { exec 1>&3; exec > >(tee /tmp/curr); }
-#save_output() { { [ -f /tmp/curr ] && \mv /tmp/curr /tmp/last; } }
-#save_output() { { [ -f /tmp/curr ] && truncate -s 0 /tmp/curr; } }
+#save_output() { exec 1>&3; { [ -f /tmp/curr ] && \mv /tmp/curr /tmp/last;}; exec > >(tee /tmp/curr);}
+#save_output() { exec 1>&3; if [[ -f /tmp/curr ]]; then \mv /tmp/curr /tmp/last; fi }
+#save_output() { exec 1>&3; if [[ -f /tmp/curr ]]; then tail -1 /tmp/curr >| /tmp/last; \rm /tmp/curr; fi }
+#save_output() { exec 1>&3; exec > >(tee /tmp/curr);}
+#save_output() { { [ -f /tmp/curr ] && \mv /tmp/curr /tmp/last;}}
+#save_output() { { [ -f /tmp/curr ] && truncate -s 0 /tmp/curr;}}
 #exec > >(tee /tmp/curr)
 #exec 3>&1
 alias o='$(cat /tmp/curr)'
