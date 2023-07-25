@@ -190,6 +190,7 @@ alias dli='tac /var/log/dpkg.log | grep -i "install"' # list installed packages
 alias aptli='apt list --installed' # list installed apt packages
 alias aptlig='apt list --installed | grep -i' # list installed apt packages
 alias aptrd='apt-cache showpkg' # find dependencies in reverse. also apt-rdepends is similar.
+alias aptfbi='apt --fix-broken install' # fix 
 alias dpkgl='dpkg --listfiles' # -L package file install locations. reverse search for pkg from file `dpkg -S <file>`. `apt-files --list <pkg>` also works, but not for Snaps.
 alias dpkgli='dpkg --list | grep "^ii"' # list kernels
 alias dpkglk='dpkg --list | grep -i -E "linux-image|linux-kernel" | grep "^ii"' # list kernels
