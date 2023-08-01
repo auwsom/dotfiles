@@ -56,13 +56,13 @@ IFS=$' \t\n' # restricts "internal field separator" to tab and newline. handles 
 ## some familiar keyboard shortcuts: 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
 #stty intr ^S # changes the ctrl+c for interrupt process to ctrl+s, to allow modern ctrl+c for copy.
-stty lnext ^N # changes the ctrl+v for lnext to ctrl+b, to allow modern ctrl+v for paste. lnext shows the keycode of the next key typed.
 stty susp ^F #stty susp undef; #stty intr undef # ctrl+z for undo have to remove default. https://www.computerhope.com/unix/bash/bind.htm
+stty lnext ^N # changes the ctrl+v for lnext to ctrl+b, to allow modern ctrl+v for paste. lnext shows the keycode of the next key typed.
 if [[ $- == *i* ]]; then bind '"\C-Z": undo' && bind '"\ez": yank'; fi # crtl+z and alt+z (bash bind wont do ctrl+shift+key, will do alt+shift+key ^[z) \e is esc and alt(meta). # dont run in non-inteactive (ie vim)
 #if [[ $- == *i* ]]; then bind '"\C-f": revert-line'; fi# clear line. use ctrl-shift-c or C-c or C-\
 
 
-## short abc's of common commands: (avoid one letter test files or variables to avoid conflicts)
+## short abc's of common commands: (avoid one letter files or variables to avoid conflicts)
 # use \ to escape any alias. `type <command>` is in front to show it's an alias and avoid confusion.
 # cant use type in front with sudo, so same name is used only when least confusion.
 # aliases need space at end for chaining so can be used before alaised directories or files.
@@ -76,7 +76,7 @@ alias f='fg 1' # put foreground job 1
 alias c='clear' # clear terminal
 alias cat='cat ' # concatenate (if more than one file) and display. `tac` cat in reverse order.
 # `<` works the same as `cat` because of "redirection" in either form: `command < in | command2 > out` or `<in command | command2 > out` https://en.wikipedia.org/wiki/Cat_(Unix)#Useless_use_of_cat 
-# (`echo hello > file; echo world >> file`): `cat file | tee /dev/tty | grep hello` and `< file tee /dev/tty | grep hello` and `tee /dev/tty < file | grep hello` all output the same.
+# `cat file | tee /dev/tty | grep hello` and `< file tee /dev/tty | grep hello` and `tee /dev/tty < file | grep hello` all output the same.
 # redirect sterr and stdout to file `command 2> error.txt 1> output.txt` null `command 2> /dev/null`
 alias cd='pushd > /dev/null ' # extra space allows aliasing directories `alias fstab='/etc/fstab '`. use `pd` to go back through dir stack.
 alias cdh='cd ~' # cd home.. just use `cd ` with one space to goto home. 
@@ -90,7 +90,7 @@ alias cpr='rsync -aAX --info=progress2 ' # copy with progress info, -a --archive
 alias df='type df; df -h -x"squashfs"' # "disk free" human readable, will exclude show all the snap mounts
 alias du='du -hs' # human readable, summarize. 
 alias du1='\du -cd1 . | sort -n' # du --total --max-depth 1, pipe to sort numerically
-# 'echo' # print <args>. 'exit '. `printf` has formatting options.
+# 'echo' # print <args>. 'exit '. `printf` formatting. > writes, >> appends, >| overwrites no-clobber.
 alias fh='find . -iname' # i means case insensitive. have to use wildcards/globs * to find from partial text. have to be in double quotes (no expansion). -exec needs escaped semicolon \;
 alias fr='find / -iname' # use `tldr find` for basics. -L will follow symlinks
 alias fe='find . -iname "f" -exec echo {} \; -exec grep word {} \;' # execute command(s) on files
