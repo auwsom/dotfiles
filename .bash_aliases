@@ -186,6 +186,7 @@ alias diff='type diff; diff -y --color --brief' # compare. -y show. --brief only
 alias dedup="tac $HISTFILE | awk '!a[\$0]++' | tac > $HISTFILE" # careful, backup first
 alias desk='kioclient exec' # in KDE will open .desktop file from CLI
 alias dmesg='type dmesg; dmesg -HTw' # messages from the kernel, human readable, timestamp, follow
+alias dmesgg='type dmesg; dmesg -HTw | grep -i' # dmesg grep. there's no option to filter by unit.
 alias dli='tac /var/log/dpkg.log | grep -i "install"' # list installed packages
 alias aptli='apt list --installed' # list installed apt packages
 alias aptlig='apt list --installed | grep -i' # list installed apt packages
@@ -303,7 +304,7 @@ export VISUAL='vi' # export EDITOR='vi' is for old line editors like ed
 # dont use single quotes when setting `export PATH="_:$PATH"`. single quotes no parameter expansion.
 # export TERM='xterm' # makes vim use End and Home keys. but only vt220 on ubuntu cloud image
 useragent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_0) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.79 Safari/537.1 Lynx"
-function ? { lynx "https://lite.duckduckgo.com/lite?kd=-1&kp=-1&q=$(urlencode "$*")";} # cli search. needs `apt install gridsite-clients` for urlencode
+#function ? { lynx "https://lite.duckduckgo.com/lite?kd=-1&kp=-1&q=$(urlencode "$*")";} # cli search. needs `apt install gridsite-clients` for urlencode
 
 
 ## key bindings. custom emacs. or use `set -o vi` for vim bindings. `set -o emacs` to reverse.
@@ -634,14 +635,21 @@ alias db='distrobox'
 alias dbl='distrobox list'
 alias dbe='distrobox enter'
 
+alias d='docker'
+alias dil='docker images'
+alias dpsa='docker ps -a' # list containers including not-running
+alias dcl='docker container list --all'
+alias dritb='docker run -it $name /bin/bash' # add `-v /outside:/inside` for volume, -p port,
+alias dsta='docker start $name'
+alias dstp='docker stop $name'
+
 alias pm='podman'
-alias pmi='podman info'
-alias pmil='podman images'
+alias pmi='podman images'
 alias pmcl='podman container list --all'
 alias pmm='podman machine'
 alias pmml='podman machine list'
-alias pmmsa='podman machine start'
-alias pmmsp='podman machine stop'
+alias pmmsta='podman machine start'
+alias pmmstp='podman machine stop'
 # podman machine init --cpus=4 --memory=4000 --image-path=/media/user/VM/Arch-Linux-x86_64-basic.qcow2 arch-4-4
 alias qemu='qemu-system-x86_64' # --help
 
