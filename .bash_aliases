@@ -199,7 +199,7 @@ alias dpkgll='grep -i install /var/log/dpkg.log' # list last installed
 alias dpkglis="dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n" # list installed by size
 alias dpkgpr='dpkg --list |grep "^rc" | cut -d " " -f 3 | xargs sudo dpkg --purge' # purge removed ^ 
 alias dpkgca='dpkg --configure -a' # use when apt install breaks. use `apt -f install` install dependencies when using `apt install debfile.deb`
-alias d='dirs' # shows dir stack for pushd/popd
+alias ds='dirs' # shows dir stack for pushd/popd
 # dbus-monitor, qdbus
 # `env` # shows environment variables
 #'fc -s' #<query> # search and redo command from history. shebang is similar !<query> or !number. fc -s [old=new] [command]   https://docs.oracle.com/cd/E19253 (fix command)
@@ -255,6 +255,7 @@ alias uname2='uname -r' # show kernel version
 alias ui='update-initramfs' # update kernel
 alias urel='cat /etc/os-release' # show OS info
 #alias w='w' # Show who is logged on and what they are doing. Or `who`.
+alias vi='vim'
 alias wdf='watch \df' # refresh command output every 2s 
 alias wdu='watch du -cd1 .' # or `watch du -s <dir>` or `watch '\du -cd1 . | sort -n'`
 alias wget='type wget; wget --no-clobber --content-disposition --trust-server-names' # -N overwrites only if newer file and disables timestamping # or curl to download webfile (curl -JLO)
@@ -642,6 +643,7 @@ alias dcl='docker container list --all'
 alias dritb='docker run -it $name /bin/bash' # add `-v /outside:/inside` for volume, -p port,
 alias dsta='docker start $name'
 alias dstp='docker stop $name'
+alias deb='docker exec -it $name bash'
 
 alias pm='podman'
 alias pmi='podman images'
