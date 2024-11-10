@@ -118,7 +118,7 @@ alias ltr='ls -lcr ' # "list" long, time, reverse. bottom latest. c changed, a a
 alias lld='ls -dlFh ' # list only directories.
 alias lsd='ls -d ' # list only directories.
 alias lsp='ls -a | xargs -I % realpath % ' # returns full paths. have to be in the directory. 
-alias lns='ln -s' # <source> <target> = <from> <to> = <"target"> <linkname>.hardlinks accumulate and dont work across disks. rm symlink wont remove underlying file. see function lnsr for reversed args
+alias lns='ln -s' # <from> <to> = <"target"> <linkname>.hardlinks accumulate and dont work across disks. rm symlink wont remove underlying file. see function lnsr for reversed args
 alias mo='more ' # break output into pages. or `less`.
 #alias mf='touch' # make file. or `echo foo | tee $newfile`. `(umask 644; touch file)` to set perms
 #alias md='mkdir -p' # makes all --parents directories necessary
