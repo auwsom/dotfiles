@@ -304,12 +304,17 @@ export CDPATH=".:/home/user:/media/user:/media/root" # can cd to any dir in user
 export VISUAL='vi' # export EDITOR='vi' is for old line editors like ed
 # dont use single quotes when setting `export PATH="_:$PATH"`. single quotes no parameter expansion.
 # export TERM='xterm' # makes vim use End and Home keys. but only vt220 on ubuntu cloud image
+
 useragent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_0) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.79 Safari/537.1 Lynx"
 #function ? { lynx "https://lite.duckduckgo.com/lite?kd=-1&kp=-1&q=$(urlencode "$*")";} # cli search. needs `apt install gridsite-clients` for urlencode
-function ? { python3 -c 'import openai; openai.api_key = "'$OPENAI_API_KEY'"; response = openai.chat.completions.create(model="gpt-4o-mini", \
-messages=[{"role": "user", "content": "'"$@"'"}]); print(response.choices[0].message.content)';} # pip install openai --break-system-packages (vs need venv)
-function ?c { python3 -c 'from anthropic import Anthropic; anthropic = Anthropic(api_key="'$ANTHROPIC_API_KEY'"); \
-message = anthropic.messages.create(model="claude-3-5-haiku-latest",max_tokens=1000,messages=[{"role": "user","content": "'"$@"'"}]); print(message.content[0].text)'; } # pip install anthropic --break-system-packages
+function ? { python3 -c "import openai; openai.api_key = '${OPENAI_API_KEY}'; response = openai.chat.completions.create(model='gpt-4o-mini', \
+messages=[{'role': 'user', 'content': '$*'}]); print(response.choices[0].message.content])";} # pip install openai --break-system-packages (vs need venv)
+function ?? { python3 -c "from anthropic import Anthropic; anthropic = Anthropic(api_key='$ANTHROPIC_API_KEY'); \
+message = anthropic.messages.create(model='claude-3-5-haiku-latest',max_tokens=1000,messages=[{'role': 'user','content': '$*'}]); print(message.content[0].text)"; } # pip install anthropic --break-system-packages
+function ??? { python3 -c "import openai; openai.api_key = '${OPENAI_API_KEY}'; response = openai.chat.completions.create(model='gpt-4o', \
+messages=[{'role': 'user', 'content': '$*'}]); print(response.choices[0].message.content)";} # pip install openai --break-system-packages (vs need venv)
+function ???? { python3 -c "from anthropic import Anthropic; anthropic = Anthropic(api_key='$ANTHROPIC_API_KEY'); \
+message = anthropic.messages.create(model='claude-3-5-haiku-latest',max_tokens=1000,messages=[{'role': 'user','content': '$*'}]); print(message.content[0].text)"; } # pip install anthropic --break-system-packages
 
 
 ## key bindings. custom emacs. or use `set -o vi` for vim bindings. `set -o emacs` to reverse.
