@@ -306,7 +306,8 @@ export VISUAL='vi' # export EDITOR='vi' is for old line editors like ed
 # export TERM='xterm' # makes vim use End and Home keys. but only vt220 on ubuntu cloud image
 useragent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_0) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.79 Safari/537.1 Lynx"
 #function ? { lynx "https://lite.duckduckgo.com/lite?kd=-1&kp=-1&q=$(urlencode "$*")";} # cli search. needs `apt install gridsite-clients` for urlencode
-function ? { python3 -c 'import openai; openai.api_key = "'$OPENAI_API_KEY'"; response = openai.chat.completions.create(model="gpt-4o-mini", messages=[{"role": "user", "content": "'$1'"}]); print(response.choices[0].message.content)';}
+function ? { python3 -c 'import openai; openai.api_key = "'$OPENAI_API_KEY'"; response = openai.chat.completions.create(model="gpt-4o-mini", \
+messages=[{"role": "user", "content": "'$1'"}]); print(response.choices[0].message.content)';} # pip install openai --break-system-packages
 
 
 ## key bindings. custom emacs. or use `set -o vi` for vim bindings. `set -o emacs` to reverse.
