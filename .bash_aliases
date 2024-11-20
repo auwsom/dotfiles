@@ -556,10 +556,10 @@ alias gitac='gita && gitc' # add and commit
 alias gs='git status && git add . && git commit -m "ok" && git push # git sync by push'
 alias gitsd='pushd ~/git/dotfiles && git add . && git commit -m commit && git push -u origin main; popd' # git sync push on dotfiles dir
 alias gpho='git push -u origin main '
-alias agitinfo # git clone is for first copy # git status, git log, git branch \# git clone https://github.com/auwsom/dotfiles.git #add ssh priv & pub key or will pull but not push
+alias agitinfo='# git clone is for first copy # git status, git log, git branch \# git clone https://github.com/auwsom/dotfiles.git #add ssh priv & pub key or will pull but not push
 # git clone git@github.com:auwsom/dotfiles.git # will ask to connect. need to `eval $(ssh-agent -s) && ssh-add ~/.ssh/id_rsa` checks if agent running and adds (will display email of GH account) 
 ## add from local creatJust found this tool called Briefcase to deploy python apps to 6 platforms (mac,win,linux,ios,android,web) looks great. Produces standalone binariese:
-# `apt install gh` then click enter until auth through webpage
+# `apt install gh` then click enter until auth through webpage'
 alias git1='git init && git remote add origin git@github.com:auwsom/<new>.git && git branch -M main'
 alias git2='gh repo create <newrepo> --public'
 alias git3='git add . && git push --set-upstream origin main'
