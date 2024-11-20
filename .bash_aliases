@@ -545,32 +545,33 @@ alias remux='tmux source ~/.tmux.conf' # reload tmux
 # Scrolling: Ctrl-b then [ then you can use your normal navigation keys to scroll around (eg. Up Arrow or PgDn). Press q to quit scroll mode.
 
 ## basic git settings
-alias gs='git status'
-alias gl='git log'
-alias gb='git branch'
-alias ga='git add .'
-alias gc='git commit -m "commit"'
-alias gph='git push'
-alias gpl='git pull' # (git fetch && git merge) 
-alias gac='ga && gc' # add and commit
-alias gacp='gs && ga && gc && gph' # also push
-alias gacpa='pushd ~/git/dotfiles && git add . && git commit -m commit && git push -u origin main; popd' # gacp on aliases
+alias gits='git status'
+alias gitl='git log'
+alias gitb='git branch'
+alias gita='git add .'
+alias gitc='git commit -m "commit"'
+alias gitph='git push'
+alias gitpl='git pull' # (git fetch && git merge) 
+alias gitac='ga && gc' # add and commit
+alias gitacp='gs && ga && gc && gph' # also push
+alias gitsync='pushd ~/git/dotfiles && git add . && git commit -m commit && git push -u origin main; popd' # gacp on aliases
 #alias gph='git push -u origin main '
 # git clone is for first copy # git status, git log, git branch
 # git clone https://github.com/auwsom/dotfiles.git #add ssh priv & pub key or will pull but not push
 # git clone git@github.com:auwsom/dotfiles.git # will ask to connect. need to `eval $(ssh-agent -s) && ssh-add ~/.ssh/id_rsa` checks if agent running and adds (will display email of GH account) 
 ## add from local creatJust found this tool called Briefcase to deploy python apps to 6 platforms (mac,win,linux,ios,android,web) looks great. Produces standalone binariese:
 # `apt install gh` then click enter until auth through webpage
-alias gi='git init && git remote add origin git@github.com:auwsom/<new>.git && git branch -M main'
-alias gi2='gh repo create <newrepo> --public'
-alias gi3='git add . && git push --set-upstream origin main'
+alias git1='git init && git remote add origin git@github.com:auwsom/<new>.git && git branch -M main'
+alias git2='gh repo create <newrepo> --public'
+alias git3='git add . && git push --set-upstream origin main'
 # git config --global init.defaultBranch main 
 # https://www.freecodecamp.org/news/how-to-make-your-first-pull-request-on-github-3/
-alias gd='git diff origin/HEAD' # <commit> diff head to a commit
-alias gd2='git diff origin/main main' # diff remote (GH repo) to local
-alias gpf='git push --force' # use only after diffing remote to local. also if warning from remote being ahead, you can pull and merge.
-alias gg='git grep'
-alias gr='git restore' # restores last commit to local. if pushed, likely need merge
+alias gitd1='git diff origin/HEAD' # <commit> diff head to a commit
+alias gitd2='git diff origin/main main' # diff remote (GH repo) to local
+alias gitpf='git push --force' # use only after diffing remote to local. also if warning from remote being ahead, you can pull and merge.
+alias gitg='git grep'
+alias gitr1='git restore' # restores last commit to local. if pushed, need merge
+alias gitr2='git reset --hard origin/main' # resets local to origin
 
 # mv ~/.bash_aliases ~/.bash_aliases0 && ln -s ~/git/dotfiles/.bash_aliases ~/.bash_aliases
 # to push new repo from CLI you have to create it using curl and PERSONAL_ACCESS_TOKEN.
