@@ -169,7 +169,7 @@ alias sz='7z x -o*' # extracts in to subdirectory
 alias szc='7z a -t7z -m0=lzma2:d1024m -mx=9 -aoa -mfb=64 -md=32m -ms=on' #<dir> <output> # highest compression or use PeaZip
 alias au='sudo apt update'
 alias auu='sudo apt update && apt -y upgrade' # show all users logged in. `last` show last logins
-alias aca='sudo apt clean && sudo apt autoremove' # `apt remove` leaves configs, `apt purge` doesnt.
+alias aca='sudo df && apt clean && apt autoremove && df' # `apt remove` leaves configs, `apt purge` doesnt.
 alias aptr='apt install --reinstall' # reinstall pkg. 
 # `arp` # lists all devices on network layer 2. apt install net-tools
 alias awk1='awk "{print \$1}"' # print first column; end column {print $NF}; second to last $(NF-1); use single quotes when not using alias; awk more common than `cut -f1 -d " "`
