@@ -22,7 +22,7 @@ HISTFILE=~/.bash_eternal_history # "certain bash sessions truncate .bash_history
 HISTCONTROL=ignoreboth:erasedups   # no duplicate entries. ignoredups is only for consecutive. ignore both = ignoredups+ignorespace (will not record commands with space in front)
 #HISTTIMEFORMAT="%h %d %H:%M " # "%F %T "
 #export HISTIGNORE="!(+(*\ *))" # ignores commands without arguments. not compatible with HISTTIMEFORMAT. should be the same as `grep -v -E "^\S+\s.*" $HISTFILE`
-export HISTIGNORE="c:cdb:cdh:cdu:df:i:h:hh:hhh:l:ll:lll:lld:lsd:lsp:ltr:ls::mount:umount:rebash:path:env:pd:ps1:sd:sss:top:tree1:zr:zz:au:auu:aca:cu:cur:cx:dedup:dmesg:dli:aptli:d:flmh:flmho:flmr:fm:free:lsblk:na:netstat:ping1:wrapon:wrapoff:um:m:hdl":"ls *":"hg *" # ignore commands from history
+export HISTIGNORE="c:cdb:cdh:cdu:df:i:h:hh:hhh:l:lll:lld:lsd:lsp:ltr::mount:umount:rebash:path:env:pd:ps1:sd:sss:top:tree1:zr:zz:au:auu:aca:cu:cur:cx:dedup:dmesg:dli:aptli:d:flmh:flmho:flmr:fm:free:lsblk:na:netstat:ping1:wrapon:wrapoff:um:m:hdl":"ls *":"hg *" # ignore commands from history
 export PROMPT_COMMAND='history -a; ' # ;set +m' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. set +m makes disables job control for aliases in vi.
 #export PROMPT_COMMAND='EC=$? && history -a && test $EC -eq 1 && echo error $HISTCMD && history -d $HISTCMD && history -w' # excludes errors from history
 # export PROMPT_COMMAND='history -a' # && test $EC -eq 1 && echo error $HISTCMD && history -d $HISTCMD && history -w' # excludes errors from history
