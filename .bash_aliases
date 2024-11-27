@@ -702,6 +702,8 @@ alias eo='echo $(cat /tmp/curr)'
 #if [[ $- == *i* ]]; then trap save_output DEBUG; fi  
 #trap save_output DEBUG
 
+export PYTHONWARNINGS="ignore"  # Suppresses warnings (optional)
+export PYTHONTRACEBACKLIMIT=1  # limits python traceback lines to 1
 
 
 if ! [[ $- == *i* ]]; then true "ENDI"; fi
