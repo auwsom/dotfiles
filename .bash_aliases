@@ -704,7 +704,7 @@ alias eo='echo $(cat /tmp/curr)'
 
 export PYTHONWARNINGS="ignore"  # Suppresses warnings (optional)
 export PYTHONTRACEBACKLIMIT=1  # limits python traceback lines to 1
-
+alias sv='source /home/user/venv1/bin/activate'
 
 if ! [[ $- == *i* ]]; then true "ENDI"; fi
 true <<'ENDZ' # move this line to anywhere above and whatever is below it will be skipped.
