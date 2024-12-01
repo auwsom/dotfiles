@@ -34,7 +34,7 @@ alias ha='history -a ' # append current history before opening a new terminal.
 alias hs='history -a; history -c; history -r' # share history from other terminals to current one.
 alias vibash='vi ~/.bash_aliases' 
 alias vibashrc='vi ~/.bashrc' 
-#alias rebashrc='source ~/.bashrc' # `source` reloads settings. ~ home dir. just type `bash`.
+alias rebashrc='source ~/.bashrc' # `source` reloads settings. ~ home dir. just type `bash` unless in venv.
 #alias rebash='exec bash -l' # reloads shell. -l is login shell for completion. just type `bash`.
 alias realias='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc'
 alias realiasr='ba=".bash_aliases";sudo install $HOME/$ba /root/$ba && sudo chmod 0664 /root/$ba'
