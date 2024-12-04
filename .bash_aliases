@@ -286,6 +286,8 @@ function hdl { history -d $HISTCMD; history -w;} # delete history last number
 function hdln { history -d $(($HISTCMD - "$1" -1))-$(($HISTCMD - 2)); history -w;} # delete last n lines. (add 1 for this command) (history -d -$1--1; has error)
 function help { "$1" --help;} # use `\help` to disable the function alias
 function q { "$1" --help || help "$1" || man "$1" || info "$1";} # use any help doc. # also tldr. 
+command_not_found_handle2() { [ $# -eq 0 ] && command -v "$1" > /dev/null 2>&1 && "$1" --help || command "$@"; } # adds --help to all commands that need a parameter. or use below to exclude certain ones.
+#command_not_found_handle() { local excluded_commands=("ls" "cd" "pwd"); if [ $# -eq 0 ] && command -v "$1" > /dev/null 2>&1; then [[ ! " ${excluded_commands[@]} " =~ " $1 " ]] && "$1" --help || command "$1"; else command "$@"; fi }
 function lnst { dir="$1"; lastdir="${dir##*/}"; sudo ln -s $2/$lastdir "$1";} # ln -st?
 function lnsr { ln -s "$2" "$1";} # symlink reversed using arg order from cp or mv
 function ren { mv "$1" "$1""$2";} # rename file just add ending, eg file to file1.
