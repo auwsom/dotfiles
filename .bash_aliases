@@ -442,7 +442,8 @@ alias eg="env | grep 1=" # grep above env vars
 # envdir or direnv for storing project secrets safely. DONT store them in a GitHub repo (.gitignore) http://thedjbway.b0llix.net/daemontools/envdir.html and python os.environ['HOME']
 
 ## basic vim settings: 
-if ! [[ -f ~/.vimrc ]]; then   # just delete to remake file opening new shell
+#if ! [[ -f ~/.vimrc ]]; then   # CHANGE THIS LINE IF YOU DONT WANT VIMRC CHANGED!
+if [[ -f ~/.vimrc ]]; then   # 
 echo -e '
 set nocompatible
 set showmode
