@@ -142,6 +142,7 @@ alias pkill='pkill -f' # kill processed - full
 alias q='helpany' # see helpany function
 alias rm='rm -Irv ' # -I requires confirmation. -r recursive into directories. -v verbose. 
 # ^^^^^ maybe most helpful alias. avoids deleting unintended files. use -i to approve each deletion.
+function rl { readlink -f "$1"; } # function returns full path of file, very useful
 # `sed` # Stream EDitor `sed -i 's/aaa/bbb/g' file` -i inplace, replace aaa with bbb. g globally. can use any char instead of /, such as `sed -i 's,aaa,bbb,' file`. -E to use re pattern matching.
 alias sudo='sudo '; alias s='sudo '; alias sd='sudo -s ' # elevate privelege for command. see `visudo` to set. And `usermod -aG sudo add`, security caution when adding.
 alias sss='eval sudo $(history -p !!)' # redo with sudo
