@@ -51,7 +51,7 @@ if [ -f ~/.env ]; then source ~/.env ; fi # dont use this or env vars for storin
 #function rh { history -a;}; trap rh SIGHUP # saves history on interupt. see functions below.
 #nohist() { e=$BASH_COMMAND; history -d $HISTCMD;}; trap nohist ERR # traps error and deletes from hist before written. $e is line for reuse. ctrl-alt-e expands it. the approach below is better.
 #if [[ -f $HISTFILE ]]; then cp "$HISTFILE" "${HISTFILE}.bak"; awk '!seen[$0]++' "$HISTFILE" > "${HISTFILE}.tmp" && mv "${HISTFILE}.tmp" "$HISTFILE"; history -c; history -r; fi # dedups history on new shell.
-[[ -f ~/.bash_history_bak2 ]] && cat ~/.bash_history_bak2 >> "$HISTFILE" && awk '!seen[$0]++' "$HISTFILE" > "${HISTFILE}.tmp" && mv "${HISTFILE}.tmp" "$HISTFILE"; history -c; history -r; sed -i '/^#.*error$/d' "$HISTFILE" # removes dups and cmds that errored
+alias hdde='[[ -f $HISTFILE ]] && cp "$HISTFILE" "${HISTFILE}.bak3" && awk "!seen[$0]++" "$HISTFILE" >| "${HISTFILE}.tmp" && mv "${HISTFILE}.tmp" "$HISTFILE" && history -c && history -r && sed -i "/^#.*error$/d" "$HISTFILE"' # removes dups and cmds that errored
 trap 'history -a' SIGHUP # saves history on interupt. see functions below.
 IFS=$' \t\n' # restricts "internal field separator" to tab and newline. handles spaces in filenames.
 #nohist() { e=$BASH_COMMAND; history -d $HISTCMD;}; trap nohist ERR # traps error and deletes from hist before written. $e is line for reuse. ctrl-alt-e expands it. 
