@@ -23,35 +23,37 @@ HISTCONTROL=ignoreboth:erasedups   # no duplicate entries. ignoredups is only fo
 #HISTTIMEFORMAT="%h %d %H:%M " # "%F %T "
 #export HISTIGNORE="!(+(*\ *))" # ignores commands without arguments. not compatible with HISTTIMEFORMAT. should be the same as `grep -v -E "^\S+\s.*" $HISTFILE`
 export HISTIGNORE="c:cdb:cdh:cdu:df:i:h:hh:hhh:l:lll:lld:lsd:lsp:ltr::mount:umount:rebash:path:env:pd:ps1:sd:sss:top:tree1:zr:zz:au:auu:aca:cu:cur:cx:dedup:dmesg:dli:aptli:d:flmh:flmho:flmr:fm:free:lsblk:na:netstat:ping1:wrapon:wrapoff:um:m:hdl":"ls *":"hg *" # ignore commands from history
-#export PROMPT_COMMAND='history -a' # ;set +m' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. set +m makes disables job control for aliases in vi.
+export PROMPT_COMMAND='history -a' # ;set +m' # will save (append) unwritten history in memory every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. set +m makes disables job control for aliases in vi.
 #export PROMPT_COMMAND='EC=$? && history -a && test $EC -eq 1 && echo error $HISTCMD && history -d $HISTCMD && history -w' # excludes errors from history
-export PROMPT_COMMAND='history -a ~/.bash_history_bak2' # writes to backup file instead of polluting every terminal with all history
+#export PROMPT_COMMAND='history -a ~/.bash_history_bak2' # writes to backup file instead of polluting every terminal with all history
 export LC_ALL="C" # makes ls list dotfiles before others
 dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
-#history -w # writes history on every new bash shell to remove duplicates
-# alias # unalias # extra space at end will look if the next arg is an alias for chaining
-alias ha='history -a ' # append current history before opening a new terminal.
-alias hs='history -a; history -c; history -r' # share history from other terminals to current one.
-alias vibash='vi ~/.bash_aliases' 
 alias vibashrc='vi ~/.bashrc' 
+alias vibasha='vi ~/.bash_aliases' 
 alias rebashrc='source ~/.bashrc' # `source` reloads settings. ~ home dir. just type `bash` unless in venv.
 #alias rebash='exec bash -l' # reloads shell. -l is login shell for completion. just type `bash`.
 alias realias='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc'
-alias realiasr='ba=".bash_aliases";sudo install $HOME/$ba /root/$ba && sudo chmod 0664 /root/$ba'
-alias revim='rm ~/.vimrc && source ~/.bashrc'
+alias realiasr='ba=".bash_aliases";sudo install $HOME/$ba /root/$ba && sudo chmod 0664 /root/$ba' # for root
+alias revim='rm ~/.vimrc && source ~/.bashrc' # redo vim settings. below import is blocked for existing .vimrc
 ## `shopt` list shell options. `set -o` lists settings. `set -<opt>` enables like flag options.
 set -o noclobber  # dont let accidental > overwrite. use >| to force redirection even with noclobber
 shopt -s lastpipe; set -o monitor # (set +m). allows last pipe to affect shell; needs Job Control enabled. for the o output alias.
 shopt -s nocaseglob # ignores upper or lower case of globs (*)
 shopt -s dotglob # uses all contents both * and .* for cp, mv, etc. or use `mv /path/{.,}* /path/`
 shopt -s globstar # makes ** be recursive for directories. use lld below for non-recursive ls.
-#shopt -s histappend # append to history, don't overwrite it. for using multiple shells at once. is default set in .bashrc. no good solution: is annoying bc adds noise to all tabs, but will loose commands without i, rh trap doesnt always work?
+# for using multiple shells at once. is default set in .bashrc. no good solution: is annoying bc adds noise to all tabs, but will loose commands without i, rh trap doesnt always work?
+shopt -s histappend # append to history, don't overwrite it. 
+#history -w # writes history on every new bash shell to remove duplicates
+alias ha='history -a ' # append current history before opening a new terminal.
+alias hs='history -a; history -c; history -r' # sync history from other terminals to current one.
 shopt -s histverify   # confirm bash history (!number) commands before executing. optional for beginners using bang ! commands. can also use ctrl+alt+e to expand before enter.
 if [ -f ~/.env ]; then source ~/.env ; fi # dont use this or env vars for storing secrets. create dir .env and store files in there, then call with $(cat ~/.env/mykey). see envdir below.
-function rh { history -a;}; trap rh SIGHUP # saves history on interupt. see functions below.
+#function rh { history -a;}; trap rh SIGHUP # saves history on interupt. see functions below.
+#if [[ -f $HISTFILE ]]; then cp "$HISTFILE" "${HISTFILE}.bak"; awk '!seen[$0]++' "$HISTFILE" > "${HISTFILE}.tmp" && mv "${HISTFILE}.tmp" "$HISTFILE"; history -c; history -r; fi # dedups history on new shell.
+[[ -f ~/.bash_history_bak2 ]] && cat ~/.bash_history_bak2 >> "$HISTFILE" && awk '!seen[$0]++' "$HISTFILE" > "${HISTFILE}.tmp" && mv "${HISTFILE}.tmp" "$HISTFILE"; history -c; history -r; sed -i '/^#.*error$/d' "$HISTFILE" # removes dups and cmds that errored
+trap 'history -a' SIGHUP # saves history on interupt. see functions below.
 IFS=$' \t\n' # restricts "internal field separator" to tab and newline. handles spaces in filenames.
-#nohist() { e=$BASH_COMMAND; history -d $HISTCMD;}; trap nohist ERR # traps error and deletes from hist before written. $e is line for reuse. ctrl-alt-e expands it.
-#nohist() { $BASH_COMMAND=$BASH_COMMAND" e";}; trap nohist ERR # traps error and deletes from hist before written. $e is line for reuse. ctrl-alt-e expands it.
+nohist() { e=$BASH_COMMAND; history -d $HISTCMD;}; trap nohist ERR # traps error and deletes from hist before written. $e is line for reuse. ctrl-alt-e expands it.
 
 ## some familiar keyboard shortcuts: 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
@@ -67,6 +69,7 @@ if [[ $- == *i* ]]; then trap '' SIGINT && bind '"\C-Z": undo' && bind '"\ez": y
 # use \ to escape any alias. `type <command>` is in front to show it's an alias and avoid confusion.
 # cant use type in front with sudo, so same name is used only when least confusion.
 # aliases need space at end for chaining so can be used before alaised directories or files.
+# alias # unalias # extra space at end will look if the next arg is an alias for chaining
 # use `whatis` then command name for official explanation of any command. then command plus `--help` flag or `man`, `info`, `tldr` and `whatis` commands for more info on any command. or q alias below.
 # full list of shell commmands: https://www.computerhope.com/unix.htm or `ls /bin`. https://www.gnu.org/software/coreutils/manual/coreutils.html
 # list all builtins with `\help`. then `\help <builtin>` for any single one.
