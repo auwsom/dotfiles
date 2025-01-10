@@ -507,7 +507,7 @@ inoremap ii <esc>i
 inoremap jj <esc>
 ' >| ~/.vimrc   # > to not overwrite or >> to append
 fi
-# indent is >> and <<. in visual mode too.
+# indent is >> and <<. in visual mode too. use 3>> for multiple levels.
 
 ## basic vim commands: https://gist.github.com/auwsom/78c837fde60fe36159ee89e4e29ed6f1
 # https://rwxrob.github.io/vi-help/ https://www.keycdn.com/blog/vim-commands
