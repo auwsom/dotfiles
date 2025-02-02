@@ -507,6 +507,10 @@ inoremap ii <esc>i
 inoremap jj <esc>
 nnoremap <C-s> :w<CR> " Remap :w to Ctrl-S
 nnoremap <C-z> :q<CR> " Remap :q to Ctrl-Z
+command Wq wq
+command WQ wq
+command W w
+command Q q
 ' >| ~/.vimrc   # > to not overwrite or >> to append
 fi
 # indent is >> and <<. in visual mode too. use 3>> for multiple levels.
