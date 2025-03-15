@@ -64,7 +64,7 @@ stty susp ^F #stty susp undef; #stty intr undef # ctrl+z for undo have to remove
 stty lnext ^N # changes the ctrl+v for lnext to ctrl+b, to allow modern ctrl+v for paste. lnext shows the keycode of the next key typed.
 if [[ $- == *i* ]]; then trap '' SIGINT && bind '"\C-Z": undo' && bind '"\ez": yank'; fi # crtl+Z (cant remap C-z yet) and alt+z (bash bind wont do ctrl+shift+key, will do alt+shift+key ^[z) \e is esc and alt(meta). # dont run in non-inteactive (ie vim) 
 #if [[ $- == *i* ]]; then bind '"\C-f": revert-line'; fi# clear line. use ctrl-shift-c or C-c or C-\
-
+[ -f ~/.xmodmaprc ] || printf $'keycode 20 = underscore minus underscore minus' > ~/.xmodmaprc && xmodmap ~/.xmodmaprc
 
 ## short abc's of common commands: (avoid one letter files or variables to avoid conflicts)
 # use \ to escape any alias. `type <command>` is in front to show it's an alias and avoid confusion.
@@ -87,7 +87,7 @@ alias cd='pushd > /dev/null ' # extra space allows aliasing directories `alias f
 alias cdh='cd ~' # cd home.. just use `cd ` with one space to goto home. 
 #alias cdb='pd - ' # cd back
 alias cdb='cd -' # cd back
-alias cdu='cd ..' # change directory up
+alias cdu='cd .. &&' # change directory up
 alias cpa='type cp; cp -ar ' # achive and recursive. rsync is will show progress (not possible with cp without piping to pv). also try `install` command - copies and keeps permissions of target dir. 
 # type shows the alias to avoid confusion. but cant use type in combo with sudo.
 alias cp='cp -ir' # copy interactive to avoid cp with files unintentionally. use `find <dir> -type f -mmin -1` to find files copied in last 1 min. then add `-exec rm {} \;` once sure to delete. or `find <dir> -maxdepth 1 -type f -exec cmp -s '{}' "$destdir/{}" \; -print` can compare dirs. -a vs -R.
@@ -112,7 +112,7 @@ function hg2 { grep -i "$1" ~/.bash_history_bak2; } # searches the file accumula
 #alias hd='history -d -2--1 ' #not working # delete last line. `history -d -10--2` to del 9 lines from -10 to -2 inclusive, counting itself. or use space in front of command to hide. 
 alias j='jobs' # dont use much unless `ctrl+z` to stop process
 alias k='kill -9' #<id> # or `kill SIGTERM` to terminate process (or job). or `pgreg __` and then `pkill __`
-alias kk='kill %1' # kill job 1 gently
+alias k1='kill %1' # kill job 1 gently
 alias kj='kill -TERM %1' # terminate job 1
 alias loc='locate --limit 5' # `apt install locate` finds common file locations fast (fstab, etc) 
 #alias ls='ls -F ' # list. F is --classify with symbols or colors. already included in most .bashrc
