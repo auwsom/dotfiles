@@ -108,7 +108,7 @@ alias i='ip -color a' # network info
 alias h='history 30'
 alias hhh='history 500' # `apt install hstr`. replaces ctrl-r with `hstr --show-configuration >> ~/.bashrc` https://github.com/dvorka/hstr. disables hide by default.
 alias hg='history | grep -i'
-function hg2 { grep -i "$1" ~/.bash_history_bak2; } # searches the file accumulating from all terminal before lost by hard exit
+function hg2 { grep -i "$1" ~/.bash_history; } # searches the file accumulating from all terminal before lost by hard exit
 #alias hd='history -d -2--1 ' #not working # delete last line. `history -d -10--2` to del 9 lines from -10 to -2 inclusive, counting itself. or use space in front of command to hide. 
 alias j='jobs' # dont use much unless `ctrl+z` to stop process
 alias k='kill -9' #<id> # or `kill SIGTERM` to terminate process (or job). or `pgreg __` and then `pkill __`
