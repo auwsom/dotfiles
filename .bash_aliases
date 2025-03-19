@@ -87,7 +87,7 @@ alias cd='pushd > /dev/null ' # extra space allows aliasing directories `alias f
 alias cdh='cd ~' # cd home.. just use `cd ` with one space to goto home. 
 #alias cdb='pd - ' # cd back
 alias cdb='cd -' # cd back
-alias cdu='cd .. &&' # change directory up
+alias cdu='cd ..' # change directory up
 alias cpa='type cp; cp -ar ' # achive and recursive. rsync is will show progress (not possible with cp without piping to pv). also try `install` command - copies and keeps permissions of target dir. 
 # type shows the alias to avoid confusion. but cant use type in combo with sudo.
 alias cp='cp -ir' # copy interactive to avoid cp with files unintentionally. use `find <dir> -type f -mmin -1` to find files copied in last 1 min. then add `-exec rm {} \;` once sure to delete. or `find <dir> -maxdepth 1 -type f -exec cmp -s '{}' "$destdir/{}" \; -print` can compare dirs. -a vs -R.
@@ -592,6 +592,7 @@ alias gitr1='git restore' # restores last commit to local. if pushed, need merge
 alias gitr2='git reset --hard origin/main' # resets local to origin
 alias gitlo='git log --oneline' # shows compact commit history
 alias gitchkf='git checkout <commit> -- <file>' # restores a file from that commit. 
+alias gitsearch1='keyword="replaceme"; for commit in $(git log -S "$keyword" --oneline --pretty=format:"%H"); do echo "Searching commit: $commit"; git grep "$keyword" "$commit"; echo "------------------------"; done'
 
 # mv ~/.bash_aliases ~/.bash_aliases0 && ln -s ~/git/dotfiles/.bash_aliases ~/.bash_aliases
 # to push new repo from CLI you have to create it using curl and PERSONAL_ACCESS_TOKEN.
