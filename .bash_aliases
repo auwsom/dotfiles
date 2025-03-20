@@ -592,7 +592,8 @@ alias gitr1='git restore' # restores last commit to local. if pushed, need merge
 alias gitr2='git reset --hard origin/main' # resets local to origin
 alias gitlo='git log --oneline' # shows compact commit history
 alias gitchkf='git checkout <commit> -- <file>' # restores a file from that commit. 
-alias gitsearch1='keyword="replaceme"; for commit in $(git log -S "$keyword" --oneline --pretty=format:"%H"); do echo "Searching commit: $commit"; git grep "$keyword" "$commit"; echo "------------------------"; done'
+alias gitsr1='keyword="replacethis"; for commit in $(git log -S "$keyword" --oneline --pretty=format:"%H"); do git grep "$keyword" "$commit"; done'
+alias gitsr2='git log --name-status --diff-filter=A --'
 
 # mv ~/.bash_aliases ~/.bash_aliases0 && ln -s ~/git/dotfiles/.bash_aliases ~/.bash_aliases
 # to push new repo from CLI you have to create it using curl and PERSONAL_ACCESS_TOKEN.
