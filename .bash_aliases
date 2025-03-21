@@ -595,6 +595,7 @@ alias gitchkf='git checkout <commit> -- <file>' # restores a file from that comm
 alias gitsr1='keyword="replacethis"; for commit in $(git log -S "$keyword" --oneline --pretty=format:"%H"); do git grep "$keyword" "$commit"; done'
 alias gitsr2='git log --name-status --diff-filter=A --'
 
+
 # mv ~/.bash_aliases ~/.bash_aliases0 && ln -s ~/git/dotfiles/.bash_aliases ~/.bash_aliases
 # to push new repo from CLI you have to create it using curl and PERSONAL_ACCESS_TOKEN.
 #[Configure GitHub SSH Keys - YouTube](https://www.youtube.com/watch?v=s6KTbytdNgs?disablekb=0)
