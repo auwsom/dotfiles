@@ -22,50 +22,55 @@ HISTFILE=~/.bash_eternal_history # "certain bash sessions truncate .bash_history
 HISTCONTROL=ignoreboth:erasedups   # no duplicate entries. ignoredups is only for consecutive. ignore both = ignoredups+ignorespace (will not record commands with space in front)
 #HISTTIMEFORMAT="%h %d %H:%M " # "%F %T "
 #export HISTIGNORE="!(+(*\ *))" # ignores commands without arguments. not compatible with HISTTIMEFORMAT. should be the same as `grep -v -E "^\S+\s.*" $HISTFILE`
-export HISTIGNORE="c:cdb:cdh:cdu:df:i:h:hh:hhh:l:ll:lll:lld:lsd:lsp:ltr:ls::mount:umount:rebash:path:env:pd:ps1:sd:sss:top:tree1:zr:zz:au:auu:aca:cu:cur:cx:dedup:dmesg:dli:aptli:d:flmh:flmho:flmr:fm:free:lsblk:na:netstat:ping1:wrapon:wrapoff:um:m:hdl":"ls *":"hg *" # ignore commands from history
-export PROMPT_COMMAND='history -a; ' # ;set +m' # will save (append) history every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. set +m makes disables job control for aliases in vi.
+export HISTIGNORE="c:cdb:cdh:cdu:df:i:h:hh:hhh:l:lll:lld:lsd:lsp:ltr::mount:umount:rebash:path:env:pd:ps1:sd:sss:top:tree1:zr:zz:au:auu:aca:cu:cur:cx:dedup:dmesg:dli:aptli:d:flmh:flmho:flmr:fm:free:lsblk:na:netstat:ping1:wrapon:wrapoff:um:m:hdl":"ls *":"hg *" # ignore commands from history
+export PROMPT_COMMAND='history -a' # ;set +m' # will save (append) unwritten history in memory every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. set +m makes disables job control for aliases in vi.
 #export PROMPT_COMMAND='EC=$? && history -a && test $EC -eq 1 && echo error $HISTCMD && history -d $HISTCMD && history -w' # excludes errors from history
-# export PROMPT_COMMAND='history -a' # && test $EC -eq 1 && echo error $HISTCMD && history -d $HISTCMD && history -w' # excludes errors from history
+#export PROMPT_COMMAND='history -a ~/.bash_history_bak2' # writes to backup file instead of polluting every terminal with all history
 export LC_ALL="C" # makes ls list dotfiles before others
 dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
-#history -w # writes history on every new bash shell to remove duplicates
-# alias # unalias # extra space at end will look if the next arg is an alias for chaining
-alias ha='history -a ' # append current history before opening a new terminal.
-alias hs='history -a; history -c; history -r' # share history from other terminals to current one.
-alias vibash='vi ~/.bash_aliases' 
 alias vibashrc='vi ~/.bashrc' 
-#alias rebashrc='source ~/.bashrc' # `source` reloads settings. ~ home dir. just type `bash`.
+alias vibasha='vi ~/.bash_aliases' 
+alias rebashrc='source ~/.bashrc' # `source` reloads settings. ~ home dir. just type `bash` unless in venv.
 #alias rebash='exec bash -l' # reloads shell. -l is login shell for completion. just type `bash`.
 alias realias='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc'
-alias realiasr='ba=".bash_aliases";sudo install $HOME/$ba /root/$ba && sudo chmod 0664 /root/$ba'
-alias revim='rm ~/.vimrc && source ~/.bashrc'
+alias realiasr='ba=".bash_aliases";sudo install $HOME/$ba /root/$ba && sudo chmod 0664 /root/$ba' # for root
+alias revim='rm ~/.vimrc && source ~/.bashrc' # redo vim settings. below import is blocked for existing .vimrc
 ## `shopt` list shell options. `set -o` lists settings. `set -<opt>` enables like flag options.
 set -o noclobber  # dont let accidental > overwrite. use >| to force redirection even with noclobber
 shopt -s lastpipe; set -o monitor # (set +m). allows last pipe to affect shell; needs Job Control enabled. for the o output alias.
 shopt -s nocaseglob # ignores upper or lower case of globs (*)
 shopt -s dotglob # uses all contents both * and .* for cp, mv, etc. or use `mv /path/{.,}* /path/`
 shopt -s globstar # makes ** be recursive for directories. use lld below for non-recursive ls.
-#shopt -s histappend # append to history, don't overwrite it. for using multiple shells at once. is default set in .bashrc. no good solution: is annoying bc adds noise to all tabs, but will loose commands without i, rh trap doesnt always work?
+# for using multiple shells at once. is default set in .bashrc. no good solution: is annoying bc adds noise to all tabs, but will loose commands without i, rh trap doesnt always work?
+shopt -s histappend # append to history, don't overwrite it. 
+#history -w # writes history on every new bash shell to remove duplicates
+alias ha='history -a ' # append current history before opening a new terminal.
+alias hs='history -a; history -c; history -r' # sync history from other terminals to current one.
 shopt -s histverify   # confirm bash history (!number) commands before executing. optional for beginners using bang ! commands. can also use ctrl+alt+e to expand before enter.
 if [ -f ~/.env ]; then source ~/.env ; fi # dont use this or env vars for storing secrets. create dir .env and store files in there, then call with $(cat ~/.env/mykey). see envdir below.
-function rh { history -a;}; trap rh SIGHUP # saves history on interupt. see functions below.
+#function rh { history -a;}; trap rh SIGHUP # saves history on interupt. see functions below.
+#nohist() { e=$BASH_COMMAND; history -d $HISTCMD;}; trap nohist ERR # traps error and deletes from hist before written. $e is line for reuse. ctrl-alt-e expands it. the approach below is better.
+#if [[ -f $HISTFILE ]]; then cp "$HISTFILE" "${HISTFILE}.bak"; awk '!seen[$0]++' "$HISTFILE" > "${HISTFILE}.tmp" && mv "${HISTFILE}.tmp" "$HISTFILE"; history -c; history -r; fi # dedups history on new shell.
+alias hdde='[[ -f $HISTFILE ]] && cp "$HISTFILE" "${HISTFILE}.bak3" && awk "!seen[$0]++" "$HISTFILE" >| "${HISTFILE}.tmp" && mv "${HISTFILE}.tmp" "$HISTFILE" && history -c && history -r && sed -i "/^#.*error$/d" "$HISTFILE"' # removes dups and cmds that errored
+trap 'history -a' SIGHUP # saves history on interupt. see functions below.
 IFS=$' \t\n' # restricts "internal field separator" to tab and newline. handles spaces in filenames.
-#nohist() { e=$BASH_COMMAND; history -d $HISTCMD;}; trap nohist ERR # traps error and deletes from hist before written. $e is line for reuse. ctrl-alt-e expands it.
-#nohist() { $BASH_COMMAND=$BASH_COMMAND" e";}; trap nohist ERR # traps error and deletes from hist before written. $e is line for reuse. ctrl-alt-e expands it.
+#nohist() { e=$BASH_COMMAND; history -d $HISTCMD;}; trap nohist ERR # traps error and deletes from hist before written. $e is line for reuse. ctrl-alt-e expands it. 
 
 ## some familiar keyboard shortcuts: 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
 #stty intr ^S # changes the ctrl+c for interrupt process to ctrl+s, to allow modern ctrl+c for copy.
 stty susp ^F #stty susp undef; #stty intr undef # ctrl+z for undo have to remove default. https://www.computerhope.com/unix/bash/bind.htm
+# (usually ctrl+/ is undo in the bash cli)
 stty lnext ^N # changes the ctrl+v for lnext to ctrl+b, to allow modern ctrl+v for paste. lnext shows the keycode of the next key typed.
-if [[ $- == *i* ]]; then bind '"\C-Z": undo' && bind '"\ez": yank'; fi # crtl+z and alt+z (bash bind wont do ctrl+shift+key, will do alt+shift+key ^[z) \e is esc and alt(meta). # dont run in non-inteactive (ie vim)
+if [[ $- == *i* ]]; then trap '' SIGINT && bind '"\C-Z": undo' && bind '"\ez": yank'; fi # crtl+Z (cant remap C-z yet) and alt+z (bash bind wont do ctrl+shift+key, will do alt+shift+key ^[z) \e is esc and alt(meta). # dont run in non-inteactive (ie vim) 
 #if [[ $- == *i* ]]; then bind '"\C-f": revert-line'; fi# clear line. use ctrl-shift-c or C-c or C-\
-
+[ -f ~/.xmodmaprc ] || printf $'keycode 20 = underscore minus underscore minus' > ~/.xmodmaprc && xmodmap ~/.xmodmaprc
 
 ## short abc's of common commands: (avoid one letter files or variables to avoid conflicts)
 # use \ to escape any alias. `type <command>` is in front to show it's an alias and avoid confusion.
 # cant use type in front with sudo, so same name is used only when least confusion.
 # aliases need space at end for chaining so can be used before alaised directories or files.
+# alias # unalias # extra space at end will look if the next arg is an alias for chaining
 # use `whatis` then command name for official explanation of any command. then command plus `--help` flag or `man`, `info`, `tldr` and `whatis` commands for more info on any command. or q alias below.
 # full list of shell commmands: https://www.computerhope.com/unix.htm or `ls /bin`. https://www.gnu.org/software/coreutils/manual/coreutils.html
 # list all builtins with `\help`. then `\help <builtin>` for any single one.
@@ -103,10 +108,11 @@ alias i='ip -color a' # network info
 alias h='history 30'
 alias hhh='history 500' # `apt install hstr`. replaces ctrl-r with `hstr --show-configuration >> ~/.bashrc` https://github.com/dvorka/hstr. disables hide by default.
 alias hg='history | grep -i'
+function hg2 { grep -i "$1" ~/.bash_history; } # searches the file accumulating from all terminal before lost by hard exit
 #alias hd='history -d -2--1 ' #not working # delete last line. `history -d -10--2` to del 9 lines from -10 to -2 inclusive, counting itself. or use space in front of command to hide. 
 alias j='jobs' # dont use much unless `ctrl+z` to stop process
 alias k='kill -9' #<id> # or `kill SIGTERM` to terminate process (or job). or `pgreg __` and then `pkill __`
-alias kk='kill %1' # kill job 1 gently
+alias k1='kill %1' # kill job 1 gently
 alias kj='kill -TERM %1' # terminate job 1
 alias loc='locate --limit 5' # `apt install locate` finds common file locations fast (fstab, etc) 
 #alias ls='ls -F ' # list. F is --classify with symbols or colors. already included in most .bashrc
@@ -114,11 +120,11 @@ alias loc='locate --limit 5' # `apt install locate` finds common file locations 
 alias l='echo $(history -p !!) | xclip' # copies last command line to clipboard. see `o` for output.
 alias ll='ls -alFh ' # "list" all, long format. included in .bashrc, added human readable. 
 alias lll='ls -alF ' # "list" all long format. full byte count. 
-alias ltr='ls -lcr ' # "list" long, time, reverse. bottom latest. c changed, a accessed, m modified
+alias lst='ls -trl ' # "list" long, time, reverse. bottom latest. c changed, a accessed, m modified. m is content, c is metadata.
 alias lld='ls -dlFh ' # list only directories.
 alias lsd='ls -d ' # list only directories.
 alias lsp='ls -a | xargs -I % realpath % ' # returns full paths. have to be in the directory. 
-alias lns='ln -s' # <from> <to> = <"target"> <linkname>.hardlinks accumulate and dont work across disks. rm symlink wont remove underlying file. see function lnsr for reversed args
+alias lns='ln -s' # <target> <symlink>.hardlinks accumulate and dont work across disks. rm symlink wont remove underlying file. see function lnsr for reversed args
 alias mo='more ' # break output into pages. or `less`.
 #alias mf='touch' # make file. or `echo foo | tee $newfile`. `(umask 644; touch file)` to set perms
 #alias md='mkdir -p' # makes all --parents directories necessary
@@ -142,6 +148,7 @@ alias pkill='pkill -f' # kill processed - full
 alias q='helpany' # see helpany function
 alias rm='rm -Irv ' # -I requires confirmation. -r recursive into directories. -v verbose. 
 # ^^^^^ maybe most helpful alias. avoids deleting unintended files. use -i to approve each deletion.
+function rl { readlink -f "$1"; } # function returns full path of file, very useful
 # `sed` # Stream EDitor `sed -i 's/aaa/bbb/g' file` -i inplace, replace aaa with bbb. g globally. can use any char instead of /, such as `sed -i 's,aaa,bbb,' file`. -E to use re pattern matching.
 alias sudo='sudo '; alias s='sudo '; alias sd='sudo -s ' # elevate privelege for command. see `visudo` to set. And `usermod -aG sudo add`, security caution when adding.
 alias sss='eval sudo $(history -p !!)' # redo with sudo
@@ -169,7 +176,7 @@ alias sz='7z x -o*' # extracts in to subdirectory
 alias szc='7z a -t7z -m0=lzma2:d1024m -mx=9 -aoa -mfb=64 -md=32m -ms=on' #<dir> <output> # highest compression or use PeaZip
 alias au='sudo apt update'
 alias auu='sudo apt update && apt -y upgrade' # show all users logged in. `last` show last logins
-alias aca='sudo apt clean && sudo apt autoremove' # `apt remove` leaves configs, `apt purge` doesnt.
+alias aca='sudo df && apt clean && apt autoremove && df' # `apt remove` leaves configs, `apt purge` doesnt.
 alias aptr='apt install --reinstall' # reinstall pkg. 
 # `arp` # lists all devices on network layer 2. apt install net-tools
 alias awk1='awk "{print \$1}"' # print first column; end column {print $NF}; second to last $(NF-1); use single quotes when not using alias; awk more common than `cut -f1 -d " "`
@@ -214,6 +221,7 @@ alias free='type free; free -h' # check memory, human readable
 # head and tail: `head -1 <file>` shows the first line. defaults to 10 lines without number.
 alias gm='guestmount -i $file -a /mnt' # set file=<vm/partition-backup> first 
 # `inotifywait -m ~/.config/ -e create -e modify` (inotify-tools), watch runs every x sec, entr runs command after file changes. use examples from bottom of `man entr` `ls *.js | entr -r node app.js`
+entr1() { ls "$1" >| temp; nohup sh -c "cat temp | entr -n cp \"$1\" \"$2\"" </dev/null >/dev/null 2>&1 & disown; } # wentr file-in-pwd ~/destination/
 alias jo='journalctl' # -p,  -err, --list-boots, -b boot, -b -1 last boot, -r reverse, -k (kernel/dmesg), -f follow, --grep -g, --catalog -x (use error notes), -e goto end
 alias jof='journalctl -f' # --follow
 alias jor='journalctl -r' # --reverse (newest first)
@@ -261,6 +269,7 @@ alias wdu='watch du -cd1 .' # or `watch du -s <dir>` or `watch '\du -cd1 . | sor
 alias wget='type wget; wget --no-clobber --content-disposition --trust-server-names' # -N overwrites only if newer file and disables timestamping # or curl to download webfile (curl -JLO)
 alias wrapon='echo -ne "\033[?7h"' # line wrap on
 alias wrapoff='echo -ne "\033[?7l"' # line wrap off
+alias xc='xclip -selection clipboard' # apt install xclip
 alias zzzr='shutdown -r now || true' # reboot in ssh, otherwise freezes
 alias zzzs='shutdown -h now || true' # shutdown in ssh, otherwise freezes
 # correct common typos
@@ -285,6 +294,8 @@ function hdl { history -d $HISTCMD; history -w;} # delete history last number
 function hdln { history -d $(($HISTCMD - "$1" -1))-$(($HISTCMD - 2)); history -w;} # delete last n lines. (add 1 for this command) (history -d -$1--1; has error)
 function help { "$1" --help;} # use `\help` to disable the function alias
 function q { "$1" --help || help "$1" || man "$1" || info "$1";} # use any help doc. # also tldr. 
+command_not_found_handle2() { [ $# -eq 0 ] && command -v "$1" > /dev/null 2>&1 && "$1" --help || command "$@"; } # adds --help to all commands that need a parameter. or use below to exclude certain ones.
+#command_not_found_handle() { local excluded_commands=("ls" "cd" "pwd"); if [ $# -eq 0 ] && command -v "$1" > /dev/null 2>&1; then [[ ! " ${excluded_commands[@]} " =~ " $1 " ]] && "$1" --help || command "$1"; else command "$@"; fi }
 function lnst { dir="$1"; lastdir="${dir##*/}"; sudo ln -s $2/$lastdir "$1";} # ln -st?
 function lnsr { ln -s "$2" "$1";} # symlink reversed using arg order from cp or mv
 function ren { mv "$1" "$1""$2";} # rename file just add ending, eg file to file1.
@@ -441,7 +452,8 @@ alias eg="env | grep 1=" # grep above env vars
 # envdir or direnv for storing project secrets safely. DONT store them in a GitHub repo (.gitignore) http://thedjbway.b0llix.net/daemontools/envdir.html and python os.environ['HOME']
 
 ## basic vim settings: 
-if ! [[ -f ~/.vimrc ]]; then   # just delete to remake file opening new shell
+#if ! [[ -f ~/.vimrc ]]; then   # CHANGE THIS LINE IF YOU DONT WANT VIMRC CHANGED!
+if [[ -f ~/.vimrc ]]; then   # 
 echo -e '
 set nocompatible
 set showmode
@@ -493,8 +505,15 @@ inoremap <c-q> <esc>:wq<CR>
 inoremap <c-z> <esc>:undo<CR>
 inoremap ii <esc>i
 inoremap jj <esc>
+nnoremap <C-s> :w<CR> " Remap :w to Ctrl-S
+nnoremap <C-z> :q<CR> " Remap :q to Ctrl-Z
+command Wq wq
+command WQ wq
+command W w
+command Q q
 ' >| ~/.vimrc   # > to not overwrite or >> to append
 fi
+# indent is >> and <<. in visual mode too. use 3>> for multiple levels.
 
 ## basic vim commands: https://gist.github.com/auwsom/78c837fde60fe36159ee89e4e29ed6f1
 # https://rwxrob.github.io/vi-help/ https://www.keycdn.com/blog/vim-commands
@@ -548,12 +567,12 @@ alias remux='tmux source ~/.tmux.conf' # reload tmux
 alias gits='git status'
 alias gitl='git log'
 alias gitb='git branch'
-alias gita='git add .'
+alias gita='git add -A' # adds all
 alias gitc='git commit -m "ok"'
 alias gitph='git push'
 alias gitpl='git pull' # (git fetch && git merge) 
 alias gitac='gita && gitc' # add and commit
-alias gs='git status && git add . && git commit -m "ok" && git push # git sync by push'
+alias gs='git status && git add -A && git commit -m \"ok\" && git push # git sync by push'
 alias gitsd='pushd ~/git/dotfiles && git add . && git commit -m commit && git push -u origin main; popd' # git sync push on dotfiles dir
 alias gpho='git push -u origin main '
 alias agitinfo='# git clone is for first copy # git status, git log, git branch \# git clone https://github.com/auwsom/dotfiles.git #add ssh priv & pub key or will pull but not push
@@ -571,6 +590,11 @@ alias gitpf='git push --force' # use only after diffing remote to local. also if
 alias gitg='git grep'
 alias gitr1='git restore' # restores last commit to local. if pushed, need merge
 alias gitr2='git reset --hard origin/main' # resets local to origin
+alias gitlo='git log --oneline' # shows compact commit history
+alias gitchkf='git checkout <commit> -- <file>' # restores a file from that commit. 
+alias gitsr1='keyword="replacethis"; for commit in $(git log -S "$keyword" --oneline --pretty=format:"%H"); do git grep "$keyword" "$commit"; done'
+alias gitsr2='git log --name-status --diff-filter=A --'
+
 
 # mv ~/.bash_aliases ~/.bash_aliases0 && ln -s ~/git/dotfiles/.bash_aliases ~/.bash_aliases
 # to push new repo from CLI you have to create it using curl and PERSONAL_ACCESS_TOKEN.
@@ -701,7 +725,10 @@ alias eo='echo $(cat /tmp/curr)'
 #if [[ $- == *i* ]]; then trap save_output DEBUG; fi  
 #trap save_output DEBUG
 
-
+export PYTHONWARNINGS="ignore"  # Suppresses warnings (optional)
+export PYTHONTRACEBACKLIMIT=1  # limits python traceback lines to 1
+alias sv='source /home/user/venv1/bin/activate'
+alias sv2='source /home/aimgr/venv2/bin/activate'
 
 if ! [[ $- == *i* ]]; then true "ENDI"; fi
 true <<'ENDZ' # move this line to anywhere above and whatever is below it will be skipped.
