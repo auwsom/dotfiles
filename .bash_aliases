@@ -534,6 +534,10 @@ fi
 # :1 uses Ex in Command mode to goto line 1. % stands for current document.
 # search-centric: type action then / Enter to apply to before next char. eg `d/}` deletes up to }.
 
+## screen, ctrl-a 
+alias ss='screen'
+alias tt='tmux'
+
 ## tmux   wget https://raw.githubusercontent.com/rwxrob/dot/main/tmux/.tmux.conf
 # tmux a # to attach (start) old session. C-a,d to detach. C-a,x to close. C-a,: for command mode.
 # C-a,[ for copy mode, q to quit, space to start selection, enter to copy, C-a,] to paste 
