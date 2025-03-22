@@ -539,7 +539,7 @@ fi
 [[ ! -f ~/.screenrc ]] && echo "startup_message off" > ~/.screenrc
 alias ss='screen'
 alias sr='screen -r'
-alias sst='screen -ls | grep -oP '(?<=\t)\S+(?=\s+\()' | while read session; do echo "title: $session;; command: screen -r $session;;"; done >| tabs-config && konsole --tabs-from-file tabs-config &' # opens all sessions in konsole new tabs
+alias sst='screen -ls | grep -oP '\''(?<=\t)\S+(?=\s+\()'\' | while read session; do echo "title: $session;; command: screen -r $session;;"; done >| tabs-config && konsole --tabs-from-file tabs-config &' # opens all sessions in konsole new tabs'
 alias tt='tmux'
 alias ta='tmux attach'
 alias ttt='tmux ls | awk -F: '{print "title: " $1 ";; command: tmux attach-session -t " $1 ";;"}' >| tabs-config && konsole --tabs-from-file tabs-config &' same for tmux
@@ -549,8 +549,9 @@ alias ttt='tmux ls | awk -F: '{print "title: " $1 ";; command: tmux attach-sessi
 # C-a,[ for copy mode, q to quit, space to start selection, enter to copy, C-a,] to paste 
 # git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 # C-b + I (shift+i) to install plugins with tpm
-if ! [[ -f ~/.tmux.conf ]]; then
-echo -e '
+#if ! [[ -f ~/.tmux.conf ]]; then echo -e '
+
+[[ ! -f ~/.tmux.conf ]] && cat <<EOF > ~/.tmux.conf #heredoc less escapes
 set -g prefix C-a # change default prefix to match Screens
 set mouse on # allows scrolling # !! hold shift to select text 
 set -g status-style "fg=#665c54"
@@ -568,106 +569,53 @@ set -g @plugin "tmux-plugins/tmux-sensible"
 set -g @continuum-restore "on" # every 15 min
 run "~/.tmux/plugins/tpm/tpm"
 
-# Configured by Rob Muhlestein (linktr.ee/rwxrob)
-# This file is copyright free (public domain).
-
-# change default meta key to same as screen
-unbind C-b
-unbind C-a
-set -g prefix C-a
-
-# turn pane sync on/off
-bind -r y setw synchronize-panes
+# Configured by Rob Muhlestein (linktr.ee/rwxrob); # This file is copyright free (public domain).
+# Meta Key and Pane Sync
+unbind C-b; unbind C-a; set -g prefix C-a; bind -r y setw synchronize-panes;
 # override Enter in copy-mode to write selected text /tmp/buf for yyy/ppp
-unbind -T copy-mode Enter
-unbind -T copy-mode-vi Enter
-bind -T copy-mode Enter send-keys -X copy-selection-and-cancel \; save-buffer /tmp/buf
-bind -T copy-mode-vi Enter send-keys -X copy-selection-and-cancel \; save-buffer /tmp/buf
+unbind -T copy-mode Enter; unbind -T copy-mode-vi Enter; bind -T copy-mode Enter send-keys -X copy-selection-and-cancel \; save-buffer /tmp/buf; bind -T copy-mode-vi Enter send-keys -X copy-selection-and-cancel \; save-buffer /tmp/buf;
 # reload configuration
-bind -r r source-file ~/.tmux.conf \; display "Config reloaded"
+bind -r r source-file ~/.tmux.conf \; display "Config reloaded";
 # add double-tap meta key to toggle last window
-bind-key C-a last-window
+bind-key C-a last-window;
 # use a different prefix for nested
-bind-key -n C-y send-prefix
+bind-key -n C-y send-prefix;
 # pane colors and display
+
 # create more intuitive split key combos (same as modern screen)
-unbind |
-bind | split-window -h
-bind '\' split-window -h
-bind 'C-\' split-window -h
-unbind -
-bind - split-window -v
-unbind _
-bind _ split-window -v
+unbind |; bind | split-window -h; bind '\\' split-window -h; bind 'C-\\' split-window -h; unbind -; bind - split-window -v; unbind _; bind _ split-window -v;
 # kill current window and all panes
-bind-key & kill-window
+bind-key & kill-window;
 # vi for copy mode
-setw -g mode-keys vi
+setw -g mode-keys vi;
 # vi for command status
-set -g status-keys vi
+set -g status-keys vi;
 # vi keys to resize
-bind -r C-k resize-pane -U 1
-bind -r C-j resize-pane -D 1
-bind -r C-h resize-pane -L 1
-bind -r C-l resize-pane -R 1
+bind -r C-k resize-pane -U 1; bind -r C-j resize-pane -D 1; bind -r C-h resize-pane -L 1; bind -r C-l resize-pane -R 1;
 # vi keys to navigate panes
-bind -r k select-pane -U
-bind -r j select-pane -D
-bind -r h select-pane -L
-bind -r l select-pane -R
+bind -r k select-pane -U; bind -r j select-pane -D; bind -r h select-pane -L; bind -r l select-pane -R;
+
 # customize create new window for streaming
-unbind C-c
-bind C-c new-window \; split-window -h \; select-pane -t 2 \; resize-pane -x 26 \; send "blankpane" Enter \; select-pane -t 1
+unbind C-c; bind C-c new-window \; split-window -h \; select-pane -t 2 \; resize-pane -x 26 \; send "blankpane" Enter \; select-pane -t 1;
+
 # avoid cursor movement messing with resize
-set -g repeat-time 200
-set -g clock-mode-style 12
-set-option -g clock-mode-colour yellow
-set -g base-index 1
-setw -g pane-base-index 1
+set -g repeat-time 200; set -g clock-mode-style 12; set-option -g clock-mode-colour yellow; set -g base-index 1; setw -g pane-base-index 1;
 # very unique Mac bug
-if-shell "type 'reattach-to-user-namespace' >/dev/null" "set -g default-command 'reattach-to-user-namespace -l $SHELL'"
+if-shell "type 'reattach-to-user-namespace' >/dev/null" "set -g default-command 'reattach-to-user-namespace -l $SHELL'";
 # color the pane borders nearly invisible
 # (when not using hacked tmux without them)
-set -g pane-border-style "fg=#171717"
-set -g pane-active-border-style "fg=#171717"
-set -g status-style "fg=#665c54"
-set -g status-bg default
-set -g status-position top
-set -g status-interval 1
-set -g status-left ""
-#set -g status-left-length 78
-#set -g status-left-style "fg=#928374,bold,reverse"
-#set -g status-left-style "fg=#928374"
-#set -g status-left-style "fg=brightwhite"
-#set -g status-left "#(now) "
-#set -g status-left "#(head -1 ~/.status) "
-#set -g status-right "%a, %b %-e, %Y, %-l:%M:%S%p %Z%0z"
-#set -g status-right-style "fg=#928374,bold"
-set -g status-right-length 50
-set -g status-right "#(pomo)"
-#set -g window-status-format ""
-#set -g window-status-current-format ""
-set -g message-style "fg=red"
-# disable status bar (prefer index)
-set -g status off
-set -g window-status-current-format ""
-# better window names
-set -g automatic-rename
-# start with 1
-set -g base-index 1
-set -g pane-base-index 1
+set -g pane-border-style "fg=#171717"; set -g pane-active-border-style "fg=#171717"; set -g status-style "fg=#665c54"; set -g status-bg default; set -g status-position top; set -g status-interval 1; set -g status-left ""; set -g status-right-length 50; set -g status-right "#(pomo)"; set -g message-style "fg=red"; set -g status off; set -g window-status-current-format ""; set -g automatic-rename; set -g base-index 1; set -g pane-base-index 1;
 # fix accidently typing accent characters, etc.
 # by forcing the terminal to not wait around
-#set -sg escape-time 0
+#set -sg escape-time 0;
 # form vim/tmux d/y buffer sync
-set -g focus-events
+set -g focus-events;
 # Set default terminal and 256 colors
-set-option -g default-terminal "xterm-256color"
-set-option -ga terminal-overrides ",xterm-256color:Tc"
-#  Set color of line selected from windows list (same as vim visual)
+set-option -g default-terminal "xterm-256color"; set-option -ga terminal-overrides ",xterm-256color:Tc";
+# Set color of line selected from windows list (same as vim visual)
 set-option -g mode-style "bg=#45403d"
-' > ~/.tmux.conf
-fi
+EOF
+#' > ~/.tmux.conf; fi
 alias remux='tmux source ~/.tmux.conf' # reload tmux
 # https://tmuxcheatsheet.com/
 # Scrolling: Ctrl-b then [ then you can use your normal navigation keys to scroll around (eg. Up Arrow or PgDn). Press q to quit scroll mode.
