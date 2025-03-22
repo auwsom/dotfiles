@@ -539,7 +539,7 @@ fi
 [[ ! -f ~/.screenrc ]] && echo "startup_message off" > ~/.screenrc
 alias ss='screen'
 alias sr='screen -r'
-alias sst='screen -ls | grep -oP '\''(?<=\t)\S+(?=\s+\()'\' | while read session; do echo "title: $session;; command: screen -r $session;;"; done >| tabs-config && konsole --tabs-from-file tabs-config &' # opens all sessions in konsole new tabs'
+#alias sst='screen -ls | grep -oP '\''(?<=\t)\S+(?=\s+\()'\' | while read session; do echo "title: $session;; command: screen -r $session;;"; done >| tabs-config && konsole --tabs-from-file tabs-config &' # opens all sessions in konsole new tabs
 alias tt='tmux'
 alias ta='tmux attach'
 alias ttt='tmux ls | awk -F: '{print "title: " $1 ";; command: tmux attach-session -t " $1 ";;"}' >| tabs-config && konsole --tabs-from-file tabs-config &' same for tmux
