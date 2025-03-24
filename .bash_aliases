@@ -542,7 +542,7 @@ alias ssls='screen -ls'
 alias sr='screen -r'
 alias sst='screen -ls | awk '"'"'NR>1 {session=$1; gsub("\\.", " ", session); print "title: "session";; command: screen -r "session";;"}'"'"' >| tabs-config && konsole --tabs-from-file tabs-config' # opens all screen sessions in konsole new tabs
 alias tt='tmux'
-alias tta='tmux attach'
+alias tta='tmux attach' # use this instead of ttt and use plugins to restore tabs
 alias ttls='tmux ls'
 alias ttt='tmux ls | awk -F: '"'"'{print "title: " $1 ";; command: tmux attach-session -t " $1 ";;"}'"'"' >| tabs-config && konsole --tabs-from-file tabs-config &' # opens all tmux sessions in konsole new tabs
 [[ ! -f ~/.tmux/plugins/tpm ]] && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
