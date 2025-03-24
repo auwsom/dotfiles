@@ -555,25 +555,27 @@ alias ttt='tmux ls | awk -F: '"'"'{print "title: " $1 ";; command: tmux attach-s
 #if ! [[ -f ~/.tmux.conf ]]; then echo -e '
 
 [[ ! -f ~/.tmux.conf ]] && cat <<EOF > ~/.tmux.conf #heredoc less escapes# bind same as bind-key
-bind k kill-window; bind q kill-window; # (overrides bash C-k kill-line). kill current window and all panes like screen. tmux default is "Ctrl-&". Hardware/Keyboard -> Terminal Driver (stty) -> Terminal Emulator -> Readline (Bash) -> Application (Emacs, Vim, Tmux) # Many of Readline key bindings are based on Emacs like ctrl-k for kill-line.
+# bind is same as bind-key
+bind k kill-window; bind q kill-window; # (overrides bash C-k kill-line). kill current window and all panes like screen. tmux default is "Ctrl-&". 
+# Hardware/Keyboard -> Terminal Driver (stty) -> Terminal Emulator -> Readline (Bash) -> Application (Emacs, Vim, Tmux) # Many of Readline key bindings are based on Emacs like ctrl-k for kill-line.
 # if-shell 'test -n "$TMUX"' 'set mouse on' # set mouse on; # makes error 'no current session'
 set-hook -g after-new-session 'set mouse on' # 'set mouse on' allows scrolling and pane resize and hold shift to select text
 # -g is global. -r makes repeatable for pane resizing
 bind r source-file ~/.tmux.conf \; display "Config reloaded"; # reload configuration
 # bind-key C-a last-window # toggle
 # #bind-key Escape cancel # doesnt work, just use Enter
-# bind-key c new-window -c "#{pane_current_path}"
+bind-key c new-window -c "#{pane_current_path}"z
 set -g @plugin "tmux-plugins/tpm" # plugin mgr. !press prefix (Ctrl+a) then capitol I to install plugin
 set -g @plugin "tmux-plugins/tmux-continuum" # test with: `tmux run-shell "tmux save-buffer -a ~/.tmux_continuum_resume" && tmux kill-server && tmux`
 set -g @plugin "tmux-plugins/tmux-resurrect" # prefix+C-s, prefix+C-r  to save and restore
 # set -g @plugin "tmux-plugins/tmux-sensible" # a list of 'sane' settings
 run "~/.tmux/plugins/tpm/tpm" # Must be below plugins!
 # Basic resurrection setup
-set -g @resurrect-dir '~/.tmux'
+# set -g @resurrect-dir '~/.tmux' # ./.local/share/tmux/resurrect/
 set -g @resurrect-processes ':all:'  # Restore all processes
-set -g @resurrect-capture-pane-contents 'on'
+set -g @resurrect-capture-pane-contents 'on'z
 set -g @continuum-restore 'on'
-set -g @continuum-save-interval '1'  # Save every 15 minutes
+set -g @continuum-save-interval '5'  # Save every 15 minutes
 set -g @resurrect-hook-pre-restore-all 'tmux kill-session -a'
 set -g status-position top # tabs at top
 set -g status-style "fg=#665c54"; set -g status-bg default;
