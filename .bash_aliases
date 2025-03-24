@@ -64,7 +64,7 @@ stty susp ^F #stty susp undef; #stty intr undef # ctrl+z for undo have to remove
 stty lnext ^N # changes the ctrl+v for lnext to ctrl+b, to allow modern ctrl+v for paste. lnext shows the keycode of the next key typed.
 if [[ $- == *i* ]]; then trap '' SIGINT && bind '"\C-Z": undo' && bind '"\ez": yank'; fi # crtl+Z (cant remap C-z yet) and alt+z (bash bind wont do ctrl+shift+key, will do alt+shift+key ^[z) \e is esc and alt(meta). # dont run in non-inteactive (ie vim) 
 #if [[ $- == *i* ]]; then bind '"\C-f": revert-line'; fi# clear line. use ctrl-shift-c or C-c or C-\
-[ -f ~/.xmodmaprc ] || printf $'keycode 20 = underscore minus underscore minus' > ~/.xmodmaprc && xmodmap ~/.xmodmaprc
+#[ -f ~/.xmodmaprc ] || printf $'keycode 20 = underscore minus underscore minus' > ~/.xmodmaprc && xmodmap ~/.xmodmaprc # swap minus and underscore. nearly impossible to remap ctrl-space to underscore.
 
 ## short abc's of common commands: (avoid one letter files or variables to avoid conflicts)
 # use \ to escape any alias. `type <command>` is in front to show it's an alias and avoid confusion.
@@ -569,7 +569,7 @@ set -g @plugin "tmux-plugins/tpm" # plugin mgr. !press prefix (Ctrl+a) then capi
 set -g @plugin "tmux-plugins/tmux-continuum" # test with: `tmux run-shell "tmux save-buffer -a ~/.tmux_continuum_resume" && tmux kill-server && tmux`
 set -g @plugin "tmux-plugins/tmux-resurrect" # prefix+C-s, prefix+C-r  to save and restore
 # set -g @plugin "tmux-plugins/tmux-sensible" # a list of 'sane' settings
-run "~/.tmux/plugins/tpm/tpm" # Must be below plugins!
+#run "~/.tmux/plugins/tpm/tpm" # Must be below plugins!
 # Basic resurrection setup
 # set -g @resurrect-dir '~/.tmux' # ./.local/share/tmux/resurrect/
 set -g @resurrect-processes ':all:'  # Restore all processes
@@ -617,6 +617,7 @@ set-option -g mode-style "bg=#45403d" # Set color of line selected from windows 
 # C-b Send prefix key C-o Rotate panes current window forwards C-z Suspend tmux client ! Break current pane window " Split current pane two top bottom # List paste buffers $ Rename current session % Split current pane two left right & Kill current window ' Prompt window index select ( Switch attached client previous session ) Switch attached client next session , Rename current window - Delete most recently copied buffer text . Prompt index move current window 0 9 Select windows 0 9 : Enter tmux command prompt ; Move previously active pane = Choose buffer paste interactively list ? List key bindings D Choose client detach L Switch attached client back last session [ Enter copy mode copy text view history ] Paste most recently copied buffer text c Create new window d Detach current client f Prompt search text open windows i Display information current window l Move previously selected window m Mark current pane select-pane -m M Clear marked pane n Change next window o Select next pane current window p Change previous window q Briefly display pane indexes r Force redraw attached client s Select new session attached client interactively t Show time w Choose current window interactively x Kill current pane z Toggle zoom state current pane { Swap current pane previous pane } Swap current pane next pane ~ Show previous messages tmux Page Up Enter copy mode scroll one page Up Down Left Right Change pane above below left right current pane M-1 M-5 Arrange panes one five preset layouts even-horizontal even-vertical main-horizontal main-vertical tiled Space Arrange current window next preset layout M-n Move next window bell activity marker M-o Rotate panes current window backwards M-p Move previous window bell activity marker C-Up C-Down C-Left C-Right Resize current pane steps one cell M-Up M-Down M-Left M-Right Resize current pane steps five cells
 
 EOF
+
 #' > ~/.tmux.conf; fi
 alias remux='tmux source ~/.tmux.conf' # reload tmux
 # https://tmuxcheatsheet.com/
