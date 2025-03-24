@@ -543,34 +543,36 @@ alias sr='screen -r'
 alias sst='screen -ls | awk '"'"'NR>1 {session=$1; gsub("\\.", " ", session); print "title: "session";; command: screen -r "session";;"}'"'"' >| tabs-config && konsole --tabs-from-file tabs-config' # opens all screen sessions in konsole new tabs
 alias tt='tmux'
 alias tta='tmux attach' # use this instead of ttt and use plugins to restore tabs
+alias ttat='tmux attach -t' # <session> attach to session name
 alias ttls='tmux ls'
+alias ttnd='tmux new -d'
+alias ttks='tmux kill-server'
 alias ttt='tmux ls | awk -F: '"'"'{print "title: " $1 ";; command: tmux attach-session -t " $1 ";;"}'"'"' >| tabs-config && konsole --tabs-from-file tabs-config &' # opens all tmux sessions in konsole new tabs
 [[ ! -d ~/.tmux/plugins/tpm ]] && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 ## tmux   
 # tmux a # to attach (start) old session. C-a,d to detach. C-a,x to close. C-a,: for command mode
-# C-a,[ for copy mode, q to quit, space to start selection, enter to copy, C-a,] to paste 
-# git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-# C-b + I (shift+i) to install plugins with tpm
+# 'C-a,[' for copy mode, q to quit, space to start selection, enter to copy, 'C-a,]' to paste 
+# git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm 
+# C-b + I (shift+i) to install plugins with tpm. or use bash cmd below. 
 #if ! [[ -f ~/.tmux.conf ]]; then echo -e '
 
 [[ ! -f ~/.tmux.conf ]] && cat <<EOF > ~/.tmux.conf #heredoc less escapes# bind same as bind-key
 # bind is same as bind-key
-bind k kill-window; bind q kill-window; # (overrides bash C-k kill-line). kill current window and all panes like screen. tmux default is "Ctrl-&". 
+bind q kill-window; #bind k kill-window; (overrides bash C-k kill-line). kill current window and all panes like screen. tmux default is "Ctrl-&".
 # Hardware/Keyboard -> Terminal Driver (stty) -> Terminal Emulator -> Readline (Bash) -> Application (Emacs, Vim, Tmux) # Many of Readline key bindings are based on Emacs like ctrl-k for kill-line.
 # if-shell 'test -n "$TMUX"' 'set mouse on' # set mouse on; # makes error 'no current session'
 set-hook -g after-new-session 'set mouse on' # 'set mouse on' allows scrolling and pane resize and hold shift to select text
 # -g is global. -r makes repeatable for pane resizing
 bind r source-file ~/.tmux.conf \; display "Config reloaded"; # reload configuration
-# bind-key C-a last-window # toggle
 # #bind-key Escape cancel # doesnt work, just use Enter
 bind-key c new-window -c "#{pane_current_path}"
-set -g @plugin "tmux-plugins/tpm" # plugin mgr. !press prefix (Ctrl+a) then capitol I to install plugins or run below.
-set -g @plugin "tmux-plugins/tmux-continuum" # test with: `tmux run-shell "tmux save-buffer -a ~/.tmux_continuum_resume" && tmux kill-server && tmux`
+set -g @plugin "tmux-plugins/tpm" # plugin mgr. !press prefix (Ctrl+a) then capitol I to install plugin
+set -g @plugin "tmux-plugins/tmux-continuum" # test with: `tmux run-shell ~/.tmux/plugins/tmux-resurrect/scripts/save.sh" && tmux kill-server && tmux new -d && tmux ls && tmux run-shell ~/.tmux/plugins/tmux-resurrect/scripts/save.sh && tmux ls`
 set -g @plugin "tmux-plugins/tmux-resurrect" # prefix+C-s, prefix+C-r  to save and restore
 # set -g @plugin "tmux-plugins/tmux-sensible" # a list of 'sane' settings
 #`run "~/.tmux/plugins/tpm/tpm"` # Must be below plugins! stops writing to .tmux.conf so run that in bash and then `tmux run-shell "~/.tmux/plugins/tpm/bin/install_plugins"`
-# Basic resurrection setup
+# if fatal: destination path '/home/user/.tmux/plugins/tpm', mv ~/.tmux/plugins/tpm
 # set -g @resurrect-dir '~/.tmux' # ./.local/share/tmux/resurrect/
 set -g @resurrect-processes ':all:'  # Restore all processes
 set -g @resurrect-capture-pane-contents 'on'z
@@ -605,9 +607,9 @@ set -g status-interval 1; set -g status-left ""; set -g status-right-length 50; 
 set -g automatic-rename; set -g base-index 1; set -g pane-base-index 1;
 # set-option -g automatic-rename-format "#{b:pane_current_path}" # cwd default?
 # fix accidently typing accent characters, etc. by forcing the terminal to not wait around
-set -sg escape-time 0; # default 500ms escape key waits for combos
+# set -sg escape-time 0; # default 500ms escape key waits for combos
 set -g focus-events; # form vim/tmux d/y buffer sync
-set-option -g default-terminal "xterm-256color"; set-option -ga terminal-overrides ",xterm-256color:Tc"; # Set default terminal and 256 colors
+# set-option -g default-terminal "xterm-256color"; set-option -ga terminal-overrides ",xterm-256color:Tc"; # Set default terminal and 256 colors # this breaks Home and End (escape codes?)
 set-option -g mode-style "bg=#45403d" # Set color of line selected from windows list (same as vim visual)
 # customize create new window for streaming. (this will change default create window c)
 #unbind C-c; bind C-c new-window \; split-window -h \; select-pane -t 2 \; resize-pane -x 26 \; send "blankpane" Enter \; select-pane -t 1;
