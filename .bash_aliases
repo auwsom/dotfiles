@@ -564,8 +564,8 @@ set-hook -g after-new-session 'set mouse on' # 'set mouse on' allows scrolling a
 bind r source-file ~/.tmux.conf \; display "Config reloaded"; # reload configuration
 # bind-key C-a last-window # toggle
 # #bind-key Escape cancel # doesnt work, just use Enter
-bind-key c new-window -c "#{pane_current_path}"z
-set -g @plugin "tmux-plugins/tpm" # plugin mgr. !press prefix (Ctrl+a) then capitol I to install plugin
+bind-key c new-window -c "#{pane_current_path}"
+set -g @plugin "tmux-plugins/tpm" # plugin mgr. !press prefix (Ctrl+a) then capitol I to install plugins or run below.
 set -g @plugin "tmux-plugins/tmux-continuum" # test with: `tmux run-shell "tmux save-buffer -a ~/.tmux_continuum_resume" && tmux kill-server && tmux`
 set -g @plugin "tmux-plugins/tmux-resurrect" # prefix+C-s, prefix+C-r  to save and restore
 # set -g @plugin "tmux-plugins/tmux-sensible" # a list of 'sane' settings
