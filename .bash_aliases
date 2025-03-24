@@ -569,7 +569,7 @@ set -g @plugin "tmux-plugins/tpm" # plugin mgr. !press prefix (Ctrl+a) then capi
 set -g @plugin "tmux-plugins/tmux-continuum" # test with: `tmux run-shell "tmux save-buffer -a ~/.tmux_continuum_resume" && tmux kill-server && tmux`
 set -g @plugin "tmux-plugins/tmux-resurrect" # prefix+C-s, prefix+C-r  to save and restore
 # set -g @plugin "tmux-plugins/tmux-sensible" # a list of 'sane' settings
-#run "~/.tmux/plugins/tpm/tpm" # Must be below plugins!
+#`run "~/.tmux/plugins/tpm/tpm"` # Must be below plugins! stops writing to .tmux.conf so run that in bash and then `tmux run-shell "~/.tmux/plugins/tpm/bin/install_plugins"`
 # Basic resurrection setup
 # set -g @resurrect-dir '~/.tmux' # ./.local/share/tmux/resurrect/
 set -g @resurrect-processes ':all:'  # Restore all processes
