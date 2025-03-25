@@ -609,8 +609,8 @@ set -g @continuum-restore 'on'
 set -g @continuum-save-interval '1'  # Save every x (15) minutes NOT WORKING
 set -g @resurrect-hook-pre-restore-all 'tmux kill-session -a'
 run '~/.tmux/plugins/tpm/tpm'
-bind-key C-s run-shell "~/.tmux/plugins/tmux-resurrect/scripts/save.sh"
-bind-key C-r run-shell "~/.tmux/plugins/tmux-resurrect/scripts/restore.sh"
+bind-key C-s run-shell "~/.tmux/plugins/tmux-resurrect/scripts/save.sh" \; display "saved";
+bind-key C-r run-shell "~/.tmux/plugins/tmux-resurrect/scripts/restore.sh" \; display "restored";
 set -g status-position top # tabs at top
 set -g status-style "fg=#665c54"; set -g status-bg default;
 # set -g status off;
