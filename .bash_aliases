@@ -578,6 +578,9 @@ alias ttls='tmux ls'
 alias ttnd='tmux new -d'
 alias ttks='tmux kill-server'
 alias ttt='tmux ls | awk -F: '"'"'{print "title: " $1 ";; command: tmux attach-session -t " $1 ";;"}'"'"' >| tabs-config && konsole --tabs-from-file tabs-config &' # opens all tmux sessions in konsole new tabs
+#/usr/bin/tmux new-session -c $PWD #/usr/bin/bash -c "tmux new-session -c $PWD" # konsole new tab commands 
+alias tts='tmux run-shell ~/.tmux/plugins/tmux-resurrect/scripts/save.sh'
+alias ttr='tmux run-shell ~/.tmux/plugins/tmux-resurrect/scripts/restore.sh'
 
 [[ ! -d ~/.tmux/plugins/tpm ]] && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm 
 # tmux a # to attach (start) old session. C-a,d to detach. C-a,x to close. C-a,: for command mode
