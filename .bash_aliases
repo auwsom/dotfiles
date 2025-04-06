@@ -9,6 +9,31 @@
 # add to sudo -E visudo for cache across tabs.. Defaults:user   timestamp_timeout=30, !tty_tickets, timestamp_type=global
 echo $CDPATH # to see which dirs are autofound (can be annoying with tab complete)
 
+'''
+temp notes:
+sed -i 's/[[:space:]]*$//'
+echo "export EDITOR=vi" >> ~/.bashrc
+sudo -E visudo
+aimgr ALL=(ALL:ALL) NOPASSWD: /usr/bin/tmux, /usr/sbin/useradd, /usr/bin/passwd[ags]
+allow sudo tmux -S /home/user/shared_tmux/shared_tmux_socket attach-session
+ttyd -W -p 8889 bash
+
+lst -a
+
+ps aux (BSD-style options)
+a – Show processes from all users.
+
+u – Display user-oriented output (includes user, CPU/mem usage, start time, etc.).
+
+x – Show processes without a controlling terminal (like daemons).
+
+ps -ef (UNIX-style options)
+-e – Show all processes.
+
+-f – Full-format listing (includes UID, PPID, start time, etc.).
+'''
+
+
 #if ! [[ $- == *i* ]]; then true "<<'ENDI'"; fi # this skips this file when running scripts
 [[ -t 0 ]] && true "<<'ENDI'" # this skips this file when running scripts
 #if [[ $- == *i* ]]; then source ~/.bashrc; fi  # Force bashrc loading for interactive shells (and scripts)
