@@ -6,6 +6,8 @@
 # `apt install shellcheck` then run `shellcheck ~/.bash_aliases` to check this script for errors. 
 
 # see further down for more general Linux tips and learning sites.(width is 100 chars vs 80 default)
+# add to sudo -E visudo for cache across tabs.. Defaults:user   timestamp_timeout=30, !tty_tickets, timestamp_type=global
+echo $CDPATH # to see which dirs are autofound (can be annoying with tab complete)
 
 #if ! [[ $- == *i* ]]; then true "<<'ENDI'"; fi # this skips this file when running scripts
 [[ -t 0 ]] && true "<<'ENDI'" # this skips this file when running scripts
@@ -592,26 +594,48 @@ alias ttr='tmux run-shell ~/.tmux/plugins/tmux-resurrect/scripts/restore.sh'
 
 #heredoc less escapes
 [[ ! -f ~/.tmux.conf ]] && cat <<EOF > ~/.tmux.conf
-# bind same as bind-key
+# bind same as bind-key. bind -r is repeatable, -n is no-prefix, -T is key-table (root, prefix, copy-mode, copy-mode-vi, pane, window, etc.)
+# set -g is global
+# run-shell 'tmux display-message "Loading ~/.tmux.conf"' 2>/dev/null #does work
+display "start message.." # cleaner start message. does not show on reload. only after kill-session.
+# dfvadfv # this will show error on reload. press enter to clear.
+# dfvadfv2 # this will be blocked from loading if above line errors.
+# set -g history-file /tmp/tmux_history.log
+#cat tmux-client-2853109.log tmux -vv?
+bind r source-file ~/.tmux.conf \; display "Config reloaded1"; # reload configuration
+# unbind C-a;
+set -g prefix C-a; # change default prefix to match Screen's
+
+set -g terminal-overrides 'xterm*:smcup@:rmcup@' # must have scrollbar activated in konsole before shift+pageup works in tmux
+set -g history-limit 10000
+bind-key -n PageUp send-keys -X scroll-up
+bind-key -n PageDown send-keys -X scroll-down
+set -g mouse on
+
+
 # Hardware/Keyboard -> Terminal Driver (stty) -> Terminal Emulator -> Readline (Bash) -> Application (Emacs, Vim, Tmux) # Many of Readline key bindings are based on Emacs like ctrl-k for kill-line.
-# if-shell 'test -n "$TMUX"' 'set mouse on' # set mouse on; # makes error 'no current session'
-set-hook -g after-new-session 'set mouse on' # 'set mouse on' allows scrolling and pane resize and hold shift to select text
+# if-shell 'test -n ""' 'set mouse on' # set mouse on; # makes error 'no current session'
+# set-hook -g after-new-session 'set mouse on' # 'set mouse on' allows scrolling and pane resize and hold shift to select text
 # -g is global. -r makes repeatable for pane resizing
-bind r source-file ~/.tmux.conf \; display "Config reloaded"; # reload configuration
 set -g @plugin "tmux-plugins/tpm" # plugin mgr. !press prefix (Ctrl+a) then capitol I to install plugin
-set -g @plugin "tmux-plugins/tmux-continuum" # test with: `tmux run-shell ~/.tmux/plugins/tmux-resurrect/scripts/save.sh" && tmux kill-server && tmux new -d && tmux ls && tmux run-shell ~/.tmux/plugins/tmux-resurrect/scripts/save.sh && tmux ls`
-set -g @plugin "tmux-plugins/tmux-resurrect" # prefix+C-s, prefix+C-r  to save and restore
+set -g @plugin "tmux-plugins/tmux-continuum" # test with:
+set -g @plugin "tmux-plugins/tmux-resurrect" # default prefix+C-s, prefix+C-r  to save and restore
+# set -g @plugin 'ofirgall/tmux-browser'
+set -g @plugin 'tmux-plugins/tmux-yank'
 # set -g @plugin "tmux-plugins/tmux-sensible" # a list of 'sane' settings
-#`run "~/.tmux/plugins/tpm/tpm"` # Must be below plugins! stops writing to .tmux.conf so run that in bash and then `tmux run-shell "~/.tmux/plugins/tpm/bin/install_plugins"`
+# run '~/.tmux/plugins/tpm/tpm'
+# # Must be below plugins! stops writing to .tmux.conf so run that in bash and then
 # if fatal: destination path '/home/user/.tmux/plugins/tpm', mv ~/.tmux/plugins/tpm
-# set -g @resurrect-dir '~/.tmux' # ~/.local/share/tmux/resurrect/
+# set -g @resurrect-dir '~/.tmux' # ~/.local/share/tmux/resurrect/ is default
 set -g @resurrect-processes ':all:'  # Restore all processes
-set -g @resurrect-capture-pane-contents 'on'z
+set -g @resurrect-capture-pane-contents 'on'
 set -g @continuum-restore 'on'
 set -g @continuum-save-interval '1'  # Save every x (15) minutes NOT WORKING
-set -g @resurrect-hook-pre-restore-all 'tmux kill-session -a'
-run '~/.tmux/plugins/tpm/tpm'
-bind-key C-s run-shell "~/.tmux/plugins/tmux-resurrect/scripts/save.sh" \; display "saved";
+# set -g @resurrect-hook-pre-restore-all 'tmux kill-session -a'
+
+bind-key C-Z display "test ctrl shift Z"
+unbind-key C-s
+bind-key C-e run-shell "~/.tmux/plugins/tmux-resurrect/scripts/save.sh" \; display "saved";
 bind-key C-r run-shell "~/.tmux/plugins/tmux-resurrect/scripts/restore.sh" \; display "restored";
 set -g status-position top # tabs at top
 set -g status-style "fg=#665c54"; set -g status-bg default;
@@ -620,27 +644,41 @@ set -g status-style "fg=#665c54"; set -g status-bg default;
 # #bind Escape cancel # doesnt work, just use Enter
 bind c new-window -c "#{pane_current_path}"
 bind k kill-window; bind q kill-session; # kill current window and all panes like screen. tmux default is "Ctrl-&". prefix,w is window mgr with : cmds.bind-key -n C-Left previous-window
-# bind -n "\e[1;2C" next-window # shift+right or left
-# bind -n "\e[1;2D" previous-window
+# bind -n "\e[1;2C" next-window # shift+right
+# bind -n "\e[1;2D" previous-window # shift-left
 bind-key Right next-window
 bind-key Left previous-window
-# unbind-key C-y
-# bind-key C-s paste-buffer
-# bind-key -T root C-y \; display "Config reloaded2";
-# bind -n "\x0E" paste-buffer # default emacs paste
-# bind-key C-n send-keys C-y \; display "Config reloaded2";
-# bind -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "xclip -i -selection clipboard"  # Copy to clipboard
-# bind-key -n C-y run "tmux paste-buffer; tmux send-keys C-y"  # Paste from clipboard
+# bind-key -T root C-y \; display "Config reloaded2"; # blocks tmux-yank
+# bind-key C-r \; display "Config reloaded2";
+
+# unbind [
+bind C-s copy-mode  # Bind prefix-_ to enter copy mode
+# bind C-c copy-buffer # unknown
+bind C-v paste-buffer
+bind -T copy-mode MouseDragEnd1Pane send -X copy-selection "xclip -selection clipboard -in"
+set -g set-clipboard on
+set -g @yank_with_mouse on
+set -g @yank_selection_mouse 'clipboard'
+# bind-key C-y run-shell "tmux show-buffer | xclip -selection clipboard"
+# set-environment -g DISPLAY $DISPLAY
+set -g @yank_selection 'clipboard'
+# bind-key -n C-y run "tmux paste-buffer"
+bind-key C-c run-shell 'tmux show-buffer | xsel --clipboard --input'
+bind -T copy-mode-vi Enter send-keys -X copy-selection-and-cancel \; run-shell -b "tmux show-buffer | xclip -selection clipboard"
+# copy mode nav: ? (up) / (down) n p w b g G
+bind p send-keys -X previous-search  # p still not working
+# setw -g mode-keys vi
+
 
 # Configured by Rob Muhlestein (linktr.ee/rwxrob); # This file is copyright free (public domain).
 # Meta Key and Pane Sync (wget https://raw.githubusercontent.com/rwxrob/dot/main/tmux/.tmux.conf)
 #setw -g modes vi; # vi for copy mode
-#set -g statuss vi; # vi for command status
-unbind C-a; set -g prefix C-a; # change default prefix to match Screen's
+#set -g status vi; # vi for command status
 #bind -r y setw synchronize-panes; # input in one pane is mirrored ? ctrl+y is paste in emacs
 # # override Enter in copy-mode to write selected text to /tmp/buf (to vim) for yyy/ppp
-# unbind -T copy-mode Enter; unbind -T copy-mode-vi Enter; bind -T copy-mode Enter sends -X copy-selection-and-cancel \; save-buffer /tmp/buf; bind -T copy-mode-vi Enter sends -X copy-selection-and-cancel \; save-buffer /tmp/buf;
-bind a last-window; #bind C-a last-window; # add double-tap meta key to toggle last window
+# unbind -T copy-mode Enter; unbind -T copy-mode-vi Enter;
+# bind -T copy-mode Enter sends -X copy-selection-and-cancel \; save-buffer /tmp/buf; bind -T copy-mode-vi Enter sends -X copy-selection-and-cancel \; save-buffer /tmp/buf;
+#bind a last-window; #bind C-a last-window; # add double-tap meta key to toggle last window
 # bind -n C-y send-prefix; # use a different prefix for nested
 # pane colors and display
 unbind |; bind | split-window -h; bind '\' split-window -h; bind 'C-\' split-window -h; unbind -; bind - split-window -v; unbind _; bind _ split-window -v; # create more intuitive split key combos (same as modern screen)
@@ -648,7 +686,8 @@ bind -r C-k resize-pane -U 1; bind -r C-j resize-pane -D 1; bind -r C-h resize-p
 # vi keys to navigate panes
 bind -r k select-pane -U; bind -r j select-pane -D; bind -r h select-pane -L; bind -r l select-pane -R;
 # avoid cursor movement messing with resize, clock.
-set -g repeat-time 200; set -g clock-mode-style 12; set -g clock-mode-colour yellow; set -g base-index 1; setw -g pane-base-index 1;
+# set -g repeat-time 200;
+set -g clock-mode-style 12; set -g clock-mode-colour yellow; set -g base-index 1; setw -g pane-base-index 1;
 # color the pane borders nearly invisible (when not using hacked tmux without them)
 set -g pane-border-style "fg=#171717"; set -g pane-active-border-style "fg=#171717";
 set -g status-interval 1; set -g status-left ""; set -g status-right-length 50; set -g message-style "fg=red"; #set -g status-right "#(pomo)";
@@ -658,16 +697,23 @@ set -g automatic-rename-format "#{b:pane_current_path}" # cwd default?
 set-window-option -g automatic-rename on
 set-window-option -g automatic-rename-format '#{b:pane_current_path}'
 # fix accidently typing accent characters, etc. by forcing the terminal to not wait around
-# set -sg escape-time 0; # default 500ms escape key waits for combos
+set -g escape-time 0; # default 500ms escape key waits for combos (vim)
+set -g repeat-time 0; # reduces wait for prefix combos
 set -g focus-events; # form vim/tmux d/y buffer sync
 # set -g default-terminal "xterm-256color"; set -ga terminal-overrides ",xterm-256color:Tc"; # Set default terminal and 256 colors # this breaks Home and End (escape codes?)
-set -g mode-style "bg=#45403d" # Set color of line selected from windows list (same as vim visual)
+# set -g mode-style "bg=#45403d" # Set color of line selected from windows list (same as vim visual)
 # customize create new window for streaming. (this will change default create window c)
 #unbind C-c; bind C-c new-window \; split-window -h \; select-pane -t 2 \; resize-pane -x 26 \; send "blankpane" Enter \; select-pane -t 1;
 # very unique Mac bug
-# if-shell "type 'reattach-to-user-namespace' >/dev/null" "set -g default-command 'reattach-to-user-namespace -l /bin/bash'";
-# from man tmux:
-# C-b Send prefix key C-o Rotate panes current window forwards C-z Suspend tmux client ! Break current pane window " Split current pane two top bottom # List paste buffers $ Rename current session % Split current pane two left right & Kill current window ' Prompt window index select ( Switch attached client previous session ) Switch attached client next session , Rename current window - Delete most recently copied buffer text . Prompt index move current window 0 9 Select windows 0 9 : Enter tmux command prompt ; Move previously active pane = Choose buffer paste interactively list ? List key bindings D Choose client detach L Switch attached client back last session [ Enter copy mode copy text view history ] Paste most recently copied buffer text c Create new window d Detach current client f Prompt search text open windows i Display information current window l Move previously selected window m Mark current pane select-pane -m M Clear marked pane n Change next window o Select next pane current window p Change previous window q Briefly display pane indexes r Force redraw attached client s Select new session attached client interactively t Show time w Choose current window interactively x Kill current pane z Toggle zoom state current pane { Swap current pane previous pane } Swap current pane next pane ~ Show previous messages tmux Page Up Enter copy mode scroll one page Up Down Left Right Change pane above below left right current pane M-1 M-5 Arrange panes one five preset layouts even-horizontal even-vertical main-horizontal main-vertical tiled Space Arrange current window next preset layout M-n Move next window bell activity marker M-o Rotate panes current window backwards M-p Move previous window bell activity marker C-Up C-Down C-Left C-Right Resize current pane steps one cell M-Up M-Down M-Left M-Right Resize current pane steps five cells
+# if-shell "type 'reattach-to-user-namespace' >/dev/null" "set -g default-command uEscape
+
+# confign .tmux.conf is not error and loaded, doesnt work
+# set -g status-bg black
+# set -g status-fg white
+# display "Config reloaded"
+# run-shell 'tmux display-message "Loaded ~/.tmux.conf"' 2>/dev/null
+display ".tmux.conf end loaded" # cleaner start message. does not show on reload.
+# dfvadfv3 # this like any error will block any other changes.
 
 EOF
 
