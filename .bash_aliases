@@ -11,27 +11,21 @@ echo $CDPATH # to see which dirs are autofound (can be annoying with tab complet
 
 '''
 temp notes:
-sed -i 's/[[:space:]]*$//'
 echo "export EDITOR=vi" >> ~/.bashrc
-sudo -E visudo
-aimgr ALL=(ALL:ALL) NOPASSWD: /usr/bin/tmux, /usr/sbin/useradd, /usr/bin/passwd[ags]
-allow sudo tmux -S /home/user/shared_tmux/shared_tmux_socket attach-session
+sudo -E visudo # no nano
+aimgr ALL=(ALL:ALL) NOPASSWD: /usr/bin/tmux, /usr/sbin/useradd, /usr/bin/passwd[ags] # couldnt get working
+allow sudo tmux -S /home/user/shared_tmux/shared_tmux_socket attach-session # couldnt get working
 ttyd -W -p 8889 bash
-
-lst -a
 
 ps aux (BSD-style options)
 a – Show processes from all users.
-
 u – Display user-oriented output (includes user, CPU/mem usage, start time, etc.).
-
 x – Show processes without a controlling terminal (like daemons).
-
 ps -ef (UNIX-style options)
 -e – Show all processes.
-
 -f – Full-format listing (includes UID, PPID, start time, etc.).
 '''
+alias rts="sed -i 's/[[:space:]]*$//'" # <file> remove trailing spaces on every line
 
 
 #if ! [[ $- == *i* ]]; then true "<<'ENDI'"; fi # this skips this file when running scripts
@@ -147,7 +141,7 @@ alias loc='locate --limit 5' # `apt install locate` finds common file locations 
 alias l='echo $(history -p !!) | xclip' # copies last command line to clipboard. see `o` for output.
 alias ll='ls -alFh ' # "list" all, long format. included in .bashrc, added human readable. 
 alias lll='ls -alF ' # "list" all long format. full byte count. 
-alias lst='ls -trl ' # "list" long, time, reverse. bottom latest. c changed, a accessed, m modified. m is content, c is metadata.
+alias lst='ls -trla ' # "list" long, time, reverse. bottom latest. c changed, a accessed, m modified. m is content, c is metadata.
 alias lld='ls -dlFh ' # list only directories.
 alias lsd='ls -d ' # list only directories.
 alias lsp='ls -a | xargs -I % realpath % ' # returns full paths. have to be in the directory. 
