@@ -30,8 +30,8 @@ export LC_ALL="C" # makes ls list dotfiles before others
 dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
 alias vibashrc='vi ~/.bashrc' 
 alias vibasha='vi ~/.bash_aliases' 
-alias rebashrc='source ~/.bashrc' # `source` reloads settings. ~ home dir. just type `bash` unless in venv.
-#alias rebash='exec bash -l' # reloads shell. -l is login shell for completion. just type `bash`.
+alias rebash='source ~/.bashrc' # `source` reloads settings. ~ home dir. just type `bash` unless in venv.
+#alias rebashl='exec bash -l' # reloads shell. -l is login shell for completion. just type `bash`.
 alias realias='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc'
 alias realiasr='ba=".bash_aliases";sudo install $HOME/$ba /root/$ba && sudo chmod 0664 /root/$ba' # for root
 alias revim='rm ~/.vimrc && source ~/.bashrc' # redo vim settings. below import is blocked for existing .vimrc
@@ -231,7 +231,7 @@ alias jolug='journalctl --field _SYSTEMD_UNIT | grep' # list units grep. to use 
 alias ku='pkill -KILL -u user' # kill another users processes. use `skill` default is TERM.
 alias launch='gio launch' # launch *.desktop files from the CLI
 alias lsblk='type lsblk; lsblk -f' # -f lists UUIDs and percent full
-alias lsof='type lsof; lsof -e /run/user/*' # remove cant stat errors
+alias lsof='lsof -e /run/user/*' # remove cant stat errors
 #alias lnf='ln -f' # symlink. use -f to overwrite. <target> <linkname>
 alias na='netplan apply'
 alias netstat='type netstat; netstat -tunapl' # --tcp --udp --numeric --all --program --listening
@@ -590,7 +590,8 @@ alias ttr='tmux run-shell ~/.tmux/plugins/tmux-resurrect/scripts/restore.sh'
 # C-b + I (shift+i) to install plugins with tpm. or use bash cmd below. 
 #if ! [[ -f ~/.tmux.conf ]]; then echo -e '
 
-[[ ! -f ~/.tmux.conf ]] && cat <<EOF > ~/.tmux.conf #heredoc less escapes
+#heredoc less escapes
+[[ ! -f ~/.tmux.conf ]] && cat <<EOF > ~/.tmux.conf
 # bind same as bind-key
 # Hardware/Keyboard -> Terminal Driver (stty) -> Terminal Emulator -> Readline (Bash) -> Application (Emacs, Vim, Tmux) # Many of Readline key bindings are based on Emacs like ctrl-k for kill-line.
 # if-shell 'test -n "$TMUX"' 'set mouse on' # set mouse on; # makes error 'no current session'
