@@ -9,7 +9,8 @@
 # add to sudo -E visudo for cache across tabs.. Defaults:user   timestamp_timeout=30, !tty_tickets, timestamp_type=global
 echo $CDPATH # to see which dirs are autofound (can be annoying with tab complete)
 
-'''
+
+true <<'END' # skips section to next END
 temp notes:
 echo "export EDITOR=vi" >> ~/.bashrc
 sudo -E visudo # no nano
@@ -23,8 +24,7 @@ u – Display user-oriented output (includes user, CPU/mem usage, start time, et
 x – Show processes without a controlling terminal (like daemons).
 ps -ef (UNIX-style options)
 -e – Show all processes.
--f – Full-format listing (includes UID, PPID, start time, etc.).
-'''
+END
 alias rts="sed -i 's/[[:space:]]*$//'" # <file> remove trailing spaces on every line
 
 
