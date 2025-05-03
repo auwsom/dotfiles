@@ -33,20 +33,25 @@ alias rts="sed -i 's/[[:space:]]*$//'" # <file> remove trailing spaces on every 
 #if [[ $- == *i* ]]; then source ~/.bashrc; fi  # Force bashrc loading for interactive shells (and scripts)
 
 ## basic Bash settings:
-export HISTSIZE=11000  # history size in terminal. limits numbering and masks if list is truncated. 
-export HISTFILESIZE=11000 #$HISTSIZE  # increase history file size or just leave blank for unlimited
+export HISTSIZE= #11000  # history size in terminal. limits numbering and masks if list is truncated. empty is unlimited.
+export HISTFILESIZE= #11000 #$HISTSIZE  # increase history file size or just leave blank for unlimited
 if ! [[ -f ~/.bash_eternal_history ]]; then cp ~/.bash_history ~/.bash_eternal_history; fi
 if ! [[ -f ~/.bash_history_bak ]]; then \mv ~/.bash_history ~/.bash_history_bak; fi
 if ! [[ -f ~/.bash_history ]]; then ln -s ~/.bash_eternal_history ~/.bash_history; fi # for hstr
 HISTFILE=~/.bash_eternal_history # "certain bash sessions truncate .bash_history" (like Screen) SU
 #sed -i 's,HISTFILESIZE=,HISTFILESIZE= #,' ~/.bashrc && sed -i 's,HISTSIZE=,HISTSIZE= #,' ~/.bashrc # run once for unlimited. have to clear the default setting in .bashrc
 HISTCONTROL=ignoreboth:erasedups   # no duplicate entries. ignoredups is only for consecutive. ignore both = ignoredups+ignorespace (will not record commands with space in front)
-#HISTTIMEFORMAT="%h %d %H:%M " # "%F %T "
+
+HISTTIMEFORMAT="%h %d %H:%M " # "%F %T " # CHECK 
 #export HISTIGNORE="!(+(*\ *))" # ignores commands without arguments. not compatible with HISTTIMEFORMAT. should be the same as `grep -v -E "^\S+\s.*" $HISTFILE`
 export HISTIGNORE="c:cdb:cdh:cdu:df:i:h:hh:hhh:l:lll:lld:lsd:lsp:ltr::mount:umount:rebash:path:env:pd:ps1:sd:sss:top:tree1:zr:zz:au:auu:aca:cu:cur:cx:dedup:dmesg:dli:aptli:d:flmh:flmho:flmr:fm:free:lsblk:na:netstat:ping1:wrapon:wrapoff:um:m:hdl":"ls *":"hg *" # ignore commands from history
-export PROMPT_COMMAND='history -a' # ;set +m' # will save (append) unwritten history in memory every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. set +m makes disables job control for aliases in vi.
+
+#export PROMPT_COMMAND='history -a' # ;set +m' # will save (append) unwritten history in memory every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. set +m makes disables job control for aliases in vi.
 #export PROMPT_COMMAND='EC=$? && history -a && test $EC -eq 1 && echo error $HISTCMD && history -d $HISTCMD && history -w' # excludes errors from history
-#export PROMPT_COMMAND='history -a ~/.bash_history_bak2' # writes to backup file instead of polluting every terminal with all history
+#export PROMPT_COMMAND='history -a ~/.bash_history_bak2' # writes to backup file instead of polluting every terminal with all history. doenst work
+export PROMPT_COMMAND='history -a; [ -f ~/.bash_history_backup ] && tail -n1 ~/.bash_eternal_history >> ~/.bash_history_backup' # writes to central backup file instead of polluting every terminal with all history. search it with hg2
+alias hf='history | fzf' # interactive search similar to hh. sudo apt install fzf
+
 export LC_ALL="C" # makes ls list dotfiles before others
 dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
 alias vibashrc='vi ~/.bashrc' 
@@ -129,7 +134,8 @@ alias i='ip -color a' # network info
 alias h='history 30'
 alias hhh='history 500' # `apt install hstr`. replaces ctrl-r with `hstr --show-configuration >> ~/.bashrc` https://github.com/dvorka/hstr. disables hide by default.
 alias hg='history | grep -i'
-function hg2 { grep -i "$1" ~/.bash_history; } # searches the file accumulating from all terminal before lost by hard exit
+#function hg2 { grep -i "$1" ~/.bash_history; } # searches the file accumulating from all terminal before lost by hard exit
+alias hg2='grep -i --color=auto "$1" ~/.bash_history_backup' # ALSO A FUNCTION
 #alias hd='history -d -2--1 ' #not working # delete last line. `history -d -10--2` to del 9 lines from -10 to -2 inclusive, counting itself. or use space in front of command to hide. 
 alias j='jobs' # dont use much unless `ctrl+z` to stop process
 alias k='kill -9' #<id> # or `kill SIGTERM` to terminate process (or job). or `pgreg __` and then `pkill __`
