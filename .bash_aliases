@@ -620,6 +620,7 @@ alias ttr='tmux run-shell ~/.tmux/plugins/tmux-resurrect/scripts/restore.sh'
 
 #heredoc less escapes
 [[ ! -f ~/.tmux.conf ]] && cat <<EOF > ~/.tmux.conf
+
 # bind same as bind-key. bind -r is repeatable, -n is no-prefix, -T is key-table (root, prefix, copy-mode, copy-mode-vi, pane, window, etc.)
 # set -g is global
 # run-shell 'tmux display-message "Loading ~/.tmux.conf"' 2>/dev/null #does work
@@ -647,7 +648,7 @@ set -g @plugin "tmux-plugins/tpm" # plugin mgr. !press prefix (Ctrl+a) then capi
 set -g @plugin "tmux-plugins/tmux-continuum" # test with:
 set -g @plugin "tmux-plugins/tmux-resurrect" # default prefix+C-s, prefix+C-r  to save and restore
 # set -g @plugin 'ofirgall/tmux-browser'
-set -g @plugin 'tmux-plugins/tmux-yank'
+# set -g @plugin 'tmux-plugins/tmux-yank' # unneeded with copy settings below
 # set -g @plugin "tmux-plugins/tmux-sensible" # a list of 'sane' settings
 # run '~/.tmux/plugins/tpm/tpm'
 # # Must be below plugins! stops writing to .tmux.conf so run that in bash and then
@@ -672,28 +673,40 @@ bind c new-window -c "#{pane_current_path}"
 bind k kill-window; bind q kill-session; # kill current window and all panes like screen. tmux default is "Ctrl-&". prefix,w is window mgr with : cmds.bind-key -n C-Left previous-window
 # bind -n "\e[1;2C" next-window # shift+right
 # bind -n "\e[1;2D" previous-window # shift-left
-bind-key Right next-window
-bind-key Left previous-window
+unbind-key Right
+unbind-key Left
+bind -r Right next-window
+bind -r Left previous-window
 # bind-key -T root C-y \; display "Config reloaded2"; # blocks tmux-yank
-# bind-key C-r \; display "Config reloaded2";
 
 # unbind [
 bind C-s copy-mode  # Bind prefix-_ to enter copy mode
 # bind C-c copy-buffer # unknown
 bind C-v paste-buffer
-bind -T copy-mode MouseDragEnd1Pane send -X copy-selection "xclip -selection clipboard -in"
-set -g set-clipboard on
-set -g @yank_with_mouse on
-set -g @yank_selection_mouse 'clipboard'
+# bind -T copy-mode MouseDragEnd1Pane send -X copy-selection "xclip -selection clipboard -in"
+# set -g set-clipboard on
 # bind-key C-y run-shell "tmux show-buffer | xclip -selection clipboard"
-# set-environment -g DISPLAY $DISPLAY
-set -g @yank_selection 'clipboard'
 # bind-key -n C-y run "tmux paste-buffer"
-bind-key C-c run-shell 'tmux show-buffer | xsel --clipboard --input'
-bind -T copy-mode-vi Enter send-keys -X copy-selection-and-cancel \; run-shell -b "tmux show-buffer | xclip -selection clipboard"
+
+bind -T copy-mode-vi Enter send-keys -X copy-selection-and-cancel \;
+#run-shell -b "tmux show-buffer | xclip -selection clipboard"
 # copy mode nav: ? (up) / (down) n p w b g G
 bind p send-keys -X previous-search  # p still not working
 # setw -g mode-keys vi
+### normal C-y copy buffer after C-eu is broken
+# shift+mouse sel goes to C-c C-v, mouse sel goes to C-y but includes CRs
+# bind-key C-y run-shell -b 'tmux show-buffer | head -c -1 | tmux load-buffer - ; tmux paste-buffer'  # no CR with C-y
+# bind-key C-c run-shell 'tmux show-buffer | xsel --clipboard --input' # does work with xsel
+
+# bind-key C-y run-shell -b 'tmux show-buffer | xclip -selection clipboard'
+bind-key C-a send-keys C-a
+# bind-key -n C-b send-keys C-a
+bind C-y send-keys C-y # bash kill ring (removed text)
+# prefix then pageup scrolls up
+unbind -n PageUp
+bind PageUp send-keys PageUp
+unbind -n PageDown
+bind PageDown send-keys PageDown
 
 
 # Configured by Rob Muhlestein (linktr.ee/rwxrob); # This file is copyright free (public domain).
@@ -707,7 +720,7 @@ bind p send-keys -X previous-search  # p still not working
 #bind a last-window; #bind C-a last-window; # add double-tap meta key to toggle last window
 # bind -n C-y send-prefix; # use a different prefix for nested
 # pane colors and display
-unbind |; bind | split-window -h; bind '\' split-window -h; bind 'C-\' split-window -h; unbind -; bind - split-window -v; unbind _; bind _ split-window -v; # create more intuitive split key combos (same as modern screen)
+# unbind |; bind | split-window -h; bind '\' split-window -h; bind 'C-\' split-window -h; unbind -; bind - split-window -v; unbind _; bind _ split-window -v; # create more intuitive split key combos (same as modern screen)
 bind -r C-k resize-pane -U 1; bind -r C-j resize-pane -D 1; bind -r C-h resize-pane -L 1; bind -r C-l resize-pane -R 1; # vi keys to resize
 # vi keys to navigate panes
 bind -r k select-pane -U; bind -r j select-pane -D; bind -r h select-pane -L; bind -r l select-pane -R;
@@ -740,6 +753,7 @@ set -g focus-events; # form vim/tmux d/y buffer sync
 # run-shell 'tmux display-message "Loaded ~/.tmux.conf"' 2>/dev/null
 display ".tmux.conf end loaded" # cleaner start message. does not show on reload.
 # dfvadfv3 # this like any error will block any other changes.
+
 
 EOF
 
