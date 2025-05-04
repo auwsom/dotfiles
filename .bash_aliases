@@ -50,6 +50,7 @@ export HISTIGNORE="c:cdb:cdh:cdu:df:i:h:hh:hhh:l:lll:lld:lsd:lsp:ltr::mount:umou
 #export PROMPT_COMMAND='EC=$? && history -a && test $EC -eq 1 && echo error $HISTCMD && history -d $HISTCMD && history -w' # excludes errors from history
 #export PROMPT_COMMAND='history -a ~/.bash_history_bak2' # writes to backup file instead of polluting every terminal with all history. doenst work
 export PROMPT_COMMAND='history -a; [ -f ~/.bash_history_backup ] && tail -n1 ~/.bash_eternal_history >> ~/.bash_history_backup' # writes to central backup file instead of polluting every terminal with all history. search it with hg2
+# cat .bash_eternal_history .bash_history_bak | awk '!seen[$0]++' > .bash_merged_history # combine all # grep -Fxv -f .bash_merged_history .bash_history_bak #checks if any lines were missed
 alias hf='history | fzf' # interactive search similar to hh. sudo apt install fzf
 
 export LC_ALL="C" # makes ls list dotfiles before others
