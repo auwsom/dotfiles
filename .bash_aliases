@@ -899,7 +899,6 @@ alias qemu='qemu-system-x86_64' # --help
 # history -a; set +m # same as above but runs every command with .bashrc
 # trap 'echo ${BASH_COMMAND}' DEBUG # prints all commands 
 # trap 'type ${BASH_COMMAND[1]}' DEBUG # array doesnt work on this bash var for some reason
-# trap 'if [[ $(echo $(type ${BASH_COMMAND} | awk "{print \$1}" ) | grep builtin) ]]; then echo "this is an alias"; fi' DEBUG # prints all commands. also prints an error ?
 
 # https://stackoverflow.com/questions/27493184/can-i-create-a-wildcard-bash-alias-that-alters-any-command
 
