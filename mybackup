@@ -1,0 +1,15 @@
+#!/bin/bash
+set -o errexit -o nounset -o xtrace
+
+#rsync -aAX --info=progress2 /media/user/16GBa/TinyLinux-2018-10-28 /media/user/backups/usb/TinyLinux-2018-10-28_$(date +%F--%T)
+
+dir="/media/user/backups/usb"
+file="/media/user/16GBa/TinyLinux-2018-10-28"
+#if ! [[ $ls -A $dir/$1 ]] && rsync -aAX --info=progress2 $file $dir/$1/${file##*/}_$(date +%F--%T)
+
+dir="/media/user/backups/backup-work"
+file="/media/user/VM/ubuntu-20.04-server-cloudimg-amd64-disk-kvm--kub-set3--work-bak2.qcow2"
+#if ! [[ $ls -A $dir/$1 ]] && rsync -aAX --info=progress2 $file $dir/$1/${file##*/}_$(date +%F--%T)
+
+
+
