@@ -40,5 +40,5 @@ MAILTO="wer987wer888@gmail.com"
 @hourly cronic /home/user/dotfiles/check-space        # every hour on the hour
 0 2 * * * cronic /home/user/dotfiles/snap_clean         # daily at 02:00
 0 4 * * * cronic /home/user/dotfiles/clamscan_daily         # daily at 04:00
-@daily cronic cd ~/dotfiles && git pull --rebase && git push # bad idea?
+@daily cronic cd /home/user/dotfiles && git pull # --rebase && git push # bad idea? dont use --rebase bc "replay" local over origin
 
