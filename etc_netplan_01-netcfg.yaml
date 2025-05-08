@@ -1,0 +1,36 @@
+network: 
+  version: 2
+  renderer: networkd
+  ethernets: 
+    enp0s25: 
+      dhcp4: no
+      optional: true
+      nameservers:
+        addresses:
+        - 8.8.8.8
+        - 1.1.1.1
+    enx8cae4ce145a8: 
+      dhcp4: true
+      optional: true
+      nameservers:
+        addresses:
+        - 8.8.8.8
+        - 1.1.1.1
+  bridges:
+    br0:
+      dhcp4: yes
+      interfaces:
+      - enp0s25
+#  wifis:
+#    wlx18c3f487e3e5:
+#    wlx18c3f487e3e5:
+#      access-points:
+#        "Reynolds":
+#          password: "00020589-2"
+#      optional: true
+#      dhcp4: no 
+#      nameservers:
+#        addresses:
+#        - 8.8.8.8
+#        - 1.1.1.1
+
