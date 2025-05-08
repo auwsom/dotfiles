@@ -25,6 +25,8 @@ MAILTO="wer987wer888@gmail.com"
 
 # will run in all non-commmented out lines manually
 #crontab -l | grep -v '^\s*#' | awk '{for(i=6;i<=NF;++i) printf $i (i<NF?" ":"\n")}' | while read -r cmd; do bash -c "$cmd"; done
+#crontab -l | grep -v '^\s*#' | sed -E 's/^(@\w+|([^ ]+ ){5})\s*cronic\s*//; s/^(@\w+|([^ ]+ ){5})\s*//' | while read -r cmd; do bash -c "$cmd"; done
+
 
 # @daily, @weekly, @monthly, @hourly, @yearly, @midnight (alias for @daily
 #@hourly    → minute 0 of every hour            (e.g. 01:00, 02:00, ...)
@@ -38,16 +40,15 @@ MAILTO="wer987wer888@gmail.com"
 0 4 * * * cronic /home/user/dotfiles/mybackup #disabled
 0 2 * * * cronic /home/user/dotfiles/jo_alerts 
 #0 3 * * * cronic ~/scripts/backup12 # attempt at smart backup. use rsync-time-backup
-#0 0 * * 0 /home/user/dotfiles/email_test         # every Sunday at 00:00 (weekly)
-@weekly /home/user/dotfiles/email_test         # every Sunday at 00:00 (weekly)
-@hourly /home/user/dotfiles/check-space        # every hour on the hour
-0 2 * * * /home/user/dotfiles/snap_clean         # daily at 02:00
-0 4 * * * /home/user/dotfiles/clamscan_daily         # daily at 04:00
+@weekly cronic /home/user/dotfiles/email_test         # every Sunday at 00:00 (weekly)
+@hourly cronic /home/user/dotfiles/check-space        # every hour on the hour
+0 2 * * * cronic /home/user/dotfiles/snap_clean         # daily at 02:00
+0 4 * * * cronic /home/user/dotfiles/clamscan_daily         # daily at 04:00
+#cd ~/dotfiles && git add . && git commit -m commit && git push -u origin main # bad idea?
 
 # @reboot does this during restart:
 #@reboot sleep 300; /usr/bin/mount -a
-#@reboot sleep 300; /home/user/autostart-scripts-sudo/*
-
+#@reboot sleep 300; /home/user/autostart-scripts/* # are symlinked now
 
 #Back In Time system entry, this will be edited by the gui:
 #0 3 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime backup-job >/dev/null # was backing up 20G-p VM

@@ -33,8 +33,8 @@ sudo mv /etc/netplan/01-netcfg.yaml ~/dotfiles/etc_netplan_01-netcfg.yaml
 sudo ln -s ~/dotfiles/etc_netplan_01-netcfg.yaml /etc/netplan/01-netcfg.yaml
 sudo ln -s ~/dotfiles/autostart ~/.config/autostart
 sudo ln -s ~/dotfiles/autostart-scripts ~/.config/autostart-scripts
-sudo ln -s 
 sudo ln -s /usr/share/applications ~/applications 
+sudo ln -s 
 
 System-wide (just notes):
 # Backup and replace /etc/fancontrol from user accnt.
