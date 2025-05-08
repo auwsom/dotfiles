@@ -1,6 +1,7 @@
 
 GITHUB:
 gh auth login && gh repo clone auwsom/dotfiles #gggYBC
+git config --global user.name "Your Name" && git config --global user.email you@example.com
 
 BACKUPS:
 git clone https://github.com/laurent22/rsync-time-backup && cd rsync-time-backup
