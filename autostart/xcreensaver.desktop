@@ -1,0 +1,4 @@
+[Desktop Entry]
+Name=Screensaver
+Type=Applicaton
+Exec=xscreensaver -nosplash

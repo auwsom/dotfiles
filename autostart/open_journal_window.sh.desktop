@@ -1,0 +1,7 @@
+[Desktop Entry]
+Exec=/home/user/.config/old-autostart-scripts/open_journal_window.sh
+Icon=dialog-scripts
+Name=open_journal_window.sh
+Path=
+Type=Application
+X-KDE-AutostartScript=true

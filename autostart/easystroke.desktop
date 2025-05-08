@@ -1,0 +1,80 @@
+[Desktop Entry]
+Version=1.0
+Name=Easystroke Gesture Recognition
+Name[ca]=Reconeixement de gestos Easystroke
+Name[cs]=Easystroke rozeznávání gest
+Name[de]=Easystroke Gestenerkennung
+Name[el]=Easystroke Αναγνώρηση Χειρονομιών
+Name[es]=Reconocedor de gestos Easystroke
+Name[fi]=Easystroke hiirieleet
+Name[fr]=Reconnaissance gestuelle Easystroke
+Name[he]=זיהוי תנועות עכבר של Easystroke
+Name[hu]=Easystroke gesztusfelismerés
+Name[it]=Easystroke riconoscimento gesti
+Name[ja]=Easystroke ジェスチャ認識
+Name[ko]=이지스트로크 동작 인식
+Name[pl]=Easystroke Rozpoznawanie Gestów
+Name[ru]=Распознавание жестов мыши Easystroke
+Name[vi]=Trình nhận dạng hành vi Easystroke
+Name[zh_CN]=Easystroke 鼠标手势辨认
+Name[zh_TW]=Easystroke 滑鼠手勢辨識
+Type=Application
+Terminal=false
+Exec=/usr/bin/easystroke
+Icon=easystroke
+Categories=GTK;Utility;Accessibility;
+Actions=About;Enable;Disable;Quit
+Comment=Control your desktop using mouse gestures
+Comment[ca]=Controla el teu escriptori a través de gestos amb el ratolí
+Comment[cs]=Ovládejte počítač pomocí gest myši
+Comment[de]=Den Rechner mit Mausgesten bedienen
+Comment[el]=Ελέγξτε την επιφάνεια εργασίας χρησιμοποιώντας χειρονομίες ποντικιού
+Comment[es]=Controlar su escriotrio usando gestos de ratón
+Comment[fi]=Hallitse työpöytää hiirieleillä
+Comment[fr]=Contrôler votre bureau à l'aide de gestes de souris
+Comment[he]=ניתן לשלוט בשולחן העבודה באמצעות תנועות העכבר
+Comment[hu]=Az asztali környezet irányítása egérgesztusokkal
+Comment[it]=Controlla la scrivania utilizzando i gesti del muse
+Comment[ja]=マウス・ジェスチャを使用してデスクトップを制御します
+Comment[ko]=마우스 동작을 통해 데스크탑 제어
+Comment[pl]=Kontroluj pulpit używając gestów myszy
+Comment[ru]=Управление рабочим столом с помощью жестов мыши
+Comment[vi]=Điều khiển máy tính bằng những hành vi của chuột
+Comment[zh_CN]=通过鼠标手势控制你的桌面
+Comment[zh_TW]=使用滑鼠手勢控制您的桌面
+
+[Desktop Action About]
+Name=About
+Name[cs]=O programu
+Name[de]=Über
+Name[es]=Acerca de
+Name[fr]=À propos
+Name[ru]=Сведения о программе
+Exec=/usr/bin/easystroke about
+
+[Desktop Action Enable]
+Name=Enable
+Name[cs]=Povolit
+Name[de]=Aktivieren
+Name[es]=Activar
+Name[fr]=Activer
+Name[ru]=Включить
+Exec=/usr/bin/easystroke enable
+
+[Desktop Action Disable]
+Name=Disable
+Name[cs]=Zakázat
+Name[de]=Deaktivieren
+Name[es]=Desactivar
+Name[fr]=Désactiver
+Name[ru]=Отключить
+Exec=/usr/bin/easystroke disable
+
+[Desktop Action Quit]
+Name=Quit
+Name[cs]=Konec
+Name[de]=Schließen
+Name[es]=Salir
+Name[fr]=Quitter
+Name[ru]=Выйти
+Exec=/usr/bin/easystroke quit
