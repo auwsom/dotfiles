@@ -9,11 +9,8 @@ git clone https://github.com/laurent22/rsync-time-backup && cd rsync-time-backup
 How it works: The script creates timestamped, file-by-file backups using hard links for unchanged files (efficient storage). 
 touch /media/user/backups/rsync-time-backup/backup.marker
 
-
-sudo -i && crontab /home/user/dotfiles/crontab1 # dotfiles sync and backups. /var/spool/cron/crontabs/root
+sudo -i && crontab /home/user/dotfiles/crontab1 # dotfiles sync and backups. location: /var/spool/cron/crontabs/root
 crontab -l # to verify
-use nice?
-0 3 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime backup-job >/dev/null
 
 
 RECOVERY:

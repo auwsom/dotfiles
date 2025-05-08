@@ -1,0 +1,717 @@
+kub-set3-part
+kub-set3-part/root/
+atac ~/.bash_history | awk '!a[$0]++' | tac > dedup; \mv dedup ~/.bash_history; rm dedup
+md git
+cat .local/share/konqueror/view_properties/global/.directory
+echo -e '[Dolphin]\nViewMode=1' > .local/share/konqueror/view_properties/global/.directory
+vi /etc/postfix/main.cf
+path=".local/share/konqueror/view_properties/global/" && mkdir -p $path && echo -e '[Dolphin]\nViewMode=1' > $path/.directory
+cat $path/.directory
+sys restart postfix
+echo -e 'su user -c "#!/bin/bash\ncd ~/git/dotfiles && git add . && git commit -m commit && git push -u origin main"' > /etc/cron.daily/github.daily
+echo -e 'su user -c "#!/bin/bash\ncd ~/git/dotfiles && git add . && git commit -m commit && git push -u origin main"' >| /etc/cron.daily/github.daily && chmod /etc/cron.daily/github.daily
+aecho -e 'su user -c "#!/bin/bash\ncd ~/git/dotfiles && git add . && git commit -m commit && git push -u origin main"' >| /etc/cron.daily/github.daily && chmod +x /etc/cron.daily/github.dailya
+echo -e 'su user -c "#!/bin/bash\ncd ~/git/dotfiles && git add . && git commit -m commit && git push -u origin main"' >| /etc/cron.daily/github.daily && chmod +x /etc/cron.daily/github.daily
+ll /etc/cron.daily/github.daily
+/etc/cron.daily/github.daily
+cdb
+cat /root/clamav-testfile 
+vi /root/clamav-testfile
+ll /home
+md /tmp/host_files
+mount -t 9p -o trans=virtio,version=9p2000.L /home/hostshare /tmp/host_files
+mount -t 9p -o trans=virtio,version=9p2000.L /hostshare /tmp/host_files
+ll /tmp/host_files
+ll /root/.bash_history 
+cat /root/.bash_history
+vi /root/.bash_history 
+ll /root/.bash_history
+
+vi /boot/grub/grub.cfg 
+efibootmgr
+mv /etc/default/grub.d/50-cloudimg-settings.cfg .
+journalctl -b -1 
+journalctl --list-boot
+snap remove lxd
+snap remove core20
+systemctl enable serial-getty@ttyS0
+systemctl start serial-getty@ttyS0
+snap list
+snap remove snapd
+systemd-analyze
+systemd-analyze blame
+apt install ncdu 
+journalctl --vacuum-size=50M
+ll /usr/src/
+apt -s autoremove
+apt remove --purge snapd
+apt install linux-image-$(uname -r)
+apt install linux-image-5.4.0-90-generic
+systemctl disable motd-news
+rm -r /home/ubuntu/
+userdel --remove ubuntu
+useradd --create-home --shell /bin/bash --password unencrypted user
+usermod -aG sudo,root user
+passwd user 
+date
+`timedatectl set-timezone America/Los_Angeles`
+echo 'SystemMaxUse=200M' > journald.conf  
+cat  journald.conf  
+mksquashfs
+mkswap /swapfile
+chmod 600 /swapfile && swapon /swapfile
+fallocate -l 300M homefile
+mkfs.ext4 /home/homefile 
+mkdir /home/user1
+mount /home/homefile /home/user1
+sudo cp -r /home/user/* /home/user1
+chown -R user:user /home/user
+mkdir /var/run/sshd &&  sudo service sshd start
+fallocate -l 30M /tmpfile && mkfs.ext4 /tmpfile
+systemctl status apparmor.service
+chown -R user:user /home/user1
+service ssh start
+apt autoremove --purge snapd
+find /etc/systemd/system/multi-user.target.wants -name "snap.*.service"
+vi  /etc/systemd/system/multi-user.target.wants/ssh.service 
+systemctl status ssh.service
+systemctl disable ssh
+losetup -c /dev/loop1
+resize2fs /dev/loop1
+vi /etc/netplan/50-cloud-init.yaml 
+ua 
+sudo ua status
+apt install clamav
+echo -e '#!/usr/bin/env\nbash clamscan -r /usr/bin' > "/etc/cron.daily/clamscan_daily
+systemctl stop clamav-freshclam
+freshclam --quiet
+systemctl start clamav-freshclam
+echo -e 'service clamav-freshclam stop && freshclam && service clamav-freshclam start' > "/etc/cron.daily/clamscan_daily"
+service clamav-freshclam stop && freshclam && service clamav-freshclam start
+vi /etc/rsyslog.d/50-default.conf
+systemctl restart rsyslog
+journalctl -u cron
+sed -i 's/#DefaultTimeoutStartSec=90s/DefaultTimeoutStartSec=3s/' /etc/systemd/system.conf
+sysl | g ua
+type ua
+strace ua
+ua --help
+apt update 
+cat /proc/meminfo
+free -h
+strace ua status
+strace ua enable cis
+enable cis
+ua attach C1L5UWhKcVhP2SGMzeBMUcYbvd2t9
+ua enable cis
+ua enable livepatch 
+sed -i 's/#DefaultTimeoutStopSec=90s/DefaultTimeoutStopSec=3s/' /etc/systemd/system.conf
+vi /etc/systemd/system.conf
+cat /var/log/cron.log 
+echo -e '#!/usr/bin/env\nbash clamscan -r /usr/bin' > "/etc/cron.daily/clamscan_daily"
+locate sources.list
+alias -p
+usermod -l user0 user
+apt install mlocate
+apt install bats
+sed -i 's/root:\/bin\/bash/root:\/usr\/sbin\/nologin/' /etc/passwd
+sed -i 's/root:\/usr\/sbin\/nologin/root:\/bin\/bash/' /etc/passwd
+vi /etc/adduser.conf
+vi /etc/default/useradd
+sed -i 's/\/sh/\/bash/' /etc/default/useradd
+grep "sh" /etc/default/useradd
+useradd --create-home user
+ls /usr/var/openscap
+ls /usr/share/openscap/
+echo -e 'APT::Periodic::Update-Package-Lists "7";\nAPT::Periodic::Download-Upgradeable-Packages "7";\nAPT::Periodic::Unattended-Upgrade "7";\nAPT::Periodic::AutocleanInterval "7";' >> /etc/apt/apt.conf.d/20auto-upgrades
+grep -i cron.daily /var/log/syslog*
+chmod +x /etc/cron.daily/clamscan_daily 
+run-parts --test /etc/cron.daily
+run-parts /etc/cron.daily
+journalctl --vacuum-size=50M && echo 'SystemMaxUse=200M' >> /etc/systemd/journald.conf
+locate language
+rm -r /usr/share/locale !(/usr/share/locale/en)
+cat /etc/netplan/02-netcfg.yaml
+ua disable cis
+wget https://security-metadata.canonical.com/oval/com.ubuntu.$(lsb_release -cs).usn.oval.xml.bz2
+chmod +s /etc/passwd
+ua enable cips
+sed -i 's/#PubkeyAuthentication/PubkeyAuthentication/' /etc/ssh/sshd_config
+journalctl -p err -r
+dpkg-reconfigure openssh-server
+apt purge openssh-server
+apt install openssh-server
+sed -i 's/#PubkeyAuthentication/PubkeyAuthentication/' /etc/ssh/sshd_config && systemctl restart sshd
+vi /etc/ssh/sshd_config
+vi ~/.ssh/authorized_keys
+systemctl restart sshd
+echo -e "network: \n  ethernets: \n    enp1s0: \n      dhcp4: true" > /etc/netplan/01-netcfg.yaml
+ss -tulpn | grep 22
+ufw allow ssh
+apt-get install libsasl2-modules postfix
+apt install mailx
+vi /etc/postfix/main.cf 
+postmap /etc/postfix/sasl_passwd && systemctl reload postfix
+apt install mailutils
+sudo chmod 600 /etc/postfix/sasl_passwd
+cat /var/log/mail.log
+apt install apticron
+unattended-upgrades --dry-run --debug && cat /var/log/unattended-upgrades/unattended-upgrades.log
+cat /var/log/unattended-upgrades/unattended-upgrades.log
+vi /usr/lib/apt/apt.systemd.daily
+grep Unattended-Upgrade /etc/apt/apt.conf.d/20auto-upgrades
+vi /etc/apt/apt.conf.d/20auto-upgrades
+echo -e "[Timer]\nPersistent=delay" > /etc/systemd/system/apt-daily-upgrade.timer.d/override.conf
+vi /etc/default/motd-news
+sed -i 's/"${distro_id}:${distro_codename}";/"\/\/${distro_id}:${distro_codename}";/' /etc/apt/apt.conf.d/50unattended-upgrades
+cat /etc/apt/apt.conf.d/50unattended-upgrades
+vi /etc/apt/apt.conf.d/50unattended-upgrades
+apt purge linux*kvm
+ll /lib/modules/5.4.0-1049-kvm
+apt install linux-virtual
+journalctl --vacuum-size=5M
+apt install -f
+apt remove mailutils
+echo -e '#!/usr/bin/env\nnice -n5 clamscan -ri / --exclude=/proc --exclude=/sys --exclude=/dev --exclude=/media --exclude=/mnt -l clamav.log && MALWARE=$(tail "clamav.log"|grep Infected|cut -d" " -f3) && if [ "$MALWARE" -ne "0" ]; then mail -s "Malware Found" $(cat ~/.env/EMAIL) <<< $(cat clamav.log); fi' >> "/etc/cron.daily/clamscan_daily"
+apt update && apt install hstr && hstr --show-configuration >> ~/.bashrc
+vi /etc/cron.daily/clamscan_daily 
+./etc/cron.hourly/check-space
+echo -e '#!/bin/bash\nCURRENT=$(df / | grep / | awk '\''{ print $5}'\'' | sed '\''s/%//g'\'') ; THRESHOLD=95; if [ "$CURRENT" -gt "$THRESHOLD" ] ; then mail -s "Disk Space Alert Used: $CURRENT" -c $(cat ~/.env/EMAIL) $(cat ~/.env/EMAIL) <<< $(hostname -i; uname -a); fi' >> /etc/cron.hourly/check-space && chmod +x /etc/cron.hourly/check-space
+vi /usr/lib/apticron/apticron.conf
+sed -i 's/EMAIL="root"/#EMAIL="root"/' /usr/lib/apticron/apticron.conf
+cp .bash_history .bash_history0
+apticron
+vi /etc/cron.hourly/check-space
+bash /etc/cron.hourly/check-space
+sed -i 's/default/default,acl/' /etc/fstab
+vi /etc/fstab
+mount -o,remount /
+apt install acl
+setfacl -dm u::rw,g::x,o::x .env
+chmod -x .env
+find / -type f -size +25M | xargs ls -Falh
+cat clamav.log
+echo 'X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*' > clamav-testfile
+chmod 600 .bash_history
+chmod 600 .bash_aliases
+ua status
+ua enable livepatch
+chmod +x resize-fdisk.sh
+bash resize-fdisk.sh
+apt install tripwire
+tripwire –-init
+echo -e '#!/bin/bash\nVIOLS=$(twprint -m r -t 0 -r /var/lib/tripwire/report/$(ls -Art /var/lib/tripwire/report/ | tail -n 1 ) | grep TWReport | cut -d" " -f4 | sed 's/V://'); if [ "$VIOLS" -ne "0" ]; then mail -s "TripWire Alert Viols: $VIOLS" -c $(cat ~/.env/EMAIL) $(cat ~/.env/EMAIL) <<< $(hostname -i; uname -a); fi' >| /etc/cron.daily/tripwire-report && chmod +x /etc/cron.daily/tripwire-report
+cat /etc/cron.daily/tripwire
+#!/bin/bash\nVIOLS=$(twprint -m r -t 0 -r /var/lib/tripwire/report/$(ls -Art /var/lib/tripwire/report/ | tail -n 1 ) | grep TWReport | cut -d" " -f4 | sed 's/V://'); if [ "$VIOLS" -ne "0" ]; then mail -s "TripWire Alert Viols: $VIOLS" -c $(cat ~/.env/EMAIL) $(cat ~/.env/EMAIL) <<< $(hostname -i; uname -a); fi' >> /etc/cron.daily/tripwire
+rm /bin/test.sh
+tripwire --check 
+apt -s install python3-dev python3-pip python3-virtualenv python3-venv python3-scapy libssl-dev libpcap-dev
+vi .bash_history 
+hg mail
+echo -e '#!/bin/bash\nif [ "$PAM_TYPE" != "close_session" ]; then mail -s "SSH Login: $PAM_USER from $PAM_RHOST on $(hostname)" -r $(cat ~/.env/EMAIL) $(cat ~/.env/EMAIL) <<< "$(date) $(who) $(tail /var/log/auth.log) $(env)"; fi' > /usr/local/bin/notify.sh && chmod +x /usr/local/bin/notify.sh && echo "session    optional     pam_exec.so /usr/local/bin/notify.sh" >> /etc/pam.d/sshd
+lsof /home/partimag
+mounts
+findmnt
+unmount -f /home/partimag
+umount -f /home/partimag
+ll /home/partimag
+ll /home/
+cat /root/.bash_aliases
+lh
+help ls
+curl ifconfig.me
+apt install tasksel
+apt --fix-missing
+cat /etc/resolv.conf
+sys restart NetworkManager
+hh
+apt install tasksel --fix-missing
+tasksel --test install kubuntu-desktop
+. ~/resize-fdisk.sh 
+cat ~/resize-fdisk.sh 
+resize2fs /dev/vda1
+echo "resize2fs /dev/vda1" >> ~/resize-fdisk.sh
+tasksel install kubuntu-desktop
+telttgfi
+grep menuentry /boot/grub/grub.cfg
+update grub
+hhh
+ping 8.8.8.8
+vi resolv
+cp ~/.bash_aliases .
+systemctl status graphical.target
+systemctl get-default
+pubkey
+systemctl set-default multi-user.target
+systemctl isolate multi-user.target
+sys enable sddm
+sddm --test -mode 
+locate sddm.conf
+cat /etc/X11/default-display-manager
+systemctl start sddm.service 
+systemctl set-default graphical.target
+jo -r
+ll /etc/sddm.conf.d/
+systemctl status display-manager
+cd ~
+apt install kubuntu-desktop
+echo "nameserver 8.8.8.8" >> /etc/resolv.conf
+apt install kde-plasma-desktop
+service display_manager start
+systemctl status sddm.service
+DISPLAY=:0 sddm &
+echo -e '      nameservers:\n        addresses:\n        - 1.1.1.1\n        - 8.8.8.8' >> /etc/netplan/01-netcfg.yaml
+cat /etc/netplan/01-netcfg.yaml
+sys status postfix@-
+jo -xb
+jo -xpb
+jo -xp3 -b
+startx
+echo -e 'xrandr --newmode "1920x1080_60.00"  173.00  1920 2048 2248 2576  1080 1083 1088 1120 -hsync +vsync\nxrandr --addmode Virtual-1 "1920x1080_60.00"\nxrandr --output Virtual-1 --mode "1920x1080_60.00"' > /etc/X11/Xsession.d/999myresolution && chmod +x /etc/X11/Xsession.d/999myresolution
+pgrep sddm
+pkill startx
+kill 2771
+kill -9 2771
+pgrep startx
+apt install spice-vdagent spice-webdavd
+vi /etc/grub.d/00_header
+vi etc/default/grub
+vi /etc/default/grub
+lshw -c video
+apt -s purge libreoffice*
+ls -alF  
+ll ..
+sed -i 's/plugin=org.kde.plasma.showdesktop/plugin=org.kde.plasma.minimizeall/' ~/.config/plasma-org.kde.plasma.desktop-appletsrc
+sed -i 's/groupingStrategy\=1/groupingStrategy\=0/' ~/.config/plasma-org.kde.plasma.desktop-appletsrc
+apt install kvm
+ls /dev/virtio-ports/
+ps -ef | grep vdagent
+rmdir ~/Documents ~/Music ~/Pictures ~/Public ~/Templates ~/Videos
+cp .config/plasma-org.kde.plasma.desktop-appletsrc .
+startx & 
+vi plasma-org.kde.plasma.desktop-appletsrc 
+sed -i 's/launchers=/launchers=applications:applications:org.kde.ksysguard.desktop,org.gnome.DiskUtility.desktop,applications:gparted.desktop,applications:veracrypt.desktop,applications:org.keepassxc.KeePassXC.desktop,applications:org.kde.konsole.desktop,applications:org.kde.krusader.desktop,applications:virt-manager.desktop,applications:firefox-esr.desktop/'
+sed -i 's/launchers=/launchers=applications:applications:org.kde.ksysguard.desktop,org.gnome.DiskUtility.desktop,applications:gparted.desktop,applications:veracrypt.desktop,applications:org.keepassxc.KeePassXC.desktop,applications:org.kde.konsole.desktop,applications:org.kde.krusader.desktop,applications:virt-manager.desktop,applications:firefox-esr.desktop/' ~/.config/plasma-org.kde.plasma.desktop-appletsrc
+startx &
+apt -s install --recommends kubuntu-desktop
+apt -s --install-suggests install kubuntu-desktop
+apt list ksysguard
+vi plasma-org.kde.plasma.desktop-appletsrc
+ll .config
+diff plasma-org.kde.plasma.desktop-appletsrc ./.config/plasma-org.kde.plasma.desktop-appletsrc | m
+m ./.local/share/baloo/index-lock
+find . -type d \( -name .mozilla \) -prune -o -type f -mmin -1
+apt install gedit gnome-disk-utility gparted gufw inotify-tools keepassxc lynx meld qdirstat secure-delete shellcheck udisks2 virt-manager wipe wmctrl xdotool
+wget https://launchpad.net/veracrypt/trunk/1.25.4/+download/veracrypt-console-1.25.4-Ubuntu-20.04-amd64.deb && dpkg -i veracrypt-console-1.25.4-Ubuntu-20.04-amd64.deb
+vi  /etc/sources.list 
+rm /etc/sources.list
+echo -e 'deb https://ppa.launchpadcontent.net/mozillateam/ppa/ubuntu focal main \ndeb-src https://ppa.launchpadcontent.net/mozillateam/ppa/ubuntu focal main ' >> /etc/apt/sources.list 
+apt install krusader
+wget https://launchpad.net/veracrypt/trunk/1.25.9/+download/veracrypt-1.25.9-Ubuntu-20.04-amd64.deb && dpkg -i veracrypt-console-1.25.4-Ubuntu-20.04-amd64.deb
+dpkg -i veracrypt-1.25.9-Ubuntu-20.04-amd64.deb 
+veracrypt
+pkill plasmashell
+apt install lighdm-gtk-greeter
+apt install lightdm-gtk-greeter
+sys disable sddm
+reboot || true
+apt reinstall lightdm
+tac ~/.bash_history | awk '!a[$0]++' | tac > t; mv t ~/.bash_history
+vi ~/.bash_history
+hhh -c & hhh -a
+j
+xrandr --newmode "1920x1080_60.00"  173.00  1920 2048 2248 2576  1080 1083 1088 1120 -hsync +vsync\nxrandr --addmode Virtual-1 "1920x1080_60.00"\nxrandr --output Virtual-1 --mode "1920x1080_60.00"
+./etc/X11/Xsession.d/999myresolution
+xrandr --addmode Virtual-1  "2048x1152_60.00"
+cvt 2048 1152
+xrandr --newmode "2048x1152_60.00"  197.00  2048 2184 2400 2752  1152 1155 1160 1195 -hsync +vsync
+xrandr
+. /etc/X11/Xsession.d/999myresolution
+cat grub
+vi grub
+update-grub
+sys enable spice-vdagentd
+sys restart spice-vdagentd
+sys status spice-vdagentd
+sys status | postfix
+sys status | g postfix
+bashtop
+free 
+vi /.config/plasma-org.kde.plasma.desktop-appletsrc
+cp ~/.config/plasma-org.kde.plasma.desktop-appletsrc .config/plasma-org.kde.plasma.desktop-appletsrc
+cat ./.local/share/kactivitymanagerd/resources/database-shm
+apt install bashtop
+apt install glances
+sudo add-apt-repository ppa:bashtop-monitor/bashtop
+add-apt-repository ppa:bashtop-monitor/bashtop && apt update && apt install bashtop
+vi ./.local/share/kxmlgui5/konsole/konsoleui.rc
+vi ./.local/share/kxmlgui5/konsole/settingsui.rc
+vi ./.local/share/kxmlgui5/konsole/sessionui.rc
+sed 's/Exec=krusader/Exec=sudo krusader/' /usr/share/applications/org.kde.krusader.desktop
+vi ./.config/kcminputrc
+find . -type d \( -name .cache -o -name .mozilla \) -prune -o -type f -mmin -1
+vi ./.config/kglobalshortcutsrc
+vi .config/kwinrulesrc
+jo -b
+du /
+apt install firefox-esr
+apt install gddrescue testdisk
+apt install linux*lowlatency
+apt search linux-headers*lowlatency
+apt search linux-*lowlatency
+apt search linux-image-5*lowlatency
+apt update --fix-missing
+apt purge linux*5.4.0-90-generic
+apt install linux-headers*lowlatency
+apt purge linux*5.4.0-99-generic
+ll /lib/modules/5.4.0-99-generic
+axserver-xorg-video-nvidia-390
+cat /etc/X11/Xsession.d/999myresolution
+vi /etc/X11/Xsession.d/999myresolution
+/etc/X11/Xsession.d/999myresolution
+git
+cp /usr/share/locale/en .
+ll Desktop/
+cat Desktop/.directory 
+apt install linux-image-lowlatency
+apt show linux-image-lowlatency
+apt remove thunderbird
+apt install libguestfs-tools
+apt install gddrescue testdisk extundelete ntfsundelete bridge-utils net-tools samba cryptsetup
+vi ~/.config/plasma-org.kde.plasma.desktop-appletsrc
+sed -i 's/plugin=org.kde.plasma.showdesktop/plugin=org.kde.plasma.minimizeall/' ~/.config/plasma-org.kde.plasma.desktop-appletsrc .config/plasma-org.kde.plasma.desktop-appletsrc
+echo -e '#xrandr --newmode "2560x1440_60.00"  312.25  2560 2752 3024 3488  1440 1443 1448 1493 -hsync +vsync\n#xrandr --addmode $monitor "2560x1440_60.00"\n#xrandr --output $monitor --mode "2560x1440_60.00"' >> /etc/X11/Xsession.d/999myresolution
+rm -r /usr/share/locale/!(en)
+ll /usr/share/locale/
+apt install localepurge
+cat ./.config/freespacenotifierrc
+echo -e '\n[General]\nconfirmLogout=false\nshutdownType=1' >> /home/user/.config/ksmserverrc
+cat /root/.config/mimeapps.list
+echo -e '[Default Applications]\ninode/directory=org.kde.krusader.desktop;\ntext/plain=org.gnome.gedit.desktop;' >> /root/.config/mimeapps.list
+cat .config/kcminputrc
+sed -i 's/caps:none/caps:ctrl_modifier/' ./.config/kxkbrc
+echo -e '\n[NightColor]\nActive=true\nMode=Constant\nNightTemperature=5000' >> ./.config/kwinrc
+cat ./.config/plasma-localerc
+echo -e '[Formats]\nLANG=en_US.UTF-8' >> ./.config/plasma-localerc
+ln -s /usr/share/applications /home/user/applications
+vi /etc/cron.daily/clamscan_daily
+su user ln -sf /usr/share/applications /home/user/applications
+chown user:user /home/user/applications
+a sed -i 's/plugin=org.kde.plasma.showdesktop/plugin=org.kde.plasma.minimizeall/' ~/.config/plasma-org.kde.plasma.desktop-appletsrc
+u rmdir ~/Documents ~/Music ~/Pictures ~/Public ~/Templates ~/Videos
+u sed -i 's/groupingStrategy\=1/groupingStrategy\=0/' ~/.config/plasma-org.kde.plasma.desktop-appletsrc
+a sed -i 's/plugin=org.kde.plasma.showdesktop/plugin=org.kde.plasma.minimizeall/' ~/.config/plasma-org.kde.plasma.desktop-appletsrc .config/plasma-org.kde.plasma.desktop-appletsrc
+a echo -e '[General]\nminimumSpace=50' > ./.config/freespacenotifierrc
+apt install hstr && hstr --show-configuration >> ~/.bashrc
+add-apt-repository ppa:ultradvorka/ppa && apt update && apt install hstr && hstr --show-configuration >> ~/.bashrc
+sed -i 's/export HISTCONTROL/#export HISTCONTROL/' ~/.bashrc
+vi ~/.bashrc
+cat sources
+ll /var
+ll /var/mail/root
+cat /var/mail/root
+hg gmail
+su user hstr --show-configuration >> ~/.bashrc
+su user 'hstr --show-configuration >> ~/.bashrc'
+su user bash -c 'hstr --show-configuration >> ~/.bashrc'
+su user bash -c sed -i 's/export HISTCONTROL/#export HISTCONTROL/' ~/.bashrc
+su user bash -c "sed -i 's/export HISTCONTROL/#export HISTCONTROL/' ~/.bashrc"
+wget https://gist.github.com/auwsom/57c4f7c9db585b3f67065f13055986cc/raw -O ~/.bash_aliases && source ~/.bashrc
+echo $home
+ll  /usr/local/lib
+ll  /usr/local/lib/python3.8/
+ll  /usr/local/lib/python3.8/dist-packages/
+cat $home/.config/plasma-org.kde.plasma.desktop-appletsrc
+vi $home/.config/plasma-org.kde.plasma.desktop-appletsrc
+cat $home/.config/kdeglobals
+.config/plasma-org.kde.plasma.desktop-appletsrc
+sed -iE 's_launchers_groupingStrategy=0\nmiddleClickAction=Close\nlaunchers_' $home/.config/plasma-org.kde.plasma.desktop-appletsrc
+vi .config/plasma-org.kde.plasma.desktop-appletsrc
+cat .config/kwinrulesrc 
+echo -e '\n[NightColor]\nActive=true\nMode=Constant\nNightTemperature=4700' >> $home/.config/kwinrc
+echo -e '\n[General]\nconfirmLogout=false\nshutdownType=1' >> $home/.config/ksmserverrc
+sed -i 's/Window Minimize=Meta+PgDown,Meta+PgDown,Minimize Window/Window Minimize=Meta+Down,Meta+PgDown,Minimize Window/' .config/kglobalshortcutsrc
+sed -i 's/Window Resize=none,none,Resize Window/Window Resize=Meta+End,none,Resize Window/' .config/kglobalshortcutsrc
+cat .config/kglobalshortcutsrc
+echo '[Settings]\nHiddenFilesShown=true' >> $home/.local/share/dolphin/view_properties/global/.directory
+cat $home/.local/share/dolphin/view_properties/global/.directory
+vi $home/.local/share/dolphin/view_properties/global/.directory
+cat .config/dolphinrc
+vi .local/share/kxmlgui5/konsole/konsoleui.rc
+vi .local/share/kxmlgui5/konsole/sessionui.rc
+sed -i 's/Exec=krusader/Exec=kdesu krusader/' /usr/share/applications/org.kde.krusader.desktop
+ln -s /usr/lib/x86_64-linux-gnu/libexec/kf5/kdesu /usr/bin/kdesu
+kwriteconfig5 --file kdesurc --group super-user-command --key super-user-command sudo
+vi .config/krusaderrc
+cp $home/.config/krusaderrc /root/.config/krusaderrc
+wget https://raw.githubusercontent.com/auwsom/dotfiles/main/kwinrulesrc -O .config/kwinrulesrc
+snap install --channel=esr/stable firefox && snap install chromium
+wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - && sh -c 'echo "deb https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && apt-get update && apt-get install google-chrome-stable
+snap run chromium
+apt info firefox
+truncate -s 1G /home/homefile2
+mkdir /home/user2
+mkfs.ext4 /home/homefile2
+mount /home/homefile2 /home/user2
+rsync -aAX --info=progress2  /home/user/ /home/user2
+umount /home/user2
+umount /home/user
+rm /home/homefile
+mv /home/homefile2 /home/homefile
+mount -a
+apt remove linux*104*
+apt remove linux*generic
+vi  /home/user/applications/firefox.desktop 
+ll /var/log
+ll /var/mail
+rm /var/mail/root 
+apt full-upgrade
+do-release-upgrade --help
+do-release-upgrade -c
+do-release-upgrade -c -d
+do-release-upgrade 
+umount /
+u /
+ls_release
+lsb_release
+lsb_release --help
+exit
+do-release-upgrade -d
+lsb_release -r
+apt list linux*generic
+apt install linux-generic
+apt autoremove 
+apt install linux-lowlatency
+ll /lib/modules
+journalctl -xeu multipathd.service
+ll /lib/modules/5.15.0-23-generic/
+apt search multipath
+apt install multipath-tools
+apt remove multipath-tools
+apt-get remove cloud-initramfs-copymods
+uu
+update-initramfs -u
+hg recon
+dpkg-reconfigure -a
+dpkg-reconfigure --all
+dpkg configure -a
+dpkg --configure -a
+apt install --reinstall linux*5.15.0-23-lowlatency
+apt remove linux*5.15.0-23-lowlatency
+apt install linux*5.15.0-23-lowlatency
+ll /boot
+apt install --reinstall linux*5.15.0-23-generic
+apt install --reinstall linux-modules*5.15.0-23-generic
+apt install --reinstall linux-modules-5.15.0-23-generic
+apt install --reinstall linux-modules-extra-5.15.0-23-generic
+ll /lib/modules/5.15.0-23-lowlatency
+uname
+mount
+mount | g mod
+apt install --reinstall linux-modules-5.15.0-23-lowlatency 
+modprobe snd_hda_intel
+hdn 633
+ufw enable
+cat .bash_history 
+cat ~/.bash_history 
+apt install --reinstall linux-modules-extra-5.15.0-23-lowlatency 
+cp /tmp/host_files/.bash_history /root
+history -d
+mount -t 9p -o trans=virtio,version=9p2000.L /hostshare /tmp/share
+umount /tmp/host_files/
+mv /tmp/host_files/ /tmp/share
+cat /root/.bash_history0
+ll ~
+/etc/cron.daily/clamscan_daily &
+pkill clam
+ll /root
+vi clamav-testfile 
+hg clam
+/etc/cron.daily/clamscan_daily 
+hg trip
+vi /etc/tripwire/twpol.txt
+twadmin -m P /etc/tripwire/twpol.txt
+tripwire --init
+tripwire --check
+cat fstab
+jo -r -err
+jo -r -b
+sys status snapd
+i
+vi /etc/netplan/01-netcfg.yaml
+netplan appy
+netplan apply
+apt list --upgradable
+nvcc
+dpkg -i /media/user/VHDdump/cuda-repo-
+sudo apt-key add /var/cuda-repo-9-1-local/7fa2af80.pub
+dpkg -i /media/user/VHDdump/cuda-repo-ubuntu1704-9-1-local_9.1.85-1_amd64.deb 
+which cuda
+dpkg show cuda
+dpkg --search cuda
+cat .bash_aliases 
+cat .bash_aliases | g dpkg
+grep " install " /var/log/dpkg.log` or `apt-mark showmanual
+grep " install " /var/log/dpkg.log
+dpkg show cuda-repo-ubuntu1704-9-1-local:amd64
+dpkg --help
+dpkg -L cuda-repo-ubuntu1704-9-1-local:amd64
+dpkg -l cuda-repo-ubuntu1704-9-1-local:amd64
+dpkg -s cuda-repo-ubuntu1704-9-1-local:amd64
+dpkg -p cuda-repo-ubuntu1704-9-1-local:amd64
+ll /var/cuda-repo-9-1-local
+dpkg -s cuda-repo-ubuntu1704-9-1-local
+dpkg -L library
+dpkg -L cuda-repo-ubuntu1704-9-1-local
+apt update && apt upgrade
+apt install /media/user/VHDdump/cuda-repo-ubuntu1704-9-1-local_9.1.85-1_amd64.deb
+apt install nvidia-cuda-toolkit
+apt remove linux*lowlatency
+apt --fix-broken install
+ncvv --version
+dpkg -i /media/user/VHDdump/cuda-repo-ubuntu1704-9-1-local_9.1.85-1_amd64.deb
+which nvcc
+ll /usr/bin/nvcc*
+ll /media/user/vhdvol2
+ll /media/user
+cdu
+ll /media
+virt-manager &
+cd /media/user/vhdvol2
+qemu-img resize +5G ubuntu-20.04-server-cloudimg-amd64-disk-kvm--mini--set2-lp-tw-10G--0-after-email-before-ssh-key-updating-set3.qcow2
+qemu-img resize ubuntu-20.04-server-cloudimg-amd64-disk-kvm--mini--set2-lp-tw-10G--0-after-email-before-ssh-key-updating-set3.qcow2 +5G
+auu
+apt upgrade
+jo -b -r
+sys status lightdm
+apt list nvidia* | installed
+apt list nvidia* | g installed
+mount LABEL=WDfile /mnt
+ll /
+ll /mnt
+ll /mnt/cuda-9.1/bin/nvcc
+/mnt/cuda-9.1/bin/nvcc
+./mnt/cuda-9.1/bin/nvcc
+./mnt/cuda-9.1/bin/nvcc --version
+apt install sddm
+hg sddm
+sddm
+c
+sys start lightdm
+dpkg-reconfigure sddm
+sys start sddm
+sys status sddm
+md /mnt2
+mount LABEL=VHDdump /mnt2
+ll /mnt2
+dpkg -i /mnt2/cuda-repo-ubuntu1704-9-1-local_9.1.85-1_amd64.deb 
+cdh
+apt autoremove
+cd /media/user
+md data
+md VHDdump
+md vhdvol2
+ll //
+vi fstab
+ll data
+ll data/tmp
+ll VHDdump/
+find VHDdump/ -iname cuda_9.1.85
+blkid
+mount /dev/sdb2 /mnt
+find /mnt -iname cuda_9.1.85
+find vhdvol2/ -iname cuda_9.1.85
+lsof /tmp
+umount -l /tmp
+truncate -s 2G /tmpfile 
+resize2fs /tmp
+umount /tmp
+ma
+lodetup -c /dev/loop15
+losetup -c /dev/loop15
+resize2fs /dev/loop15
+cp cuda_9.1.85_387.26_linux  /media/user/VHDdump/
+./cuda_9.1.85_387.26_linux  --help
+sudo ./cuda_9.1.85_387.26_linux  --help
+sudo ./cuda_9.1.85_387.26_linux  
+cat ./cuda-install 
+sh ./cuda_9.1.85_387.26_linux  --help
+sh ./cuda_9.1.85_387.26_linux  --override --toolkit --silent --extract /media/user/VHDdump/tmp
+md /media/user/VHDdump/tmp
+sh ./cuda_9.1.85_387.26_linux  --override --toolkit --silent --tmpdir=/media/user/VHDdump/tmp
+rm cuda_9.1.85_387.26_linux 
+sh /media/user/VHDdump/cuda_9.1.85_387.26_linux  --override --toolkit --silent --tmpdir=/media/user/VHDdump/tmp
+./cuda-install 
+addpath /usr/local/cuda/bin
+echo /usr/local/cuda-9.1/lib | sudo tee /etc/ld.so.conf.d/cuda-9,1.conf
+nvcc --version
+pyton3
+python3
+add-apt-repository ppa:deadsnakes/ppa
+apt install python3.6
+apt search python3.6
+lynx
+lynx --help
+loc lynx.cfg
+locate lynx.cfg
+lynx duckduckgo.com
+ltr
+ll Downloads/
+flmh
+ll .cache
+curl https://www.python.org/ftp/python/3.6.15/Python-3.6.15.tar.xz
+vi ./cuda-install 
+curl -LO https://www.python.org/ftp/python/3.6.15/Python-3.6.15.tar.xz 
+untar Python-3.6.15.tar.xz 
+cd Python-3.6.15/
+.configure 
+./configure 
+make altinstall
+python3.6
+pip install virtualenv
+apt install python3pip
+apt install python3-pip
+pip --help
+pip3 install virtualenv
+ll py36
+ll py36/bin
+which python3.6
+python3.6 -m venv py36
+cdu 
+python3 -m venv py310
+apt install python3.6-venv
+virtualenv -p python3.6 py36
+cd py36
+cd bin
+source activate
+./pip install torch
+./pip install zlib
+./pip3.6 install zlib
+apt install zlib-devel
+apt install zlib-dev
+apt install zlib
+which zlib
+apt search zlib
+apt install zlib1g-dev
+which zlib1g-dev
+dpkg -L zlib1g-dev
+apt-key adv --keyserver keyserver.ubuntu.com --recv-key 40976EAF437D05B5
+apt-key adv --keyserver keyserver.ubuntu.com --recv-key 3B4FE6ACC0B21F32
+apt list --upgradable 
+apt clean
+ncdu
+ncdu /
+ll
+df
+vi  /etc/apt/sources.list.d//cuda-9-1-local.list 
+vi sources
+apt install gcc-6 -f
+apt install libisl19
+add-apt-repository ppa:ubuntu-toolkit-r/test
+apt update
+apt install cpp-6
+apt install gcc-6
+apt install gcc-6 cpp-6 libgcc-6-dev libisl19
+reboot
+h
+nvidia-smi

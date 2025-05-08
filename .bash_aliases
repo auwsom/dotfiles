@@ -1,4 +1,4 @@
-## WARNING: Never run a script from the internet without reading and understanding it. see last line
+## WARNING: Never run a script from the internet without reading and understanding it (see last line of file).
 ## These lines for importing these command aliases and functions into .bash_aliases (or .bashrc)
 # `wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc`
 # `wget https://bit.ly/3EjgWdx -O ~/.bash_aliases && source ~/.bashrc` # shortened urls
@@ -35,23 +35,23 @@ alias rts="sed -i 's/[[:space:]]*$//'" # <file> remove trailing spaces on every 
 ## basic Bash settings:
 export HISTSIZE= #11000  # history size in terminal. limits numbering and masks if list is truncated. empty is unlimited.
 export HISTFILESIZE= #11000 #$HISTSIZE  # increase history file size or just leave blank for unlimited
-if ! [[ -f ~/.bash_eternal_history ]]; then cp ~/.bash_history ~/.bash_eternal_history; fi
-if ! [[ -f ~/.bash_history_bak ]]; then \mv ~/.bash_history ~/.bash_history_bak; fi
-if ! [[ -f ~/.bash_history ]]; then ln -s ~/.bash_eternal_history ~/.bash_history; fi # for hstr
+if ! [[ -f ~/.bash_eternal_history ]]; then cp ~/.bash_history ~/.bash_eternal_history; fi  # if no eternal history, create by copying
+if ! [[ -f ~/.bash_history_backup ]]; then mv ~/.bash_history ~/.bash_history_backup; fi  # move the old to _bak
+if ! [[ -f ~/.bash_history ]]; then ln -s ~/.bash_eternal_history ~/.bash_history; fi  # symlink for hstr or fzf
 HISTFILE=~/.bash_eternal_history # "certain bash sessions truncate .bash_history" (like Screen) SU
 #sed -i 's,HISTFILESIZE=,HISTFILESIZE= #,' ~/.bashrc && sed -i 's,HISTSIZE=,HISTSIZE= #,' ~/.bashrc # run once for unlimited. have to clear the default setting in .bashrc
 HISTCONTROL=ignoreboth:erasedups   # no duplicate entries. ignoredups is only for consecutive. ignore both = ignoredups+ignorespace (will not record commands with space in front)
 
-HISTTIMEFORMAT="%h %d %H:%M " # "%F %T " # CHECK 
+#HISTTIMEFORMAT="%h %d %H:%M " # "%F %T " # adds unix epoch timestamp before each history: #1746739135. then "1836  May 08 14:21 cat .bash_history"
 #export HISTIGNORE="!(+(*\ *))" # ignores commands without arguments. not compatible with HISTTIMEFORMAT. should be the same as `grep -v -E "^\S+\s.*" $HISTFILE`
 export HISTIGNORE="c:cdb:cdh:cdu:df:i:h:hh:hhh:l:lll:lld:lsd:lsp:ltr::mount:umount:rebash:path:env:pd:ps1:sd:top:tree1:zr:zz:au:auu:aca:cu:cur:cx:dedup:dmesg:dli:aptli:d:flmh:flmho:flmr:fm:free:lsblk:na:netstat:ping1:wrapon:wrapoff:um:m:hdl" # :"ls *":"hg *" # ignore commands from history
 
 #export PROMPT_COMMAND='history -a' # ;set +m' # will save (append) unwritten history in memory every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. set +m makes disables job control for aliases in vi.
 #export PROMPT_COMMAND='EC=$? && history -a && test $EC -eq 1 && echo error $HISTCMD && history -d $HISTCMD && history -w' # excludes errors from history
-#export PROMPT_COMMAND='history -a ~/.bash_history_bak2' # writes to backup file instead of polluting every terminal with all history. doenst work
-export PROMPT_COMMAND='history -a; [ -f ~/.bash_history_backup ] && tail -n1 ~/.bash_eternal_history >> ~/.bash_history_backup' # writes to central backup file instead of polluting every terminal with all history. search it with hg2
-# cat .bash_eternal_history .bash_history_bak | awk '!seen[$0]++' > .bash_merged_history # combine all # grep -Fxv -f .bash_merged_history .bash_history_bak #checks if any lines were missed
-alias hf='history | fzf' # interactive search similar to hh. sudo apt install fzf
+#export PROMPT_COMMAND='history -a ~/.bash_history_backup' # writes to backup file instead of polluting every terminal with all history. doenst work
+export PROMPT_COMMAND='history -a; tail -n1 ~/.bash_eternal_history >> ~/.bash_history_backup' # writes to central backup file instead of polluting every terminal with all history. search it with hg2
+# cat .bash_eternal_history .bash_history_bak | awk '!seen[$0]++' > .bash_history_backup # combine all # grep -Fxv -f .bash_merged_history .bash_history_bak #checks if any lines were missed. should see new cmds.
+alias h2='history | fzf' # interactive search similar to hh. sudo apt install fzf
 
 export LC_ALL="C" # makes ls list dotfiles before others
 dircolors -p | sed 's/;42/;01/' >| ~/.dircolors # remove directory colors
