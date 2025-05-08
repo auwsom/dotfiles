@@ -3,20 +3,13 @@ GITHUB:
 gh auth login && gh repo clone auwsom/dotfiles #gggYBC
 
 BACKUPS:
-wget https://updates.duplicati.com/beta/duplicati_2.0.6.3-1_all.deb
-sudo apt install ./duplicati_2.0.6.3-1_all.deb
-sudo systemctl enable duplicati
-sudo systemctl start duplicati
-http://localhost:8200
-had to refresh for it to read storage. does not have file-by-file storage, only in chunks.
-
 git clone https://github.com/laurent22/rsync-time-backup && cd rsync-time-backup
-1:1 - keep all backups for the first day. 7:1 - keep one per day for the last 7 days. 30:7 - keep one per week for the last 4 weeks. 365:30 - keep one per month for the last 12 months
+1:1 - keep all for the first day. 7:1 - keep 1 per day for the last 7 days. 30:7 - keep 1 per week for the last 30. 365:30 - keep 1 per month for the last 365
 How it works: The script creates timestamped, file-by-file backups using hard links for unchanged files (efficient storage). 
 touch /media/user/backups/rsync-time-backup/backup.marker
 
 
-sudo -i && crontab ~/dotfiles/crontab1 # dotfiles sync and backups. /var/spool/cron/crontabs/root
+sudo -i && crontab /home/user/dotfiles/crontab1 # dotfiles sync and backups. /var/spool/cron/crontabs/root
 crontab -l # to verify
 use nice?
 0 3 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime backup-job >/dev/null
@@ -54,3 +47,12 @@ System-wide (just notes):
 todo:
 dpkg --get-selections > /home/user/pkglist.txt
 comm -23 .bash_history .bash_history-bak >> .bash_history-bak # Show lines that only exist in file a:
+
+
+old:
+wget https://updates.duplicati.com/beta/duplicati_2.0.6.3-1_all.deb
+sudo apt install ./duplicati_2.0.6.3-1_all.deb
+sudo systemctl enable duplicati
+sudo systemctl start duplicati
+http://localhost:8200
+had to refresh for it to read storage. does not have file-by-file storage, only in chunks.
