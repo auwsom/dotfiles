@@ -1,2 +1,0 @@
-#!/bin/bash -e
-cronic apt-get update || mail -s "apt update failed on: $(hostname)" $(cat ~/.env/EMAIL) <<< "apt update failed"
