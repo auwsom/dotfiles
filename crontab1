@@ -26,8 +26,8 @@ MAILTO="wer987wer888@gmail.com"
 # m h dom mon dow   command
 #@reboot /home/user/autostart-scripts/*
 #* * * * * cronic echo "test_$(date +%F--%T)" >> /report
-0 4 * * * cronic /root/scripts/mybackup
-0 * * * * cronic /root/scripts/jo_alerts
+0 4 * * * cronic /home/user/dotfiles/mybackup
+0 * * * * cronic /home/user/dotfiles/jo_alerts
 #0 3 * * * cronic ~/scripts/backup12
 
 #@reboot sleep 300; /usr/bin/mount -a
