@@ -1,9 +1,0 @@
-#!/bin/bash
-HISTFILE=~/.bash_history
-x#set -o history #turns on for this non-interactive script
-history -a # appends current, working?
-#su user "history -a"
-#exec sudo -u user -- "$0" "$@"
-# every day at midnight cron.daily append current history to a backup
-comm -23 .bash_history .bash_history-bak >> .bash_history-bak # Show lines that only exist in file a:
-
