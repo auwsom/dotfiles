@@ -794,6 +794,11 @@ alias gitchkf='git checkout <commit> -- <file>' # restores a file from that comm
 alias gitsr1='keyword="replacethis"; for commit in $(git log -S "$keyword" --oneline --pretty=format:"%H"); do git grep "$keyword" "$commit"; done'
 alias gitsr2='git log --name-status --diff-filter=A --'
 
+#git conflicts:
+alias gitv1='git log HEAD..origin/main -p      # view Remote changes'
+alias gitv2='git log origin/main..HEAD -p      # view Your changes'
+alias gitv3='git commit -m "rebase" && git pull --rebase && git push # will add local changes onto origin. doesnt merge (does rewrite history linearly) 
+
 
 # mv ~/.bash_aliases ~/.bash_aliases0 && ln -s ~/git/dotfiles/.bash_aliases ~/.bash_aliases
 # to push new repo from CLI you have to create it using curl and PERSONAL_ACCESS_TOKEN.
