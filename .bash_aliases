@@ -893,14 +893,15 @@ alias pmmstp='podman machine stop'
 alias qemu='qemu-system-x86_64' # --help
 
 
-
-#set -x; complete -r # enable debugging. show aliases/functions expanded when running them.. for beginners for learning full command. unfortunately prints out all the tab completion so needs `complete -r` remove all function completions.
+# misc troubleshooting to trap commands with errors to remove from history:
+# set -x; complete -r # enable debugging. show aliases/functions expanded when running them.. for beginners for learning full command. unfortunately prints out all the tab completion so needs `complete -r` remove all function completions.
 # trap DEBUG needs `shopt -s extdebug` and runs on every command.
-#history -a; set +m # same as above but runs every command with .bashrc
-#trap 'echo ${BASH_COMMAND}' DEBUG # prints all commands 
-#trap 'type ${BASH_COMMAND[1]}' DEBUG # array doesnt work on this bash var for some reason
-#trap 'if [[ $(echo $(type ${BASH_COMMAND} | awk "{print \$1}" ) | grep builtin) ]]; then echo "this is an alias"; fi' DEBUG # prints all commands. also prints an error ?
-#https://stackoverflow.com/questions/27493184/can-i-create-a-wildcard-bash-alias-that-alters-any-command
+# history -a; set +m # same as above but runs every command with .bashrc
+# trap 'echo ${BASH_COMMAND}' DEBUG # prints all commands 
+# trap 'type ${BASH_COMMAND[1]}' DEBUG # array doesnt work on this bash var for some reason
+# trap 'if [[ $(echo $(type ${BASH_COMMAND} | awk "{print \$1}" ) | grep builtin) ]]; then echo "this is an alias"; fi' DEBUG # prints all commands. also prints an error ?
+
+# https://stackoverflow.com/questions/27493184/can-i-create-a-wildcard-bash-alias-that-alters-any-command
 
 convert_help() { if [[ $- == *i* ]]; then
   if [[ $BASH_COMMAND == *" help"* ]]; then eval "${BASH_COMMAND/help/} --help"; false; fi; fi;}
