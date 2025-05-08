@@ -1,7 +1,6 @@
 
 GITHUB:
 gh auth login && gh repo clone auwsom/dotfiles #gggYBC
-sudo -i && crontab /home/user/dotfiles/crontab1 # dotfiles sync and backups. /var/spool/cron/crontabs/root
 
 BACKUPS:
 wget https://updates.duplicati.com/beta/duplicati_2.0.6.3-1_all.deb
@@ -15,44 +14,35 @@ git clone https://github.com/laurent22/rsync-time-backup && cd rsync-time-backup
 1:1 - keep all backups for the first day. 7:1 - keep one per day for the last 7 days. 30:7 - keep one per week for the last 4 weeks. 365:30 - keep one per month for the last 12 months
 How it works: The script creates timestamped, file-by-file backups using hard links for unchanged files (efficient storage). 
 touch /media/user/backups/rsync-time-backup/backup.marker
-./rsync_tmbackup.sh --strategy "1:1 7:1 30:7 365:30" /media/user/16GBa/ /media/user/backups/rsync-time-backup/
-echo "$(crontab -l; echo '0 3 * * * cronic /root/rsync-time-backup/rsync_tmbackup.sh --strategy "1:1 7:1 30:7 365:30" /media/user/16GBa /media/user/backups/rsync-time-backup/')" | crontab -
-echo "$(crontab -l; echo '0 3 * * * cronic /root/rsync-time-backup/rsync_tmbackup.sh -e .cache --strategy "1:1 7:1 30:7 365:30" /home/user /media/user/backups/home-user/')" | crontab -
-echo "$(crontab -l; echo '0 3 * * * cronic rsync -aL /home/user/backup /media/user/backups/home-user/')" | crontab -
-echo "$(crontab -l; echo '0 3 * * * cronic rsync_tmbackup.sh --rsync-append-flags "-L" --strategy "1:1 7:1 30:7 365:30" /home/user/backup /media/user/backups/home-user/')" | crontab -
-lns /etc/fancontrol /home/user/backup/fancontrol
+
+
+sudo -i && crontab ~/dotfiles/crontab1 # dotfiles sync and backups. /var/spool/cron/crontabs/root
 crontab -l # to verify
 use nice?
 0 3 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime backup-job >/dev/null
-
-crontab -l > ~/my-crontab.bak
-crontab ~/dotfiles/crontab
 
 
 RECOVERY:
 wget https://www.r-studio.com/downloads/RLinux6_x64.deb && sudo dpkg -i RLinux6_x64.deb
 
 SYMLINKS:
-sudo mv /etc/cron.hourly /home/user/git/dotfiles/ && sudo ln -s /home/user/git/dotfiles/cron.hourly/ /etc/cron.hourly
-sudo mv /etc/cron.daily /home/user/git/dotfiles/ && sudo ln -s /home/user/git/dotfiles/cron.daily/ /etc/cron.daily
-sudo mv /etc/cron.weekly /home/user/git/dotfiles/ && sudo ln -s /home/user/git/dotfiles/cron.weekly/ /etc/cron.weekly
+#sudo mv /etc/cron.hourly /home/user/git/dotfiles/ && sudo ln -s /home/user/git/dotfiles/cron.hourly/ /etc/cron.hourly
+#sudo mv /etc/cron.daily /home/user/git/dotfiles/ && sudo ln -s /home/user/git/dotfiles/cron.daily/ /etc/cron.daily
+#sudo mv /etc/cron.weekly /home/user/git/dotfiles/ && sudo ln -s /home/user/git/dotfiles/cron.weekly/ /etc/cron.weekly
+# dont symlink dirs, just the files:
+sudo ln -s /home/user/dotfiles/email_test /etc/cron.weekly/email_test
+sudo ln -s /home/user/dotfiles/check-space /etc/cron.hourly/check-space
+sudo ln -s /home/user/dotfiles/snap_clean /etc/cron.daily/snap_clean
 
-sudo mv /var/spool/cron/crontabs/user /home/user/git/dotfiles/ && sudo ln -s /home/user/git/dotfiles/user /var/spool/cron/crontabs/
-#sudo mv /var/spool/cron/crontabs/root /home/user/git/dotfiles/ && sudo ln -s /home/user/git/dotfiles/root /var/spool/cron/crontabs/
-
-sudo ln -s /home/user/git/dotfiles/scripts /home/user/scripts
-
-
-
-System-wide:
-# Backup and replace /etc/fancontrol from user accnt.
-# https://github.com/GitJournal/git-auto-sync. using symlinks now.
 #sudo mv /etc/fancontrol ~/dotfiles/etc_fancontrol
 sudo mv /etc/fancontrol /etc/fancontrol0
 sudo ln -s ~/dotfiles/etc_fancontrol /etc/fancontrol
 sudo mv /etc/netplan/01-netcfg.yaml ~/dotfiles/etc_netplan_01-netcfg.yaml
 sudo ln -s ~/dotfiles/etc_netplan_01-netcfg.yaml /etc/netplan/01-netcfg.yaml
 
+System-wide, just notes:
+# Backup and replace /etc/fancontrol from user accnt.
+# https://github.com/GitJournal/git-auto-sync. using symlinks now.
 /etc/crontab, @reboot user /bin/sleep 300; /home/user/autostart-scripts-sudo/*
 /etc/cron.*/, snap_clean, email_test, check-space
 /etc/fstab — Mount points and disks
@@ -64,6 +54,7 @@ sudo ln -s ~/dotfiles/etc_netplan_01-netcfg.yaml /etc/netplan/01-netcfg.yaml
 /etc/systemd/system/ — Custom services
 /etc/netplan/ (Ubuntu)
 /etc/NetworkManager/system-connections/ (Wi-Fi credentials)
-dpkg --get-selections > /home/user/pkglist.txt
 
+todo:
+dpkg --get-selections > /home/user/pkglist.txt
 comm -23 .bash_history .bash_history-bak >> .bash_history-bak # Show lines that only exist in file a:
