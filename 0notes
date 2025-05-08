@@ -26,21 +26,13 @@ RECOVERY:
 wget https://www.r-studio.com/downloads/RLinux6_x64.deb && sudo dpkg -i RLinux6_x64.deb
 
 SYMLINKS:
-#sudo mv /etc/cron.hourly /home/user/git/dotfiles/ && sudo ln -s /home/user/git/dotfiles/cron.hourly/ /etc/cron.hourly
-#sudo mv /etc/cron.daily /home/user/git/dotfiles/ && sudo ln -s /home/user/git/dotfiles/cron.daily/ /etc/cron.daily
-#sudo mv /etc/cron.weekly /home/user/git/dotfiles/ && sudo ln -s /home/user/git/dotfiles/cron.weekly/ /etc/cron.weekly
-# dont symlink dirs, just the files:
-sudo ln -s /home/user/dotfiles/email_test /etc/cron.weekly/email_test
-sudo ln -s /home/user/dotfiles/check-space /etc/cron.hourly/check-space
-sudo ln -s /home/user/dotfiles/snap_clean /etc/cron.daily/snap_clean
-
 #sudo mv /etc/fancontrol ~/dotfiles/etc_fancontrol
 sudo mv /etc/fancontrol /etc/fancontrol0
 sudo ln -s ~/dotfiles/etc_fancontrol /etc/fancontrol
 sudo mv /etc/netplan/01-netcfg.yaml ~/dotfiles/etc_netplan_01-netcfg.yaml
 sudo ln -s ~/dotfiles/etc_netplan_01-netcfg.yaml /etc/netplan/01-netcfg.yaml
 
-System-wide, just notes:
+System-wide (just notes):
 # Backup and replace /etc/fancontrol from user accnt.
 # https://github.com/GitJournal/git-auto-sync. using symlinks now.
 /etc/crontab, @reboot user /bin/sleep 300; /home/user/autostart-scripts-sudo/*
