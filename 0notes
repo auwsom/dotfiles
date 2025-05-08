@@ -21,6 +21,7 @@ SYMLINKS:
 sudo mv /etc/fancontrol /etc/fancontrol0
 sudo ln -s ~/dotfiles/etc_fancontrol /etc/fancontrol
 sudo mv /etc/netplan/01-netcfg.yaml ~/dotfiles/etc_netplan_01-netcfg.yaml
+
 sudo ln -s ~/dotfiles/etc_netplan_01-netcfg.yaml /etc/netplan/01-netcfg.yaml
 sudo ln -s ~/dotfiles/autostart ~/.config/autostart
 sudo ln -s ~/dotfiles/autostart-scripts ~/.config/autostart-scripts
@@ -54,3 +55,9 @@ sudo systemctl enable duplicati
 sudo systemctl start duplicati
 http://localhost:8200
 had to refresh for it to read storage. does not have file-by-file storage, only in chunks.
+
+
+misc:
+git conflicts:
+git log HEAD..origin/main -p      # Remote changes
+git log origin/main..HEAD -p      # Your changes
