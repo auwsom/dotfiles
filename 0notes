@@ -58,7 +58,3 @@ had to refresh for it to read storage. does not have file-by-file storage, only 
 
 
 misc:
-git conflicts:
-git log HEAD..origin/main -p      # Remote changes
-git log origin/main..HEAD -p      # Your changes
-git commit -m "rebase" && git pull --rebase && git push # will add local changes onto origin. doesnt merge (does rewrite history linearly) 
