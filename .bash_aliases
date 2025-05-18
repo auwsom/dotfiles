@@ -7,7 +7,7 @@
 
 # see further down for more general Linux tips and learning sites.(width is 100 chars vs 80 default)
 # add to sudo -E visudo for cache across tabs.. Defaults:user   timestamp_timeout=30, !tty_tickets, timestamp_type=global
-echo $CDPATH # to see which dirs are autofound (can be annoying with tab complete)
+echo CDPATH dirs: $CDPATH # to see which dirs are autofound (can be annoying with tab complete)
 
 
 true <<'END' # skips section to next END
@@ -172,11 +172,12 @@ alias ps1='ps -ef' # show processes. -e/-A all. -f full.
 alias psp='ps -Flww -p' # <PID> show info on just one process
 alias pgrep='pgrep -af' # grep processes - full, list-full. use \pgrep for just the PID.
 alias pkill='pkill -f' # kill processed - full
+
 # p for pipe `|` powerful feature of shell language. transfers command output to input next command.
 alias q='helpany' # see helpany function
 #alias rm='rm -Irv ' # -I requires confirmation. -r recursive into directories. -v verbose. 
 # ^^^^^ maybe most helpful alias. avoids deleting unintended files. use -i to approve each deletion.
-function rm { mv $1 ~/0del/ ;} # 
+function rm() { mkdir -p ~/0del && mv "$1" ~/0del/; } # ~/0del is trash bin. use \rm for the original command.
 function rl { readlink -f "$1"; } # function returns full path of file, very useful
 # `sed` # Stream EDitor `sed -i 's/aaa/bbb/g' file` -i inplace, replace aaa with bbb. g globally. can use any char instead of /, such as `sed -i 's,aaa,bbb,' file`. -E to use re pattern matching.
 alias sudo='sudo '; alias s='sudo '; alias sd='sudo -s ' # elevate privelege for command. see `visudo` to set. And `usermod -aG sudo add`, security caution when adding.
@@ -310,7 +311,6 @@ alias umf='umount -l' # unmount lazy works when force doesnt
 if [[ $(whoami) == 'root' ]]; then export TMOUT=18000 && readonly TMOUT; fi # timeout root login
 # `sudo echo foo > /rootfile` errors.. so `echo foo | sudo tee /rootfile`. sudo doesnt pass redirect
 # other admin commands: last, w, who, whoami, users, login, uptime, free -th, mpstat, iostat, bashtop, ssh, lsof, lspci, dmesg, dbus, strace, scp, file
-
 
 ## extra stuff
 # `!!` for last command, as in `sudo !!`. `ctrl+alt+e` expand works here. `!-1:-1` for second to last arg in last command.
@@ -798,12 +798,11 @@ alias gitsr2='git log --name-status --diff-filter=A --'
 #git resolve conflicts:
 alias gitv1='git log HEAD..origin/main -p      # view Remote changes' # can use --oneline for commit number and desc
 alias gitv2='git log origin/main..HEAD -p      # view Your changes'
-alias gitrc1='git commit -m "rebase" && git pull --rebase && git push # will add local changes onto origin. doesnt merge (does rewrite history linearly). 'git pull --rebase' will add markers in file of conflict. have to remove manually, then `git add $file` and `git rebase --continue` and `git push origin main --force-with-lease` or `git rebase --abort` to cancel'
+alias gitrc1='git commit -m "rebase" && git pull --rebase && git push' # will add local changes onto origin. doesnt merge (does rewrite history linearly). 'git pull --rebase' will add markers in file of conflict. have to remove manually, then `git add $file` and `git rebase --continue` and `git push origin main --force-with-lease` or `git rebase --abort` to cancel
 # or:
 alias gitcrl='git diff origin/main -- $file # to compare'
 alias gitkr='git checkout --theirs $file && git add $file && git rebase --continue # keep remote'
 alias gitkl='git checkout --ours $file && git add $file && git rebase --continue # keep local'
-#FUCK
 
 # mv ~/.bash_aliases ~/.bash_aliases0 && ln -s ~/git/dotfiles/.bash_aliases ~/.bash_aliases
 # to push new repo from CLI you have to create it using curl and PERSONAL_ACCESS_TOKEN.
