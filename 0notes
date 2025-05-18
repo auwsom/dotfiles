@@ -61,3 +61,5 @@ had to refresh for it to read storage. does not have file-by-file storage, only 
 
 
 misc:
+virsh managedsave ubuntu20.04--set3--claude12 # doesnt break if usb device ID changes
+virsh start ubuntu20.04--set3--claude12
