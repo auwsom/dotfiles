@@ -780,8 +780,8 @@ alias agitinfo='# git clone is for first copy # git status, git log, git branch 
 ## add from local creatJust found this tool called Briefcase to deploy python apps to 6 platforms (mac,win,linux,ios,android,web) looks great. Produces standalone binariese:
 # `apt install gh` then click enter until auth through webpage'
 alias git1='gh repo create <newrepo> --public' # or --private
-alias git2h='git init && git remote add origin https://github.com/auwsom/<new>.git && git branch -M main'
-alias git2s='git init && git remote add origin git@github.com:auwsom/<new>.git && git branch -M main'
+alias git2h='git init && git remote add origin https://github.com/auwsom/<new>.git && git branch -M main' # doesnt need password everytime when using gh login 
+alias git2s='git init && git remote add origin git@github.com:auwsom/<new>.git && git branch -M main' # dont need password
 alias git3='git add . && git push --set-upstream origin main'
 # git config --global init.defaultBranch main 
 # https://www.freecodecamp.org/news/how-to-make-your-first-pull-request-on-github-3/
