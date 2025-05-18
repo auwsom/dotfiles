@@ -304,7 +304,7 @@ alias zzzr='shutdown -r now || true' # reboot in ssh, otherwise freezes
 alias zzzs='shutdown -h now || true' # shutdown in ssh, otherwise freezes
 # correct common typos
 alias unmount='umount' ; alias um='umount' ; alias mounts='mount' ; alias m='type m; printf "\033[?7l"; mount | g -v -e cgroup -e fs; printf "\033[?7h"' ; alias ma='mount -a' ; alias mg='mount | grep'; alias mr='mount -o remount,rw'; 
-alias umf='umount -l' # unmount lazy works when force doesnt # also `fuser -m /media/user/dir`
+alias umf='sudo umount -l' # unmount lazy works when force doesnt # also `fuser -m /media/user/dir` will list PIDs
 # change tty term from cli: `chvt 2`
 # https://itnext.io/what-is-linux-keyring-gnome-keyring-secret-service-and-d-bus-349df9411e67 
 # encrypt files with `gpg -c`
