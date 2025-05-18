@@ -1,5 +1,6 @@
 
 GITHUB:
+mkdir ~/git
 gh auth login && gh repo clone auwsom/dotfiles #gggYBC
 git config --global user.name "Your Name" && git config --global user.email you@example.com
 
@@ -19,12 +20,12 @@ wget https://www.r-studio.com/downloads/RLinux6_x64.deb && sudo dpkg -i RLinux6_
 SYMLINKS:
 #sudo mv /etc/fancontrol ~/dotfiles/etc_fancontrol
 sudo mv /etc/fancontrol /etc/fancontrol0
-sudo ln -s ~/dotfiles/etc_fancontrol /etc/fancontrol
+sudo ln -s ~/git/dotfiles/etc_fancontrol /etc/fancontrol
 sudo mv /etc/netplan/01-netcfg.yaml ~/dotfiles/etc_netplan_01-netcfg.yaml
 
-sudo ln -s ~/dotfiles/etc_netplan_01-netcfg.yaml /etc/netplan/01-netcfg.yaml
-sudo ln -s ~/dotfiles/autostart ~/.config/autostart
-sudo ln -s ~/dotfiles/autostart-scripts ~/.config/autostart-scripts
+sudo ln -s ~/git/dotfiles/etc_netplan_01-netcfg.yaml /etc/netplan/01-netcfg.yaml
+sudo ln -s ~/git/dotfiles/autostart ~/.config/autostart
+sudo ln -s ~/git/dotfiles/autostart-scripts ~/.config/autostart-scripts
 sudo ln -s /usr/share/applications ~/applications 
 sudo ln -s 
 
@@ -46,6 +47,8 @@ System-wide (just notes):
 todo:
 dpkg --get-selections > /home/user/pkglist.txt
 comm -23 .bash_history .bash_history-bak >> .bash_history-bak # Show lines that only exist in file a:
+why does this line error?
+# trap 'if [[ $(echo $(type ${BASH_COMMAND} | awk "{print \$1}" ) | grep builtin) ]]; then echo "this is an alias"; fi' DEBUG # prints all commands. also prints an error ?
 
 
 old:
