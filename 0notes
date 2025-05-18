@@ -61,5 +61,7 @@ had to refresh for it to read storage. does not have file-by-file storage, only 
 
 
 misc:
+sudo mv /var/lib/libvirt/qemu/save /var/lib/libvirt/qemu/save0
+sudo lns /media/user/ai/save /var/lib/libvirt/qemu/save
 virsh managedsave ubuntu20.04--set3--claude12 # doesnt break if usb device ID changes
 virsh start ubuntu20.04--set3--claude12
