@@ -817,7 +817,7 @@ alias gitkl='git checkout --ours $file && git add $file && git rebase --continue
 # if sure origin (github) is correct:
 alias gitpfr='git format-patch -1 HEAD && git fetch origin && git reset --hard origin/main # save local as patch, fetch, reset'
 # if sure local is correct:
-alias gitpf='git push --force origin main' # use only after diffing remote to local. also if warning from remote being ahead, you can pull and merge.
+alias gitpuf='git push --force origin main' # use only after diffing remote to local. also if warning from remote being ahead, you can pull and merge.
 
 
 # mv ~/.bash_aliases ~/.bash_aliases0 && ln -s ~/git/dotfiles/.bash_aliases ~/.bash_aliases
