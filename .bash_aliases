@@ -298,6 +298,7 @@ alias wdf='watch \df' # refresh command output every 2s
 alias wdu='watch du -cd1 .' # or `watch du -s <dir>` or `watch '\du -cd1 . | sort -n'`
 alias wget='type wget; wget --no-clobber --content-disposition --trust-server-names' # -N overwrites only if newer file and disables timestamping # or curl to download webfile (curl -JLO)
 alias wrapon='echo -ne "\033[?7h"' # line wrap on
+echo -ne "\033[?7h" # on by default?
 alias wrapoff='echo -ne "\033[?7l"' # line wrap off
 alias xc='xclip -selection clipboard' # apt install xclip
 alias zzzr='shutdown -r now || true' # reboot in ssh, otherwise freezes

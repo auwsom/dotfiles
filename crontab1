@@ -52,9 +52,13 @@ MAILTO="wer987wer888@gmail.com"
 #Back In Time system entry, this will be edited by the gui:
 #0 3 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime backup-job >/dev/null # was backing up 20G-p VM
 
+# usb volumes
 @daily cronic /root/rsync-time-backup/rsync_tmbackup.sh --strategy "1:1 7:1 30:7 365:30" /media/user/16GBa /media/user/backups/rtb-usb
+# home dir minus .cache
 0 3 * * * cronic /root/rsync-time-backup/rsync_tmbackup.sh --rsync-append-flags "--exclude .cache" --strategy "1:1 7:1 30:7 365:30" /home/user /media/user/backups/rtb-home-user/
+# VMs minus work vm
 0 3 * * * cronic /root/rsync-time-backup/rsync_tmbackup.sh --rsync-append-flags "--exclude 100G-w" --strategy "1:1 7:1 30:7 365:30" /media/user/VM/ /media/user/backups/rtb-pers/
+# unused example of how to make follow symlinks
 #0 3 * * * cronic /root/rsync-time-backup/rsync_tmbackup.sh --rsync-append-flags "-L" --strategy "1:1 7:1 30:7 365:30" /home/user/backup /media/user/backups/home-user/
 
 
