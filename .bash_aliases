@@ -41,11 +41,9 @@ if ! [[ -f ~/.bash_history ]]; then ln -s ~/.bash_eternal_history ~/.bash_histor
 HISTFILE=~/.bash_eternal_history # "certain bash sessions truncate .bash_history" (like Screen) SU
 #sed -i 's,HISTFILESIZE=,HISTFILESIZE= #,' ~/.bashrc && sed -i 's,HISTSIZE=,HISTSIZE= #,' ~/.bashrc # run once for unlimited. have to clear the default setting in .bashrc
 HISTCONTROL=ignoreboth:erasedups   # no duplicate entries. ignoredups is only for consecutive. ignore both = ignoredups+ignorespace (will not record commands with space in front)
-
 #HISTTIMEFORMAT="%h %d %H:%M " # "%F %T " # adds unix epoch timestamp before each history: #1746739135. then "1836  May 08 14:21 cat .bash_history"
 #export HISTIGNORE="!(+(*\ *))" # ignores commands without arguments. not compatible with HISTTIMEFORMAT. should be the same as `grep -v -E "^\S+\s.*" $HISTFILE`
 export HISTIGNORE="c:cdb:cdh:cdu:df:i:h:hh:hhh:l:lll:lld:lsd:lsp:ltr::mount:umount:rebash:path:env:pd:ps1:sd:top:tree1:zr:zz:au:auu:aca:cu:cur:cx:dedup:dmesg:dli:aptli:d:flmh:flmho:flmr:fm:free:lsblk:na:netstat:ping1:wrapon:wrapoff:um:m:hdl" # :"ls *":"hg *" # ignore commands from history
-
 #export PROMPT_COMMAND='history -a' # ;set +m' # will save (append) unwritten history in memory every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. set +m makes disables job control for aliases in vi.
 #export PROMPT_COMMAND='EC=$? && history -a && test $EC -eq 1 && echo error $HISTCMD && history -d $HISTCMD && history -w' # excludes errors from history
 #export PROMPT_COMMAND='history -a ~/.bash_history_backup' # writes to backup file instead of polluting every terminal with all history. doenst work
@@ -82,6 +80,7 @@ alias hdde='[[ -f $HISTFILE ]] && cp "$HISTFILE" "${HISTFILE}.bak3" && awk "!see
 trap 'history -a' SIGHUP # saves history on interupt. see functions below.
 IFS=$' \t\n' # restricts "internal field separator" to tab and newline. handles spaces in filenames.
 #nohist() { e=$BASH_COMMAND; history -d $HISTCMD;}; trap nohist ERR # traps error and deletes from hist before written. $e is line for reuse. ctrl-alt-e expands it. 
+echo -ne "\033[?7h" # line wrap on 
 
 ## some familiar keyboard shortcuts: 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
@@ -249,7 +248,8 @@ alias flmr='find / -type d \( -name proc -o -name sys -o -name dev -o -name run 
 alias fm='findmnt' # shows mountpoints as tree. shows bind mounts.
 alias free='type free; free -h' # check memory, human readable
 # head and tail: `head -1 <file>` shows the first line. defaults to 10 lines without number.
-alias gm='guestmount -i $file -a /mnt' # set file=<vm/partition-backup> first 
+alias gm1='guestmount -i $file -a /mnt # doesnt work on qcows a lot' # set file=<vm/partition-backup> first 
+alias gm2='sudo modprobe nbd max_part=8 && sudo qemu-nbd --connect=/dev/nbd0 "$file" && sudo partprobe /dev/nbd0 && sudo mount /dev/nbd0p1 /mnt # use instead of guestmount' # 
 # `inotifywait -m ~/.config/ -e create -e modify` (inotify-tools), watch runs every x sec, entr runs command after file changes. use examples from bottom of `man entr` `ls *.js | entr -r node app.js`
 entr1() { ls "$1" >| temp; nohup sh -c "cat temp | entr -n cp \"$1\" \"$2\"" </dev/null >/dev/null 2>&1 & disown; } # wentr file-in-pwd ~/destination/
 alias jo='journalctl' # -p,  -err, --list-boots, -b boot, -b -1 last boot, -r reverse, -k (kernel/dmesg), -f follow, --grep -g, --catalog -x (use error notes), -e goto end
@@ -298,7 +298,6 @@ alias wdf='watch \df' # refresh command output every 2s
 alias wdu='watch du -cd1 .' # or `watch du -s <dir>` or `watch '\du -cd1 . | sort -n'`
 alias wget='type wget; wget --no-clobber --content-disposition --trust-server-names' # -N overwrites only if newer file and disables timestamping # or curl to download webfile (curl -JLO)
 alias wrapon='echo -ne "\033[?7h"' # line wrap on
-echo -ne "\033[?7h" # on by default?
 alias wrapoff='echo -ne "\033[?7l"' # line wrap off
 alias xc='xclip -selection clipboard' # apt install xclip
 alias zzzr='shutdown -r now || true' # reboot in ssh, otherwise freezes
