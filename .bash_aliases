@@ -780,7 +780,7 @@ alias agitinfo='# git clone is for first copy # git status, git log, git branch 
 # git clone git@github.com:auwsom/dotfiles.git # will ask to connect. need to `eval $(ssh-agent -s) && ssh-add ~/.ssh/id_rsa` checks if agent running and adds (will display email of GH account) 
 ## add from local creatJust found this tool called Briefcase to deploy python apps to 6 platforms (mac,win,linux,ios,android,web) looks great. Produces standalone binariese:
 # `apt install gh` then click enter until auth through webpage'
-alias git1='gh repo create <newrepo> --public' # or --private
+alias git1='gh repo create <newrepo> --private' # or --public
 alias git2h='git init && git remote add origin https://github.com/auwsom/<new>.git && git branch -M main' # doesnt need password everytime when using gh login 
 alias git2s='git init && git remote add origin git@github.com:auwsom/<new>.git && git branch -M main' # dont need password
 alias git3='git add . && git push --set-upstream origin main'
@@ -825,8 +825,8 @@ alias gitkl='git checkout --ours $file && git add $file && git rebase --continue
 # `apt purge <package>` doesnt erase anything in home dir
 # list installed packages by date: `grep " install " /var/log/dpkg.log` or `apt-mark showmanual` (`apt-mark minimize-manual` supposed to unmark all dependencies) (zgrep search /var/log/dpkg.log.2.gz)
 # `apt install mlocate ncdu htop`
-# ext4magic and testdisk (extundelete defunct https://www.unix.com/fedora/279812-segmentation-fault-while-trying-recover-file-extundelete.html) ntfs keeps directory info in journal, ext4 doesnt.
-# `ntfsundelete /dev/hda1 -t 2d` Look for deleted files altered in the last two days
+# ext4magic and testdisk/photorec (extundelete defunct https://www.unix.com/fedora/279812-segmentation-fault-while-trying-recover-file-extundelete.html).
+# `ntfsundelete /dev/hda1 -t 2d` Look for deleted files altered in the last two days. partition has to be ntfs which has directory structure journaling. 
 
 # bash wildcards (glob/global): `*(pattern|optional-or) ? * + @ ! https://www.linuxjournal.com/content/bash-extended-globbing
 # `egrep "(a)(.*b)"` matches everything between a and b inclusively. 
