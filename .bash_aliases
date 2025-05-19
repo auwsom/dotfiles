@@ -58,7 +58,9 @@ alias vibasha='vi ~/.bash_aliases'
 alias rebash='source ~/.bashrc' # `source` reloads settings. ~ home dir. just type `bash` unless in venv.
 #alias rebashl='exec bash -l' # reloads shell. -l is login shell for completion. just type `bash`.
 alias realias='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc'
+alias realias2='cd ~/git/dotfiles && git fetch origin && git checkout origin/main -- .bash_aliases && cp -f .bash_aliases ~/ && source ~/.bashrc'
 alias realiasr='ba=".bash_aliases";sudo install $HOME/$ba /root/$ba && sudo chmod 0664 /root/$ba' # for root
+alias realiasr2='cd /home/user/git/dotfiles && git fetch origin && git checkout origin/main -- .bash_aliases && cp -f .bash_aliases ~/ && source ~/.bashrc'
 alias revim='rm ~/.vimrc && source ~/.bashrc' # redo vim settings. below import is blocked for existing .vimrc
 ## `shopt` list shell options. `set -o` lists settings. `set -<opt>` enables like flag options.
 set -o noclobber  # dont let accidental > overwrite. use >| to force redirection even with noclobber
@@ -764,7 +766,7 @@ alias remux='tmux source ~/.tmux.conf' # reload tmux
 # https://tmuxcheatsheet.com/
 # Scrolling: Ctrl-b then [ then you can use your normal navigation keys to scroll around (eg. Up Arrow or PgDn). Press q to quit scroll mode.
 
-## basic git settings
+## basic git settings. GIT DOESNT compare by timestamp, only by commit order.
 alias gits='git status'
 alias gitl='git log'
 alias gitb='git branch'
@@ -798,6 +800,10 @@ alias gitsr1='keyword="replacethis"; for commit in $(git log -S "$keyword" --one
 alias gitsr2='git log --name-status --diff-filter=A --'
 
 #git resolve conflicts:
+alias gitdiff1='git log --all --pretty=format:%H --date-order | head -n 2 | tac | xargs git diff # COMPARE BY TIMESTAMP ON MOST RECENT 2 COMMITS'
+alias gitdiff2='git diff HEAD^ HEAD # compare 2 most local commits'
+
+alias gitf='git fetch # have to fetch before compare to origin. wont overwrite local'
 alias gitv1='git log HEAD..origin/main -p      # view Remote changes' # can use --oneline for commit number and desc
 alias gitv2='git log origin/main..HEAD -p      # view Your changes'
 alias gitrc1='git commit -m "rebase" && git pull --rebase && git push' # will add local changes onto origin. doesnt merge (does rewrite history linearly). 'git pull --rebase' will add markers in file of conflict. have to remove manually, then `git add $file` and `git rebase --continue` and `git push origin main --force-with-lease` or `git rebase --abort` to cancel
