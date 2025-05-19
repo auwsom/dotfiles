@@ -65,3 +65,8 @@ sudo mv /var/lib/libvirt/qemu/save /var/lib/libvirt/qemu/save0
 sudo lns /media/user/ai/save /var/lib/libvirt/qemu/save
 virsh managedsave ubuntu20.04--set3--claude12 # doesnt break if usb device ID changes
 virsh start ubuntu20.04--set3--claude12
+
+
+
+alias undel1='sudo ext4magic /dev/sdd7 -r -d ./recovered_files -f /home/user/$file # undelete example'
+alias undel2='sudo ext4magic /dev/sdd7 -f /home/user/$file -d ./recovered_files -a $(date -d "2025-05-01 00:00:00" +%s) -b $(date -d "2025-05-16 19:17:00" +%s) -r # older than'
