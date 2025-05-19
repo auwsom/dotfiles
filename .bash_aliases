@@ -80,7 +80,6 @@ alias hdde='[[ -f $HISTFILE ]] && cp "$HISTFILE" "${HISTFILE}.bak3" && awk "!see
 trap 'history -a' SIGHUP # saves history on interupt. see functions below.
 IFS=$' \t\n' # restricts "internal field separator" to tab and newline. handles spaces in filenames.
 #nohist() { e=$BASH_COMMAND; history -d $HISTCMD;}; trap nohist ERR # traps error and deletes from hist before written. $e is line for reuse. ctrl-alt-e expands it. 
-echo -ne "\033[?7h" # line wrap on 
 
 ## some familiar keyboard shortcuts: 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
@@ -248,8 +247,11 @@ alias flmr='find / -type d \( -name proc -o -name sys -o -name dev -o -name run 
 alias fm='findmnt' # shows mountpoints as tree. shows bind mounts.
 alias free='type free; free -h' # check memory, human readable
 # head and tail: `head -1 <file>` shows the first line. defaults to 10 lines without number.
-alias gm1='guestmount -i $file -a /mnt # doesnt work on qcows a lot' # set file=<vm/partition-backup> first 
-alias gm2='sudo modprobe nbd max_part=8 && sudo qemu-nbd --connect=/dev/nbd0 "$file" && sudo partprobe /dev/nbd0 && sudo mount /dev/nbd0p1 /mnt # use instead of guestmount' # 
+alias gm1='guestmount -i $file -a /mnt # doesnt work on qcows a lot. use gm2 function' # set file=<vm/partition-backup> first 
+function gm2 { sudo modprobe nbd max_part=8 && sudo qemu-nbd --connect=/dev/nbd0 "$1" && sudo partprobe /dev/nbd0 && sudo mount /dev/nbd0p1 /mnt; }
+function gm3 { sudo modprobe nbd max_part=8 && sudo qemu-nbd --connect=/dev/nbd1 "$1" && sudo partprobe /dev/nbd1 && sudo mount /dev/nbd1p1 /mnt2; }
+alias gm2d='sudo umount /mnt && sudo qemu-nbd --disconnect /dev/nbd0'
+alias gm3d='sudo umount /mnt2 && sudo qemu-nbd --disconnect /dev/nbd1'
 # `inotifywait -m ~/.config/ -e create -e modify` (inotify-tools), watch runs every x sec, entr runs command after file changes. use examples from bottom of `man entr` `ls *.js | entr -r node app.js`
 entr1() { ls "$1" >| temp; nohup sh -c "cat temp | entr -n cp \"$1\" \"$2\"" </dev/null >/dev/null 2>&1 & disown; } # wentr file-in-pwd ~/destination/
 alias jo='journalctl' # -p,  -err, --list-boots, -b boot, -b -1 last boot, -r reverse, -k (kernel/dmesg), -f follow, --grep -g, --catalog -x (use error notes), -e goto end
@@ -297,7 +299,7 @@ alias vi='vim'
 alias wdf='watch \df' # refresh command output every 2s 
 alias wdu='watch du -cd1 .' # or `watch du -s <dir>` or `watch '\du -cd1 . | sort -n'`
 alias wget='type wget; wget --no-clobber --content-disposition --trust-server-names' # -N overwrites only if newer file and disables timestamping # or curl to download webfile (curl -JLO)
-alias wrapon='echo -ne "\033[?7h"' # line wrap on
+alias wrapon='echo -ne "\033[?7h"' # line wrap on (by default)
 alias wrapoff='echo -ne "\033[?7l"' # line wrap off
 alias xc='xclip -selection clipboard' # apt install xclip
 alias zzzr='shutdown -r now || true' # reboot in ssh, otherwise freezes
