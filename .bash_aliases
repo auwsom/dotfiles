@@ -7,7 +7,7 @@
 
 # see further down for more general Linux tips and learning sites.(width is 100 chars vs 80 default)
 # add to sudo -E visudo for cache across tabs.. Defaults:user   timestamp_timeout=30, !tty_tickets, timestamp_type=global
-echo CDPATH dirs: $CDPATH # to see which dirs are autofound (can be annoying with tab complete)
+echo CDPATH dirs1: $CDPATH # to see which dirs are autofound (can be annoying with tab complete)
 
 
 true <<'END' # skips section to next END
