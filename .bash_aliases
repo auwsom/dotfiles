@@ -170,12 +170,11 @@ alias ps1='ps -ef' # show processes. -e/-A all. -f full.
 alias psp='ps -Flww -p' # <PID> show info on just one process
 alias pgrep='pgrep -af' # grep processes - full, list-full. use \pgrep for just the PID.
 alias pkill='pkill -f' # kill processed - full
-
 # p for pipe `|` powerful feature of shell language. transfers command output to input next command.
 alias q='helpany' # see helpany function
-#alias rm='rm -Irv ' # -I requires confirmation. -r recursive into directories. -v verbose. 
+alias rm='rm -Irv ' # -I requires confirmation. -r recursive into directories. -v verbose. 
 # ^^^^^ maybe most helpful alias. avoids deleting unintended files. use -i to approve each deletion.
-function rm() { mkdir -p ~/0del && mv "$@" ~/0del/; } # ~/0del is trash bin. use \rm for the original command.
+function rmm() { mkdir -p ~/0del && mv "$@" ~/0del/; } # ~/0del is trash bin. use \rm for the original command (which is not working atm so renamed to rmm).
 function rl { readlink -f "$1"; } # function returns full path of file, very useful
 # `sed` # Stream EDitor `sed -i 's/aaa/bbb/g' file` -i inplace, replace aaa with bbb. g globally. can use any char instead of /, such as `sed -i 's,aaa,bbb,' file`. -E to use re pattern matching.
 alias sudo='sudo '; alias s='sudo '; alias sd='sudo -s ' # elevate privelege for command. see `visudo` to set. And `usermod -aG sudo add`, security caution when adding.
@@ -826,7 +825,9 @@ alias gitkl='git checkout --ours $file && git add $file && git rebase --continue
 # `apt purge <package>` doesnt erase anything in home dir
 # list installed packages by date: `grep " install " /var/log/dpkg.log` or `apt-mark showmanual` (`apt-mark minimize-manual` supposed to unmark all dependencies) (zgrep search /var/log/dpkg.log.2.gz)
 # `apt install mlocate ncdu htop`
-# ext4magic and testdisk/photorec (extundelete defunct https://www.unix.com/fedora/279812-segmentation-fault-while-trying-recover-file-extundelete.html).
+# ext4magic and testdisk/photorec (extundelete defunct "Segmentation fault" https://www.unix.com/fedora/279812-segmentation-fault-while-trying-recover-file-extundelete.html). For Linux filesystems (ext2/3/4), TestDisk does not offer undelete through its Advanced menu. PhotoRec can recover files by file signature, helpful if file metadata is lost.
+alias undel1='sudo ext4magic /dev/sdd7 -r -d ./recovered_files -f /home/user/$file # undelete example'
+alias undel2='sudo ext4magic /dev/sdd7 -f '/home/user/$file' -d ./recovered_files -a $(date -d '2025-05-01 00:00:00' +%s) -b $(date -d '2025-05-16 19:17:00' +%s) -r # older than'
 # `ntfsundelete /dev/hda1 -t 2d` Look for deleted files altered in the last two days. partition has to be ntfs which has directory structure journaling. 
 
 # bash wildcards (glob/global): `*(pattern|optional-or) ? * + @ ! https://www.linuxjournal.com/content/bash-extended-globbing
