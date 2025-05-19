@@ -792,8 +792,6 @@ alias git3='git add . && git push --set-upstream origin main'
 # https://www.freecodecamp.org/news/how-to-make-your-first-pull-request-on-github-3/
 
 # git more advanced:
-alias gitd1='git diff origin/HEAD' # <commit> diff head to a commit
-alias gitd2='git diff origin/main main' # diff remote (GH repo) to local
 alias gitg='git grep'
 alias gitr1='git restore' # restores last commit to local. if pushed, need merge
 alias gitr2='git reset --hard origin/main' # resets local to origin
@@ -803,15 +801,16 @@ alias gitsr1='keyword="replacethis"; for commit in $(git log -S "$keyword" --one
 alias gitsr2='git log --name-status --diff-filter=A --'
 
 #git resolve conflicts:
-alias gitdiff1='git log --all --pretty=format:%H --date-order | head -n 2 | tac | xargs git diff # COMPARE BY TIMESTAMP ON MOST RECENT 2 COMMITS'
-alias gitdiff2='git diff HEAD^ HEAD # compare 2 most local commits'
-
-alias gitf='git fetch # have to fetch before compare to origin. wont overwrite local'
+alias gitf='git fetch # have to fetch before compare to origin (wont overwrite local)'
+alias gitd1='git diff origin/HEAD' # <commit> diff head to a commit
+alias gitd2='git diff origin/main main' # diff remote (GH repo) to local
+alias gitd3='git log --all --pretty=format:%H --date-order | head -n 2 | tac | xargs git diff # COMPARE BY TIMESTAMP ON MOST RECENT 2 COMMITS'
+alias gitd4='git diff HEAD^ HEAD # compare 2 most local commits'
+alias gitd5='git diff origin/main -- $file # to compare a single file'
 alias gitv1='git log HEAD..origin/main -p      # view Remote changes' # can use --oneline for commit number and desc
 alias gitv2='git log origin/main..HEAD -p      # view Your changes'
+
 alias gitrc1='git commit -m "rebase" && git pull --rebase && git push' # will add local changes onto origin. doesnt merge (does rewrite history linearly). 'git pull --rebase' will add markers in file of conflict. have to remove manually, then `git add $file` and `git rebase --continue` and `git push origin main --force-with-lease` or `git rebase --abort` to cancel
-# or:
-alias gitcrl='git diff origin/main -- $file # to compare'
 alias gitkr='git checkout --theirs $file && git add $file && git rebase --continue # keep remote'
 alias gitkl='git checkout --ours $file && git add $file && git rebase --continue # keep local'
 # if sure origin (github) is correct:
