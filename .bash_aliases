@@ -178,7 +178,7 @@ alias pkill='pkill -f' # kill processed - full
 alias q='helpany' # see helpany function
 alias rm0='rm -Irv ' # -I requires confirmation. -r recursive into directories. -v verbose. 
 # ^^^^^ maybe most helpful alias. avoids deleting unintended files. use -i to approve each deletion.
-function rm() { mkdir -p ~/0del && mv "$@" ~/0del/; } # ~/0del is trash bin. use \rm for the original command (which is not working atm, so use /usr/bin/rm).
+function rm { type "${FUNCNAME[0]}"; mkdir -p ~/0del && mv "$@" ~/0del/; } # ~/0del is trash bin. use \rm for the original command (which is not working atm, so use /usr/bin/rm).
 function rl { readlink -f "$1"; } # function returns full path of file, very useful
 # `sed` # Stream EDitor `sed -i 's/aaa/bbb/g' file` -i inplace, replace aaa with bbb. g globally. can use any char instead of /, such as `sed -i 's,aaa,bbb,' file`. -E to use re pattern matching.
 alias sudo='sudo '; alias s='sudo '; alias sd='sudo -s ' # elevate privelege for command. see `visudo` to set. And `usermod -aG sudo add`, security caution when adding.
@@ -320,13 +320,13 @@ if [[ $(whoami) == 'root' ]]; then export TMOUT=18000 && readonly TMOUT; fi # ti
 ## extra stuff
 # `!!` for last command, as in `sudo !!`. `ctrl+alt+e` expand works here. `!-1:-1` for second to last arg in last command.
 # `vi $(!!)` to use output of last command. or use backticks: vi `!!`
-# `declare -f <function>` will show it
+# `declare -f <function>` will show it. use `type <name>` will show both alias and functions
 set -a # sets for export to env the following functions, for calling in scripts and subshells (aliases dont get called).
 function hdn { history -d "$1"; history -w;} # delete history line number
 # function hdl { history -d $(($HISTCMD - 1)); history -w;} # delete history last number
 function hdl { history -d $HISTCMD; history -w;} # delete history last number
 function hdln { history -d $(($HISTCMD - "$1" -1))-$(($HISTCMD - 2)); history -w;} # delete last n lines. (add 1 for this command) (history -d -$1--1; has error)
-function help { "$1" --help;} # use `\help` to disable the function alias
+function help { type "${FUNCNAME[0]}"; "$1" --help;} # use `\help` to disable the function alias
 function q { "$1" --help || help "$1" || man "$1" || info "$1";} # use any help doc. # also tldr. 
 command_not_found_handle2() { [ $# -eq 0 ] && command -v "$1" > /dev/null 2>&1 && "$1" --help || command "$@"; } # adds --help to all commands that need a parameter. or use below to exclude certain ones.
 #command_not_found_handle() { local excluded_commands=("ls" "cd" "pwd"); if [ $# -eq 0 ] && command -v "$1" > /dev/null 2>&1; then [[ ! " ${excluded_commands[@]} " =~ " $1 " ]] && "$1" --help || command "$1"; else command "$@"; fi }
