@@ -58,7 +58,7 @@ alias vibasha='vi ~/.bash_aliases'
 alias rebash='source ~/.bashrc' # `source` reloads settings. ~ home dir. just type `bash` unless in venv.
 #alias rebashl='exec bash -l' # reloads shell. -l is login shell for completion. just type `bash`.
 alias realias0='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc'
-alias realias='cd ~/git/dotfiles && git fetch origin && git checkout origin/main -- .bash_aliases && cp -f .bash_aliases ~/ && source ~/.bashrc'
+alias realias='cd ~/git/dotfiles && git fetch origin && git checkout origin/main -- .bash_aliases && cp -f .bash_aliases ~/ && source ~/.bashrc && cd -'
 alias realiasr0='ba=".bash_aliases";sudo install $HOME/$ba /root/$ba && sudo chmod 0664 /root/$ba' # for root
 alias realiasr2='cd /home/user/git/dotfiles && git fetch origin && git checkout origin/main -- .bash_aliases && cp -f .bash_aliases ~/ && source ~/.bashrc'
 alias revim='rm ~/.vimrc && source ~/.bashrc' # redo vim settings. below import is blocked for existing .vimrc
