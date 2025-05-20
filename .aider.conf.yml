@@ -1,0 +1,451 @@
+##########################################################
+# Sample .aider.conf.yml
+# This file lists *all* the valid configuration entries.
+# Place in your home dir, or at the root of your git repo.
+##########################################################
+
+# Note: You can only put OpenAI and Anthropic API keys in the yaml
+# config file. Keys for all APIs can be stored in a .env file
+# https://aider.chat/docs/config/dotenv.html
+
+##########
+# options:
+
+## show this help message and exit
+#help: xxx
+
+
+
+# auto-test: true
+restore-chat-history: true
+
+
+
+#############
+# Main model:
+
+## Specify the model to use for the main chat
+#model: gemini/gemini-2.0-flash-thinking-exp
+# model: deepseek/deepseek-coder # bad ideas
+# model: deepseek/deepseek-reasoner # thinks in loops
+# model: gemini/gemini-2.5-pro-exp-03-25
+# model: o3-mini
+# reasoning-effort: high
+# model:  venice/llama-3.3-70b # made some bad edits
+# model:  venice/deepseek-r1-671b # slow from thinking and very long sometimes
+# model:  venice/qwen-2.5-coder-32b # new errors
+# model:  venice/qwen-2.5-qwq-32b # lot of thinkin, token limit 37k
+# model:  venice/llama-3.1-405b # gets cut off short, slow
+# model: ollama/deepseek-coder-v2:latest
+# model: deepseek/deepseek-chat
+# model: gemini/gemini-2.5-pro-preview-03-25
+# model: fireworks_ai/accounts/fireworks/models/deepseek-v3-0324
+# model: venice/llama-3.2-3b
+# model: gemini/gemini-1.5-pro-latest
+model: gemini/gemini-2.0-pro-exp-02-05
+
+# venice/deepseek-r1-671b
+# venice/qwen-2.5-coder-32b
+# venice/qwen-2.5-qwq-32b
+# venice/llama-3.1-405b
+
+## Specify the model to use for commit messages and chat history summarization (default depends on --model)
+# weak-model: gemini/gemini-2.0-flash #gemini-2.0-flash-thinking-exp
+# weak-model: venice/llama-3.2-3b
+weak-model: venice/llama-3.2-3b
+# weak-model: deepseek/deepseek-coder
+# weak-model: fireworks_ai/accounts/fireworks/models/deepseek-v3-0324
+
+## Specify the model to use for editor tasks (default depends on --model)
+# editor-model: gemini-exp-1206 #openrouter/deepseek/deepseek-chat-v3-0324 #gemini/gemini-2.0-flash #
+# editor-model:  venice/qwen-2.5-coder-32b # ollama/qwen2.5-coder:32b
+# editor-model: deepseek/deepseek-coder
+# editor-model: deepseek/deepseek-chat # both hard time with test_core edits
+# editor-model: 40-mini #openrouter/deepseek/deepseek-chat-v3-0324 #gemini/gemini-2.0-flash #
+# editor-model: deepseek/deepseek-chat
+# editor-model:  gemini/gemini-2.5-pro-preview-03-25
+editor-model: fireworks_ai/accounts/fireworks/models/deepseek-v3-0324
+
+
+########################
+# API Keys and settings:
+
+## Set an environment variable (to control API settings, can be used multiple times)
+#set-env: xxx
+## Specify multiple values like this:
+#set-env:
+#  - xxx
+#  - yyy
+#  - zzz
+
+## Set an API key for a provider (eg: --api-key provider=<key> sets PROVIDER_API_KEY=<key>)
+#api-key: xxx
+## Specify multiple values like this:
+api-key:
+  #  - gemini=$GEMINI_API_KEY
+  #  - google=$GEMINI_API_KEY
+  # - venice=$VENICE_API_KEY
+#  - yyy
+#  - zzz
+
+
+# export PYTHONPATH="/home/aimgr/dev/aimain17c:$PYTHONPATH" #or:
+# import sys
+# sys.path.append("/home/aimgr/dev/aimain17c")
+# export AIDER_LLM_PROVIDER=custom
+# export CUSTOM_LLM_MODULE=customllms
+# litellm_settings:
+#   custom_provider_map:
+#     - provider: venice
+      # custom_handler: custom_handler.venice_llm
+
+
+#################
+# Model settings:
+
+
+## Specify a file with aider model settings for unknown models
+model-settings-file: .aider.model.settings.yml
+
+## Specify a file with context window and costs for unknown models
+#model-metadata-file: .aider.model.metadata.json
+
+## Add a model alias (can be used multiple times)
+#alias: xxx
+## Specify multiple values like this:
+alias:
+#  - xxx
+#  - yyy
+#  - zzz
+  - "c1:gemini/gemini-2.0-flash-thinking-exp" 
+  - "e1:gemini/gemini-exp-1206" 
+  - "t1:deepseek/deepseek-coder"  
+
+
+## Set the reasoning_effort API parameter (default: not set)
+#reasoning-effort: xxx
+
+
+
+## Timeout in seconds for API calls (default: None)
+timeout: 60
+
+
+
+## Specify what edit format the LLM should use (default depends on model)
+#edit-format: xxx
+
+## Use architect edit format for the main chat
+architect: false #true
+
+## Enable/disable automatic acceptance of architect changes (default: True)
+auto-accept-architect: false
+
+
+## Specify the edit format for the editor model (default: depends on editor model)
+#editor-edit-format: xxx
+
+## Only work with models that have meta-data available (default: True)
+show-model-warnings: false
+
+## Check if model accepts settings like reasoning_effort/thinking_tokens (default: True)
+#check-model-accepts-settings: true
+
+## Soft limit on tokens for chat history, after which summarization begins. If unspecified, defaults to the model's max_chat_history_tokens.
+max-chat-history-tokens: 15000
+
+###################
+# Repomap settings:
+
+## Suggested number of tokens to use for repo map, use 0 to disable
+map-tokens: 2000
+
+################
+# History Files:
+
+## Specify the chat input history file (default: .aider.input.history)
+#input-history-file: .aider.input.history
+
+## Specify the chat history file (default: .aider.chat.history.md)
+chat-history-file: .aider.chat.history.md
+# chat-history-file: /home/aimgr/dev/aimain17c/.aider.chat.history.md
+## Restore the previous chat history messages (default: False)
+# restore-chat-history: true
+
+## Log the conversation with the LLM to this file (for example, .aider.llm.history)
+#llm-history-file: .aider.llm.history
+
+##################
+# Output settings:
+
+## Use colors suitable for a dark terminal background (default: False)
+dark-mode: true
+
+## Use colors suitable for a light terminal background (default: False)
+#light-mode: false
+
+## Enable/disable pretty, colorized output (default: True)
+#pretty: true
+
+## Enable/disable streaming responses (default: True)
+#stream: true
+
+## Set the color for user input (default: #00cc00)
+#user-input-color: #00cc00
+
+## Set the color for tool output (default: None)
+#tool-output-color: xxx
+
+## Set the color for tool error messages (default: #FF2222)
+#tool-error-color: #FF2222
+
+## Set the color for tool warning messages (default: #FFA500)
+#tool-warning-color: #FFA500
+
+## Set the color for assistant output (default: #0088ff)
+#assistant-output-color: #0088ff
+
+## Set the color for the completion menu (default: terminal's default text color)
+#completion-menu-color: xxx
+
+## Set the background color for the completion menu (default: terminal's default background color)
+#completion-menu-bg-color: xxx
+
+## Set the color for the current item in the completion menu (default: terminal's default background color)
+#completion-menu-current-color: xxx
+
+## Set the background color for the current item in the completion menu (default: terminal's default text color)
+#completion-menu-current-bg-color: xxx
+
+## Set the markdown code theme (default: default, other options include monokai, solarized-dark, solarized-light, or a Pygments builtin style, see https://pygments.org/styles for available themes)
+code-theme: gruvbox-dark #solarized-dark
+
+## Show diffs when committing changes (default: False)
+#show-diffs: false
+
+###############
+# Git settings:
+
+## Enable/disable looking for a git repo (default: True)
+#git: false #
+
+## Enable/disable adding .aider* to .gitignore (default: True)
+gitignore: false
+
+## Specify the aider ignore file (default: .aiderignore in git root)
+#aiderignore: .aiderignore
+
+## Only consider files in the current subtree of the git repository
+subtree-only: false
+
+## Enable/disable auto commit of LLM changes (default: True)
+#auto-commits: true
+
+## Enable/disable commits when repo is found dirty (default: True)
+#dirty-commits: true
+
+## Attribute aider code changes in the git author name (default: True)
+#attribute-author: true
+
+## Attribute aider commits in the git committer name (default: True)
+#attribute-committer: true
+
+## Prefix commit messages with 'aider: ' if aider authored the changes (default: False)
+#attribute-commit-message-author: false
+
+## Prefix all commit messages with 'aider: ' (default: False)
+#attribute-commit-message-committer: false
+
+## Enable/disable git pre-commit hooks with --no-verify (default: False)
+#git-commit-verify: false
+
+## Commit all pending changes with a suitable commit message, then exit
+#commit: false
+
+## Specify a custom prompt for generating commit messages
+#commit-prompt: xxx
+
+## Perform a dry run without modifying files (default: False)
+#dry-run: false
+
+## Skip the sanity check for the git repository (default: False)
+#skip-sanity-check-repo: false
+
+## Enable/disable watching files for ai coding comments (default: False)
+#watch-files: false
+
+########################
+# Fixing and committing:
+
+## Lint and fix provided files, or dirty files if none provided
+#lint: true
+
+## Specify lint commands to run for different languages, eg: "python: flake8 --select=..." (can be used multiple times)
+#lint-cmd: xxx
+## Specify multiple values like this:
+#lint-cmd:
+#  - xxx
+#  - yyy
+#  - zzz
+
+## Enable/disable automatic linting after changes (default: True)
+auto-lint: true
+
+## Specify command to run tests
+test-cmd: bash test.sh
+#source /home/aimgr/venv2/bin/activate && python3 tests/test_main_client.py run --coredev >> /dev/null
+#test-cmd: python3 aimain17c/aidermgr/test.py
+
+## Enable/disable automatic testing after changes (default: False)
+# auto-test: true
+
+## Run tests, fix problems found and then exit
+#test: false
+
+############
+# Analytics:
+
+## Enable/disable analytics for current session (default: random)
+#analytics: xxx
+
+## Specify a file to log analytics events
+#analytics-log: xxx
+
+## Permanently disable analytics
+#analytics-disable: false
+
+############
+# Upgrading:
+
+## Check for updates and return status in the exit code
+#just-check-update: false
+
+## Check for new aider versions on launch
+#check-update: true
+
+## Show release notes on first run of new version (default: None, ask user)
+#show-release-notes: xxx
+
+## Install the latest version from the main branch
+#install-main-branch: false
+
+## Upgrade aider to the latest version from PyPI
+#upgrade: false
+
+## Show the version number and exit
+#version: xxx
+
+########
+# Modes:
+
+## Specify a single message to send the LLM, process reply then exit (disables chat mode)
+#message: xxx
+
+## Specify a file containing the message to send the LLM, process reply, then exit (disables chat mode)
+#message-file: xxx
+
+## Run aider in your browser (default: False)
+#gui: false
+
+## Enable automatic copy/paste of chat between aider and web UI (default: False)
+#copy-paste: false
+
+## Apply the changes from the given file instead of running the chat (debug)
+#apply: xxx
+
+## Apply clipboard contents as edits using the main model's editor format
+#apply-clipboard-edits: false
+
+## Do all startup activities then exit before accepting user input (debug)
+#exit: false
+
+## Print the repo map and exit (debug)
+#show-repo-map: false
+
+## Print the system prompts and exit (debug)
+#show-prompts: false
+
+#################
+# Voice settings:
+
+## Audio format for voice recording (default: wav). webm and mp3 require ffmpeg
+#voice-format: wav
+
+## Specify the language for voice using ISO 639-1 code (default: auto)
+#voice-language: en
+
+## Specify the input device name for voice recording
+#voice-input-device: xxx
+
+#################
+# Other settings:
+
+## specify a file to edit (can be used multiple times)
+#file: xxx
+## Specify multiple values like this:
+#file:
+#  - xxx
+#  - yyy
+#  - zzz
+
+## specify a read-only file (can be used multiple times)
+#read: xxx
+## Specify multiple values like this:
+#read:
+#  - xxx
+#  - yyy
+#  - zzz
+
+## Use VI editing mode in the terminal (default: False)
+#vim: false
+
+## Specify the language to use in the chat (default: None, uses system settings)
+#chat-language: xxx
+
+
+## Always say yes to every confirmation
+#yes-always: false
+
+## Enable verbose output
+#verbose: false
+
+## Load and execute /commands from a file on launch
+load: as1
+
+## Specify the encoding for input and output (default: utf-8)
+#encoding: utf-8
+
+## Line endings to use when writing files (default: platform)
+#line-endings: platform
+
+
+## Specify the config file (default: search for .aider.conf.yml in git root, cwd or home directory)
+#config: xxx
+
+## Specify the .env file to load (default: .env in git root)
+#env-file: .env
+
+
+## Enable/disable suggesting shell commands (default: True)
+suggest-shell-commands: false
+
+## Enable/disable fancy input with history and completion (default: True)
+#fancy-input: false
+
+## Enable/disable multi-line input mode with Meta-Enter to submit (default: False)
+#multiline: false
+
+## Enable/disable terminal bell notifications when LLM responses are ready (default: False)
+#notifications: false
+
+## Specify a command to run for notifications instead of the terminal bell. If not specified, a default command for your OS may be used.
+#notifications-command: xxx
+
+## Enable/disable detection and offering to add URLs to chat (default: True)
+detect-urls: false
+
+## Specify which editor to use for the /editor command
+#editor: xxx
+
+## Install the tree_sitter_language_pack (experimental)
+#install-tree-sitter-language-pack: false
