@@ -7,7 +7,7 @@
 
 # see further down for more general Linux tips and learning sites.(width is 100 chars vs 80 default)
 # add to sudo -E visudo for cache across tabs.. Defaults:user   timestamp_timeout=30, !tty_tickets, timestamp_type=global
-echo CDPATH dirs12: $CDPATH # to see which dirs are autofound (can be annoying with tab complete)
+echo CDPATH dirs: $CDPATH # to see which dirs are autofound (can be annoying with tab complete)
 
 
 true <<'END' # skips section to next END
@@ -57,9 +57,9 @@ alias vibashrc='vi ~/.bashrc'
 alias vibasha='vi ~/.bash_aliases' 
 alias rebash='source ~/.bashrc' # `source` reloads settings. ~ home dir. just type `bash` unless in venv.
 #alias rebashl='exec bash -l' # reloads shell. -l is login shell for completion. just type `bash`.
-alias realias='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc'
-alias realias2='cd ~/git/dotfiles && git fetch origin && git checkout origin/main -- .bash_aliases && cp -f .bash_aliases ~/ && source ~/.bashrc'
-alias realiasr='ba=".bash_aliases";sudo install $HOME/$ba /root/$ba && sudo chmod 0664 /root/$ba' # for root
+alias realias0='\wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc'
+alias realias='cd ~/git/dotfiles && git fetch origin && git checkout origin/main -- .bash_aliases && cp -f .bash_aliases ~/ && source ~/.bashrc'
+alias realiasr0='ba=".bash_aliases";sudo install $HOME/$ba /root/$ba && sudo chmod 0664 /root/$ba' # for root
 alias realiasr2='cd /home/user/git/dotfiles && git fetch origin && git checkout origin/main -- .bash_aliases && cp -f .bash_aliases ~/ && source ~/.bashrc'
 alias revim='rm ~/.vimrc && source ~/.bashrc' # redo vim settings. below import is blocked for existing .vimrc
 ## `shopt` list shell options. `set -o` lists settings. `set -<opt>` enables like flag options.
@@ -176,9 +176,9 @@ alias pgrep='pgrep -af' # grep processes - full, list-full. use \pgrep for just 
 alias pkill='pkill -f' # kill processed - full
 # p for pipe `|` powerful feature of shell language. transfers command output to input next command.
 alias q='helpany' # see helpany function
-alias rm='rm -Irv ' # -I requires confirmation. -r recursive into directories. -v verbose. 
+alias rm0='rm -Irv ' # -I requires confirmation. -r recursive into directories. -v verbose. 
 # ^^^^^ maybe most helpful alias. avoids deleting unintended files. use -i to approve each deletion.
-function rmm() { mkdir -p ~/0del && mv "$@" ~/0del/; } # ~/0del is trash bin. use \rm for the original command (which is not working atm so renamed to rmm).
+function rm() { mkdir -p ~/0del && mv "$@" ~/0del/; } # ~/0del is trash bin. use \rm for the original command (which is not working atm, so use /usr/bin/rm).
 function rl { readlink -f "$1"; } # function returns full path of file, very useful
 # `sed` # Stream EDitor `sed -i 's/aaa/bbb/g' file` -i inplace, replace aaa with bbb. g globally. can use any char instead of /, such as `sed -i 's,aaa,bbb,' file`. -E to use re pattern matching.
 alias sudo='sudo '; alias s='sudo '; alias sd='sudo -s ' # elevate privelege for command. see `visudo` to set. And `usermod -aG sudo add`, security caution when adding.
@@ -787,7 +787,8 @@ setup a repo from local:
 # `apt install gh` then click enter until auth through webpage'
 #alias git1='gh repo create <newrepo> --private' # or --public
 function git1 { gh repo create $1 --private;}
-alias git2h='git init && git remote add origin https://github.com/auwsom/<new>.git && git branch -M main' # doesnt need password everytime when using gh login 
+#alias git2='git init && git remote add origin https://github.com/auwsom/<new>.git && git branch -M main' # doesnt need password everytime when using gh login 
+function git2 { git init && git remote add origin https://github.com/auwsom/$1.git && git branch -M main;}
 alias git2s='git init && git remote add origin git@github.com:auwsom/<new>.git && git branch -M main' # dont need password
 alias git3='git add . && git push --set-upstream origin main'
 # git config --global init.defaultBranch main 
