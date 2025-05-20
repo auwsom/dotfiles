@@ -791,6 +791,7 @@ function git1 { gh repo create $1 --private;}
 function git2 { git init && git remote add origin https://github.com/auwsom/$1.git && git branch -M main;}
 alias git2s='git init && git remote add origin git@github.com:auwsom/<new>.git && git branch -M main' # dont need password
 alias git3='git add . && git push --set-upstream origin main'
+function git123 { mkdir $1 && git1 $1 && git2 $1 && git3 ;}
 # git config --global init.defaultBranch main 
 # https://www.freecodecamp.org/news/how-to-make-your-first-pull-request-on-github-3/
 
