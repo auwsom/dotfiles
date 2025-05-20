@@ -782,13 +782,13 @@ alias gitac='gita && gitc' # add and commit
 alias gs='git status && git add -A && git commit -m \"ok\" && git push # local ahead: git status,add,commit,push' # push recent changes
 alias gss='git fetch origin >/dev/null && commits=$(git rev-list --left-right --count HEAD...origin/$(git rev-parse --abbrev-ref HEAD)) && [[ $commits == "0	0" ]] && echo "synced" || ([[ ${commits%%	*} -gt 0 ]] && echo "local ahead" || echo "origin ahead") # git sync' # check if in sync
 alias gsss='git fetch origin && git merge-tree $(git merge-base HEAD origin/$(git rev-parse --abbrev-ref HEAD)) HEAD origin/$(git rev-parse --abbrev-ref HEAD) | grep -q "^<<<<<<<" && echo "Conflict!" || echo "No Conflicts"' # checks for file conflicts before merge
-alias gssss='git pull --rebase # merge after gsss checks theres no conflicts locally'
-alias gsssss='git push --force-with-lease origin main # merge after gsss checks theres no conflicts in origin. lease checks if files are checked out' 
+alias gssss='git commit -m "rebase" && git pull --rebase # local ahead.. merge after gsss checks theres no conflicts locally'
+alias gsssss='git push --force-with-lease origin main # origin ahead.. merge after gsss checks theres no conflicts in origin. lease checks if files are checked out' 
 
 alias gsync='git commit -m "rebase" && git pull --rebase && git push' # full sync but adds markup of changes inside files. will add local changes onto origin. doesnt merge (does rewrite history linearly). 'git pull --rebase' will add markers in file of conflict. have to remove manually, then `git add $file` and `git rebase --continue` and `git push origin main --force-with-lease` or `git rebase --abort` to cancel. 
-fullsync
+alias gfullsync='git add -A && git commit -m "sync" && git fetch origin && git rebase origin/$(git rev-parse --abbrev-ref HEAD) && git push --force-with-lease'
 
-setup a repo from local:
+#setup a repo from local:
 alias agitinfo='# git clone is for first copy # git status, git log, git branch \# git clone https://github.com/auwsom/dotfiles.git #add ssh priv & pub key or will pull but not push
 # git clone git@github.com:auwsom/dotfiles.git # will ask to connect. need to `eval $(ssh-agent -s) && ssh-add ~/.ssh/id_rsa` checks if agent running and adds (will display email of GH account) 
 # `apt install gh` then click enter until auth through webpage'
@@ -827,7 +827,7 @@ alias gitkl='git checkout --ours $file && git add $file && git rebase --continue
 # if sure origin (github) is correct:
 alias gitpfr='git format-patch -1 HEAD && git fetch origin && git reset --hard origin/main # save local as patch, fetch, reset'
 # if sure local is correct:
-alias gitpuf='git push --force origin main' # use only after diffing remote to local. also if warning from remote being ahead, you can pull and merge.
+alias gitpuf='git push --force-with-lease origin main' # use only after diffing remote to local. also if warning from remote being ahead, you can pull and merge.
 
 
 # mv ~/.bash_aliases ~/.bash_aliases0 && ln -s ~/git/dotfiles/.bash_aliases ~/.bash_aliases
