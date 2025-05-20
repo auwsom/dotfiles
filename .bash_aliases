@@ -7,7 +7,7 @@
 
 # see further down for more general Linux tips and learning sites.(width is 100 chars vs 80 default)
 # add to sudo -E visudo for cache across tabs.. Defaults:user   timestamp_timeout=30, !tty_tickets, timestamp_type=global
-echo CDPATH dirs: $CDPATH # to see which dirs are autofound (can be annoying with tab complete)
+echo CDPATH dirs12: $CDPATH # to see which dirs are autofound (can be annoying with tab complete)
 
 
 true <<'END' # skips section to next END
@@ -82,6 +82,8 @@ alias hdde='[[ -f $HISTFILE ]] && cp "$HISTFILE" "${HISTFILE}.bak3" && awk "!see
 trap 'history -a' SIGHUP # saves history on interupt. see functions below.
 IFS=$' \t\n' # restricts "internal field separator" to tab and newline. handles spaces in filenames.
 #nohist() { e=$BASH_COMMAND; history -d $HISTCMD;}; trap nohist ERR # traps error and deletes from hist before written. $e is line for reuse. ctrl-alt-e expands it. 
+echo -ne "\033[?7h" # set line wrap on
+
 
 ## some familiar keyboard shortcuts: 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
@@ -772,25 +774,26 @@ alias gitl='git log'
 alias gitb='git branch'
 alias gita='git add -A' # adds all
 alias gitc='git commit -m "ok"'
-alias gitph='git push'
+alias gitpu='git push origin main' # usually same as `git push`. see below for conflicts
 alias gitpl='git pull' # (git fetch && git merge) 
 alias gitac='gita && gitc' # add and commit
 alias gs='git status && git add -A && git commit -m \"ok\" && git push # git sync by push' 
 alias gitsd='pushd ~/git/dotfiles && git add . && git commit -m commit && git push -u origin main; popd' # git sync push on dotfiles dir
 alias gpho='git push -u origin main '
 alias agitinfo='# git clone is for first copy # git status, git log, git branch \# git clone https://github.com/auwsom/dotfiles.git #add ssh priv & pub key or will pull but not push
+
+setup a repo from local:
 # git clone git@github.com:auwsom/dotfiles.git # will ask to connect. need to `eval $(ssh-agent -s) && ssh-add ~/.ssh/id_rsa` checks if agent running and adds (will display email of GH account) 
-## add from local creatJust found this tool called Briefcase to deploy python apps to 6 platforms (mac,win,linux,ios,android,web) looks great. Produces standalone binariese:
 # `apt install gh` then click enter until auth through webpage'
-alias git1='gh repo create <newrepo> --private' # or --public
+#alias git1='gh repo create <newrepo> --private' # or --public
+function git1 { gh repo create $1 --private;}
 alias git2h='git init && git remote add origin https://github.com/auwsom/<new>.git && git branch -M main' # doesnt need password everytime when using gh login 
 alias git2s='git init && git remote add origin git@github.com:auwsom/<new>.git && git branch -M main' # dont need password
 alias git3='git add . && git push --set-upstream origin main'
 # git config --global init.defaultBranch main 
 # https://www.freecodecamp.org/news/how-to-make-your-first-pull-request-on-github-3/
-alias gitd1='git diff origin/HEAD' # <commit> diff head to a commit
-alias gitd2='git diff origin/main main' # diff remote (GH repo) to local
-alias gitpf='git push --force' # use only after diffing remote to local. also if warning from remote being ahead, you can pull and merge.
+
+# git more advanced:
 alias gitg='git grep'
 alias gitr1='git restore' # restores last commit to local. if pushed, need merge
 alias gitr2='git reset --hard origin/main' # resets local to origin
@@ -800,17 +803,23 @@ alias gitsr1='keyword="replacethis"; for commit in $(git log -S "$keyword" --one
 alias gitsr2='git log --name-status --diff-filter=A --'
 
 #git resolve conflicts:
-alias gitdiff1='git log --all --pretty=format:%H --date-order | head -n 2 | tac | xargs git diff # COMPARE BY TIMESTAMP ON MOST RECENT 2 COMMITS'
-alias gitdiff2='git diff HEAD^ HEAD # compare 2 most local commits'
-
-alias gitf='git fetch # have to fetch before compare to origin. wont overwrite local'
+alias gitf='git fetch # have to fetch before compare to origin (wont overwrite local)'
+alias gitd1='git diff origin/HEAD' # <commit> diff head to a commit
+alias gitd2='git diff origin/main main' # diff remote (GH repo) to local
+alias gitd3='git log --all --pretty=format:%H --date-order | head -n 2 | tac | xargs git diff # COMPARE BY TIMESTAMP ON MOST RECENT 2 COMMITS'
+alias gitd4='git diff HEAD^ HEAD # compare 2 most local commits'
+alias gitd5='git diff origin/main -- $file # to compare a single file'
 alias gitv1='git log HEAD..origin/main -p      # view Remote changes' # can use --oneline for commit number and desc
 alias gitv2='git log origin/main..HEAD -p      # view Your changes'
+
 alias gitrc1='git commit -m "rebase" && git pull --rebase && git push' # will add local changes onto origin. doesnt merge (does rewrite history linearly). 'git pull --rebase' will add markers in file of conflict. have to remove manually, then `git add $file` and `git rebase --continue` and `git push origin main --force-with-lease` or `git rebase --abort` to cancel
-# or:
-alias gitcrl='git diff origin/main -- $file # to compare'
 alias gitkr='git checkout --theirs $file && git add $file && git rebase --continue # keep remote'
 alias gitkl='git checkout --ours $file && git add $file && git rebase --continue # keep local'
+# if sure origin (github) is correct:
+alias gitpfr='git format-patch -1 HEAD && git fetch origin && git reset --hard origin/main # save local as patch, fetch, reset'
+# if sure local is correct:
+alias gitpuf='git push --force origin main' # use only after diffing remote to local. also if warning from remote being ahead, you can pull and merge.
+
 
 # mv ~/.bash_aliases ~/.bash_aliases0 && ln -s ~/git/dotfiles/.bash_aliases ~/.bash_aliases
 # to push new repo from CLI you have to create it using curl and PERSONAL_ACCESS_TOKEN.
@@ -833,7 +842,8 @@ alias gitkl='git checkout --ours $file && git add $file && git rebase --continue
 # `apt install mlocate ncdu htop`
 # ext4magic and testdisk/photorec (extundelete defunct "Segmentation fault" https://www.unix.com/fedora/279812-segmentation-fault-while-trying-recover-file-extundelete.html). For Linux filesystems (ext2/3/4), TestDisk does not offer undelete through its Advanced menu. PhotoRec can recover files by file signature, helpful if file metadata is lost.
 alias undel1='sudo ext4magic /dev/sdd7 -r -d ./recovered_files -f /home/user/$file # undelete example'
-alias undel2='sudo ext4magic /dev/sdd7 -f '/home/user/$file' -d ./recovered_files -a $(date -d '2025-05-01 00:00:00' +%s) -b $(date -d '2025-05-16 19:17:00' +%s) -r # older than'
+alias undel2='sudo ext4magic /dev/sdd7 -f /home/user/$file -d ./recovered_files -a $(date -d "2025-05-01 00:00:00" +%s) -b $(date -d "2025-05-16 19:17:00" +%s) -r # older than'
+# if on root fs mounted, use `sudo dd if=/dev/sdXN of=/path/to/backup.img bs=4M status=progress` to copy it. then `sudo fsck.ext4 -n /path/to/backup.img` to check without changing (may need to use without -n but say no, to fix) then use ext4magic `sudo ext4magic rootfs-sdb15b.img -f /home/user/$file -d ./recovered_files`
 # `ntfsundelete /dev/hda1 -t 2d` Look for deleted files altered in the last two days. partition has to be ntfs which has directory structure journaling. 
 
 # bash wildcards (glob/global): `*(pattern|optional-or) ? * + @ ! https://www.linuxjournal.com/content/bash-extended-globbing
