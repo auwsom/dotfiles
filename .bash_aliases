@@ -778,14 +778,14 @@ alias gitpu='git push origin main' # usually same as `git push`. see below for c
 alias gitpl='git pull' # (git fetch && git merge) 
 alias gitac='gita && gitc' # add and commit
 
-alias gs='git status && git add -A && git commit -m \"ok\" && git push # local ahead: git status,add,commit,push' 
-alias gss='git fetch origin >/dev/null && commits=$(git rev-list --left-right --count HEAD...origin/$(git rev-parse --abbrev-ref HEAD)) && [[ $commits == "0	0" ]] && echo "synced" || ([[ ${commits%%	*} -gt 0 ]] && echo "local ahead" || echo "origin ahead") # git sync'
-alias gs='git status && git add -A && git commit -m \"ok\" && git push # local ahead: git status,add,commit,push' 
-alias gitsd='pushd ~/git/dotfiles && git add . && git commit -m commit && git push -u origin main; popd' # git sync push on dotfiles dir
-alias gpho='git push -u origin main '
-alias agitinfo='# git clone is for first copy # git status, git log, git branch \# git clone https://github.com/auwsom/dotfiles.git #add ssh priv & pub key or will pull but not push
+alias gs='git status && git add -A && git commit -m \"ok\" && git push # local ahead: git status,add,commit,push' # push recent changes
+alias gss='git fetch origin >/dev/null && commits=$(git rev-list --left-right --count HEAD...origin/$(git rev-parse --abbrev-ref HEAD)) && [[ $commits == "0	0" ]] && echo "synced" || ([[ ${commits%%	*} -gt 0 ]] && echo "local ahead" || echo "origin ahead") # git sync' # check if in sync
+alias gsss='git fetch origin && git merge-tree $(git merge-base HEAD origin/$(git rev-parse --abbrev-ref HEAD)) HEAD origin/$(git rev-parse --abbrev-ref HEAD) | grep -q '^<<<<<<<' && echo "Conflict!" || echo "No Conflicts"' # checks for file conflicts before merge
+alias gssss='git pull --rebase # merge after checking theres no conflicts'
+alias gsync='git commit -m "rebase" && git pull --rebase && git push' # full sync but adds markup of changes inside files. will add local changes onto origin. doesnt merge (does rewrite history linearly). 'git pull --rebase' will add markers in file of conflict. have to remove manually, then `git add $file` and `git rebase --continue` and `git push origin main --force-with-lease` or `git rebase --abort` to cancel. 
 
 setup a repo from local:
+alias agitinfo='# git clone is for first copy # git status, git log, git branch \# git clone https://github.com/auwsom/dotfiles.git #add ssh priv & pub key or will pull but not push
 # git clone git@github.com:auwsom/dotfiles.git # will ask to connect. need to `eval $(ssh-agent -s) && ssh-add ~/.ssh/id_rsa` checks if agent running and adds (will display email of GH account) 
 # `apt install gh` then click enter until auth through webpage'
 #alias git1='gh repo create <newrepo> --private' # or --public
@@ -806,6 +806,7 @@ alias gitlo='git log --oneline' # shows compact commit history
 alias gitchkf='git checkout <commit> -- <file>' # restores a file from that commit. 
 alias gitsr1='keyword="replacethis"; for commit in $(git log -S "$keyword" --oneline --pretty=format:"%H"); do git grep "$keyword" "$commit"; done'
 alias gitsr2='git log --name-status --diff-filter=A --'
+alias gitsd='pushd ~/git/dotfiles && git add . && git commit -m commit && git push -u origin main; popd' # git sync push on dotfiles dir
 
 #git resolve conflicts:
 alias gitf='git fetch # have to fetch before compare to origin (wont overwrite local)'
@@ -816,9 +817,6 @@ alias gitd4='git diff HEAD^ HEAD # compare 2 most local commits'
 alias gitd5='git diff origin/main -- $file # to compare a single file'
 alias gitv1='git log HEAD..origin/main -p      # view Remote changes' # can use --oneline for commit number and desc
 alias gitv2='git log origin/main..HEAD -p      # view Your changes'
-
-alias gitrc1='git commit -m "rebase" && git pull --rebase && git push' # will add local changes onto origin. doesnt merge (does rewrite history linearly). 'git pull --rebase' will add markers in file of conflict. have to remove manually, then `git add $file` and `git rebase --continue` and `git push origin main --force-with-lease` or `git rebase --abort` to cancel. 
-#git fetch origin && git merge-tree $(git merge-base HEAD origin/$(git rev-parse --abbrev-ref HEAD)) HEAD origin/$(git rev-parse --abbrev-ref HEAD) | grep -q '^<<<<<<<' && echo "Conflict!" || echo "No Conflict"
 
 alias gitkr='git checkout --theirs $file && git add $file && git rebase --continue # keep remote'
 alias gitkl='git checkout --ours $file && git add $file && git rebase --continue # keep local'
