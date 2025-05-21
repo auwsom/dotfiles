@@ -76,8 +76,8 @@ echo -ne "\033[?7h" # set line wrap on
 
 ## some familiar keyboard shortcuts (cat -v; showkey -a; xev; are all good tools to show kep mapping: 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
-# stty intr ^S # changes the ctrl+c for interrupt process to ctrl+s, to allow modern ctrl+c for copy. ctrl-shift-c will show ^S with this line if it is remapped in terminial.
-# stty susp ^Q #stty susp undef; #stty intr undef # for bind ctrl+z to undo have to remove default. https://www.computerhope.com/unix/bash/bind.htm
+stty intr ^S # changes the ctrl+c for interrupt process to ctrl+s, to allow modern ctrl+c for copy. ctrl-shift-c will show ^S with this line if it is remapped in terminial.
+stty susp ^Q #stty susp undef; #stty intr undef # for bind ctrl+z to undo have to remove default. https://www.computerhope.com/unix/bash/bind.htm
 [[ $- == *i* ]] && bind '"\C-Z": undo' && bind -x '"\C-c": "printf %s $READLINE_LINE | xclip -selection clipboard"' # this copies (whole line unless region selected by mouse) to desktop clipboard like modern ^c # wont run in non-inteactive (ie vim)
 # alternaitve: bind '"\C-c": copy-region-as-kill' # use ctrl+space to start mark, then ^c to copy and then ^y to paste
 stty lnext ^_ # changes the ctrl+] for lnext to ctrl+], to allow modern ctrl+v for paste. lnext shows the keycode of the next key typed.
