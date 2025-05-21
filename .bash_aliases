@@ -9,24 +9,12 @@
 # add to sudo -E visudo for cache across tabs.. Defaults:user   timestamp_timeout=30, !tty_tickets, timestamp_type=global
 echo CDPATH dirs: $CDPATH # to see which dirs are autofound (can be annoying with tab complete)
 
+# default bash emacs keybindings. you can also use `set -o vi` for vim keybinding navgation: ^@:null-char ^A:beginning-of-line ^B:backward-char ^C:SIGINT ^D:EOF ^E:end-of-line ^F:forward-char ^G:abort ^H:backward-delete-char ^I:tab ^J:newline ^K:kill-line ^L:clear-screen ^M:newline ^N:next-history ^O:reserved ^P:previous-history ^Q:flow-control ^R:reverse-search ^S:flow-control ^T:transpose-chars ^U:kill-line ^V:quoted-insert ^W:word-rubout ^X:reserved ^Y:yank ^Z:SIGTSTP ^[:escape/meta-prefix ^\\:SIGQUIT ^]:unbound ^^:unbound ^_:unbound
+
 
 true <<'END' # skips section to next END
 temp notes:
-echo "export EDITOR=vi" >> ~/.bashrc
-sudo -E visudo # no nano
-aimgr ALL=(ALL:ALL) NOPASSWD: /usr/bin/tmux, /usr/sbin/useradd, /usr/bin/passwd[ags] # couldnt get working
-allow sudo tmux -S /home/user/shared_tmux/shared_tmux_socket attach-session # couldnt get working
-ttyd -W -p 8889 bash
-
-ps aux (BSD-style options)
-a – Show processes from all users.
-u – Display user-oriented output (includes user, CPU/mem usage, start time, etc.).
-x – Show processes without a controlling terminal (like daemons).
-ps -ef (UNIX-style options)
--e – Show all processes.
 END
-alias rts="sed -i 's/[[:space:]]*$//'" # <file> remove trailing spaces on every line
-
 
 #if ! [[ $- == *i* ]]; then true "<<'ENDI'"; fi # this skips this file when running scripts
 [[ -t 0 ]] && true "<<'ENDI'" # this skips this file when running scripts
@@ -44,7 +32,8 @@ HISTCONTROL=ignoreboth:erasedups   # no duplicate entries. ignoredups is only fo
 #HISTTIMEFORMAT="%h %d %H:%M " # "%F %T " # adds unix epoch timestamp before each history: #1746739135. then "1836  May 08 14:21 cat .bash_history"
 #export HISTIGNORE="!(+(*\ *))" # ignores commands without arguments. not compatible with HISTTIMEFORMAT. should be the same as `grep -v -E "^\S+\s.*" $HISTFILE`
 export HISTIGNORE="c:cdb:cdh:cdu:df:i:h:hh:hhh:l:lll:lld:lsd:lsp:ltr::mount:umount:rebash:path:env:pd:ps1:sd:top:tree1:zr:zz:au:auu:aca:cu:cur:cx:dedup:dmesg:dli:aptli:d:flmh:flmho:flmr:fm:free:lsblk:na:netstat:ping1:wrapon:wrapoff:um:m:hdl" # :"ls *":"hg *" # ignore commands from history
-#export PROMPT_COMMAND='history -a' # ;set +m' # will save (append) unwritten history in memory every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. set +m makes disables job control for aliases in vi.
+#export PROMPT_COMMAND='history -a' # ;set +m' # will save (append) unwritten history in memory every time a new shell is opened. unfortunately, it also adds duplicates before they get removed by writing to file. use cron job to erase dups. 
+#set +m # disables job control to allow use of bash aliases in vi.
 #export PROMPT_COMMAND='EC=$? && history -a && test $EC -eq 1 && echo error $HISTCMD && history -d $HISTCMD && history -w' # excludes errors from history
 #export PROMPT_COMMAND='history -a ~/.bash_history_backup' # writes to backup file instead of polluting every terminal with all history. doenst work
 export PROMPT_COMMAND='history -a; tail -n1 ~/.bash_eternal_history >> ~/.bash_history_backup' # writes to central backup file instead of polluting every terminal with all history. search it with hg2
@@ -64,7 +53,7 @@ alias realiasr2='cd /home/user/git/dotfiles && git fetch origin && git checkout 
 alias revim='rm ~/.vimrc && source ~/.bashrc' # redo vim settings. below import is blocked for existing .vimrc
 ## `shopt` list shell options. `set -o` lists settings. `set -<opt>` enables like flag options.
 set -o noclobber  # dont let accidental > overwrite. use >| to force redirection even with noclobber
-shopt -s lastpipe; set -o monitor # (set +m). allows last pipe to affect shell; needs Job Control enabled. for the o output alias.
+shopt -s lastpipe # allows last pipe to affect shell for the o (output) alias. needs Job Control enabled (set -m). `set -o monitor` will check job control state.
 shopt -s nocaseglob # ignores upper or lower case of globs (*)
 shopt -s dotglob # uses all contents both * and .* for cp, mv, etc. or use `mv /path/{.,}* /path/`
 shopt -s globstar # makes ** be recursive for directories. use lld below for non-recursive ls.
@@ -85,14 +74,13 @@ IFS=$' \t\n' # restricts "internal field separator" to tab and newline. handles 
 echo -ne "\033[?7h" # set line wrap on
 
 
-## some familiar keyboard shortcuts: 
+## some familiar keyboard shortcuts (cat -v; showkey -a; xev; are all good tools to show kep mapping: 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
-#stty intr ^S # changes the ctrl+c for interrupt process to ctrl+s, to allow modern ctrl+c for copy.
-stty susp ^F #stty susp undef; #stty intr undef # ctrl+z for undo have to remove default. https://www.computerhope.com/unix/bash/bind.htm
-# (usually ctrl+/ is undo in the bash cli)
-stty lnext ^N # changes the ctrl+v for lnext to ctrl+b, to allow modern ctrl+v for paste. lnext shows the keycode of the next key typed.
-if [[ $- == *i* ]]; then trap '' SIGINT && bind '"\C-Z": undo' && bind '"\ez": yank'; fi # crtl+Z (cant remap C-z yet) and alt+z (bash bind wont do ctrl+shift+key, will do alt+shift+key ^[z) \e is esc and alt(meta). # dont run in non-inteactive (ie vim) 
-#if [[ $- == *i* ]]; then bind '"\C-f": revert-line'; fi# clear line. use ctrl-shift-c or C-c or C-\
+# stty intr ^S # changes the ctrl+c for interrupt process to ctrl+s, to allow modern ctrl+c for copy. ctrl-shift-c will show ^S with this line if it is remapped in terminial.
+# stty susp ^Q #stty susp undef; #stty intr undef # for bind ctrl+z to undo have to remove default. https://www.computerhope.com/unix/bash/bind.htm
+[[ $- == *i* ]] && bind '"\C-Z": undo' && bind -x '"\C-c": "printf %s $READLINE_LINE | xclip -selection clipboard"' # this copies (whole line unless region selected by mouse) to desktop clipboard like modern ^c # wont run in non-inteactive (ie vim)
+# alternaitve: bind '"\C-c": copy-region-as-kill' # use ctrl+space to start mark, then ^c to copy and then ^y to paste
+stty lnext ^_ # changes the ctrl+] for lnext to ctrl+], to allow modern ctrl+v for paste. lnext shows the keycode of the next key typed.
 #[ -f ~/.xmodmaprc ] || printf $'keycode 20 = underscore minus underscore minus' > ~/.xmodmaprc && xmodmap ~/.xmodmaprc # swap minus and underscore. nearly impossible to remap ctrl-space to underscore.
 
 ## short abc's of common commands: (avoid one letter files or variables to avoid conflicts)
@@ -967,6 +955,9 @@ export PYTHONWARNINGS="ignore"  # Suppresses warnings (optional)
 export PYTHONTRACEBACKLIMIT=1  # limits python traceback lines to 1
 alias sv='source /home/user/venv1/bin/activate'
 alias sv2='source /home/aimgr/venv2/bin/activate'
+
+alias rts="sed -i 's/[[:space:]]*$//'" # <file> remove trailing spaces on every line. for copying from terminal that adds spaces.
+
 
 if ! [[ $- == *i* ]]; then true "ENDI"; fi
 true <<'ENDZ' # move this line to anywhere above and whatever is below it will be skipped.

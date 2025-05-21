@@ -68,5 +68,18 @@ virsh start ubuntu20.04--set3--claude12
 
 
 
-alias undel1='sudo ext4magic /dev/sdd7 -r -d ./recovered_files -f /home/user/$file # undelete example'
-alias undel2='sudo ext4magic /dev/sdd7 -f /home/user/$file -d ./recovered_files -a $(date -d "2025-05-01 00:00:00" +%s) -b $(date -d "2025-05-16 19:17:00" +%s) -r # older than'
+echo "export EDITOR=vi" >> ~/.bashrc
+sudo -E visudo # no nano
+aimgr ALL=(ALL:ALL) NOPASSWD: /usr/bin/tmux, /usr/sbin/useradd, /usr/bin/passwd[ags] # couldnt get working
+allow sudo tmux -S /home/user/shared_tmux/shared_tmux_socket attach-session # couldnt get working
+ttyd -W -p 8889 bash
+
+ps aux (BSD-style options)
+a – Show processes from all users.
+u – Display user-oriented output (includes user, CPU/mem usage, start time, etc.).
+x – Show processes without a controlling terminal (like daemons).
+ps -ef (UNIX-style options)
+-e – Show all processes.
+
+to trim trailing whitespace in vim:
+:%%s/\s\+$//
