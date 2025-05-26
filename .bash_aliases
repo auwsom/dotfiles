@@ -87,11 +87,15 @@ echo -ne "\033[?7h" # set line wrap on
 
 ## some familiar keyboard shortcuts: 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
-#stty intr ^S # changes the ctrl+c for interrupt process to ctrl+s, to allow modern ctrl+c for copy.
-stty susp ^F #stty susp undef; #stty intr undef # ctrl+z for undo have to remove default. https://www.computerhope.com/unix/bash/bind.htm
-# (usually ctrl+/ is undo in the bash cli)
+stty intr ^S # changes the ctrl+c for interrupt process to ctrl+s, to allow modern ctrl+c for copy.
+stty susp ^Q #stty susp undef; #stty intr undef # for bind ctrl+z to undo have to remove default. https://www.computerhope.com/unix/bash/bind.htm
+[[ $- == *i* ]] && bind '"\C-Z": undo' && bind -x '"\C-c": "printf %s $READLINE_LINE | xclip -selection clipboard"' # this copies (whole line unless region selected by mouse) to desktop clipboard like modern ^c
+# bind '"\C-c": copy-region-as-kill' # use ctrl+space to start mark, then ^c to copy and then ^y to paste
+
+
+
+# if [[ $- == *i* ]]; then trap '' SIGINT && bind '"\C-Z": undo' ; fi # crtl+Z (cant remap C-z yet) and alt+z (bash bind wont do ctrl+shift+key, will do alt+shift+key ^[z) \e is es (c&& bind '"\ez": yank' and alt(meta). # dont run in non-inteactive (ie vim) # (usually ctrl+/ is undo in the bash cli)
 stty lnext ^N # changes the ctrl+v for lnext to ctrl+b, to allow modern ctrl+v for paste. lnext shows the keycode of the next key typed.
-if [[ $- == *i* ]]; then trap '' SIGINT && bind '"\C-Z": undo' && bind '"\ez": yank'; fi # crtl+Z (cant remap C-z yet) and alt+z (bash bind wont do ctrl+shift+key, will do alt+shift+key ^[z) \e is esc and alt(meta). # dont run in non-inteactive (ie vim) 
 #if [[ $- == *i* ]]; then bind '"\C-f": revert-line'; fi# clear line. use ctrl-shift-c or C-c or C-\
 #[ -f ~/.xmodmaprc ] || printf $'keycode 20 = underscore minus underscore minus' > ~/.xmodmaprc && xmodmap ~/.xmodmaprc # swap minus and underscore. nearly impossible to remap ctrl-space to underscore.
 
