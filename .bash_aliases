@@ -107,7 +107,9 @@ stty lnext ^N # changes the ctrl+v for lnext to ctrl+b, to allow modern ctrl+v f
 # use `whatis` then command name for official explanation of any command. then command plus `--help` flag or `man`, `info`, `tldr` and `whatis` commands for more info on any command. or q alias below.
 # full list of shell commmands: https://www.computerhope.com/unix.htm or `ls /bin`. https://www.gnu.org/software/coreutils/manual/coreutils.html
 # list all builtins with `\help`. then `\help <builtin>` for any single one.
-alias ag='alias | grep' # search the aliases for commands
+#alias ag='alias | grep' # search the aliases for commands. function below shows comments too.
+#function ag(){ grep "$1" ~/.bash_aliases; }
+function ag(){ type ag | tr -d '\n'; echo; grep "$1" ~/.bash_aliases; } # make type declare one line
 alias apt="sudo apt" # also extend sudo timeout: `echo 'Defaults timestamp_timeout=360 #minutes' | sudo EDITOR='tee -a' visudo`
 alias b='bg 1' # put background job 1
 alias f='fg 1' # put foreground job 1
@@ -182,7 +184,7 @@ alias pkill='pkill -f' # kill processed - full
 alias q='helpany' # see helpany function
 alias rm0='rm -Irv ' # -I requires confirmation. -r recursive into directories. -v verbose. 
 # ^^^^^ maybe most helpful alias. avoids deleting unintended files. use -i to approve each deletion.
-function rm() { mkdir -p ~/0del && mv "$@" ~/0del/; } # ~/0del is trash bin. use \rm for the original command (which is not working atm, so use /usr/bin/rm).
+function rm { type rm | tr -d '\n'; echo; mkdir -p ~/0del && mv "$@" ~/0del/;  # ~/0del is trash bin. escaping with \rm doenst work on functions, so use /usr/bin/rm or which rm) }.
 function rl { readlink -f "$1"; } # function returns full path of file, very useful
 # `sed` # Stream EDitor `sed -i 's/aaa/bbb/g' file` -i inplace, replace aaa with bbb. g globally. can use any char instead of /, such as `sed -i 's,aaa,bbb,' file`. -E to use re pattern matching.
 alias sudo='sudo '; alias s='sudo '; alias sd='sudo -s ' # elevate privelege for command. see `visudo` to set. And `usermod -aG sudo add`, security caution when adding.
