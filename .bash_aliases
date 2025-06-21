@@ -386,11 +386,12 @@ if [[ $- == *i* ]]; then bind '",.": "$"'; fi # quick $
 
 
 true <<'END' 
-CLI emacs mode common keys:
+CLI emacs mode common keys (mod1=ctrl/command(mac app shortcuts), mod2=alt/option, control, meta=win/command):
+alt-. for last word from history lines. ctrl-alt-i to transpose 2 words.
 press `ctrl+alt+e` to expand symbols to show them, such as `!!`
 clear line: `ctrl+e`,`ctrl+u` goto end then clear to left, (or ctrl+a, ctrl+k)
 cut word backward `ctrl w`, paste that word `ctrl y`, use `alt d` to cut word forward
-undo like this : `ctrl+_`
+undo like this : `ctrl+_` (or `ctrl-/` or `ctrl-z` from bindings here)
 kill runaway process: `ctrl+c`, `ctrl+d` (exit current shell), `ctrl+\` 
 search history, reverse (type afterward): `ctrl+r`, go forward `ctrl+f`. `ctrl+g` cancels. `alt(meta)+>` go back to history bottom.
 https://dokumen.tips/documents/macintosh-terminal-pocket-guide.html?page=42 (vi/emacs keys table)
