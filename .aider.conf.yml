@@ -42,7 +42,9 @@ restore-chat-history: true
 # model: fireworks_ai/accounts/fireworks/models/deepseek-v3-0324
 # model: venice/llama-3.2-3b
 # model: gemini/gemini-1.5-pro-latest
-model: gemini/gemini-2.0-pro-exp-02-05
+#model: gemini/gemini-2.0-pro-exp-02-05
+#model: fireworks_ai/accounts/fireworks/models/deepseek-v3-0324
+model: deepseek/deepseek-r1-0528
 
 # venice/deepseek-r1-671b
 # venice/qwen-2.5-coder-32b
@@ -52,9 +54,10 @@ model: gemini/gemini-2.0-pro-exp-02-05
 ## Specify the model to use for commit messages and chat history summarization (default depends on --model)
 # weak-model: gemini/gemini-2.0-flash #gemini-2.0-flash-thinking-exp
 # weak-model: venice/llama-3.2-3b
-weak-model: venice/llama-3.2-3b
 # weak-model: deepseek/deepseek-coder
 # weak-model: fireworks_ai/accounts/fireworks/models/deepseek-v3-0324
+#weak-model: venice/llama-3.2-3b
+weak-model: deepseek/deepseek-r1-0528
 
 ## Specify the model to use for editor tasks (default depends on --model)
 # editor-model: gemini-exp-1206 #openrouter/deepseek/deepseek-chat-v3-0324 #gemini/gemini-2.0-flash #
@@ -64,7 +67,8 @@ weak-model: venice/llama-3.2-3b
 # editor-model: 40-mini #openrouter/deepseek/deepseek-chat-v3-0324 #gemini/gemini-2.0-flash #
 # editor-model: deepseek/deepseek-chat
 # editor-model:  gemini/gemini-2.5-pro-preview-03-25
-editor-model: fireworks_ai/accounts/fireworks/models/deepseek-v3-0324
+#editor-model: fireworks_ai/accounts/fireworks/models/deepseek-v3-0324
+editor-model: deepseek/deepseek-r1-0528
 
 
 ########################
