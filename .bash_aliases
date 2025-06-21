@@ -386,15 +386,17 @@ if [[ $- == *i* ]]; then bind '",.": "$"'; fi # quick $
 
 
 true <<'END' 
-CLI emacs mode common keys (mod1=ctrl/command(mac app shortcuts), mod2=alt/option, control, meta=win/command):
-alt-. for last word from history lines. ctrl-alt-i to transpose 2 words.
+CLI emacs mode common keys (Control, Meta(Esc-then-key)=alt/option, Super=win/command, fn):
+alt-. for last word from history lines. ctrl-alt-t to transpose 2 words. 
 press `ctrl+alt+e` to expand symbols to show them, such as `!!`
 clear line: `ctrl+e`,`ctrl+u` goto end then clear to left, (or ctrl+a, ctrl+k)
 cut word backward `ctrl w`, paste that word `ctrl y`, use `alt d` to cut word forward
 undo like this : `ctrl+_` (or `ctrl-/` or `ctrl-z` from bindings here)
-kill runaway process: `ctrl+c`, `ctrl+d` (exit current shell), `ctrl+\` 
-search history, reverse (type afterward): `ctrl+r`, go forward `ctrl+f`. `ctrl+g` cancels. `alt(meta)+>` go back to history bottom.
-https://dokumen.tips/documents/macintosh-terminal-pocket-guide.html?page=42 (vi/emacs keys table)
+kill runaway process: `ctrl+c`, `ctrl+\`, `ctrl+d` (exit current shell), ctrl+z is remapped to undo.
+search history, reverse (type afterward): `ctrl+r`, go forward `ctrl+f`. `ctrl+g` cancels. `alt+>` go back to history bottom.
+C-x,C-e exec line. C-o to process an reenter line. 
+https://dokumen.tips/documents/macintosh-terminal-pocket-guide.html?page=42 (vi/emacs keys table, broken link to Orielly's book)
+https://dokumen.pub/qdownload/macintosh-terminal-pocket-guide-take-command-of-your-mac-1nbsped-1449328342-9781449328344.html  pg 36
 
 basic bash system commands:
 `fdisk -l` # partition table list. also see `cfdisk` for changing
