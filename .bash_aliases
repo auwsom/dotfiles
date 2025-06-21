@@ -87,11 +87,15 @@ echo -ne "\033[?7h" # set line wrap on
 
 ## some familiar keyboard shortcuts: 
 stty -ixon # this unsets the ctrl+s to stop(suspend) the terminal. (ctrl+q would start it again).
-#stty intr ^S # changes the ctrl+c for interrupt process to ctrl+s, to allow modern ctrl+c for copy.
-stty susp ^F #stty susp undef; #stty intr undef # ctrl+z for undo have to remove default. https://www.computerhope.com/unix/bash/bind.htm
-# (usually ctrl+/ is undo in the bash cli)
+stty intr ^S # changes the ctrl+c for interrupt process to ctrl+s, to allow modern ctrl+c for copy.
+stty susp ^Q #stty susp undef; #stty intr undef # for bind ctrl+z to undo have to remove default. https://www.computerhope.com/unix/bash/bind.htm
+[[ $- == *i* ]] && bind '"\C-Z": undo' && bind -x '"\C-c": "printf %s $READLINE_LINE | xclip -selection clipboard"' # this copies (whole line unless region selected by mouse) to desktop clipboard like modern ^c
+# bind '"\C-c": copy-region-as-kill' # use ctrl+space to start mark, then ^c to copy and then ^y to paste
+
+
+
+# if [[ $- == *i* ]]; then trap '' SIGINT && bind '"\C-Z": undo' ; fi # crtl+Z (cant remap C-z yet) and alt+z (bash bind wont do ctrl+shift+key, will do alt+shift+key ^[z) \e is es (c&& bind '"\ez": yank' and alt(meta). # dont run in non-inteactive (ie vim) # (usually ctrl+/ is undo in the bash cli)
 stty lnext ^N # changes the ctrl+v for lnext to ctrl+b, to allow modern ctrl+v for paste. lnext shows the keycode of the next key typed.
-if [[ $- == *i* ]]; then trap '' SIGINT && bind '"\C-Z": undo' && bind '"\ez": yank'; fi # crtl+Z (cant remap C-z yet) and alt+z (bash bind wont do ctrl+shift+key, will do alt+shift+key ^[z) \e is esc and alt(meta). # dont run in non-inteactive (ie vim) 
 #if [[ $- == *i* ]]; then bind '"\C-f": revert-line'; fi# clear line. use ctrl-shift-c or C-c or C-\
 #[ -f ~/.xmodmaprc ] || printf $'keycode 20 = underscore minus underscore minus' > ~/.xmodmaprc && xmodmap ~/.xmodmaprc # swap minus and underscore. nearly impossible to remap ctrl-space to underscore.
 
@@ -103,7 +107,9 @@ if [[ $- == *i* ]]; then trap '' SIGINT && bind '"\C-Z": undo' && bind '"\ez": y
 # use `whatis` then command name for official explanation of any command. then command plus `--help` flag or `man`, `info`, `tldr` and `whatis` commands for more info on any command. or q alias below.
 # full list of shell commmands: https://www.computerhope.com/unix.htm or `ls /bin`. https://www.gnu.org/software/coreutils/manual/coreutils.html
 # list all builtins with `\help`. then `\help <builtin>` for any single one.
-alias ag='alias | grep' # search the aliases for commands
+#alias ag='alias | grep' # search the aliases for commands. function below shows comments too.
+#function ag(){ grep "$1" ~/.bash_aliases; }
+function ag(){ type ag | tr -d '\n'; echo; grep "$1" ~/.bash_aliases; } # make type declare one line
 alias apt="sudo apt" # also extend sudo timeout: `echo 'Defaults timestamp_timeout=360 #minutes' | sudo EDITOR='tee -a' visudo`
 alias b='bg 1' # put background job 1
 alias f='fg 1' # put foreground job 1
@@ -121,6 +127,7 @@ alias cpa='type cp; cp -ar ' # achive and recursive. rsync is will show progress
 # type shows the alias to avoid confusion. but cant use type in combo with sudo.
 alias cp='cp -ir' # copy interactive to avoid cp with files unintentionally. use `find <dir> -type f -mmin -1` to find files copied in last 1 min. then add `-exec rm {} \;` once sure to delete. or `find <dir> -maxdepth 1 -type f -exec cmp -s '{}' "$destdir/{}" \; -print` can compare dirs. -a vs -R.
 alias cpr='rsync -aAX --info=progress2 ' # copy with progress info, -a --archive mode: recursive, copies symlinks, keeps permissions, times, owner, group, device. -A acls -X extended attributes. -c checks/verify. cant use `type` (to show it is an alias) with sudo in front.
+function install1 { sudo install -o "$(stat -c '%U' "$(dirname "$2")")" -g "$(stat -c '%G' "$(dirname "$2")")" "$1" "$2"; } # copies but uses target dir ownership, though doesnt set group yetv
 alias df='type df; df -h -x"squashfs"' # "disk free" human readable, will exclude show all the snap mounts
 alias du='du -hs' # human readable, summarize. 
 alias du1='\du -cd1 . | sort -n' # du --total --max-depth 1, pipe to sort numerically
@@ -178,7 +185,7 @@ alias pkill='pkill -f' # kill processed - full
 alias q='helpany' # see helpany function
 alias rm0='rm -Irv ' # -I requires confirmation. -r recursive into directories. -v verbose. 
 # ^^^^^ maybe most helpful alias. avoids deleting unintended files. use -i to approve each deletion.
-function rm { type "${FUNCNAME[0]}"; mkdir -p ~/0del && mv "$@" ~/0del/; } # ~/0del is trash bin. use \rm for the original command (which is not working atm, so use /usr/bin/rm).
+function rm { type rm | tr -d '\n'; echo; mkdir -p ~/0del && mv "$@" ~/0del/; } # ~/0del is trash bin. escaping with \rm doenst work on functions, so use /usr/bin/rm or which rm).
 function rl { readlink -f "$1"; } # function returns full path of file, very useful
 # `sed` # Stream EDitor `sed -i 's/aaa/bbb/g' file` -i inplace, replace aaa with bbb. g globally. can use any char instead of /, such as `sed -i 's,aaa,bbb,' file`. -E to use re pattern matching.
 alias sudo='sudo '; alias s='sudo '; alias sd='sudo -s ' # elevate privelege for command. see `visudo` to set. And `usermod -aG sudo add`, security caution when adding.
@@ -320,13 +327,13 @@ if [[ $(whoami) == 'root' ]]; then export TMOUT=18000 && readonly TMOUT; fi # ti
 ## extra stuff
 # `!!` for last command, as in `sudo !!`. `ctrl+alt+e` expand works here. `!-1:-1` for second to last arg in last command.
 # `vi $(!!)` to use output of last command. or use backticks: vi `!!`
-# `declare -f <function>` will show it. use `type <name>` will show both alias and functions
+# `declare -f <function>` will show it
 set -a # sets for export to env the following functions, for calling in scripts and subshells (aliases dont get called).
 function hdn { history -d "$1"; history -w;} # delete history line number
 # function hdl { history -d $(($HISTCMD - 1)); history -w;} # delete history last number
 function hdl { history -d $HISTCMD; history -w;} # delete history last number
 function hdln { history -d $(($HISTCMD - "$1" -1))-$(($HISTCMD - 2)); history -w;} # delete last n lines. (add 1 for this command) (history -d -$1--1; has error)
-function help { type "${FUNCNAME[0]}"; "$1" --help;} # use `\help` to disable the function alias
+function help { "$1" --help;} # use `\help` to disable the function alias
 function q { "$1" --help || help "$1" || man "$1" || info "$1";} # use any help doc. # also tldr. 
 command_not_found_handle2() { [ $# -eq 0 ] && command -v "$1" > /dev/null 2>&1 && "$1" --help || command "$@"; } # adds --help to all commands that need a parameter. or use below to exclude certain ones.
 #command_not_found_handle() { local excluded_commands=("ls" "cd" "pwd"); if [ $# -eq 0 ] && command -v "$1" > /dev/null 2>&1; then [[ ! " ${excluded_commands[@]} " =~ " $1 " ]] && "$1" --help || command "$1"; else command "$@"; fi }
@@ -379,14 +386,17 @@ if [[ $- == *i* ]]; then bind '",.": "$"'; fi # quick $
 
 
 true <<'END' 
-CLI emacs mode common keys:
+CLI emacs mode common keys (Control, Meta(Esc-then-key)=alt/option, Super=win/command, fn):
+alt-. for last word from history lines. ctrl-alt-t to transpose 2 words. 
 press `ctrl+alt+e` to expand symbols to show them, such as `!!`
 clear line: `ctrl+e`,`ctrl+u` goto end then clear to left, (or ctrl+a, ctrl+k)
 cut word backward `ctrl w`, paste that word `ctrl y`, use `alt d` to cut word forward
-undo like this : `ctrl+_`
-kill runaway process: `ctrl+c`, `ctrl+d` (exit current shell), `ctrl+\` 
-search history, reverse (type afterward): `ctrl+r`, go forward `ctrl+f`. `ctrl+g` cancels. `alt(meta)+>` go back to history bottom.
-https://dokumen.tips/documents/macintosh-terminal-pocket-guide.html?page=42 (vi/emacs keys table)
+undo like this : `ctrl+_` (or `ctrl-/` or `ctrl-z` from bindings here)
+kill runaway process: `ctrl+c`, `ctrl+\`, `ctrl+d` (exit current shell), ctrl+z is remapped to undo.
+search history, reverse (type afterward): `ctrl+r`, go forward `ctrl+f`. `ctrl+g` cancels. `alt+>` go back to history bottom.
+C-x,C-e exec line. C-o to process an reenter line. 
+https://dokumen.tips/documents/macintosh-terminal-pocket-guide.html?page=42 (vi/emacs keys table, broken link to Orielly's book)
+https://dokumen.pub/qdownload/macintosh-terminal-pocket-guide-take-command-of-your-mac-1nbsped-1449328342-9781449328344.html  pg 36
 
 basic bash system commands:
 `fdisk -l` # partition table list. also see `cfdisk` for changing
@@ -777,15 +787,12 @@ alias gitc='git commit -m "ok"'
 alias gitpu='git push origin main' # usually same as `git push`. see below for conflicts
 alias gitpl='git pull' # (git fetch && git merge) 
 alias gitac='gita && gitc' # add and commit
-
-alias gs='git status && git add -A && git commit -m \"ok\" && git push # local ahead: git status,add,commit,push' # push recent changes
-alias gss='git fetch origin >/dev/null && commits=$(git rev-list --left-right --count HEAD...origin/$(git rev-parse --abbrev-ref HEAD)) && [[ $commits == "0	0" ]] && echo "synced" || ([[ ${commits%%	*} -gt 0 ]] && echo "local ahead" || echo "origin ahead") # git sync' # check if in sync
-alias gsss='git fetch origin && git merge-tree $(git merge-base HEAD origin/$(git rev-parse --abbrev-ref HEAD)) HEAD origin/$(git rev-parse --abbrev-ref HEAD) | grep -q "^<<<<<<<" && echo "Conflict!" || echo "No Conflicts"' # checks for file conflicts before merge
-alias gssss='git pull --rebase # merge after checking theres no conflicts'
-alias gsync='git commit -m "rebase" && git pull --rebase && git push' # full sync but adds markup of changes inside files. will add local changes onto origin. doesnt merge (does rewrite history linearly). 'git pull --rebase' will add markers in file of conflict. have to remove manually, then `git add $file` and `git rebase --continue` and `git push origin main --force-with-lease` or `git rebase --abort` to cancel. 
+alias gs='git status && git add -A && git commit -m \"ok\" && git push # git sync by push' 
+alias gitsd='pushd ~/git/dotfiles && git add . && git commit -m commit && git push -u origin main; popd' # git sync push on dotfiles dir
+alias gpho='git push -u origin main '
+alias agitinfo='# git clone is for first copy # git status, git log, git branch \# git clone https://github.com/auwsom/dotfiles.git #add ssh priv & pub key or will pull but not push
 
 setup a repo from local:
-alias agitinfo='# git clone is for first copy # git status, git log, git branch \# git clone https://github.com/auwsom/dotfiles.git #add ssh priv & pub key or will pull but not push
 # git clone git@github.com:auwsom/dotfiles.git # will ask to connect. need to `eval $(ssh-agent -s) && ssh-add ~/.ssh/id_rsa` checks if agent running and adds (will display email of GH account) 
 # `apt install gh` then click enter until auth through webpage'
 #alias git1='gh repo create <newrepo> --private' # or --public
@@ -806,7 +813,6 @@ alias gitlo='git log --oneline' # shows compact commit history
 alias gitchkf='git checkout <commit> -- <file>' # restores a file from that commit. 
 alias gitsr1='keyword="replacethis"; for commit in $(git log -S "$keyword" --oneline --pretty=format:"%H"); do git grep "$keyword" "$commit"; done'
 alias gitsr2='git log --name-status --diff-filter=A --'
-alias gitsd='pushd ~/git/dotfiles && git add . && git commit -m commit && git push -u origin main; popd' # git sync push on dotfiles dir
 
 #git resolve conflicts:
 alias gitf='git fetch # have to fetch before compare to origin (wont overwrite local)'
@@ -818,6 +824,7 @@ alias gitd5='git diff origin/main -- $file # to compare a single file'
 alias gitv1='git log HEAD..origin/main -p      # view Remote changes' # can use --oneline for commit number and desc
 alias gitv2='git log origin/main..HEAD -p      # view Your changes'
 
+alias gitrc1='git commit -m "rebase" && git pull --rebase && git push' # will add local changes onto origin. doesnt merge (does rewrite history linearly). 'git pull --rebase' will add markers in file of conflict. have to remove manually, then `git add $file` and `git rebase --continue` and `git push origin main --force-with-lease` or `git rebase --abort` to cancel
 alias gitkr='git checkout --theirs $file && git add $file && git rebase --continue # keep remote'
 alias gitkl='git checkout --ours $file && git add $file && git rebase --continue # keep local'
 # if sure origin (github) is correct:
