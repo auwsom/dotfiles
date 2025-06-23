@@ -793,7 +793,10 @@ alias gs='git add -A && git commit -m \"ok\" && git push # local ahead: git stat
 alias g2='git fetch origin >/dev/null && commits=$(git rev-list --left-right --count HEAD...origin/$(git rev-parse --abbrev-ref HEAD)) && [[ $commits == "0	0" ]] && echo "synced" || ([[ ${commits%%	*} -gt 0 ]] && echo "local ahead" || echo "origin ahead") # git sync' # check if in sync
 alias g3='git fetch origin && git merge-tree $(git merge-base HEAD origin/$(git rev-parse --abbrev-ref HEAD)) HEAD origin/$(git rev-parse --abbrev-ref HEAD) | grep -q "^<\\<<<<<<" && echo "Conflict!" || echo "No Conflicts"' # checks for file conflicts before merge
 #alias g4='git commit -m "rebase" && git pull --rebase # local ahead.. merge after gsss checks theres no conflicts locally'
+alias g3b='git stash' # stash local changes before rebasing to pop them on top after.
 alias g4='git add -A && git commit -m "rebase (if new)" || true && git pull --rebase' # local ahead.. merge after gsss checks theres no conflicts locally'
+# Rebase reapplies commits one by one. it WILL create markups in file <<,==,>> you have to remove. then `git add <file>` and `git rebase --continue`. rebase --abort to undo.
+alias g4b='git stash pop' # put recent local changes back on top after rebasing, etc.
 alias g5='git push --force-with-lease origin main # origin ahead.. merge after gsss checks theres no conflicts in origin. lease checks if files are checked out' 
 
 # gs: Commits and pushes your current local changes to the remote.

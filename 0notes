@@ -67,20 +67,4 @@ virsh managedsave ubuntu20.04--set3--claude12 # doesnt break if usb device ID ch
 virsh start ubuntu20.04--set3--claude12
 
 
-Rebase works differently: it reapplies commits one by one
-can stash local changes before rebasing to pop them on top after.
-Always git stash before g4 (rebase): This is your best defense. If your g4 (rebase) goes poorly, you can git rebase --abort and then git stash pop to get back to your original state before the rebase attempt. Your local changes are safe.
 
-
-
-alias gs='git status && git add -A && git commit -m \"ok\" && git push # local ahead: git status,add,commit,push' # push recent changes
-alias g2='git fetch origin >/dev/null && commits=$(git rev-list --left-right --count HEAD...origin/$(git rev-parse --abbrev-ref HEAD)) && [[ $commits == "0	0" ]] && echo "synced" || ([[ ${commits%%	*} -gt 0 ]] && echo "local ahead" || echo "origin ahead") # git sync' # check if in sync
-alias g3='git fetch origin && git merge-tree $(git merge-base HEAD origin/$(git rev-parse --abbrev-ref HEAD)) HEAD origin/$(git rev-parse --abbrev-ref HEAD) | grep -q "^<<<<<<<" && echo "Conflict!" || echo "No Conflicts"' # checks for file conflicts before merge
-alias g4='git add -A && git commit -m "rebase (if new)" || true && git pull --rebase' # local ahead.. merge after gsss checks theres no conflicts locally'
-alias g5='git push --force-with-lease origin main # origin ahead.. merge after gsss checks theres no conflicts in origin. lease checks if files are checked out' 
-
-# gs: Commits and pushes your current local changes to the remote.
-# g2: Checks if your local branch is in sync, ahead, or behind the remote.
-# g3: Predicts if merging remote changes would cause conflicts.
-# g4: Commits your local changes then pulls remote changes by replaying your commits on top.
-# g5: Forces your local branch to overwrite the remote branch, with a safety check.
