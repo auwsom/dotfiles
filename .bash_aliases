@@ -1,3 +1,4 @@
+#!/bin/bash
 ## WARNING: Never run a script from the internet without reading and understanding it (see last line of file).
 ## These lines for importing these command aliases and functions into .bash_aliases (or .bashrc)
 # `wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc`
@@ -7,7 +8,7 @@
 
 # see further down for more general Linux tips and learning sites.(width is 100 chars vs 80 default)
 # add to sudo -E visudo for cache across tabs.. Defaults:user   timestamp_timeout=30, !tty_tickets, timestamp_type=global
-echo CDPATH dirs: $CDPATH # to see which dirs are autofound (can be annoying with tab complete)
+echo CDPATH dirs: "$CDPATH" # to see which dirs are autofound (can be annoying with tab complete)
 
 
 true <<'END' # skips section to next END
@@ -145,7 +146,7 @@ alias h='history 30'
 alias hhh='history 500' # `apt install hstr`. replaces ctrl-r with `hstr --show-configuration >> ~/.bashrc` https://github.com/dvorka/hstr. disables hide by default.
 alias hg='history | grep -i'
 function hg2 { grep -i "$1" ~/.bash_history_backup; } # searches the file accumulating from all terminal before lost by hard exit
-#alias hg2='grep -i --color=auto "$1" ~/.bash_history_backup' # CANT USE $1 in aliases
+#alias hg2='grep -i --color=auto "$1" ~/.bash_history_backup' # CANT USE "$1" in aliases
 #alias hd='history -d -2--1 ' #not working # delete last line. `history -d -10--2` to del 9 lines from -10 to -2 inclusive, counting itself. or use space in front of command to hide. 
 alias j='jobs' # dont use much unless `ctrl+z` to stop process
 alias k='kill -9' #<id> # or `kill SIGTERM` to terminate process (or job). or `pgreg __` and then `pkill __`
@@ -185,7 +186,7 @@ alias pkill='pkill -f' # kill processed - full
 alias q='helpany' # see helpany function
 alias rm0='rm -Irv ' # -I requires confirmation. -r recursive into directories. -v verbose. 
 # ^^^^^ maybe most helpful alias. avoids deleting unintended files. use -i to approve each deletion.
-function rm { type rm | tr -d '\n'; echo; mkdir -p ~/0del && mv "$@" ~/0del/;  # ~/0del is trash bin. escaping with \rm doenst work on functions, so use /usr/bin/rm or which rm) }.
+function rm { type rm | tr -d '\n'; echo; mkdir -p ~/0del && mv "$@" ~/0del/; } # ~/0del is trash bin. escaping with \rm doenst work on functions, so use /usr/bin/rm or which rm).
 function rl { readlink -f "$1"; } # function returns full path of file, very useful
 # `sed` # Stream EDitor `sed -i 's/aaa/bbb/g' file` -i inplace, replace aaa with bbb. g globally. can use any char instead of /, such as `sed -i 's,aaa,bbb,' file`. -E to use re pattern matching.
 alias sudo='sudo '; alias s='sudo '; alias sd='sudo -s ' # elevate privelege for command. see `visudo` to set. And `usermod -aG sudo add`, security caution when adding.
@@ -217,7 +218,7 @@ alias auu='sudo apt update && apt -y upgrade' # show all users logged in. `last`
 alias aca='sudo df && apt clean && apt autoremove && df' # `apt remove` leaves configs, `apt purge` doesnt.
 alias aptr='apt install --reinstall' # reinstall pkg. 
 # `arp` # lists all devices on network layer 2. apt install net-tools
-alias awk1='awk "{print \$1}"' # print first column; end column {print $NF}; second to last $(NF-1); use single quotes when not using alias; awk more common than `cut -f1 -d " "`
+alias awk1='awk "{print \"$1"}"' # print first column; end column {print $NF}; second to last $(NF-1); use single quotes when not using alias; awk more common than `cut -f1 -d " "`
 alias bc='type bc; BC_ENV_ARGS=<(echo "scale=2") \bc' # basic calculator. with 2 decimal places.
 alias cu='chown -R $USER:$USER' # change ownership to current user
 alias cur='chown -R root:root' # change ownership to root
@@ -249,8 +250,8 @@ alias ds='dirs' # shows dir stack for pushd/popd
 # `env` # shows environment variables
 #'fc -s' #<query> # search and redo command from history. shebang is similar !<query> or !number. fc -s [old=new] [command]   https://docs.oracle.com/cd/E19253 (fix command)
 alias fsck1='fsck -p # </dev/sdX#>' # -p auto fix. or use -y for yes to all except multiple choice.
-function flm () { find $1 -type f -mmin -1;} # modification time
-function flmc () { find $1 -type f -cmin -1;} # creation time. access time? amin.
+function flm () { find "$1" -type f -mmin -1;} # modification time
+function flmc () { find "$1" -type f -cmin -1;} # creation time. access time? amin.
 alias flmh='find . -type f -mmin -1'
 alias flmho='find ~ -type d \( -name .cache -o -name .mozilla \) -prune -o -type f -mmin -1'
 alias flmr='find / -type d \( -name proc -o -name sys -o -name dev -o -name run -o -name var -o -name media -o -name -home \) -prune -o -type f -mmin 1'
@@ -263,7 +264,7 @@ function gm2 { sudo modprobe nbd max_part=8 && sudo qemu-nbd --connect=/dev/nbd1
 alias gm1d='sudo umount /mnt && sudo qemu-nbd --disconnect /dev/nbd0'
 alias gm2d='sudo umount /mnt2 && sudo qemu-nbd --disconnect /dev/nbd1'
 # `inotifywait -m ~/.config/ -e create -e modify` (inotify-tools), watch runs every x sec, entr runs command after file changes. use examples from bottom of `man entr` `ls *.js | entr -r node app.js`
-entr1() { ls "$1" >| temp; nohup sh -c "cat temp | entr -n cp \"$1\" \"$2\"" </dev/null >/dev/null 2>&1 & disown; } # wentr file-in-pwd ~/destination/
+entr1() { ls "$1" >| temp; nohup sh -c "cat temp | entr -n cp \""$1"\" \"$2\"" </dev/null >/dev/null 2>&1 & disown; } # wentr file-in-pwd ~/destination/
 alias jo='journalctl' # -p,  -err, --list-boots, -b boot, -b -1 last boot, -r reverse, -k (kernel/dmesg), -f follow, --grep -g, --catalog -x (use error notes), -e goto end
 alias jof='journalctl -f' # --follow
 alias jor='journalctl -r' # --reverse (newest first)
@@ -332,11 +333,11 @@ set -a # sets for export to env the following functions, for calling in scripts 
 function hdn { history -d "$1"; history -w;} # delete history line number
 # function hdl { history -d $(($HISTCMD - 1)); history -w;} # delete history last number
 function hdl { history -d $HISTCMD; history -w;} # delete history last number
-function hdln { history -d $(($HISTCMD - "$1" -1))-$(($HISTCMD - 2)); history -w;} # delete last n lines. (add 1 for this command) (history -d -$1--1; has error)
+function hdln { history -d $(($HISTCMD - "$1" -1))-$(($HISTCMD - 2)); history -w;} # delete last n lines. (add 1 for this command) (history -d -"$1"--1; has error)
 function help { "$1" --help;} # use `\help` to disable the function alias
 function q { "$1" --help || help "$1" || man "$1" || info "$1";} # use any help doc. # also tldr. 
 command_not_found_handle2() { [ $# -eq 0 ] && command -v "$1" > /dev/null 2>&1 && "$1" --help || command "$@"; } # adds --help to all commands that need a parameter. or use below to exclude certain ones.
-#command_not_found_handle() { local excluded_commands=("ls" "cd" "pwd"); if [ $# -eq 0 ] && command -v "$1" > /dev/null 2>&1; then [[ ! " ${excluded_commands[@]} " =~ " $1 " ]] && "$1" --help || command "$1"; else command "$@"; fi }
+#command_not_found_handle() { local excluded_commands=("ls" "cd" "pwd"); if [ $# -eq 0 ] && command -v "$1" > /dev/null 2>&1; then [[ ! " ${excluded_commands[@]} " =~ " "$1" " ]] && "$1" --help || command "$1"; else command "$@"; fi }
 function lnst { dir="$1"; lastdir="${dir##*/}"; sudo ln -s $2/$lastdir "$1";} # ln -st?
 function lnsr { ln -s "$2" "$1";} # symlink reversed using arg order from cp or mv
 function ren { mv "$1" "$1""$2";} # rename file just add ending, eg file to file1.
@@ -428,9 +429,9 @@ first line for scripts: #!/bin/bash -Cex; shellcheck "$0" #no-clobber, exit on e
 put scripts in /usr/local/bin and the can be used in Vim
 
 https://www.gnu.org/software/bash/manual/html_node/Special-Parameters.html
-    $1, $2, $3, ... are the positional parameters.
-    "$@" is an array-like construct of all positional parameters, {$1, $2, $3 ...}.
-    "$*" is the IFS expansion of all positional parameters, $1 $2 $3 ....
+    "$1", $2, $3, ... are the positional parameters.
+    "$@" is an array-like construct of all positional parameters, {"$1", $2, $3 ...}.
+    "$*" is the IFS expansion of all positional parameters, "$1" $2 $3 ....
     $# is the number of positional parameters.
     $- current options set for the shell.
     $$ pid of the current shell (not subshell).
@@ -453,7 +454,7 @@ END
 ## common dirs and files:
 alias el='env | egrep '^[a-z].*=.*' | sort' # list env var exports below
 shopt -s cdable_vars # dirs exportable.
-export alias1='~/.bash_aliases'
+export alias1='$HOME/.bash_aliases'
 export fstab1='/etc/fstab' # mounts volumes
 export passwd1='/etc/passwd' # controls user perms
 export group1='/etc/group' # groups
@@ -474,7 +475,7 @@ export hostname1='/etc/hostname' # sets hostname. also a command
 export log1='/var/log/' # logs: syslog auth.log boot.log lastlog
 #export netman='/etc/network/interfaces' # `man interfaces`. use netplan instead.
 export netplan1='/etc/netplan/01-netcfg.yaml' # add `optional: true` under ethernets: interface: to prevent boot waiting on network
-export known1='~/.ssh/known_hosts' # rm this to remove unused store ssh connections
+export known1='$HOME/.ssh/known_hosts' # rm this to remove unused store ssh connections
 export mailr1='/var/mail/root ' # mail file
 export osr1='/etc/os-release' # os names
 export sysd1='/etc/systemd/system/multi-user.target.wants' # services startup
@@ -584,7 +585,7 @@ fi
 alias ss='screen'
 alias ssls='screen -ls'
 alias sr='screen -r'
-alias sst='screen -ls | awk '"'"'NR>1 {session=$1; gsub("\\.", " ", session); print "title: "session";; command: screen -r "session";;"}'"'"' >| tabs-config && konsole --tabs-from-file tabs-config' # opens all screen sessions in konsole new tabs
+alias sst='screen -ls | awk '"'"'NR>1 {session="$1"; gsub("\\.", " ", session); print "title: "session";; command: screen -r "session";;"}'"'"' >| tabs-config && konsole --tabs-from-file tabs-config' # opens all screen sessions in konsole new tabs
 [[ ! -f ~/.screenrc ]] && cat <<EOF > ~/.screenrc #heredoc less escapes
 startup_message off
 #escape ^[[ # try to use Esc for prefix
@@ -622,7 +623,7 @@ alias ttls='tmux ls'
 alias ttnd='tmux new -d'
 alias ttks='tmux kill-server'
 alias ttkw='tmux kill-window'
-alias ttt='tmux ls | awk -F: '"'"'{print "title: " $1 ";; command: tmux attach-session -t " $1 ";;"}'"'"' >| tabs-config && konsole --tabs-from-file tabs-config &' # opens all tmux sessions in konsole new tabs
+alias ttt='tmux ls | awk -F: '"'"'{print "title: " "$1" ";; command: tmux attach-session -t " "$1" ";;"}'"'"' >| tabs-config && konsole --tabs-from-file tabs-config &' # opens all tmux sessions in konsole new tabs
 #/usr/bin/tmux new-session -c $PWD #/usr/bin/bash -c "tmux new-session -c $PWD" # konsole new tab commands 
 alias tts='tmux run-shell ~/.tmux/plugins/tmux-resurrect/scripts/save.sh'
 alias ttr='tmux run-shell ~/.tmux/plugins/tmux-resurrect/scripts/restore.sh'
@@ -811,12 +812,12 @@ setup a repo from local:
 # git clone git@github.com:auwsom/dotfiles.git # will ask to connect. need to `eval $(ssh-agent -s) && ssh-add ~/.ssh/id_rsa` checks if agent running and adds (will display email of GH account) 
 # `apt install gh` then click enter until auth through webpage'
 #alias git1='gh repo create <newrepo> --private' # or --public
-function git1 { gh repo create $1 --private;}
+function git1 { gh repo create "$1" --private;}
 #alias git2='git init && git remote add origin https://github.com/auwsom/<new>.git && git branch -M main' # doesnt need password everytime when using gh login 
-function git2 { git init && git remote add origin https://github.com/auwsom/$1.git && git branch -M main;}
+function git2 { git init && git remote add origin https://github.com/auwsom/"$1".git && git branch -M main;}
 alias git2s='git init && git remote add origin git@github.com:auwsom/<new>.git && git branch -M main' # dont need password
 alias git3='touch README.md && git add . && git commit -m "init" && git push --set-upstream origin main'
-function git123 { mkdir $1 && git1 $1 && git2 $1 && git3 ;}
+function git123 { mkdir "$1" && git1 "$1" && git2 "$1" && git3 ;}
 # git config --global init.defaultBranch main 
 # https://www.freecodecamp.org/news/how-to-make-your-first-pull-request-on-github-3/
 
@@ -950,7 +951,7 @@ alias qemu='qemu-system-x86_64' # --help
 # history -a; set +m # same as above but runs every command with .bashrc
 # trap 'echo ${BASH_COMMAND}' DEBUG # prints all commands 
 # trap 'type ${BASH_COMMAND[1]}' DEBUG # array doesnt work on this bash var for some reason
-# trap 'if [[ $(echo $(type ${BASH_COMMAND} | awk "{print \$1}" ) | grep builtin) ]]; then echo "this is an alias"; fi' DEBUG # prints all commands. also prints an error ?
+# trap 'if [[ $(echo $(type ${BASH_COMMAND} | awk "{print \"$1"}" ) | grep builtin) ]]; then echo "this is an alias"; fi' DEBUG # prints all commands. also prints an error ?
 
 # https://stackoverflow.com/questions/27493184/can-i-create-a-wildcard-bash-alias-that-alters-any-command
 
