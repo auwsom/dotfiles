@@ -789,16 +789,17 @@ alias gitpl='git pull' # (git fetch && git merge)
 alias gitac='gita && gitc' # add and commit
 
 alias gs='git status && git add -A && git commit -m \"ok\" && git push # local ahead: git status,add,commit,push' # push recent changes
-alias gss='git fetch origin >/dev/null && commits=$(git rev-list --left-right --count HEAD...origin/$(git rev-parse --abbrev-ref HEAD)) && [[ $commits == "0	0" ]] && echo "synced" || ([[ ${commits%%	*} -gt 0 ]] && echo "local ahead" || echo "origin ahead") # git sync' # check if in sync
-alias gsss='git fetch origin && git merge-tree $(git merge-base HEAD origin/$(git rev-parse --abbrev-ref HEAD)) HEAD origin/$(git rev-parse --abbrev-ref HEAD) | grep -q "^<<<< <<<" && echo "Conflict!" || echo "No Conflicts"' # checks for file conflicts before merge
-alias gssss='git commit -m "rebase" && git pull --rebase # local ahead.. merge after gsss checks theres no conflicts locally'
-alias gsssss='git push --force-with-lease origin main # origin ahead.. merge after gsss checks theres no conflicts in origin. lease checks if files are checked out' 
+alias g2='git fetch origin >/dev/null && commits=$(git rev-list --left-right --count HEAD...origin/$(git rev-parse --abbrev-ref HEAD)) && [[ $commits == "0	0" ]] && echo "synced" || ([[ ${commits%%	*} -gt 0 ]] && echo "local ahead" || echo "origin ahead") # git sync' # check if in sync
+alias g3='git fetch origin && git merge-tree $(git merge-base HEAD origin/$(git rev-parse --abbrev-ref HEAD)) HEAD origin/$(git rev-parse --abbrev-ref HEAD) | grep -q "^<\\<<<<<<" && echo "Conflict!" || echo "No Conflicts"' # checks for file conflicts before merge
+#alias g4='git commit -m "rebase" && git pull --rebase # local ahead.. merge after gsss checks theres no conflicts locally'
+alias g4='git add -A && git commit -m "rebase (if new)" || true && git pull --rebase' # local ahead.. merge after gsss checks theres no conflicts locally'
+alias g5='git push --force-with-lease origin main # origin ahead.. merge after gsss checks theres no conflicts in origin. lease checks if files are checked out' 
 
 # gs: Commits and pushes your current local changes to the remote.
-# gss: Checks if your local branch is in sync, ahead, or behind the remote.
-# gsss: Predicts if merging remote changes would cause conflicts.
-# gssss: Commits your local changes then pulls remote changes by replaying your commits on top.
-# gsssss: Forces your local branch to overwrite the remote branch, with a safety check.
+# g2: Checks if your local branch is in sync, ahead, or behind the remote.
+# g3: Predicts if merging remote changes would cause conflicts.
+# g4: Commits your local changes then pulls remote changes by replaying your commits on top.
+# g5: Forces your local branch to overwrite the remote branch, with a safety check.
 
 
 alias gsync='git commit -m "rebase" && git pull --rebase && git push' # full sync but adds markup of changes inside files. will add local changes onto origin. doesnt merge (does rewrite history linearly). 'git pull --rebase' will add markers in file of conflict. have to remove manually, then `git add $file` and `git rebase --continue` and `git push origin main --force-with-lease` or `git rebase --abort` to cancel. 
