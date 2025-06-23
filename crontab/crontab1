@@ -1,0 +1,83 @@
+# Edit this file to introduce tasks to be run by cron.
+#
+# Each task to run has to be defined through a single line
+# indicating with different fields when the task will be run
+# and what command to run for the task
+#
+# To define the time you can provide concrete values for
+# minute (m), hour (h), day of month (dom), month (mon),
+# and day of week (dow) or use '*' in these fields (for 'any').
+#
+# Notice that tasks will be started based on the cron's system
+# daemon's notion of time and timezones.
+#
+# Output of the crontab jobs (including errors) is sent through
+# email to the user the crontab file belongs to (unless redirected).
+#
+# For example, you can run a backup of all your user accounts
+# at 5 a.m every week with:
+# 0 5 * * 1 tar -zcf /var/backups/home.tgz /home/
+#
+# For more information see the manual pages of crontab(5) and cron(8)
+#
+
+# `crontab /home/user/dotfiles/crontab/crontab1` to update
+# * * * * * = minute hour dayofmonth month dayofweek  
+
+MAILTO="wer987wer888@gmail.com"
+
+0 5 * * * cronic /home/user/dotfiles/crontab/dotfiles-notification.sh && crontab /home/user/dotfiles/crontab/crontab1   # exit code should prevent sync 
+
+# will run in all non-commmented out lines manually
+# crontab -l | grep -v '^\s*#' | sed -E 's/.*cronic\s+//'  # lists
+# crontab -l | grep -v '^\s*#' | sed -E 's/.*cronic\s+//' | while read -r cmd; do bash -c "$cmd" || true; done
+
+# test cronic every minute
+#* * * * * /usr/bin/cronic false
+
+
+# @daily, @weekly, @monthly, @hourly, @yearly, @midnight (alias for @daily)
+#@hourly    → minute 0 of every hour            (e.g. 01:00, 02:00, ...)
+#@daily     → 00:00 every day                   (midnight)
+#@weekly    → 00:00 every Sunday                (midnight at the start of Sunday)
+#@monthly   → 00:00 on the 1st of every month
+#@yearly    → 00:00 on January 1st              (same as @annually)
+
+# minute hour dayofmonth month dayofweek   
+#* * * * * cronic echo "test_$(date +%F--%T)" >> /report
+#0 4 * * * cronic /home/user/dotfiles/mybackup-usb #disabled
+#0 3 * * * cronic ~/scripts/backup12 # attempt at smart backup. use rsync-time-backup
+
+@weekly cronic /home/user/dotfiles/crontab/email_test.sh         # every Sunday at 00:00 (weekly)
+@hourly cronic /home/user/dotfiles/crontab/check-space.sh        # every hour on the hour
+0 2 * * * cronic /home/user/dotfiles/crontab/jo_alerts.sh    # error alerts
+0 2 * * * cronic /home/user/dotfiles/crontab/snap_clean.sh         # daily at 02:00
+0 4 * * * cronic /home/user/dotfiles/crontab/clamscan_daily.sh         # daily at 04:00
+
+# @reboot does this during restart:
+#@reboot sleep 300; /usr/bin/mount -a
+@reboot /bin/bash -c 'sleep 300 && for f in /home/user/git/dotfiles/autostart-scripts/*.sh; do "$f"; done'
+#@reboot /bin/bash -c 'sleep 300 && notify-send --urgency=critical --expire-time=0 "crontab @reboot ran"'
+@reboot /bin/bash -c 'sleep 300 && sudo -u user DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=$(grep -z DBUS_SESSION_BUS_ADDRESS /proc/$(pgrep -u user gnome-session | head -n1)/environ | tr "\0" "\n" | grep DBUS_SESSION_BUS_ADDRESS | cut -d= -f2-) notify-send --urgency=critical --expire-time=0 "crontab @reboot ran"'
+@reboot /bin/bash -c 'sleep 300 && /home/user/git/dotfiles/test-notif.sh'
+
+
+#Back In Time system entry, this will be edited by the gui:
+#0 3 * * * /usr/bin/nice -n19 /usr/bin/ionice -c2 -n7 /usr/bin/backintime backup-job >/dev/null # was backing up 20G-p VM
+
+# moved to file:
+#/root/rsync-time-backup/rsync_tmbackup.sh --strategy "1:1 7:1 30:7 365:30" /media/user/16GBa /media/user/backups/rtb-usb
+# home dir minus .cache
+#0 3 * * * cronic /root/rsync-time-backup/rsync_tmbackup.sh --rsync-append-flags "--exclude .cache" --strategy "1:1 7:1 30:7 365:30" /home/user /media/user/backups/rtb-home-user/
+# VMs minus work vm
+#0 3 * * * cronic /root/rsync-time-backup/rsync_tmbackup.sh --rsync-append-flags "--exclude 100G-w" --strategy "1:1 7:1 30:7 365:30" /media/user/VM/ /media/user/backups/rtb-pers/
+# unused example of how to make follow symlinks
+#0 3 * * * cronic /root/rsync-time-backup/rsync_tmbackup.sh --rsync-append-flags "-L" --strategy "1:1 7:1 30:7 365:30" /home/user/backup /media/user/backups/home-user/
+# file:
+0 6 * * * cronic /home/user/dotfiles/crontab/rtb_smart_backups.sh
+
+
+0 6 * * * /bin/bash -c '. /root/.env; /usr/bin/canonical-livepatch enable "$LPTOKEN"'
+0 7 * * * /usr/bin/canonical-livepatch disable
+
+
