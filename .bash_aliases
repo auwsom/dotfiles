@@ -789,7 +789,7 @@ alias gitpu='git push origin main' # usually same as `git push`. see below for c
 alias gitpl='git pull' # (git fetch && git merge) 
 alias gitac='gita && gitc' # add and commit
 
-alias gs='git add -A && git commit -m \"ok\" && git push # local ahead: git status,add,commit,push' # push recent changes
+alias gg='git add -A && git commit -m \"ok\" && git push # local ahead: git status,add,commit,push' # push recent changes
 alias g2='git fetch origin >/dev/null && commits=$(git rev-list --left-right --count HEAD...origin/$(git rev-parse --abbrev-ref HEAD)) && [[ $commits == "0	0" ]] && echo "synced" || ([[ ${commits%%	*} -gt 0 ]] && echo "local ahead" || echo "origin ahead") # git sync' # check if in sync
 alias g3='git fetch origin && git merge-tree $(git merge-base HEAD origin/$(git rev-parse --abbrev-ref HEAD)) HEAD origin/$(git rev-parse --abbrev-ref HEAD) | grep -q "^<\\<<<<<<" && echo "Conflict!" || echo "No Conflicts"' # checks for file conflicts before merge
 #alias g4='git commit -m "rebase" && git pull --rebase # local ahead.. merge after gsss checks theres no conflicts locally'
@@ -805,8 +805,9 @@ alias g5='git push --force-with-lease origin main # origin ahead.. merge after g
 # g4: Commits your local changes then pulls remote changes by replaying your commits on top.
 # g5: Forces your local branch to overwrite the remote branch, with a safety check.
 
-
-alias gsync='git commit -m "rebase" && git pull --rebase && git push' # full sync but adds markup of changes inside files. will add local changes onto origin. doesnt merge (does rewrite history linearly). 'git pull --rebase' will add markers in file of conflict. have to remove manually, then `git add $file` and `git rebase --continue` and `git push origin main --force-with-lease` or `git rebase --abort` to cancel. 
+alias gs='! ( git diff --quiet || git diff --cached --quiet ) || { echo "Stashing..."; git stash; } && git pull --rebase && git stash pop || true' # check if 
+alias gs2='git add -A && git rebase --continue' 
+alias gsyncrebase='git commit -m "rebase" && git pull --rebase && git push' # full sync but adds markup of changes inside files. will add local changes onto origin. doesnt merge (does rewrite history linearly). 'git pull --rebase' will add markers in file of conflict. have to remove manually, then `git add $file` and `git rebase --continue` and `git push origin main --force-with-lease` or `git rebase --abort` to cancel. 
 alias gfullsync='git add -A && git commit -m "sync" && git fetch origin && git rebase origin/$(git rev-parse --abbrev-ref HEAD) && git push --force-with-lease'
 
 alias agitinfo='# git clone is for first copy # git status, git log, git branch \# git clone https://github.com/auwsom/dotfiles.git #add ssh priv & pub key or will pull but not push
