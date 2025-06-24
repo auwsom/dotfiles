@@ -805,8 +805,9 @@ alias g5='git push --force-with-lease origin main # origin ahead.. merge after g
 # g4: Commits your local changes then pulls remote changes by replaying your commits on top.
 # g5: Forces your local branch to overwrite the remote branch, with a safety check.
 
-alias gs='! ( git diff --quiet || git diff --cached --quiet ) || { echo "Stashing..."; git stash; } && git pull --rebase && git stash pop || true' # check if 
-alias gs2='git add -A && git rebase --continue' 
+alias gs='! ( git diff --quiet || git diff --cached --quiet ) || { echo "Stashing..."; git stash; } && git pull --rebase && git stash pop || true' # git sync. check if diffs, stash if local, pull and rebase if remote, apply local. stops for rebase if conflicts.
+alias gs2='git add -A && git rebase --continue && git push' # after resolving conflicts in rebase, add, finish rebase, and push.
+
 alias gsyncrebase='git commit -m "rebase" && git pull --rebase && git push' # full sync but adds markup of changes inside files. will add local changes onto origin. doesnt merge (does rewrite history linearly). 'git pull --rebase' will add markers in file of conflict. have to remove manually, then `git add $file` and `git rebase --continue` and `git push origin main --force-with-lease` or `git rebase --abort` to cancel. 
 alias gfullsync='git add -A && git commit -m "sync" && git fetch origin && git rebase origin/$(git rev-parse --abbrev-ref HEAD) && git push --force-with-lease'
 
