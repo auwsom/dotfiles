@@ -48,7 +48,7 @@ todo:
 dpkg --get-selections > /home/user/pkglist.txt
 comm -23 .bash_history .bash_history-bak >> .bash_history-bak # Show lines that only exist in file a:
 why does this line error?
-# trap 'if [[ $(echo $(type ${BASH_COMMAND} | awk "{print \$1}" ) | grep builtin) ]]; then echo "this is an alias"; fi' DEBUG # prints all commands. also prints an error ?
+# trap 'if [[ $(echo $(type ${BASH_COMMAND} | awk "{print \"$1"}" ) | grep builtin) ]]; then echo "this is an alias"; fi' DEBUG # prints all commands. also prints an error ?
 
 
 old:
@@ -67,4 +67,14 @@ virsh managedsave ubuntu20.04--set3--claude12 # doesnt break if usb device ID ch
 virsh start ubuntu20.04--set3--claude12
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+Rebase works differently: it reapplies commits one by one
+can stash local changes before rebasing to pop them on top after.
+Always git stash before g4 (rebase): This is your best defense. If your g4 (rebase) goes poorly, you can git rebase --abort and then git stash pop to get back to your original state before the rebase attempt. Your local changes are safe.
+git rebase --abort
+>>>>>>> Stashed changes
 

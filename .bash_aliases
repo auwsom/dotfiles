@@ -789,7 +789,7 @@ alias gitpu='git push origin main' # usually same as `git push`. see below for c
 alias gitpl='git pull' # (git fetch && git merge) 
 alias gitac='gita && gitc' # add and commit
 
-alias gg='git add -A && git commit -m \"ok\" && git push # local ahead: git status,add,commit,push' # push recent changes
+alias gg0='git add -A && git commit -m \"ok\" && git push # local ahead: git status,add,commit,push' # push recent changes
 alias g2='git fetch origin >/dev/null && commits=$(git rev-list --left-right --count HEAD...origin/$(git rev-parse --abbrev-ref HEAD)) && [[ $commits == "0	0" ]] && echo "synced" || ([[ ${commits%%	*} -gt 0 ]] && echo "local ahead" || echo "origin ahead") # git sync' # check if in sync
 alias g3='git fetch origin && git merge-tree $(git merge-base HEAD origin/$(git rev-parse --abbrev-ref HEAD)) HEAD origin/$(git rev-parse --abbrev-ref HEAD) | grep -q "^<\\<<<<<<" && echo "Conflict!" || echo "No Conflicts"' # checks for file conflicts before merge
 #alias g4='git commit -m "rebase" && git pull --rebase # local ahead.. merge after gsss checks theres no conflicts locally'
@@ -800,11 +800,12 @@ alias g4b='git stash pop' # put recent local changes back on top after rebasing,
 alias g5='git push --force-with-lease origin main # origin ahead.. merge after gsss checks theres no conflicts in origin. lease checks if files are checked out' 
 
 # gs: Commits and pushes your current local changes to the remote.
-# g2: Checks if your local branch is in sync, ahead, or behind the remote.
+# g2: Checks if your local branch is in sync, ahead, or behind the remote. 
 # g3: Predicts if merging remote changes would cause conflicts.  
 # g4: Commits your local changes then pulls remote changes by replaying your commits on top.
 # g5: Forces your local branch to overwrite the remote branch, with a safety check.
 
+alias gg='! git add -A && git commit -m "ok" && { g2_output=$(g2); if [[ "$g2_output" == "synced" || "$g2_output" == "local ahead" ]]; then git push || (echo "Push failed, pulling and retrying..." && git pull --rebase && git push); else echo "Origin ahead, pulling first..."; git pull --rebase && git push; fi; } || (echo "Commit failed, check status." && git status)'
 alias gs='! ( git diff --quiet || git diff --cached --quiet ) || { echo "Stashing..."; git stash; } && git pull --rebase && git stash pop || true' # git sync. check if diffs, stash if local, pull and rebase if remote, apply local. stops for rebase if conflicts. 
 alias gs2='git add -A && git rebase --continue && git push' # after resolving conflicts in rebase, add, finish rebase, and push.
 
