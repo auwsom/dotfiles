@@ -801,7 +801,7 @@ alias g5='git push --force-with-lease origin main # origin ahead.. merge after g
 
 # gs: Commits and pushes your current local changes to the remote.
 # g2: Checks if your local branch is in sync, ahead, or behind the remote.
-# g3: Predicts if merging remote changes would cause conflicts. 
+# g3: Predicts if merging remote changes would cause conflicts.  
 # g4: Commits your local changes then pulls remote changes by replaying your commits on top.
 # g5: Forces your local branch to overwrite the remote branch, with a safety check.
 
