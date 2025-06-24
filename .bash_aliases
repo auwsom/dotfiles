@@ -810,8 +810,14 @@ alias gg='! git add -A; \
     if ! git diff --cached --quiet; then \
         git commit -m "ok" || { echo "Actual commit error encountered."; exit 1; }; \
     fi; \
-    local g2_status=$(git fetch origin >/dev/null && commits=$(git rev-list --left-right --count HEAD...origin/$(git rev-parse --abbrev-ref HEAD)) && [[ $commits == "0 0" ]] && echo "synced" || ([[ ${commits%% *} -gt 0 ]] && echo "local ahead" || echo "origin ahead")); \
-    if [[ "$g2_status" == "synced" || "$g2_status" == "local ahead" ]]; then \
+    g2_status_output=$(git fetch origin >/dev/null && \
+        commits_counts=$(git rev-list --left-right --count HEAD...origin/$(git rev-parse --abbrev-ref HEAD)); \
+        read -r local_c remote_c <<< "$commits_counts"; \
+        if [[ "$local_c" -eq 0 && "$remote_c" -eq 0 ]]; then echo "synced"; \
+        elif [[ "$local_c" -gt 0 ]]; then echo "local ahead"; \
+        else echo "origin ahead"; fi \
+    ); \
+    if [[ "$g2_status_output" == "synced" || "$g2_status_output" == "local ahead" ]]; then \
         git push || (echo "Push rejected; pulling and retrying..." && git pull --rebase && git push); \
     else \
         echo "Remote ahead; pulling first..."; git pull --rebase && git push; \
@@ -823,6 +829,18 @@ alias gg='! git add -A; \
 # If "synced" or "local ahead": Tries git push. If push fails (remote changes), it then git pull --rebase and retries git push.
 # If "origin ahead": Prints message, then git pull --rebase (to integrate remote changes) and git push.
 # || (echo ...): If the initial git commit fails (e.g., nothing to commit), it prints an error message and shows git status.
+
+# git add -A; if ! git diff --cached --quiet; then git commit -m "ok" ... fi:
+#   First, stages all changes.
+#   Then, it checks if there are actual staged changes to commit.
+#   If yes, it attempts to create an "ok" commit. If this commit *truly* fails (not just "nothing to commit"), it prints an error.
+#   If there's nothing to commit (or commit succeeds), it proceeds to the next step.
+# g2_status_output=(...):
+#   Fetches remote changes.
+#   It then robustly determines if the local branch is "synced" (0 commits ahead/behind), "local ahead", or "origin ahead" by parsing git commit counts.
+# if ... then ... else ... fi: Conditional logic based on g2_status_output:
+#   If "synced" or "local ahead": It tries git push. If the push fails (remote likely updated), it then performs git pull --rebase and retries git push.
+#   If "origin ahead": It prints a message, then performs git pull --rebase (to integrate remote changes) and then git push.
 
 alias gs='! ( git diff --quiet || git diff --cached --quiet ) || { echo "Stashing..."; git stash; } && git pull --rebase && git stash pop || true' # git sync. check if diffs, stash if local, pull and rebase if remote, apply local. stops for rebase if conflicts. 
 alias gs2='git add -A && git rebase --continue && git push' # after resolving conflicts in rebase, add, finish rebase, and push.
