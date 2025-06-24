@@ -805,7 +805,25 @@ alias g5='git push --force-with-lease origin main # origin ahead.. merge after g
 # g4: Commits your local changes then pulls remote changes by replaying your commits on top.
 # g5: Forces your local branch to overwrite the remote branch, with a safety check.
 
-alias gg='! git add -A && git commit -m "ok" && { g2_output=$(g2); if [[ "$g2_output" == "synced" || "$g2_output" == "local ahead" ]]; then git push || (echo "Push failed, pulling and retrying..." && git pull --rebase && git push); else echo "Origin ahead, pulling first..."; git pull --rebase && git push; fi; } || (echo "Commit failed, check status." && git status)'
+#alias gg='! git add -A && git commit -m "ok" && { g2_status=$(git fetch origin >/dev/null && commits=$(git rev-list --left-right --count HEAD...origin/$(git rev-parse --abbrev-ref HEAD)) && [[ $commits == "0 0" ]] && echo "synced" || ([[ ${commits%% *} -gt 0 ]] && echo "local ahead" || echo "origin ahead")); if [[ "$g2_status" == "synced" || "$g2_status" == "local ahead" ]]; then git push || (echo "Push rejected; pulling and retrying..." && git pull --rebase && git push); else echo "Remote ahead; pulling first..." && git pull --rebase && git push; fi; } || (echo "Commit failed; check status below.." && git status)'
+alias gg='! git add -A; \
+    if ! git diff --cached --quiet; then \
+        git commit -m "ok" || { echo "Actual commit error encountered."; exit 1; }; \
+    fi; \
+    local g2_status=$(git fetch origin >/dev/null && commits=$(git rev-list --left-right --count HEAD...origin/$(git rev-parse --abbrev-ref HEAD)) && [[ $commits == "0 0" ]] && echo "synced" || ([[ ${commits%% *} -gt 0 ]] && echo "local ahead" || echo "origin ahead")); \
+    if [[ "$g2_status" == "synced" || "$g2_status" == "local ahead" ]]; then \
+        git push || (echo "Push rejected; pulling and retrying..." && git pull --rebase && git push); \
+    else \
+        echo "Remote ahead; pulling first..."; git pull --rebase && git push; \
+    fi'
+# explanation:
+# git add -A && git commit -m "ok": Stages all changes and creates an "ok" commit.
+# g2_status=$(...): fetch, check local/remote commit counts, to determine sync status, storing result.
+# if ... then ... else ... fi: Conditional logic based on g2_status:
+# If "synced" or "local ahead": Tries git push. If push fails (remote changes), it then git pull --rebase and retries git push.
+# If "origin ahead": Prints message, then git pull --rebase (to integrate remote changes) and git push.
+# || (echo ...): If the initial git commit fails (e.g., nothing to commit), it prints an error message and shows git status.
+
 alias gs='! ( git diff --quiet || git diff --cached --quiet ) || { echo "Stashing..."; git stash; } && git pull --rebase && git stash pop || true' # git sync. check if diffs, stash if local, pull and rebase if remote, apply local. stops for rebase if conflicts. 
 alias gs2='git add -A && git rebase --continue && git push' # after resolving conflicts in rebase, add, finish rebase, and push.
 
