@@ -1,2 +1,0 @@
-#!/bin/bash
-mail -s "email test on: $(hostname)" $(cat /root/.env/EMAIL) <<< "email test"

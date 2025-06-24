@@ -77,7 +77,7 @@ MAILTO="wer987wer888@gmail.com"
 0 6 * * * cronic /home/user/dotfiles/crontab/rtb_smart_backups.sh
 
 
-0 6 * * * /bin/bash -c '. /root/.env; /usr/bin/canonical-livepatch enable "$LPTOKEN"'
-0 7 * * * /usr/bin/canonical-livepatch disable
+0 6 * * * /bin/bash -c '. /root/.env; /snap/bin/canonical-livepatch enable "$LPTOKEN"'
+0 7 * * * /snap/bin/canonical-livepatch disable
 
 
