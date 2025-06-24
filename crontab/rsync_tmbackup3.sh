@@ -17,14 +17,14 @@ RSYNC_EXCLUDE_FLAGS=""
 # Log functions
 # -----------------------------------------------------------------------------
 
-fn_log_info()  { echo "$APPNAME: $1"; }
-fn_log_warn()  { echo "$APPNAME: [WARNING] $1" 1>&2; }
-fn_log_error() { echo "$APPNAME: [ERROR] $1" 1>&2; }
+fn_log_info()  { echo "$APPNAME: "$1""; }
+fn_log_warn()  { echo "$APPNAME: [WARNING] "$1"" 1>&2; }
+fn_log_error() { echo "$APPNAME: [ERROR] "$1"" 1>&2; }
 fn_log_info_cmd()  {
     if [ -n "$SSH_CMD" ]; then
-        echo "$APPNAME: $SSH_CMD '$1'";
+        echo "$APPNAME: $SSH_CMD '"$1"'";
     else
-        echo "$APPNAME: $1";
+        echo "$APPNAME: "$1"";
     fi
 }
 
@@ -45,7 +45,7 @@ trap 'fn_terminate_script' SIGINT
 
 # ADDED/MOVED: Centralized fn_run_cmd for consistent DRY_RUN handling
 fn_run_cmd() {
-    local cmd_to_run="$1"
+    local cmd_to_run=""$1""
     if [ "$DRY_RUN" == true ]; then
 #         fn_log_info "DRY RUN: Would execute: $cmd_to_run"
         : # pass
@@ -64,7 +64,7 @@ fn_parse_date0() {
     case "$OSTYPE" in
         linux*|cygwin*|netbsd*)
             date -d "${1:0:10} ${1:11:2}:${1:13:2}:${1:15:2}" +%s ;;
-        FreeBSD*) date -j -f "%Y-%m-%d-%H%M%S" "$1" "+%s" ;;
+        FreeBSD*) date -j -f "%Y-%m-%d-%H%M%S" ""$1"" "+%s" ;;
         darwin*)
             yy="${1:0:4}"
             mm=$((10#${1:5:2} - 1)) # Use 10# to force base-10 interpretation, important for months like '01', '09'
@@ -81,16 +81,16 @@ fn_parse_date1() {
     case "$OSTYPE" in
         linux*)    date -d "${1:0:10} ${1:11:2}:${1:13:2}:${1:15:2}" +%s ;;
         cygwin*)   date -d "${1:0:10} ${1:11:2}:${1:13:2}:${1:15:2}" +%s ;;
-        darwin*)   date -j -f "%Y-%m-%d-%H%M%S" "$1" "+%s" ;;
+        darwin*)   date -j -f "%Y-%m-%d-%H%M%S" ""$1"" "+%s" ;;
     esac
 }
 
 # fn_parse_date: The wrapper function, using fn_parse_date1 by default or fn_parse_date0 if --use-old-parse-date is set
 fn_parse_date() {
     if [ "$USE_OLD_PARSE_DATE" = true ]; then
-        fn_parse_date0 "$1"
+        fn_parse_date0 ""$1""
     else
-        fn_parse_date1 "$1"
+        fn_parse_date1 ""$1""
     fi
 }
 
@@ -99,21 +99,21 @@ fn_rm_dir() {
     # It has been shown that 'rm -rf' on large directories can be much slower
     # than 'rsync --delete'. For this reason, we prefer rsync.
     fn_run_cmd "mkdir -p \"$TEMP_DIR/emptydir\"" # Ensure emptydir exists via fn_run_cmd
-    fn_run_cmd "rsync -a --delete \"$TEMP_DIR/emptydir/\" \"$1/\""
-    fn_run_cmd "rmdir \"$1\"" # rmdir only works on empty dirs
+    fn_run_cmd "rsync -a --delete \"$TEMP_DIR/emptydir/\" \""$1"/\""
+    fn_run_cmd "rmdir \""$1"\"" # rmdir only works on empty dirs
 }
 
 # Removes a file or symlink - not for directories
 fn_rm_file() {
-    fn_run_cmd "rm -f -- '$1'"
+    fn_run_cmd "rm -f -- '"$1"'"
 }
 
 fn_ln() {
-    fn_run_cmd "ln -s '$1' '$2'"
+    fn_run_cmd "ln -s '"$1"' '$2'"
 }
 
 fn_mkdir() {
-    fn_run_cmd "mkdir -p '$1'"
+    fn_run_cmd "mkdir -p '"$1"'"
 }
 
 fn_find_backups() {
@@ -121,7 +121,7 @@ fn_find_backups() {
 }
 
 fn_find_backup_marker() {
-    find "$1" -maxdepth 1 -mindepth 1 -name "backup.marker" -type f
+    find ""$1"" -maxdepth 1 -mindepth 1 -name "backup.marker" -type f
 }
 
 fn_find_exclusions() {
@@ -132,12 +132,12 @@ fn_find_exclusions() {
 fn_expire_backup() {
     # Double-check that we're on a backup destination to be completely
     # sure we're deleting the right folder
-    if [ -z "$(fn_find_backup_marker "$(dirname -- "$1")")" ]; then
-        fn_log_error "$1 is not on a backup destination - aborting."
+    if [ -z "$(fn_find_backup_marker "$(dirname -- ""$1"")")" ]; then
+        fn_log_error ""$1" is not on a backup destination - aborting."
         exit 1
     fi
-    # Removed fn_log_info "Expiring $1" - logging is handled by fn_expire_backups caller
-    fn_rm_dir "$1"
+    # Removed fn_log_info "Expiring "$1"" - logging is handled by fn_expire_backups caller
+    fn_rm_dir ""$1""
 }
 
 
@@ -147,7 +147,7 @@ fn_expire_backups() {
     local last_kept_timestamp=9999999999 # Initialize to a very large number for the first 'kept' backup
 
     # we will keep requested backup (the one currently being created/linked from, or specifically passed in)
-    backup_to_keep="$1" # This can be empty if ONLY_PRUNE is true
+    backup_to_keep=""$1"" # This can be empty if ONLY_PRUNE is true
 
     # we will also keep the oldest backup if it exists and is not the same as backup_to_keep
     local all_backups_sorted=$(fn_find_backups | sort)
@@ -269,7 +269,7 @@ fn_display_usage() {
 OPTIND=1
 
 while :; do
-    case $1 in
+    case "$1" in
         -h|-\?|--help)
             fn_display_usage
             exit
@@ -354,7 +354,7 @@ while :; do
             ;;
         --strategy)
             shift
-            EXPIRATION_STRATEGY="$1"
+            EXPIRATION_STRATEGY=""$1""
             ;;
         --no-auto-expire)
             AUTO_EXPIRE="0"
@@ -367,7 +367,7 @@ while :; do
             break
             ;;
         -?*)
-            fn_log_warn "Unknown option (ignored): $1\n"
+            fn_log_warn "Unknown option (ignored): "$1"\n"
             ;;
         *) # Default case: No more options, so break out of the loop.
             break

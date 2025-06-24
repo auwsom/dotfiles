@@ -49,7 +49,7 @@ MAILTO="wer987wer888@gmail.com"
 #0 3 * * * cronic ~/scripts/backup12 # attempt at smart backup. use rsync-time-backup
 
 @weekly cronic /home/user/dotfiles/crontab/email_test.sh         # every Sunday at 00:00 (weekly)
-@hourly cronic /home/user/dotfiles/crontab/check-space.sh        # every hour on the hour
+@hourly cronic /home/user/dotfiles/crontab/check_space.sh        # every hour on the hour
 0 2 * * * cronic /home/user/dotfiles/crontab/jo_alerts.sh    # error alerts
 0 2 * * * cronic /home/user/dotfiles/crontab/snap_clean.sh         # daily at 02:00
 0 4 * * * cronic /home/user/dotfiles/crontab/clamscan_daily.sh         # daily at 04:00
