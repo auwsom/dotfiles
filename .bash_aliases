@@ -1,3 +1,4 @@
+#!/bin/bash
 ## WARNING: Never run a script from the internet without reading and understanding it (see last line of file).
 ## These lines for importing these command aliases and functions into .bash_aliases (or .bashrc)
 # `wget https://raw.githubusercontent.com/auwsom/dotfiles/main/.bash_aliases -O ~/.bash_aliases && source ~/.bashrc`
@@ -7,7 +8,7 @@
 
 # see further down for more general Linux tips and learning sites.(width is 100 chars vs 80 default)
 # add to sudo -E visudo for cache across tabs.. Defaults:user   timestamp_timeout=30, !tty_tickets, timestamp_type=global
-echo CDPATH dirs: $CDPATH # to see which dirs are autofound (can be annoying with tab complete)
+echo CDPATH dirs: "$CDPATH" # to see which dirs are autofound (can be annoying with tab complete)
 
 
 true <<'END' # skips section to next END
@@ -145,7 +146,7 @@ alias h='history 30'
 alias hhh='history 500' # `apt install hstr`. replaces ctrl-r with `hstr --show-configuration >> ~/.bashrc` https://github.com/dvorka/hstr. disables hide by default.
 alias hg='history | grep -i'
 function hg2 { grep -i "$1" ~/.bash_history_backup; } # searches the file accumulating from all terminal before lost by hard exit
-#alias hg2='grep -i --color=auto "$1" ~/.bash_history_backup' # CANT USE $1 in aliases
+#alias hg2='grep -i --color=auto "$1" ~/.bash_history_backup' # CANT USE "$1" in aliases
 #alias hd='history -d -2--1 ' #not working # delete last line. `history -d -10--2` to del 9 lines from -10 to -2 inclusive, counting itself. or use space in front of command to hide. 
 alias j='jobs' # dont use much unless `ctrl+z` to stop process
 alias k='kill -9' #<id> # or `kill SIGTERM` to terminate process (or job). or `pgreg __` and then `pkill __`
@@ -217,7 +218,7 @@ alias auu='sudo apt update && apt -y upgrade' # show all users logged in. `last`
 alias aca='sudo df && apt clean && apt autoremove && df' # `apt remove` leaves configs, `apt purge` doesnt.
 alias aptr='apt install --reinstall' # reinstall pkg. 
 # `arp` # lists all devices on network layer 2. apt install net-tools
-alias awk1='awk "{print \$1}"' # print first column; end column {print $NF}; second to last $(NF-1); use single quotes when not using alias; awk more common than `cut -f1 -d " "`
+alias awk1='awk "{print \"$1"}"' # print first column; end column {print $NF}; second to last $(NF-1); use single quotes when not using alias; awk more common than `cut -f1 -d " "`
 alias bc='type bc; BC_ENV_ARGS=<(echo "scale=2") \bc' # basic calculator. with 2 decimal places.
 alias cu='chown -R $USER:$USER' # change ownership to current user
 alias cur='chown -R root:root' # change ownership to root
@@ -249,8 +250,8 @@ alias ds='dirs' # shows dir stack for pushd/popd
 # `env` # shows environment variables
 #'fc -s' #<query> # search and redo command from history. shebang is similar !<query> or !number. fc -s [old=new] [command]   https://docs.oracle.com/cd/E19253 (fix command)
 alias fsck1='fsck -p # </dev/sdX#>' # -p auto fix. or use -y for yes to all except multiple choice.
-function flm () { find $1 -type f -mmin -1;} # modification time
-function flmc () { find $1 -type f -cmin -1;} # creation time. access time? amin.
+function flm () { find "$1" -type f -mmin -1;} # modification time
+function flmc () { find "$1" -type f -cmin -1;} # creation time. access time? amin.
 alias flmh='find . -type f -mmin -1'
 alias flmho='find ~ -type d \( -name .cache -o -name .mozilla \) -prune -o -type f -mmin -1'
 alias flmr='find / -type d \( -name proc -o -name sys -o -name dev -o -name run -o -name var -o -name media -o -name -home \) -prune -o -type f -mmin 1'
@@ -263,7 +264,7 @@ function gm2 { sudo modprobe nbd max_part=8 && sudo qemu-nbd --connect=/dev/nbd1
 alias gm1d='sudo umount /mnt && sudo qemu-nbd --disconnect /dev/nbd0'
 alias gm2d='sudo umount /mnt2 && sudo qemu-nbd --disconnect /dev/nbd1'
 # `inotifywait -m ~/.config/ -e create -e modify` (inotify-tools), watch runs every x sec, entr runs command after file changes. use examples from bottom of `man entr` `ls *.js | entr -r node app.js`
-entr1() { ls "$1" >| temp; nohup sh -c "cat temp | entr -n cp \"$1\" \"$2\"" </dev/null >/dev/null 2>&1 & disown; } # wentr file-in-pwd ~/destination/
+entr1() { ls "$1" >| temp; nohup sh -c "cat temp | entr -n cp \""$1"\" \"$2\"" </dev/null >/dev/null 2>&1 & disown; } # wentr file-in-pwd ~/destination/
 alias jo='journalctl' # -p,  -err, --list-boots, -b boot, -b -1 last boot, -r reverse, -k (kernel/dmesg), -f follow, --grep -g, --catalog -x (use error notes), -e goto end
 alias jof='journalctl -f' # --follow
 alias jor='journalctl -r' # --reverse (newest first)
@@ -332,11 +333,11 @@ set -a # sets for export to env the following functions, for calling in scripts 
 function hdn { history -d "$1"; history -w;} # delete history line number
 # function hdl { history -d $(($HISTCMD - 1)); history -w;} # delete history last number
 function hdl { history -d $HISTCMD; history -w;} # delete history last number
-function hdln { history -d $(($HISTCMD - "$1" -1))-$(($HISTCMD - 2)); history -w;} # delete last n lines. (add 1 for this command) (history -d -$1--1; has error)
+function hdln { history -d $(($HISTCMD - "$1" -1))-$(($HISTCMD - 2)); history -w;} # delete last n lines. (add 1 for this command) (history -d -"$1"--1; has error)
 function help { "$1" --help;} # use `\help` to disable the function alias
 function q { "$1" --help || help "$1" || man "$1" || info "$1";} # use any help doc. # also tldr. 
 command_not_found_handle2() { [ $# -eq 0 ] && command -v "$1" > /dev/null 2>&1 && "$1" --help || command "$@"; } # adds --help to all commands that need a parameter. or use below to exclude certain ones.
-#command_not_found_handle() { local excluded_commands=("ls" "cd" "pwd"); if [ $# -eq 0 ] && command -v "$1" > /dev/null 2>&1; then [[ ! " ${excluded_commands[@]} " =~ " $1 " ]] && "$1" --help || command "$1"; else command "$@"; fi }
+#command_not_found_handle() { local excluded_commands=("ls" "cd" "pwd"); if [ $# -eq 0 ] && command -v "$1" > /dev/null 2>&1; then [[ ! " ${excluded_commands[@]} " =~ " "$1" " ]] && "$1" --help || command "$1"; else command "$@"; fi }
 function lnst { dir="$1"; lastdir="${dir##*/}"; sudo ln -s $2/$lastdir "$1";} # ln -st?
 function lnsr { ln -s "$2" "$1";} # symlink reversed using arg order from cp or mv
 function ren { mv "$1" "$1""$2";} # rename file just add ending, eg file to file1.
@@ -428,9 +429,9 @@ first line for scripts: #!/bin/bash -Cex; shellcheck "$0" #no-clobber, exit on e
 put scripts in /usr/local/bin and the can be used in Vim
 
 https://www.gnu.org/software/bash/manual/html_node/Special-Parameters.html
-    $1, $2, $3, ... are the positional parameters.
-    "$@" is an array-like construct of all positional parameters, {$1, $2, $3 ...}.
-    "$*" is the IFS expansion of all positional parameters, $1 $2 $3 ....
+    "$1", $2, $3, ... are the positional parameters.
+    "$@" is an array-like construct of all positional parameters, {"$1", $2, $3 ...}.
+    "$*" is the IFS expansion of all positional parameters, "$1" $2 $3 ....
     $# is the number of positional parameters.
     $- current options set for the shell.
     $$ pid of the current shell (not subshell).
@@ -453,7 +454,7 @@ END
 ## common dirs and files:
 alias el='env | egrep '^[a-z].*=.*' | sort' # list env var exports below
 shopt -s cdable_vars # dirs exportable.
-export alias1='~/.bash_aliases'
+export alias1='$HOME/.bash_aliases'
 export fstab1='/etc/fstab' # mounts volumes
 export passwd1='/etc/passwd' # controls user perms
 export group1='/etc/group' # groups
@@ -474,7 +475,7 @@ export hostname1='/etc/hostname' # sets hostname. also a command
 export log1='/var/log/' # logs: syslog auth.log boot.log lastlog
 #export netman='/etc/network/interfaces' # `man interfaces`. use netplan instead.
 export netplan1='/etc/netplan/01-netcfg.yaml' # add `optional: true` under ethernets: interface: to prevent boot waiting on network
-export known1='~/.ssh/known_hosts' # rm this to remove unused store ssh connections
+export known1='$HOME/.ssh/known_hosts' # rm this to remove unused store ssh connections
 export mailr1='/var/mail/root ' # mail file
 export osr1='/etc/os-release' # os names
 export sysd1='/etc/systemd/system/multi-user.target.wants' # services startup
@@ -584,7 +585,7 @@ fi
 alias ss='screen'
 alias ssls='screen -ls'
 alias sr='screen -r'
-alias sst='screen -ls | awk '"'"'NR>1 {session=$1; gsub("\\.", " ", session); print "title: "session";; command: screen -r "session";;"}'"'"' >| tabs-config && konsole --tabs-from-file tabs-config' # opens all screen sessions in konsole new tabs
+alias sst='screen -ls | awk '"'"'NR>1 {session="$1"; gsub("\\.", " ", session); print "title: "session";; command: screen -r "session";;"}'"'"' >| tabs-config && konsole --tabs-from-file tabs-config' # opens all screen sessions in konsole new tabs
 [[ ! -f ~/.screenrc ]] && cat <<EOF > ~/.screenrc #heredoc less escapes
 startup_message off
 #escape ^[[ # try to use Esc for prefix
@@ -622,7 +623,7 @@ alias ttls='tmux ls'
 alias ttnd='tmux new -d'
 alias ttks='tmux kill-server'
 alias ttkw='tmux kill-window'
-alias ttt='tmux ls | awk -F: '"'"'{print "title: " $1 ";; command: tmux attach-session -t " $1 ";;"}'"'"' >| tabs-config && konsole --tabs-from-file tabs-config &' # opens all tmux sessions in konsole new tabs
+alias ttt='tmux ls | awk -F: '"'"'{print "title: " "$1" ";; command: tmux attach-session -t " "$1" ";;"}'"'"' >| tabs-config && konsole --tabs-from-file tabs-config &' # opens all tmux sessions in konsole new tabs
 #/usr/bin/tmux new-session -c $PWD #/usr/bin/bash -c "tmux new-session -c $PWD" # konsole new tab commands 
 alias tts='tmux run-shell ~/.tmux/plugins/tmux-resurrect/scripts/save.sh'
 alias ttr='tmux run-shell ~/.tmux/plugins/tmux-resurrect/scripts/restore.sh'
@@ -787,21 +788,70 @@ alias gitc='git commit -m "ok"'
 alias gitpu='git push origin main' # usually same as `git push`. see below for conflicts
 alias gitpl='git pull' # (git fetch && git merge) 
 alias gitac='gita && gitc' # add and commit
-alias gs='git status && git add -A && git commit -m \"ok\" && git push # git sync by push' 
-alias gitsd='pushd ~/git/dotfiles && git add . && git commit -m commit && git push -u origin main; popd' # git sync push on dotfiles dir
-alias gpho='git push -u origin main '
+
+alias gg0='git add -A && git commit -m \"ok\" && git push # local ahead: git status,add,commit,push' # push recent changes
+alias g2='git fetch origin >/dev/null && commits=$(git rev-list --left-right --count HEAD...origin/$(git rev-parse --abbrev-ref HEAD)) && [[ $commits == "0	0" ]] && echo "synced" || ([[ ${commits%%	*} -gt 0 ]] && echo "local ahead" || echo "origin ahead") # git sync' # check if in sync
+alias g3='git fetch origin && git merge-tree $(git merge-base HEAD origin/$(git rev-parse --abbrev-ref HEAD)) HEAD origin/$(git rev-parse --abbrev-ref HEAD) | grep -q "^<\\<<<<<<" && echo "Conflict!" || echo "No Conflicts"' # checks for file conflicts before merge
+#alias g4='git commit -m "rebase" && git pull --rebase # local ahead.. merge after gsss checks theres no conflicts locally'
+alias g3b='git stash' # stash local changes before rebasing to pop them on top after.
+alias g4='git add -A && git commit -m "rebase (if new)" || true && git pull --rebase' # local ahead.. merge after gsss checks theres no conflicts locally'
+# Rebase reapplies commits one by one. it WILL create markups in file <<,==,>> you have to remove. then `git add <file>` and `git rebase --continue`. rebase --abort to undo.
+alias g4b='git stash pop' # put recent local changes back on top after rebasing, etc.
+alias g5='git push --force-with-lease origin main # origin ahead.. merge after gsss checks theres no conflicts in origin. lease checks if files are checked out' 
+
+# gs: Commits and pushes your current local changes to the remote.
+# g2: Checks if your local branch is in sync, ahead, or behind the remote. 
+# g3: Predicts if merging remote changes would cause conflicts.  
+# g4: Commits your local changes then pulls remote changes by replaying your commits on top.
+# g5: Forces your local branch to overwrite the remote branch, with a safety check.
+
+alias gg='! git add -A; \
+    if ! git diff --cached --quiet; then \
+        git commit -m "ok" || { echo "Actual commit error encountered."; exit 1; }; \
+    fi; \
+    g2_status_output=$(git fetch origin >/dev/null && \
+        commits_counts=$(git rev-list --left-right --count HEAD...origin/$(git rev-parse --abbrev-ref HEAD)); \
+        read -r local_c remote_c <<< "$commits_counts"; \
+        if [[ "$local_c" -eq 0 && "$remote_c" -eq 0 ]]; then echo "synced"; \
+        elif [[ "$local_c" -gt 0 ]]; then echo "local ahead"; \
+        else echo "origin ahead"; fi \
+    ); \
+    if [[ "$g2_status_output" == "synced" || "$g2_status_output" == "local ahead" ]]; then \
+        git push || (echo "Push rejected; pulling and retrying..." && git pull --rebase && git push); \
+    else \
+        echo "Remote ahead; pulling first..."; git pull --rebase && git push; \
+    fi'
+# explanation:
+# git add -A; if ! git diff --cached --quiet; then git commit -m "ok" ... fi:
+#   First, stages all changes.
+#   Then, it checks if there are actual staged changes to commit.
+#   If yes, it attempts to create an "ok" commit. If this commit *truly* fails (not just "nothing to commit"), it prints an error.
+#   If there's nothing to commit (or commit succeeds), it proceeds to the next step.
+# g2_status_output=(...):
+#   Fetches remote changes.
+#   It then robustly determines if the local branch is "synced" (0 commits ahead/behind), "local ahead", or "origin ahead" by parsing git commit counts.
+# if ... then ... else ... fi: Conditional logic based on g2_status_output:
+#   If "synced" or "local ahead": It tries git push. If the push fails (remote likely updated), it then performs git pull --rebase and retries git push.
+#   If "origin ahead": It prints a message, then performs git pull --rebase (to integrate remote changes) and then git push.
+
+alias gs='! ( git diff --quiet || git diff --cached --quiet ) || { echo "Stashing..."; git stash; } && git pull --rebase && git stash pop || true' # git sync. check if diffs, stash if local, pull and rebase if remote, apply local. stops for rebase if conflicts. 
+alias gs2='git add -A && git rebase --continue && git push' # after resolving conflicts in rebase, add, finish rebase, and push.
+
+alias gsyncrebase='git commit -m "rebase" && git pull --rebase && git push' # full sync but adds markup of changes inside files. will add local changes onto origin. doesnt merge (does rewrite history linearly). 'git pull --rebase' will add markers in file of conflict. have to remove manually, then `git add $file` and `git rebase --continue` and `git push origin main --force-with-lease` or `git rebase --abort` to cancel. 
+alias gfullsync='git add -A && git commit -m "sync" && git fetch origin && git rebase origin/$(git rev-parse --abbrev-ref HEAD) && git push --force-with-lease'
+
 alias agitinfo='# git clone is for first copy # git status, git log, git branch \# git clone https://github.com/auwsom/dotfiles.git #add ssh priv & pub key or will pull but not push
 
 setup a repo from local:
 # git clone git@github.com:auwsom/dotfiles.git # will ask to connect. need to `eval $(ssh-agent -s) && ssh-add ~/.ssh/id_rsa` checks if agent running and adds (will display email of GH account) 
 # `apt install gh` then click enter until auth through webpage'
 #alias git1='gh repo create <newrepo> --private' # or --public
-function git1 { gh repo create $1 --private;}
+function git1 { gh repo create "$1" --private;}
 #alias git2='git init && git remote add origin https://github.com/auwsom/<new>.git && git branch -M main' # doesnt need password everytime when using gh login 
-function git2 { git init && git remote add origin https://github.com/auwsom/$1.git && git branch -M main;}
+function git2 { git init && git remote add origin https://github.com/auwsom/"$1".git && git branch -M main;}
 alias git2s='git init && git remote add origin git@github.com:auwsom/<new>.git && git branch -M main' # dont need password
 alias git3='touch README.md && git add . && git commit -m "init" && git push --set-upstream origin main'
-function git123 { mkdir $1 && git1 $1 && git2 $1 && git3 ;}
+function git123 { mkdir "$1" && git1 "$1" && git2 "$1" && git3 ;}
 # git config --global init.defaultBranch main 
 # https://www.freecodecamp.org/news/how-to-make-your-first-pull-request-on-github-3/
 
@@ -935,7 +985,7 @@ alias qemu='qemu-system-x86_64' # --help
 # history -a; set +m # same as above but runs every command with .bashrc
 # trap 'echo ${BASH_COMMAND}' DEBUG # prints all commands 
 # trap 'type ${BASH_COMMAND[1]}' DEBUG # array doesnt work on this bash var for some reason
-# trap 'if [[ $(echo $(type ${BASH_COMMAND} | awk "{print \$1}" ) | grep builtin) ]]; then echo "this is an alias"; fi' DEBUG # prints all commands. also prints an error ?
+# trap 'if [[ $(echo $(type ${BASH_COMMAND} | awk "{print \"$1"}" ) | grep builtin) ]]; then echo "this is an alias"; fi' DEBUG # prints all commands. also prints an error ?
 
 # https://stackoverflow.com/questions/27493184/can-i-create-a-wildcard-bash-alias-that-alters-any-command
 
