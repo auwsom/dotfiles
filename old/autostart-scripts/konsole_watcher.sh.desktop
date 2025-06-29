@@ -1,0 +1,8 @@
+#cp konsole_watcher.sh.desktop /home/user/.config/autostart/
+[Desktop Entry]
+Exec=/home/user/.config/autostart-scripts/konsole_watcher.sh
+Icon=dialog-scripts
+Name=konsole_watcher.sh
+Path=
+Type=Application
+X-KDE-AutostartScript=true
