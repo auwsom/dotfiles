@@ -73,6 +73,7 @@ MAILTO="wer987wer888@gmail.com"
 #0 3 * * * cronic /root/rsync-time-backup/rsync_tmbackup.sh --rsync-append-flags "--exclude 100G-w" --strategy "1:1 7:1 30:7 365:30" /media/user/VM/ /media/user/backups/rtb-pers/
 # unused example of how to make follow symlinks
 #0 3 * * * cronic /root/rsync-time-backup/rsync_tmbackup.sh --rsync-append-flags "-L" --strategy "1:1 7:1 30:7 365:30" /home/user/backup /media/user/backups/home-user/
+
 # file:
 0 6 * * * cronic /home/user/dotfiles/crontab/rtb_smart_backups.sh
 
