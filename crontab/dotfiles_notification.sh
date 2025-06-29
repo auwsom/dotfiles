@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# git config --global --add safe.directory /home/user/git/dotfiles
+
 cd /home/user/git/dotfiles
 git fetch origin
 

@@ -76,8 +76,8 @@ MAILTO="wer987wer888@gmail.com"
 # file:
 0 6 * * * cronic /home/user/dotfiles/crontab/rtb_smart_backups.sh
 
-
-0 6 * * * /bin/bash -c '. /root/.env; /snap/bin/canonical-livepatch enable "$LPTOKEN"'
-0 7 * * * /snap/bin/canonical-livepatch disable
+# only output stdout from these 2 to null, cronic needs exit codes still.
+0 6 * * * /bin/bash -c '. /root/.env; /snap/bin/canonical-livepatch enable "$LPTOKEN" > /dev/null'
+0 7 * * * /snap/bin/canonical-livepatch disable > /dev/null 
 
 
