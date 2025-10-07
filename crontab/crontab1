@@ -26,7 +26,7 @@
 
 MAILTO="wer987wer888@gmail.com"
 
-0 5 * * * cronic /home/user/dotfiles/crontab/dotfiles-notification.sh && crontab /home/user/dotfiles/crontab/crontab1   # exit code should prevent sync 
+0 5 * * * cronic /home/user/dotfiles/crontab/dotfiles_notification.sh && crontab /home/user/dotfiles/crontab/crontab1   # exit code should prevent sync 
 
 # will run in all non-commmented out lines manually
 # crontab -l | grep -v '^\s*#' | sed -E 's/.*cronic\s+//'  # lists

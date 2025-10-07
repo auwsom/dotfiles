@@ -7,7 +7,8 @@
 # home dir minus .cache
 # /root/rsync-time-backup/rsync_tmbackup.sh --rsync-append-flags "--exclude .cache"  /home/user /media/user/backups/rtb-home-user/
 # /home/user/git/dotfiles/crontab/rsync_tmbackup3.sh  -s /home/user -d /media/user/backups/rtb-home-user/ --rsync-append-flags "--exclude .cache"
-/home/user/git/dotfiles/crontab/rsync_tmbackup3.sh  -s /home/user -d /media/user/backups/rtb-home-user/ --ex ".cache"
+# /home/user/git/dotfiles/crontab/rsync_tmbackup3.sh  -s /home/user -d /media/user/backups/rtb-home-user/ --ex ".cache"
+/home/user/git/dotfiles/crontab/rsync_tmbackup3.sh  -s /home/user -d /media/user/backups/rtb-home-user/ --rsync-append-flags "--exclude .cache"
 
 # VMs minus work vm
 # /root/rsync-time-backup/rsync_tmbackup.sh --rsync-append-flags "--exclude 100G-w" --strategy "1:1 7:1 30:7 365:30" /media/user/VM/ /media/user/backups/rtb-pers/

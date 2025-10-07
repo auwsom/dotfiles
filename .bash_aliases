@@ -156,7 +156,7 @@ alias loc='locate --limit 5' # `apt install locate` finds common file locations 
 #alias ls='ls -F ' # list. F is --classify with symbols or colors. already included in most .bashrc
 #alias la='ls -A' # list all. included. 
 alias l='echo $(history -p !!) | xclip' # copies last command line to clipboard. see `o` for output.
-alias ll='ls -alFh ' # "list" all, long format. included in .bashrc, added human readable. 
+alias ll='ls -alFh --color=auto --group-directories-first' # "list" all, long format. included in .bashrc, added human readable. 
 alias lll='ls -alF ' # "list" all long format. full byte count. 
 alias lst='ls -trla ' # "list" long, time, reverse. bottom latest. c changed, a accessed, m modified. m is content, c is metadata.
 alias lld='ls -dlFh ' # list only directories.
@@ -333,11 +333,7 @@ set -a # sets for export to env the following functions, for calling in scripts 
 function hdn { history -d "$1"; history -w;} # delete history line number
 # function hdl { history -d $(($HISTCMD - 1)); history -w;} # delete history last number
 function hdl { history -d $HISTCMD; history -w;} # delete history last number
-<<<<<<< HEAD
 function hdln { history -d $(($HISTCMD - "$1" -1))-$(($HISTCMD - 2)); history -w;} # delete last n lines. (add 1 for this command) (history -d -"$1"--1; has error)
-=======
-function hdln { history -d $(($HISTCMD - "$1" -1))-$(($HISTCMD - 2)); history -w;} # delete last n lines. (add 1 for this command) (history -d -$1--1; has error)
->>>>>>> dfba153 ("ok")
 function help { "$1" --help;} # use `\help` to disable the function alias
 function q { "$1" --help || help "$1" || man "$1" || info "$1";} # use any help doc. # also tldr. 
 command_not_found_handle2() { [ $# -eq 0 ] && command -v "$1" > /dev/null 2>&1 && "$1" --help || command "$@"; } # adds --help to all commands that need a parameter. or use below to exclude certain ones.
@@ -792,7 +788,6 @@ alias gitc='git commit -m "ok"'
 alias gitpu='git push origin main' # usually same as `git push`. see below for conflicts
 alias gitpl='git pull' # (git fetch && git merge) 
 alias gitac='gita && gitc' # add and commit
-<<<<<<< HEAD
 
 alias gg0='git add -A && git commit -m \"ok\" && git push # local ahead: git status,add,commit,push' # push recent changes
 alias g2='git fetch origin >/dev/null && commits=$(git rev-list --left-right --count HEAD...origin/$(git rev-parse --abbrev-ref HEAD)) && [[ $commits == "0	0" ]] && echo "synced" || ([[ ${commits%%	*} -gt 0 ]] && echo "local ahead" || echo "origin ahead") # git sync' # check if in sync
@@ -839,17 +834,15 @@ alias gg='! git add -A; \
 #   If "synced" or "local ahead": It tries git push. If the push fails (remote likely updated), it then performs git pull --rebase and retries git push.
 #   If "origin ahead": It prints a message, then performs git pull --rebase (to integrate remote changes) and then git push.
 
-alias gs='! ( git diff --quiet || git diff --cached --quiet ) || { echo "Stashing..."; git stash; } && git pull --rebase && git stash pop || true' # git sync. check if diffs, stash if local, pull and rebase if remote, apply local. stops for rebase if conflicts. 
-alias gs2='git add -A && git rebase --continue && git push' # after resolving conflicts in rebase, add, finish rebase, and push.
+alias gs2a='! ( git diff --quiet || git diff --cached --quiet ) || { echo "Stashing..."; git stash; } && git pull --rebase && git stash pop || true' # git sync. check if diffs, stash if local, pull and rebase if remote, apply local. stops for rebase if conflicts. 
+alias gs2b='git add -A && git rebase --continue && git push' # after resolving conflicts in rebase, add, finish rebase, and push.
 
 alias gsyncrebase='git commit -m "rebase" && git pull --rebase && git push' # full sync but adds markup of changes inside files. will add local changes onto origin. doesnt merge (does rewrite history linearly). 'git pull --rebase' will add markers in file of conflict. have to remove manually, then `git add $file` and `git rebase --continue` and `git push origin main --force-with-lease` or `git rebase --abort` to cancel. 
 alias gfullsync='git add -A && git commit -m "sync" && git fetch origin && git rebase origin/$(git rev-parse --abbrev-ref HEAD) && git push --force-with-lease'
 
-=======
 alias gs='git status && git add -A && git commit -m \"ok\" && git push # git sync by push' 
 alias gitsd='pushd ~/git/dotfiles && git add . && git commit -m commit && git push -u origin main; popd' # git sync push on dotfiles dir
 alias gpho='git push -u origin main '
->>>>>>> dfba153 ("ok")
 alias agitinfo='# git clone is for first copy # git status, git log, git branch \# git clone https://github.com/auwsom/dotfiles.git #add ssh priv & pub key or will pull but not push
 
 setup a repo from local:
