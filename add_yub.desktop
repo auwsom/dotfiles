@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Add Yubikey
+Comment=Launch add_yub.sh script
+Exec=/home/user/git/dotfiles/add_yub.sh
+Icon=security-high
+Categories=System;Security;
+Terminal=true
+StartupNotify=false
