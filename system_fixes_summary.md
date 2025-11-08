@@ -122,3 +122,33 @@ echo '+memory' > /sys/fs/cgroup/user.slice/user-1001.slice/cgroup.subtree_contro
 - Verify desktop responsiveness after each test
 - Keep AIMGR user processes protected
 
+
+### Safe Testing Protocol (To Avoid Desktop Crashes)
+
+#### Pre-Test Checks
+1. Verify system load < 5.0
+2. Verify memory > 10GB free
+3. Verify desktop service active
+4. Kill any orphan AIMGR processes (except user's bash app)
+
+#### Test Execution
+1. Use 15-second timeout maximum
+2. Monitor memory every 5 seconds
+3. Kill test if memory > 15GB used
+4. Kill test if load > 20.0
+5. Verify desktop responsive after each test
+
+#### Emergency Procedures
+1. Use `/usr/local/bin/emergency-kill.sh` immediately if unresponsive
+2. Restart lightdm service if desktop crashes
+3. Reboot VM only as last resort
+
+#### Continuous Monitoring Commands
+```bash
+# Monitor system during tests
+watch -n 5 "free -h | grep Mem && uptime && systemctl is-active lightdm"
+
+# Quick emergency kill
+pkill -9 -u aimgr && systemctl restart lightdm
+```
+
