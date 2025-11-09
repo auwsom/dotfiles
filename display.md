@@ -214,3 +214,98 @@ The VM display gap issue was caused by KDE global scale settings, not by:
 - Plasma shell restarts
 
 The global scale setting affects how the display renders within the VM window frame, which controls gap distribution.
+
+## Critical Configuration Requirement: Global Scaling After Resolution Change
+
+### Requirement
+The KDE global scale MUST be set to 100% (1.0) after resolution changes on reboot, NOT 150% (1.5).
+
+### Why This Is Critical
+- **150% scale (1.5)**: Makes UI elements too large for high-resolution displays
+- **100% scale (1.0)**: Provides proper UI element sizing for 3840x2050 resolution
+- **User preference**: 100% scale for normal UI element size
+- **Display clarity**: 100% scale provides sharper text and interface elements
+
+### Current Working Configuration
+```ini
+# In /home/user/.config/kdeglobals
+ScreenScaleFactors=Virtual-1=1.0;
+```
+
+### The Problem: Resolution Change Resets Global Scale
+When the system reboots and the resolution change script runs:
+1. **xrandr sets resolution** to 3840x2050_60.00
+2. **KDE may reset global scale** to default values
+3. **Global scale reverts** to 150% (1.5) instead of 100% (1.0)
+4. **UI elements become too large** for the high resolution
+
+### Solution: Enforce 100% Global Scale After Resolution Change
+
+#### Method 1: Modify the Autostart Script
+Update `/home/user/.config/autostart/fix-scaling.desktop`:
+```ini
+[Desktop Entry]
+Type=Application
+Name=Fix Display Scaling
+Exec=sh -c 'export DISPLAY=:0 && sleep 5 && xrandr --output Virtual-1 --mode 3840x2050_60.00 --scale 1x1 && kwriteconfig5 --file kdeglobals --group KDE --key ScreenScaleFactors "Virtual-1=1.0;"'
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+```
+
+#### Method 2: Create a Separate Global Scale Script
+Create `/home/user/.config/autostart/fix-global-scale.desktop`:
+```ini
+[Desktop Entry]
+Type=Application
+Name=Fix Global Scale
+Exec=sh -c 'export DISPLAY=:0 && sleep 8 && kwriteconfig5 --file kdeglobals --group KDE --key ScreenScaleFactors "Virtual-1=1.0;"'
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+```
+
+#### Method 3: Systemd User Service
+Create `/home/user/.config/systemd/user/fix-global-scale.service`:
+```ini
+[Unit]
+Description=Fix KDE Global Scale After Boot
+After=plasma-plasmashell.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c 'kwriteconfig5 --file kdeglobals --group KDE --key ScreenScaleFactors "Virtual-1=1.0;"'
+
+[Install]
+WantedBy=default.target
+```
+
+### Verification Commands
+To check if global scale is set correctly:
+```bash
+# Check current global scale
+grep 'ScreenScaleFactors' /home/user/.config/kdeglobals
+
+# Force apply global scale
+kwriteconfig5 --file kdeglobals --group KDE --key ScreenScaleFactors "Virtual-1=1.0;"
+
+# Restart plasma to apply changes
+kquitapp5 plasmashell && kstart5 plasmashell
+```
+
+### Implementation Priority
+1. **High Priority**: Modify existing autostart script (Method 1)
+2. **Medium Priority**: Create separate global scale script (Method 2)
+3. **Low Priority**: Systemd user service (Method 3)
+
+### Status
+- **Requirement Identified**: ✅ Global scale must be 100% after resolution change
+- **Solution Methods**: ✅ Three implementation options provided
+- **Implementation**: ❌ Not yet implemented - needs to be applied
+- **Verification**: ❌ Not yet tested - needs validation after implementation
+
+### Next Steps
+1. Implement Method 1 (modify autostart script) immediately
+2. Test that global scale remains 100% after reboot
+3. Verify UI elements are properly sized
+4. Remove or disable other scale-setting methods that may interfere
