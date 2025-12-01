@@ -46,27 +46,34 @@ cd /home/aimgr/dev/avoli/agent2
 # Alternative with container kept running for log access
 cd /home/aimgr/dev/avoli/agent2
 ./run_container_test_capture.sh
-```
 
-### Memory Optimization Scripts
-```bash
-# Conservative test (12GB memory - may trigger OOM)
-./run_container_test_proper.sh
-
-# High performance test (18GB memory - may still trigger OOM)
-./run_container_test_fast.sh
-
-# No OOM killer test (20GB memory + OOM disabled - RECOMMENDED)
+# Maximum reliability (20GB + no OOM killer)
+cd /home/aimgr/dev/avoli/agent2
 ./run_container_test_no_oom.sh
 ```
+
+### Available Scripts and Their Purpose
+| Script | Memory | OOM Killer | Container Retention | Purpose |
+|--------|--------|------------|-------------------|---------|
+| `run_container_test_logged.sh` | 20GB | Disabled | ❌ Auto-removed | **Primary recommended** |
+| `run_container_test_capture.sh` | 20GB | Disabled | ✅ Kept running | Debug mode |
+| `run_container_test_no_oom.sh` | 20GB | Disabled | ❌ Auto-removed | High reliability |
 
 ### Script Locations
 All scripts are located in: `/home/aimgr/dev/avoli/agent2/`
 - `run_container_test_logged.sh` - Primary script with output logging
 - `run_container_test_capture.sh` - Improved capture with container retention
 - `run_container_test_no_oom.sh` - 20GB memory + OOM killer disabled
-- `run_container_test_proper.sh` - 12GB memory (conservative)
-- `run_container_test_fast.sh` - 18GB memory (high performance)
+
+### Memory Optimization Scripts (DEPRECATED)
+```bash
+# NOTE: These old scripts have been removed due to insufficient memory:
+# - run_container_test.sh (4GB - insufficient)
+# - run_container_test_proper.sh (12GB - insufficient) 
+# - run_container_test_fast.sh (18GB - insufficient)
+
+# All scripts now use 20GB + OOM killer disabled for reliability
+```
 
 ## 📋 CONTAINER CONFIGURATION DETAILS
 

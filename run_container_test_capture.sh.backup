@@ -65,7 +65,7 @@ echo "================================"
 START_TIME=$(date +%s.%N)
 
 # Execute container with resource isolation (OOM killer disabled) and improved output capture
-docker run --rm \
+docker run \
   --name "$CONTAINER_NAME" \
   --user 1003 \
   --memory="$MEMORY_LIMIT" \
@@ -109,7 +109,7 @@ echo ""
 echo "📈 System Impact:"
 echo "  Current Load: $(uptime | awk -F'load average:' '{print $2}')"
 echo "  Memory Usage: $(free -h | grep Mem | awk '{print $3 "/" $2}')"
-echo "  Container Status: Auto-removed (--rm flag)"
+echo "  Container Status: Still running (for log access)"
 
 # Show last 20 lines of output
 echo ""
@@ -124,4 +124,5 @@ fi
 echo ""
 echo "🎯 Container Test Complete!"
 echo "📁 Full output saved to: $OUTPUT_LOG"
-echo "🧹 Container auto-removed (--rm flag)"
+echo "🔍 Container still running. Access logs with: docker logs $CONTAINER_NAME"
+echo "🗑️  Remove container when done: docker rm $CONTAINER_NAME"

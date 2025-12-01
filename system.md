@@ -86,12 +86,14 @@ WantedBy=multi-user.target
 ### Method 3: Direct cgroup setup
 ```bash
 # One-time setup (run once after reboot)
-echo '0-19' > /sys/fs/cgroup/user.slice/cpuset.cpus
+echo '2-19' > /sys/fs/cgroup/user.slice/cpuset.cpus
 echo '4-19' > /sys/fs/cgroup/user.slice/user-1003.slice/cpuset.cpus
 
 # Run the test
 timeout 10 su - aimgr -c 'cd /home/aimgr/dev/avoli/agent2 && source /home/aimgr/venv2/bin/activate && python3 chat.py --test'
 ```
+
+**⚠️ IMPORTANT NOTE**: Due to systemd-logind session scope assignment, AIMGR processes may be assigned to session scopes (user-0.slice/session-X.scope) instead of user-1003.slice. This can cause processes to use 2-19 instead of 4-19. For reliable AIMGR containment, use the container method or manual taskset assignment.
 
 ## VM Management and Recovery Procedures
 
