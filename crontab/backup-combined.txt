@@ -85,7 +85,182 @@ sudo timeout 10 bash -c 'sudo qemu-nbd --connect=/dev/nbd0 /media/user/backups/r
 - Blockcopy #3 (14:14): Contains both test files ✓  
 - Snapshot file: Contains both files plus subsequent changes ✓
 
-## MOUNT WORKAROUND DISCOVERY
+## 🆕 VIRTNBDBACKUP - SUCCESSFULLY INSTALLED & WORKING
+Date: 2025-12-03
+
+### **Installation - WORKED**
+```bash
+# Minimal working installation:
+sudo dpkg -i virtnbdbackup_2.18-1_all.deb
+sudo apt-get install -f
+```
+
+### **AppArmor Configuration - SIMPLIFIED**
+```bash
+# Direct file permissions that actually work:
+echo "/var/tmp/virtnbdbackup.* rw," | sudo tee -a /etc/apparmor.d/local/usr.lib.libvirt.virt-aa-helper
+echo "/var/tmp/backup.* rw," | sudo tee -a /etc/apparmor.d/local/abstractions/libvirt-qemu
+sudo systemctl reload apparmor
+sudo systemctl reload libvirtd
+```
+
+### **Running Full Backup - VERIFIED WORKING**
+```bash
+# Creates consistent incremental-ready backups:
+sudo virtnbdbackup -d ubuntu20.04-kvm-img--mini--set2--kub--pers -l full \\
+  -o /media/user/temp/vm-backup --scratchdir /media/user/temp/
+```
+
+### **Verification**
+```bash
+# Verify backup integrity:
+virtnbdrestore -i /media/user/temp/vm-backup -a verify
+```
+
+**Evidence**: Created 23GB VM backup file successfully (`/media/user/temp/vm-backup/vda.full.data`)
+
+---
+
+## 🎯 COMPLETE BACKUP SYSTEM PLAN (December 2025)
+
+### **Smart Retention Strategy for All Targets**
+```bash
+# Strategy: "3:1 4:7 30:7" ✓ (Tested and Working)
+- Keep 3 most recent daily backups
+- Keep weekly backups for 4 weeks  
+- Keep monthly backups beyond that
+- Always preserve oldest backup (script default)
+```
+
+### **File/Directory Backup Pattern ✓ (WORKING)**
+```bash
+# Basic pattern for directories/folders
+rsync_tmbackup3.sh --prune-then-backup -s SOURCE -d DEST --strategy "3:1 4:7 30:7"
+
+# Working targets:
+- USB: /media/user/16GBa → /media/user/backups/rtb-usb/
+- Home: /home/user → /media/user/backups/rtb-home-user/ (excludes .cache)
+- 25G-p: /media/user/VM/25G-p → /media/user/backups/rtb-pers/
+- 100G-w: /media/user/VM/100G-w → /media/user/backups2/rtb-work/
+
+# Failing target:
+- AI VM: /media/user/ai/ubuntu-20.04-server-cloudimg-amd64-disk-kvm--kub-set3-2404--claude12.qcow2 → /media/user/backups3/rtb-ai/ ❌
+```
+
+### **VM Image Backup Methods Tested**
+
+#### **1. BlockCopy Method (? - Manual ✓, Script ❌)**
+```bash
+# Manual: ✓ WORKS IMMEDIATELY ✅
+sudo virsh blockcopy <vm> vda /backup/full.qcow2 --transient-job
+
+# Script: ❌ Hangs despite identical command
+# Libvirt automation issue - different behavior than interactive shell
+```
+
+#### **2. External Snapshot Method (? - Most Promising)**
+```bash
+# Pattern: Snapshot → Copy Frozen Base → Merge ?
+sudo virsh snapshot-create-as <vm> daily-snapshot --disk-only --atomic ?
+sudo cp original.qcow2 /backup/incremental.qcow2 ?  # Fast copy of frozen base
+sudo virsh blockcommit <vm> vda --active --wait ?    # Merge changes back
+```
+
+#### **3. QEMU Dirty Bitmap Method (? - Advanced/Conflicts)**
+```bash
+# Native QEMU incremental backup with conflicts ❗
+virsh qemu-monitor-command <vm> blockdev-backup --sync incremental ?
+
+# ISSUES IDENTIFIED:
+- ❌ **Conflicts with blockcopy operations** - cannot run concurrently
+- ❌ **Requires transient flag but causes lock without it**
+- ❌ **Not truly live without transient flag**
+- ❌ **Locking complications make automation unreliable**
+```
+
+#### **4. Brief Shutdown Copy (? - Conservative)**
+```bash
+# Stop VM briefly for guaranteed consistency
+sudo virsh shutdown <vm> ?
+sudo cp original.qcow2 /backup/consistent.qcow2 ?
+sudo virsh start <vm> ?
+```
+
+## 🔒 CRITICAL DISCOVERIES
+
+### **VM Backup Locking Issues:**
+1. **Libvirt State Corruption**: Previous blockcopy experiments corrupted libvirt state
+2. **Script vs Manual Discrepancy**: Commands that work manually fail in scripts
+3. **Dirty Bitmap Conflicts**: Cannot run concurrently with blockcopy operations
+4. **Transient Flag Required**: Blockcopy needs --transient-job but causes its own issues
+
+### **Current Status Matrix:**
+- **File Backups**: ✓ Works with smart retention ✅
+- **VM Backups (Auto)**: ❌ Script automation broken due to libvirt state ❓
+- **VM Backups (Manual)**: ✓ Blockcopy works manually ✅
+- **Snapshot Method**: ? External snapshots partially tested ❓
+- **Incremental Chain**: ? Not established yet due to locking conflicts ❓
+
+## 🌟 RTB SMART BACKUP SYSTEM - CURRENT STATUS
+Date: 2025-12-02
+
+## 📋 Current Backup Configuration
+**Script**: `/home/user/dotfiles/crontab/rtb_smart_backups.sh`
+**Debug Script**: `/home/user/dotfiles/crontab/rtb_smart_backups_debug.sh`
+**Wrapper**: `/home/user/git/dotfiles/crontab/rsync_tmbackup3.sh`
+
+## ✅ Functioning Backups
+1. **USB Backup**: `/media/user/16GBa` → `/media/user/backups/rtb-usb/`
+   - Uses default strategy (keeping ~2 weeks of daily backups)
+   - Status: WORKING ✅
+
+2. **Home Directory**: `/home/user` → `/media/user/backups/rtb-home-user/`
+   - Excludes `.cache` directory
+   - Status: WORKING ✅
+
+3. **25G-p VM**: `/media/user/VM/25G-p` → `/media/user/backups/rtb-pers/`
+   - Uses `--prune-then-backup` flag
+   - Status: WORKING ✅
+
+4. **100G-w VM**: `/media/user/VM/100G-w` → `/media/user/backups2/rtb-work/`
+   - Uses `--prune-then-backup` with `--strategy "3:1 4:7 30:7"`
+   - Status: WORKING ✅
+
+## 🚨 Issues Identified
+1. **AI VM Backup Failing**: 
+   - Source: `/media/user/ai/ubuntu-20.04-server-cloudimg-amd64-disk-kvm--kub-set3-2404--claude12.qcow2`
+   - Destination: `/media/user/backups3/rtb-ai/`
+   - Errors: "No space left on device", "Backup already in progress"
+   - Status: FAILING ❌
+
+2. **Script Errors**: 
+   - Multiple "rm: command not found" in `rsync_tmbackup3.sh` script
+   - Filesystem permissions/path issues
+
+3. **Disk Space Management**: 
+   - Backup operations stop when destination drive is full
+   - Pruning logic works but needs better disk space checking
+
+## 🎯 Backup Strategies Implemented
+```bash
+# Working Strategies:
+--strategy "3:1 4:7 30:7"        # Keep 3 daily, then weekly, then monthly
+--strategy "1:1 7:1 30:7 365:30" # Default aggressive strategy
+--prune-then-backup              # Prune old backups before creating new ones
+```
+
+## 📊 Current Performance (from logs)
+- **USB Backup**: 14 backups kept, pruning older ones correctly
+- **Home Backup**: Weekly rotation with oldest from August 2, 2025
+- **VM Backups**: Retention strategies working as expected
+
+## 🔧 Next Actions Needed
+1. **Fix AI VM backup disk space issues**
+2. **Resolve "rm: command not found" script errors**
+3. **Implement better disk space checking in backup script**
+4. **Test with smaller VM (22GB) as alternate target**
+
+# MOUNT WORKAROUND DISCOVERY
 When testing backup files, sometimes qemu-nbd --connect hangs but mount still works:
 
 # Option 1: Standard approach
