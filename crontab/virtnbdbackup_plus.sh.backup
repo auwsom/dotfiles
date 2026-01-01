@@ -97,16 +97,16 @@ fi
 # Perform backup
 if [[ "$BACKUP_TYPE" == "full" ]]; then
     echo "=== CREATING FULL BACKUP ==="
-    sudo virtnbdbackup -d "$VM_NAME" -l full -o "$BACKUP_PATH" --scratchdir /media/user/temp
+    sudo virtnbdbackup -d "$VM_NAME" -l full -o "$BACKUP_PATH"
 else
     echo "=== CREATING INCREMENTAL BACKUP ==="
     if [[ -d "$LAST_FULL" ]]; then
-        sudo virtnbdbackup -d "$VM_NAME" -l inc -o "$LAST_FULL" --scratchdir /media/user/temp
+        sudo virtnbdbackup -d "$VM_NAME" -l inc -o "$LAST_FULL"
         echo "Incremental added to chain starting from: $LAST_FULL"
     else
         echo "ERROR: No full backup found for week $WEEK_NUM, falling back to full backup"
         BACKUP_PATH="$BACKUP_DEST/week-${WEEK_NUM}-full"
-        sudo virtnbdbackup -d "$VM_NAME" -l full -o "$BACKUP_PATH" --scratchdir /media/user/temp
+        sudo virtnbdbackup -d "$VM_NAME" -l full -o "$BACKUP_PATH"
     fi
 fi
 

@@ -1,0 +1,48 @@
+
+## CRONIC ERROR CHECKING PROCEDURE
+Date: 2025-12-15
+
+### How to Check for Cronic Errors from Overnight Backups:
+
+#### Method 1: Check Mail Spool
+```bash
+# Check if user has mail
+ls -la /var/mail/
+
+# Check mailbox for cron errors
+mail -u user -H 2>/dev/null | grep -A 10 -B 2 "Cron.*error\|ERROR\|Failed\|failed"
+
+# Or check mail spool directly
+sudo tail -50 /var/mail/user | grep -E "(ERROR|error|Failed|failed|cronic)"
+```
+
+#### Method 2: Filter by Date
+```bash
+# Check recent entries for today
+sudo tail -100 /var/mail/user | grep -E "$(date +%b\ %d)"
+
+# Look for error patterns
+sudo tail -200 /var/mail/user | grep -E "(failed|Failed|ERROR|error|permission|denied)"
+```
+
+#### Method 3: Context Around Failed Actions
+```bash
+# Get context around failed actions
+sudo grep -B 5 -A 5 "Action: failed" /var/mail/user
+
+# Check for backup-specific failures
+sudo grep -C 10 "virtnbdbackup\|backup" /var/mail/user | grep -E "(failed|Failed|ERROR|error)"
+```
+
+#### Common Error Types Found:
+- ❌ Gmail delivery failures (not backup failures)
+- ❌ Daily sending limit exceeded for email notifications
+- ❌ SMTP delivery issues to external mail services
+- ✅ Backup script execution errors (actual failures to investigate)
+
+#### Key Findings:
+- Most "Action: failed" messages are email delivery issues
+- Backup failures will show script execution errors
+- Check for "virtnbdbackup" or "backup" keywords in error context
+- Gmail limits often cause false positives in cron error reporting
+
