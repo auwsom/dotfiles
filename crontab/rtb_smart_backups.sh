@@ -18,7 +18,7 @@
 /home/user/git/dotfiles/crontab/rsync_tmbackup3.sh --prune-then-backup -s /media/user/VM/100G-w -d /media/user/backups2/rtb-work/ --strategy "3:1 4:7 30:7" || echo "100G-w backup failed, continuing..."
 
 # # AI VM with virtnbdbackup incremental chain
-# /home/user/git/dotfiles/crontab/virtnbdbackup_plus.sh --prune-then-backup -s /media/user/ai/ubuntu-20.04-server-cloudimg-amd64-disk-kvm--kub-set3-2404--claude12.qcow2 -d /media/user/backups3/rtb-ai/ --vm-name "ubuntu20.04--set3--claude12--------------------" --strategy "3:1 4:7 30:7" || echo "AI VM backup failed, continuing..."
+/home/user/git/dotfiles/crontab/virtnbdbackup_plus.sh --prune-then-backup -s /media/user/ai/ubuntu-20.04-server-cloudimg-amd64-disk-kvm--kub-set3-2404--claude12.qcow2 -d /media/user/backups3/rtb-ai/ --vm-name "ubuntu20.04--set3--claude12--------------------" --strategy "3:1 4:7 30:7" || echo "AI VM backup failed, continuing..."
 
 # unused example of how to make follow symlinks
 #0 3 * * * cronic /root/rsync-time-backup/rsync_tmbackup.sh --rsync-append-flags "-L" --strategy "1:1 7:1 30:7 365:30" /home/user/backup /media/user/backups/home-user/
