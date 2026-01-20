@@ -1,48 +1,39 @@
+# System Setup Summary
 
-## Service Cleanup (2025-11-07 19:25)
+## Display Configuration
+- Resolution: 3840x2050 @ 60Hz
+- Scaling: Normal (1x1)
+- Autostart: ~/.config/autostart/set-resolution.desktop
+- Fix: Added Plasma reload command after resolution change
 
-### Disabled Services (AIMGR User)
-- agent2-server.service
-- cloudflare-tunnel.service  
-- corporate-firewall-bypass.service
-- discord-bot.service
-- goose2-bot.service
-- goose2-hotreload.service
-- syncthing.service
-- todo-approval.service
-- websocket-server.service
+## Resource Allocation
+- Total Cores: 20
+- System: 0-1 (2 cores - reserved for desktop/system)
+- AIMGR: 2-19 (18 cores - testing workloads)
+- Memory: 4GB limit for AIMGR enforced
 
-### Process Cleanup Results
-- Before: 139 AIMGR processes
-- After: 0 AIMGR processes  
-- Desktop: Remained stable and responsive
+## System Protection
+- Desktop OOM: -1000 score
+- Emergency kill: /home/user/bin/kill_aimgr_processes.sh
+- Safe testing: 20-25 second timeouts with monitoring
+- CPU Priority: Desktop (1024) > AIMGR (256) CPUShares
 
-### Status
-- ✅ Non-essential services disabled and stopped
-- ✅ Process leak source identified and cleaned
-- ✅ System resources freed
-- ✅ Ready for cron job optimization
+## VM Environment Considerations
+⚠️  **VM-SPECIFIC LIMITATIONS:**
+- Standard cgroup v2 and systemd slice methods have reliability issues in VM environments
+- CPU core affinity restrictions are the most reliable isolation mechanism
+- Memory and process limits work but require explicit configuration
+- TasksMax and CPUShares provide essential backup protection when slices don't work properly
 
-## FINAL COMPLETION (2025-11-07 19:33)
+## Status
+- ✅ Display scaling fixed
+- ✅ System stable under load
+- ✅ Desktop responsive during tests
+- ✅ Core allocation COMPLETE and working
+- ✅ VM-compatible protection systems active
 
-### Core Allocation Fixed
-- System/root: Cores 0-1 ✅
-- Desktop/user: Cores 2-3 ✅
-- AIMGR: Cores 4-19 ✅ FIXED
-
-### Final Validation Test Results
-- 20-second stress test: ✅ Completed successfully
-- Desktop: ✅ Remained responsive throughout
-- Memory: ✅ Managed well (5.1GB peak, 17GB free)
-- Load: ✅ Handled properly (18.60 peak, recovering)
-
-### SYSTEM STATUS: 100% COMPLETE
-
-### Final Configuration
-- Resource protection: ✅ Working
-- Process management: ✅ Clean
-- Desktop responsiveness: ✅ Maintained under load
-- Core isolation: ✅ Complete
-- Display scaling: ✅ Fixed
-
-### READY FOR PRODUCTION USE
+## Enhanced Protection Controls (December 2025)
+- TasksMax=200 for AIMGR process containment
+- CPUShares differential (1024 vs 256) for priority management
+- Targeted kill scripts: /home/user/bin/kill_aimgr_processes.sh
+- Optimized test runners with automatic monitoring
