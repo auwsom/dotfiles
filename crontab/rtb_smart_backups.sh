@@ -2,7 +2,7 @@
 
 # usb volumes
 # /root/rsync-time-backup/rsync_tmbackup.sh  /media/user/16GBa /media/user/backups/rtb-usb
-/home/user/git/dotfiles/crontab/rsync_tmbackup3.sh  -s /media/user/16GBa -d /media/user/backups/rtb-usb/ || echo "USB backup failed, continuing..."
+/home/user/git/dotfiles/crontab/rsync_tmbackup4.sh  -s /media/user/16GBa -d /media/user/backups/rtb-usb/ || echo "USB backup failed, continuing..."
 
 # home dir minus .cache
 # /root/rsync-time-backup/rsync_tmbackup.sh --rsync-append-flags "--exclude .cache"  /home/user /media/user/backups/rtb-home-user/
@@ -12,7 +12,7 @@
 
 # VMs minus work vm
 # /root/rsync-time-backup/rsync_tmbackup.sh --rsync-append-flags "--exclude 100G-w" --strategy "1:1 7:1 30:7 365:30" /media/user/VM/ /media/user/backups/rtb-pers/
-/home/user/git/dotfiles/crontab/rsync_tmbackup3.sh --prune-then-backup -s /media/user/VM/25G-p -d /media/user/backups/rtb-pers/ || echo "25G-p backup failed, continuing..."
+/home/user/git/dotfiles/crontab/rsync_tmbackup4.sh --prune-then-backup -s /media/user/VM/25G-p -d /media/user/backups/rtb-pers/ || echo "25G-p backup failed, continuing..."
 
 # /home/user/git/dotfiles/crontab/rsync_tmbackup3.sh --prune-then-backup -s /media/user/VM/100G-w -d /media/user/temp/rtb-work/ --strategy "3:1 4:7 30:7" || echo "100G-w backup failed, continuing..."
 /home/user/git/dotfiles/crontab/rsync_tmbackup3.sh --prune-then-backup -s /media/user/VM/100G-w -d /media/user/backups2/rtb-work/ --strategy "3:1 4:7 30:7" || echo "100G-w backup failed, continuing..."
