@@ -1,0 +1,280 @@
+#!/bin/bash
+# WORKING Konsole setup - 4 windows with custom directories, spans full horizontal width, Y=0
+# Based on the working setup-working-width.sh.working
+
+echo "Setting up 4 Konsole windows spanning full 3840px width..."
+
+# Screen dimensions
+SCREEN_WIDTH=3840
+SCREEN_HEIGHT=2050
+
+# Layout configuration - WORKING VERSION
+WINDOW_HEIGHT=$SCREEN_HEIGHT  # Full vertical height
+WINDOW_WIDTH=1200  # Same size for all windows
+WINDOW_START_Y=0   # Start at top (Y=0!)
+
+# Position last window at right edge, then space others evenly to the left
+WINDOW4_X=$((SCREEN_WIDTH - WINDOW_WIDTH))  # Last window at right edge
+SPACING=$((WINDOW4_X / 3))  # Divide remaining space by 3 for even spacing
+
+WINDOW1_X=0
+WINDOW2_X=$SPACING
+WINDOW3_X=$((SPACING * 2))
+WINDOW4_X=$((SPACING * 3))
+
+echo "Screen: ${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
+echo "Each window: ${WINDOW_WIDTH}x${WINDOW_HEIGHT}"
+echo "Spacing between starts: ${SPACING}px"
+echo "Window 1 (Regular User): Position ($WINDOW1_X,$WINDOW_START_Y) - 8 tabs with custom dirs"
+echo "Window 2 (aimgr): Position ($WINDOW2_X,$WINDOW_START_Y) - 3 tabs in ~/dev/avoli" 
+echo "Window 3 (aimgr): Position ($WINDOW3_X,$WINDOW_START_Y) - 3 tabs in ~/dev/avoli"
+echo "Window 4 (aimgr): Position ($WINDOW4_X,$WINDOW_START_Y) - 3 tabs in ~/dev/avoli/agent3 (right edge)"
+
+# Skip killing existing windows to avoid killing the script itself
+
+# Start windows in correct order: Regular user first, then aimgr windows
+echo "Starting Window 1: Regular user, 8 tabs"
+konsole --profile "Regular User" &
+sleep 3
+
+echo "Starting Window 2: aimgr user, 3 tabs"
+konsole --profile "aimgr" &
+sleep 2
+
+echo "Starting Window 3: aimgr user, 3 tabs"
+konsole --profile "aimgr" &
+sleep 2
+
+echo "Starting Window 4: aimgr user, 3 tabs"
+konsole --profile "aimgr" &
+sleep 3
+
+# Get all Konsole windows
+echo "Getting window IDs..."
+ALL_WINDOW_IDS=($(xdotool search --class "konsole" 2>/dev/null))
+echo "Total Konsole windows found: ${#ALL_WINDOW_IDS[@]}"
+
+# Take the last 4 (newest) windows
+WINDOW_IDS=("${ALL_WINDOW_IDS[@]: -4}")
+
+echo "Positioning 4 windows..."
+for i in {0..3}; do
+    case $i in
+        0) POS_X=$WINDOW1_X; WIN_TYPE="Regular User" ;;
+        1) POS_X=$WINDOW2_X; WIN_TYPE="aimgr" ;;
+        2) POS_X=$WINDOW3_X; WIN_TYPE="aimgr" ;;
+        3) POS_X=$WINDOW4_X; WIN_TYPE="aimgr" ;;
+    esac
+    
+    xdotool windowmove "${WINDOW_IDS[$i]}" $POS_X $WINDOW_START_Y
+    xdotool windowsize "${WINDOW_IDS[$i]}" $WINDOW_WIDTH $WINDOW_HEIGHT
+    echo "Window $((i+1)) ($WIN_TYPE): positioned at $POS_X,$WINDOW_START_Y"
+done
+
+# Create tabs using keyboard shortcuts (reliable method)
+echo "Creating additional tabs..."
+sleep 2
+
+# Window 1: Regular user, 8 tabs total (7 additional)
+echo "Window 1: Creating 7 additional tabs as regular user"
+xdotool windowactivate "${WINDOW_IDS[0]}"
+sleep 1
+for ((i=1; i<8; i++)); do
+    xdotool key ctrl+shift+t
+    sleep 0.3
+done
+
+# Set custom directories for Window 1 tabs
+echo "Window 1: Setting custom directories for 8 tabs"
+xdotool windowactivate "${WINDOW_IDS[0]}"
+sleep 1
+
+# Tab 1: /home/user
+xdotool key ctrl+Page_Up
+sleep 0.2
+xdotool type " cd /home/user"
+xdotool key Return
+sleep 0.3
+
+# Tab 2: /home/user
+xdotool key ctrl+Page_Down
+sleep 0.2
+xdotool type " cd /home/user"
+xdotool key Return
+sleep 0.3
+
+# Tab 3: /home/user/.config/goose
+xdotool key ctrl+Page_Down
+sleep 0.2
+xdotool type " cd /home/user/.config/goose"
+xdotool key Return
+sleep 0.3
+
+# Tab 4: /home/user/git
+xdotool key ctrl+Page_Down
+sleep 0.2
+xdotool type " cd /home/user/git"
+xdotool key Return
+sleep 0.3
+
+# Tab 5: /home/user/git
+xdotool key ctrl+Page_Down
+sleep 0.2
+xdotool type " cd /home/user/git"
+xdotool key Return
+sleep 0.3
+
+# Tab 6: /home/user/git/ai/aiai/wsp
+xdotool key ctrl+Page_Down
+sleep 0.2
+xdotool type " cd /home/user/git/ai/aiai/wsp"
+xdotool key Return
+sleep 0.3
+
+# Tab 7: /home/user/git/ai/aiai/wsp
+xdotool key ctrl+Page_Down
+sleep 0.2
+xdotool type " cd /home/user/git/ai/aiai/wsp"
+xdotool key Return
+sleep 0.3
+
+# Tab 8: /home/user/git/ai/aiai/wsp
+xdotool key ctrl+Page_Down
+sleep 0.2
+xdotool type " cd /home/user/git/ai/aiai/wsp"
+xdotool key Return
+sleep 0.3
+
+# Window 2: aimgr user, 3 tabs total (2 additional) in ~/dev/avoli
+echo "Window 2: Creating 2 additional tabs as aimgr user"
+xdotool windowactivate "${WINDOW_IDS[1]}"
+sleep 1
+
+# First set up the initial tab
+echo "Setting up first tab in Window 2"
+xdotool type " sudo -u aimgr bash -c 'cd ~/dev/avoli/agent3 cd ~/dev/avoli && execcd ~/dev/avoli && exec exec bash'"
+xdotool key Return
+sleep 1
+xdotool type " sv2"
+xdotool key Return
+sleep 0.5
+
+# Create 2 additional tabs - each gets sudo command AFTER creation
+for ((i=1; i<3; i++)); do
+    echo "Creating tab $i in Window 2"
+    xdotool key ctrl+shift+t
+    sleep 1  # Wait for tab to be created
+    # NOW run the sudo command in the new tab
+    xdotool type " sudo -u aimgr bash -c 'cd ~/dev/avoli/agent3 cd ~/dev/avoli && execcd ~/dev/avoli && exec exec bash'"
+    xdotool key Return
+    sleep 1
+    xdotool type " sv2"
+    xdotool key Return
+    sleep 0.5
+done
+
+# Window 3: aimgr user, 3 tabs total (2 additional) in ~/dev/avoli
+echo "Window 3: Creating 2 additional tabs as aimgr user"
+xdotool windowactivate "${WINDOW_IDS[2]}"
+sleep 1
+
+# First set up the initial tab
+echo "Setting up first tab in Window 3"
+xdotool type " sudo -u aimgr bash -c 'cd ~/dev/avoli/agent3 cd ~/dev/avoli && execcd ~/dev/avoli && exec exec bash'"
+xdotool key Return
+sleep 1
+xdotool type " sv2"
+xdotool key Return
+sleep 0.5
+
+# Create 2 additional tabs - each gets sudo command AFTER creation
+for ((i=1; i<3; i++)); do
+    echo "Creating tab $i in Window 3"
+    xdotool key ctrl+shift+t
+    sleep 1  # Wait for tab to be created
+    # NOW run the sudo command in the new tab
+    xdotool type " sudo -u aimgr bash -c 'cd ~/dev/avoli/agent3 cd ~/dev/avoli && execcd ~/dev/avoli && exec exec bash'"
+    xdotool key Return
+    sleep 1
+    xdotool type " sv2"
+    xdotool key Return
+    sleep 0.5
+done
+
+# Window 4: aimgr user, 3 tabs total (2 additional) in ~/dev/avoli/agent3
+echo "Window 4: Creating 2 additional tabs as aimgr user"
+xdotool windowactivate "${WINDOW_IDS[3]}"
+sleep 1
+
+# First set up the initial tab
+echo "Setting up first tab in Window 4"
+xdotool type " sudo -u aimgr bash -c 'cd ~/dev/avoli/agent3 && exec bash'"
+xdotool key Return
+sleep 1
+xdotool type " sv2"
+xdotool key Return
+sleep 0.5
+
+# Create 2 additional tabs - each gets sudo command AFTER creation
+for ((i=1; i<3; i++)); do
+    echo "Creating tab $i in Window 4"
+    xdotool key ctrl+shift+t
+    sleep 1  # Wait for tab to be created
+    # NOW run the sudo command in the new tab
+    xdotool type " sudo -u aimgr bash -c 'cd ~/dev/avoli/agent3 && exec bash'"
+    xdotool key Return
+    sleep 1
+    xdotool type " sv2"
+    xdotool key Return
+    sleep 0.5
+done
+
+echo "Successfully created all tabs!"
+
+# Fix profile inheritance issue - set correct profiles for all tabs
+echo "Fixing profile inheritance for all tabs..."
+# Get current Konsole windows
+konsole_windows=($(DISPLAY=:0 qdbus | grep "org.kde.konsole-" | sed 's/org\.kde\.konsole-//' | sort -n))
+
+# Set profiles for each window
+for window_id in "${konsole_windows[@]}"; do
+    # Get all sessions for this window
+    sessions=($(DISPLAY=:0 qdbus "org.kde.konsole-$window_id" | grep "/Sessions/[0-9]" | sort -V))
+    
+    # Determine profile based on window content or position
+    # First window uses Regular User, others use aimgr
+    if [[ "$window_id" == "${WINDOW_IDS[0]}" ]]; then
+        profile_name="Regular User"
+    else
+        profile_name="aimgr"
+    fi
+    
+    echo "Setting profile '$profile_name' for window $window_id..."
+    for session in "${sessions[@]}"; do
+        DISPLAY=:0 qdbus "org.kde.konsole-$window_id" "$session" org.kde.konsole.Session.setProfile "$profile_name" 2>/dev/null
+    done
+done
+echo "Profile inheritance fix complete!"
+    
+# Activate the first window
+xdotool windowactivate "${WINDOW_IDS[0]}"
+    
+else
+    echo "Error: Expected at least 4 Konsole windows, found ${#WINDOW_IDS[@]}"
+    exit 1
+fi
+
+echo ""
+echo "Custom 4-window layout created:"
+echo "Window 1 (Regular User): 8 tabs with mixed directories"
+echo "  Tab 1-2: /home/user"
+echo "  Tab 3: /home/user/.config/goose"
+echo "  Tab 4-5: /home/user/git"
+echo "  Tab 6-8: /home/user/git/ai/aiai/wsp"
+echo "Window 2 (aimgr): 3 tabs in ~/dev/avoli"
+echo "Window 3 (aimgr): 3 tabs in ~/dev/avoli"
+echo "Window 4 (aimgr): 3 tabs in ~/dev/avoli/agent3"
+echo ""
+echo "Total windows: $(xdotool search --class "konsole" | wc -l)"
+echo "Display resolution: $(xrandr | grep " connected" | grep -o "[0-9]\+x[0-9]\+" | head -1)"
+echo "Layout spans full horizontal width: $((WINDOW4_X + WINDOW_WIDTH))px"

@@ -1,0 +1,5 @@
+--- original
++++ fixed
+@@ -1 +1 @@
+-sudo -u aimgr bash -c 'cd ~/dev/avoli/agent3 && exec bash'
++sudo -u aimgr

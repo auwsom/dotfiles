@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=KWin Health Check
+Comment=Check kwin_x11 health and send notifications
+Exec=/home/user/kwin_health_check.sh
+Icon=dialog-warning
+Categories=System;Monitor;
+Terminal=true
+StartupNotify=false

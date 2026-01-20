@@ -1,0 +1,217 @@
+#!/bin/bash
+# WORKING Konsole setup - spans full horizontal width, Y=0
+# Based on the working add-4-custom-tabs.sh
+
+echo "Setting up 4 Konsole windows spanning full 3840px width..."
+
+# Screen dimensions
+SCREEN_WIDTH=3840
+SCREEN_HEIGHT=2050
+
+# Layout configuration - WORKING VERSION
+WINDOW_HEIGHT=$SCREEN_HEIGHT  # Full vertical height
+WINDOW_WIDTH=1200  # Same size for all windows
+WINDOW_START_Y=0   # Start at top (Y=0!)
+
+# Position last window at right edge, then space others evenly to the left
+WINDOW4_X=$((SCREEN_WIDTH - WINDOW_WIDTH))  # Last window at right edge
+SPACING=$((WINDOW4_X / 3))  # Divide remaining space by 3 for even spacing
+
+WINDOW1_X=0
+WINDOW2_X=$SPACING
+WINDOW3_X=$((SPACING * 2))
+WINDOW4_X=$((SPACING * 3))
+
+echo "Screen: ${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
+echo "Each window: ${WINDOW_WIDTH}x${WINDOW_HEIGHT}"
+echo "Spacing between starts: ${SPACING}px"
+echo "Window 1 (Regular User): Position ($WINDOW1_X,$WINDOW_START_Y) - 8 tabs"
+echo "Window 2 (aimgr): Position ($WINDOW2_X,$WINDOW_START_Y) - 3 tabs" 
+echo "Window 3 (aimgr): Position ($WINDOW3_X,$WINDOW_START_Y) - 3 tabs"
+echo "Window 4 (aimgr): Position ($WINDOW4_X,$WINDOW_START_Y) - 3 tabs (right edge)"
+
+# Skip killing existing windows to avoid killing the script itself
+echo "Starting new Konsole windows..."
+sleep 1
+
+# Start windows in correct order: Regular user first, then aimgr windows
+echo "Starting Window 1: Regular user, 8 tabs"
+nohup konsole --profile "Regular User" >/dev/null 2>&1 &
+sleep 3
+
+echo "Starting Window 2: aimgr user, 3 tabs"
+nohup konsole --profile "aimgr" >/dev/null 2>&1 &
+sleep 2
+
+echo "Starting Window 3: aimgr user, 3 tabs"
+nohup konsole --profile "aimgr" >/dev/null 2>&1 &
+sleep 2
+
+echo "Starting Window 4: aimgr user, 3 tabs"
+nohup konsole --profile "aimgr" >/dev/null 2>&1 &
+sleep 3
+
+# Get all Konsole windows
+echo "Getting window IDs..."
+ALL_WINDOW_IDS=($(xdotool search --class "konsole" 2>/dev/null))
+echo "Total Konsole windows found: ${#ALL_WINDOW_IDS[@]}"
+
+# Take the last 4 (newest) windows
+WINDOW_IDS=("${ALL_WINDOW_IDS[@]: -4}")
+
+echo "Positioning newest 4 windows: ${WINDOW_IDS[@]}"
+
+if [ ${#WINDOW_IDS[@]} -ge 4 ]; then
+    # Position all windows with FORCE override for KWin rules
+    # Window 1 - Regular user
+    xdotool windowmove "${WINDOW_IDS[0]}" $WINDOW1_X $WINDOW_START_Y
+    xdotool windowsize "${WINDOW_IDS[0]}" $WINDOW_WIDTH $WINDOW_HEIGHT
+    sleep 0.5
+    # Force position again in case KWin overrides
+    xdotool windowmove "${WINDOW_IDS[0]}" $WINDOW1_X $WINDOW_START_Y
+    xdotool windowsize "${WINDOW_IDS[0]}" $WINDOW_WIDTH $WINDOW_HEIGHT
+    echo "Positioned window ${WINDOW_IDS[0]} at ($WINDOW1_X,$WINDOW_START_Y) size ${WINDOW_WIDTH}x${WINDOW_HEIGHT}"
+    
+    # Window 2 - aimgr user
+    xdotool windowmove "${WINDOW_IDS[1]}" $WINDOW2_X $WINDOW_START_Y
+    xdotool windowsize "${WINDOW_IDS[1]}" $WINDOW_WIDTH $WINDOW_HEIGHT
+    sleep 0.5
+    xdotool windowmove "${WINDOW_IDS[1]}" $WINDOW2_X $WINDOW_START_Y
+    xdotool windowsize "${WINDOW_IDS[1]}" $WINDOW_WIDTH $WINDOW_HEIGHT
+    echo "Positioned window ${WINDOW_IDS[1]} at ($WINDOW2_X,$WINDOW_START_Y) size ${WINDOW_WIDTH}x${WINDOW_HEIGHT}"
+    
+    # Window 3 - aimgr user
+    xdotool windowmove "${WINDOW_IDS[2]}" $WINDOW3_X $WINDOW_START_Y
+    xdotool windowsize "${WINDOW_IDS[2]}" $WINDOW_WIDTH $WINDOW_HEIGHT
+    sleep 0.5
+    xdotool windowmove "${WINDOW_IDS[2]}" $WINDOW3_X $WINDOW_START_Y
+    xdotool windowsize "${WINDOW_IDS[2]}" $WINDOW_WIDTH $WINDOW_HEIGHT
+    echo "Positioned window ${WINDOW_IDS[2]} at ($WINDOW3_X,$WINDOW_START_Y) size ${WINDOW_WIDTH}x${WINDOW_HEIGHT}"
+    
+    # Window 4 - aimgr user
+    xdotool windowmove "${WINDOW_IDS[3]}" $WINDOW4_X $WINDOW_START_Y
+    xdotool windowsize "${WINDOW_IDS[3]}" $WINDOW_WIDTH $WINDOW_HEIGHT
+    sleep 0.5
+    xdotool windowmove "${WINDOW_IDS[3]}" $WINDOW4_X $WINDOW_START_Y
+    xdotool windowsize "${WINDOW_IDS[3]}" $WINDOW_WIDTH $WINDOW_HEIGHT
+    echo "Positioned window ${WINDOW_IDS[3]} at ($WINDOW4_X,$WINDOW_START_Y) size ${WINDOW_WIDTH}x${WINDOW_HEIGHT}"
+    
+    # Wait for windows to stabilize
+    sleep 2
+    
+    # Create tabs using keyboard shortcuts (reliable method)
+    echo "Creating additional tabs..."
+    
+    # Window 1: Regular user, 8 tabs total (7 additional)
+    echo "Window 1: Creating 7 additional tabs as regular user"
+    xdotool windowactivate "${WINDOW_IDS[0]}"
+    sleep 1
+    for ((i=1; i<8; i++)); do
+        xdotool key ctrl+shift+t
+        sleep 0.3
+    done
+    
+    # Window 2: aimgr user, 3 tabs total (2 additional)
+    echo "Window 2: Creating 2 additional tabs as aimgr user"
+    xdotool windowactivate "${WINDOW_IDS[1]}"
+    sleep 1
+    
+    # First set up the initial tab
+    echo "Setting up first tab in Window 2"
+    xdotool type "sudo -u aimgr bash -c 'cd ~/dev/avoli && exec bash'"
+    xdotool key Return
+    sleep 1
+    xdotool type "sv2"
+    xdotool key Return
+    sleep 0.5
+    
+    # Create 2 additional tabs - each gets sudo command AFTER creation
+    for ((i=1; i<3; i++)); do
+        echo "Creating tab $i in Window 2"
+        xdotool key ctrl+shift+t
+        sleep 1  # Wait for tab to be created
+        # NOW run the sudo command in the new tab
+        xdotool type "sudo -u aimgr bash -c 'cd ~/dev/avoli && exec bash'"
+        xdotool key Return
+        sleep 1
+        xdotool type "sv2"
+        xdotool key Return
+        sleep 0.5
+    done
+    
+    # Window 3: aimgr user, 3 tabs total (2 additional)
+    echo "Window 3: Creating 2 additional tabs as aimgr user"
+    xdotool windowactivate "${WINDOW_IDS[2]}"
+    sleep 1
+    
+    # First set up the initial tab
+    echo "Setting up first tab in Window 3"
+    xdotool type "sudo -u aimgr bash -c 'cd ~/dev/avoli && exec bash'"
+    xdotool key Return
+    sleep 1
+    xdotool type "sv2"
+    xdotool key Return
+    sleep 0.5
+    
+    # Create 2 additional tabs - each gets sudo command AFTER creation
+    for ((i=1; i<3; i++)); do
+        echo "Creating tab $i in Window 3"
+        xdotool key ctrl+shift+t
+        sleep 1  # Wait for tab to be created
+        # NOW run the sudo command in the new tab
+        xdotool type "sudo -u aimgr bash -c 'cd ~/dev/avoli && exec bash'"
+        xdotool key Return
+        sleep 1
+        xdotool type "sv2"
+        xdotool key Return
+        sleep 0.5
+    done
+    
+    # Window 4: aimgr user, 3 tabs total (2 additional)
+    echo "Window 4: Creating 2 additional tabs as aimgr user"
+    xdotool windowactivate "${WINDOW_IDS[3]}"
+    sleep 1
+    
+    # First set up the initial tab
+    echo "Setting up first tab in Window 4"
+    xdotool type "sudo -u aimgr bash -c 'cd ~/dev/avoli/agent2 && exec bash'"
+    xdotool key Return
+    sleep 1
+    xdotool type "sv2"
+    xdotool key Return
+    sleep 0.5
+    
+    # Create 2 additional tabs - each gets sudo command AFTER creation
+    for ((i=1; i<3; i++)); do
+        echo "Creating tab $i in Window 4"
+        xdotool key ctrl+shift+t
+        sleep 1  # Wait for tab to be created
+        # NOW run the sudo command in the new tab
+        xdotool type "sudo -u aimgr bash -c 'cd ~/dev/avoli/agent2 && exec bash'"
+        xdotool key Return
+        sleep 1
+        xdotool type "sv2"
+        xdotool key Return
+        sleep 0.5
+    done
+    
+    echo "Successfully created all tabs!"
+    
+    # Activate the first window
+    xdotool windowactivate "${WINDOW_IDS[0]}"
+    
+else
+    echo "Error: Expected at least 4 Konsole windows, found ${#WINDOW_IDS[@]}"
+    exit 1
+fi
+
+echo ""
+echo "✅ Setup complete!"
+echo "Window 1 (Regular User): 8 tabs at position $WINDOW1_X"
+echo "Window 2 (aimgr): 3 tabs at position $WINDOW2_X"
+echo "Window 3 (aimgr): 3 tabs at position $WINDOW3_X"
+echo "Window 4 (aimgr): 3 tabs at position $WINDOW4_X"
+echo ""
+echo "Total windows: $(xdotool search --class "konsole" | wc -l)"
+echo "Display resolution: $(xrandr | grep " connected" | grep -o "[0-9]\+x[0-9]\+" | head -1)"
+echo "Layout spans full horizontal width: $((WINDOW4_X + WINDOW_WIDTH))px"

@@ -1,0 +1,20 @@
+#!/bin/bash
+# Restore Konsole session from saved state
+
+SCRIPT_DIR="/home/user/git/dotfiles/konsoletabs"
+
+echo "=== Restore Konsole Session ==="
+echo ""
+
+echo "Restoring saved session..."
+if "$SCRIPT_DIR/konsole-manager.sh" restore; then
+    echo "✅ Session restored successfully"
+else
+    echo "❌ Failed to restore session"
+    echo "Creating fresh layout instead..."
+    "$SCRIPT_DIR/setup-working-width.sh"
+fi
+
+echo ""
+echo "Done! Press Enter to close..."
+read input

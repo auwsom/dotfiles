@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Fresh Konsole Layout
+Comment=Create fresh 4-window Konsole layout
+Exec=konsole -e /home/user/git/dotfiles/konsoletabs/fresh-layout.sh
+Icon=konsole
+Terminal=false
+StartupNotify=true
+Path=/home/user/git/dotfiles/konsoletabs
+Categories=System;TerminalEmulator;

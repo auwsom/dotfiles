@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Save Konsole Session
+Comment=Save current Konsole session manually
+Exec=konsole -e /home/user/git/dotfiles/konsoletabs/save-session.sh
+Icon=document-save
+Terminal=false
+StartupNotify=true
+Path=/home/user/git/dotfiles/konsoletabs
+Categories=System;TerminalEmulator;

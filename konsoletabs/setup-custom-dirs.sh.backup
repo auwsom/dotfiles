@@ -1,0 +1,185 @@
+#!/bin/bash
+# Custom Konsole setup with specific directories and sudo check
+
+# Function to check and request sudo access
+check_sudo() {
+    # Check if we can run sudo without password
+    if ! sudo -n true 2>/dev/null; then
+        echo "🔐 This script requires sudo access for switching to aimgr user."
+        echo "Please enter your sudo password:"
+        
+        # Try to get sudo access
+        if sudo -v; then
+            echo "✅ Sudo access granted"
+            return 0
+        else
+            echo "❌ Sudo access failed. Cannot continue."
+            exit 1
+        fi
+    else
+        echo "✅ Sudo access already available"
+        return 0
+    fi
+}
+
+# Check sudo access first
+check_sudo
+
+echo "Setting up 8 Konsole windows with custom directories..."
+
+# Screen dimensions
+SCREEN_WIDTH=3840
+SCREEN_HEIGHT=2050
+
+# Layout configuration - 8 windows
+WINDOW_HEIGHT=$SCREEN_HEIGHT
+WINDOW_WIDTH=600  # Smaller width for 8 windows
+WINDOW_START_Y=0
+
+# Calculate spacing for 8 windows
+WINDOW8_X=$((SCREEN_WIDTH - WINDOW_WIDTH))
+SPACING=$((WINDOW8_X / 7))
+
+WINDOW1_X=0
+WINDOW2_X=$SPACING
+WINDOW3_X=$((SPACING * 2))
+WINDOW4_X=$((SPACING * 3))
+WINDOW5_X=$((SPACING * 4))
+WINDOW6_X=$((SPACING * 5))
+WINDOW7_X=$((SPACING * 6))
+WINDOW8_X=$((SPACING * 7))
+
+echo "Starting 8 Konsole windows..."
+
+# Start all windows with Regular User profile
+echo "Starting Window 1: /home/user - 8 tabs"
+nohup konsole --profile "Regular User" >/dev/null 2>&1 &
+sleep 2
+
+echo "Starting Window 2: /home/user - 3 tabs"
+nohup konsole --profile "Regular User" >/dev/null 2>&1 &
+sleep 1
+
+echo "Starting Window 3: ~/.config/goose - 3 tabs"
+nohup konsole --profile "Regular User" >/dev/null 2>&1 &
+sleep 1
+
+echo "Starting Window 4: ~/git - 3 tabs"
+nohup konsole --profile "Regular User" >/dev/null 2>&1 &
+sleep 1
+
+echo "Starting Window 5: ~/git/ai/aiai/wsp - 3 tabs"
+nohup konsole --profile "Regular User" >/dev/null 2>&1 &
+sleep 1
+
+echo "Starting Window 6: ~/git/ai/aiai/wsp - 3 tabs"
+nohup konsole --profile "Regular User" >/dev/null 2>&1 &
+sleep 1
+
+echo "Starting Window 7: ~/git/ai/aiai/wsp - 3 tabs"
+nohup konsole --profile "Regular User" >/dev/null 2>&1 &
+sleep 1
+
+echo "Starting Window 8: ~/dev/avoli/agent2 as aimgr - 3 tabs"
+nohup konsole --profile "Regular User" >/dev/null 2>&1 &
+sleep 3
+
+# Get window IDs and position them
+echo "Getting window IDs..."
+ALL_WINDOW_IDS=($(xdotool search --class "konsole" 2>/dev/null))
+WINDOW_IDS=("${ALL_WINDOW_IDS[@]: -8}")
+
+echo "Positioning 8 windows..."
+for i in {0..7}; do
+    case $i in
+        0) POS_X=$WINDOW1_X; DIR="/home/user" ;;
+        1) POS_X=$WINDOW2_X; DIR="/home/user" ;;
+        2) POS_X=$WINDOW3_X; DIR="/home/user/.config/goose" ;;
+        3) POS_X=$WINDOW4_X; DIR="/home/user/git" ;;
+        4) POS_X=$WINDOW5_X; DIR="/home/user/git/ai/aiai/wsp" ;;
+        5) POS_X=$WINDOW6_X; DIR="/home/user/git/ai/aiai/wsp" ;;
+        6) POS_X=$WINDOW7_X; DIR="/home/user/git/ai/aiai/wsp" ;;
+        7) POS_X=$WINDOW8_X; DIR="/home/aimgr/dev/avoli/agent2" ;;
+    esac
+    
+    xdotool windowmove "${WINDOW_IDS[$i]}" $POS_X $WINDOW_START_Y
+    xdotool windowsize "${WINDOW_IDS[$i]}" $WINDOW_WIDTH $WINDOW_HEIGHT
+    echo "Window $((i+1)): positioned at $POS_X,$WINDOW_START_Y -> $DIR"
+done
+
+# Create tabs and set directories
+sleep 2
+
+# Window 1: 8 tabs in /home/user
+echo "Window 1: Creating 7 additional tabs"
+xdotool windowactivate "${WINDOW_IDS[0]}"
+sleep 1
+for ((i=1; i<8; i++)); do
+    xdotool key ctrl+shift+t
+    sleep 0.3
+done
+# Set all tabs to /home/user
+for ((i=0; i<8; i++)); do
+    xdotool key ctrl+Page_Up
+    sleep 0.2
+    xdotool type "cd /home/user"
+    xdotool key Return
+    sleep 0.2
+done
+
+# Windows 2-7: 3 tabs each in their directories
+for i in {1..6}; do
+    case $i in
+        1) DIR="/home/user" ;;
+        2) DIR="/home/user/.config/goose" ;;
+        3) DIR="/home/user/git" ;;
+        4) DIR="/home/user/git/ai/aiai/wsp" ;;
+        5) DIR="/home/user/git/ai/aiai/wsp" ;;
+        6) DIR="/home/user/git/ai/aiai/wsp" ;;
+    esac
+    
+    echo "Window $((i+1)): Creating 2 additional tabs in $DIR"
+    xdotool windowactivate "${WINDOW_IDS[$i]}"
+    sleep 1
+    # Set first tab
+    xdotool type "cd $DIR"
+    xdotool key Return
+    sleep 0.5
+    # Create 2 more tabs
+    for ((j=1; j<3; j++)); do
+        xdotool key ctrl+shift+t
+        sleep 0.5
+        xdotool type "cd $DIR"
+        xdotool key Return
+        sleep 0.3
+    done
+done
+
+# Window 8: 3 tabs in ~/dev/avoli/agent2 as aimgr user
+echo "Window 8: Creating 2 additional tabs in ~/dev/avoli/agent2 as aimgr"
+xdotool windowactivate "${WINDOW_IDS[7]}"
+sleep 1
+# Set first tab - switch to aimgr user
+xdotool type "sudo -u aimgr bash -c 'cd /home/aimgr/dev/avoli/agent2 && exec bash'"
+xdotool key Return
+sleep 1
+# Create 2 more tabs - each gets sudo command AFTER creation
+for ((i=1; i<3; i++)); do
+    echo "Creating tab $i in Window 8 as aimgr"
+    xdotool key ctrl+shift+t
+    sleep 1  # Wait for tab to be created
+    # NOW run the sudo command in the new tab
+    xdotool type "sudo -u aimgr bash -c 'cd /home/aimgr/dev/avoli/agent2 && exec bash'"
+    xdotool key Return
+    sleep 1
+done
+
+echo ""
+echo "Custom layout created:"
+echo "Window 1-2: /home/user"
+echo "Window 3: ~/.config/goose"
+echo "Window 4: ~/git"
+echo "Window 5-7: ~/git/ai/aiai/wsp"
+echo "Window 8: ~/dev/avoli/agent2 (as aimgr)"
+echo ""
+echo "Total windows: $(xdotool search --class "konsole" | wc -l)"

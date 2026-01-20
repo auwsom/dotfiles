@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Restore Konsole Session
+Comment=Restore Konsole session from saved state
+Exec=konsole -e /home/user/git/dotfiles/konsoletabs/restore-simple.sh
+Icon=view-restore
+Terminal=false
+StartupNotify=true
+Path=/home/user/git/dotfiles/konsoletabs
+Categories=System;TerminalEmulator;
